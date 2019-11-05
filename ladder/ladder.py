@@ -42,15 +42,14 @@ class Ladder(commands.Cog):
     @commands.guild_only()
     @leaderboard.command(aliases=["r", "reg"], invoke_without_command=True, name="register")
     async def leaderboard_register(self, ctx, member : discord.Member = None):
-        if member != None and not ctx.author.server_permissions.administrator:
-            embed = discord.Embed(colour = discord.Colour.red(), description = "Only administrators can register other players!")
-            return await ctx.send(embed = embed)
+        if member != None and not ctx.author.guild_permissions.administrator:
+            return await ctx.send(embed = discord.Embed(colour = discord.Colour.red(), description = "Only administrators can register other players!"))
         member = ctx.author if member == None else member
         if await self.config.member(member).registered():
-            return await ctx.send("This user is already registered!")
+            return await ctx.send(embed = discord.Embed(colour = discord.Colour.red(), description = "This user is already registered!"))
         await self.config.member(member).registered.set(True)
         await self.config.member(member).name.set(member.display_name)
         await self.config.member(member).registered_time.set(int(time.time()))
         await self.config.member(member).wins.set(await self.config.member(member).wins() + 1)
-        await ctx.send(f"{member.mention} was successfully registered")
+        await ctx.send(embed = discord.Embed(colour = discord.Colour.green(), description = f"{member.mention} was successfully registered"))
         
