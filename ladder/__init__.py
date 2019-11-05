@@ -1,4 +1,4 @@
-from .cr import Ladder
+from .ladder import Ladder
 
 async def setup(bot):
   cog = Ladder(bot)
