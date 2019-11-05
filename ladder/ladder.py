@@ -12,6 +12,7 @@ class Ladder(commands.Cog):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=25171725)
         default_member = {
+            "registered" : False, 
             "wins" : 0,
             "losses" : 0,
             "last_played" : None,
@@ -20,7 +21,7 @@ class Ladder(commands.Cog):
             "highest_rank": None,
             "name" : None,
             "match_history" : [],
-            "registered" : None,
+            "registered_time" : None,
             "elo" : 1200
         }
         self.config.register_member(**default_member)
@@ -45,8 +46,11 @@ class Ladder(commands.Cog):
             embed = discord.Embed(colour = discord.Colour.red(), description = "Only administrators can register other players!")
             return await ctx.send(embed = embed)
         member = ctx.author if member == None else member
+        if await self.config.member(member).registered():
+            return await ctx.send("This user is already registered!")
+        await self.config.member(member).registered.set(True)
         await self.config.member(member).name.set(member.display_name)
-        await self.config.member(member).registered.set(int(time.time()))
+        await self.config.member(member).registered_time.set(int(time.time()))
         await self.config.member(member).wins.set(await self.config.member(member).wins() + 1)
         await ctx.send(f"{member.mention} was successfully registered")
         
