@@ -1,0 +1,9 @@
+{
+  "author": ["milan_25"],
+  "name" : "LAdder",
+  "description": "Custom leaderboard with ELO ranking for LA",
+  "install_msg": "Thank you for installing this cog.",
+  "short": "Custom leaderboard with ELO ranking for LA",
+  "requirements" : [],
+  "tags": ["Leaderboard"]
+}
