@@ -33,7 +33,7 @@ class Ladder(commands.Cog):
     def calculate_elo(self, old_rating_player_a : int, old_rating_player_b : int, win : bool):
         expected = 1 / (1 + math.pow(10, (-((old_rating_player_a - old_rating_player_b)/400))))
         actual = 1 if win else 0
-        return int(old_rating_player_a + 30 * (actual - expected))
+        return round(old_rating_player_a + 30 * (actual - expected))
 
     async def one_match_result(self, winner, loser):
         winner_elo = await self.config.member(winner).elo()
@@ -48,7 +48,7 @@ class Ladder(commands.Cog):
     async def result(self, ctx, winner : discord.Member, loser : discord.Member):
         result = await self.one_match_result(winner, loser)
         embed = discord.Embed(colour = discord.Color.green())
-        embed.add_field(name = "Winner", value = f"{winner.mention} {result[0]} -> {result[1]} ({result[1] - result[0]})", inline = False)
+        embed.add_field(name = "Winner", value = f"{winner.mention} {result[0]} -> {result[1]} (+{result[1] - result[0]})", inline = False)
         embed.add_field(name = "Loser", value = f"{loser.mention} {result[2]} -> {result[3]} ({result[3] - result[2]})", inline = False)
         await ctx.send(embed=embed)
 
@@ -59,7 +59,7 @@ class Ladder(commands.Cog):
         values = []
         for k in players.keys():
             values.append([players[k]["elo"], players[k]["name"]])
-        values.sort(key=lambda x: x[0])
+        values.sort(key=lambda x: x[0], reverse=True)
         msg = ""
         for v in values:
             msg += f"{v[1]} `{v[0]}`\n"
