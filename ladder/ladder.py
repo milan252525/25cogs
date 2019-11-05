@@ -42,7 +42,7 @@ class Ladder(commands.Cog):
         values = []
         for k in players.keys():
             values.append([players[k]["elo"], players[k]["name"]])
-        values = values.sort(key=lambda x: x[0])
+        values.sort(key=lambda x: x[0])
         msg = ""
         for v in values:
             msg += f"{v[1]} `{v[0]}``"
