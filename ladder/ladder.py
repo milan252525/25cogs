@@ -12,7 +12,8 @@ class Ladder(commands.Cog):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=25171725)
         default_member = {
-            "registered" : False, 
+            "registered" : False,
+            "id" : None, 
             "wins" : 0,
             "losses" : 0,
             "last_played" : None,
@@ -37,18 +38,26 @@ class Ladder(commands.Cog):
     @commands.guild_only()
     @commands.group(aliases=["lb", "ladder"], invoke_without_command=True)
     async def leaderboard(self, ctx):
-        await ctx.send("LADDER")
+        players = await self.config.all_members(ctx.guild)
+        values = []
+        for k in players.keys():
+            values.append([players[k]["elo"], players[k]["name"]])
+        msg = ""
+        for v in values.sort(key=lambda x: x[0]):
+            msg += f"{v[1]} `{v[0]}``"
+        await ctx.send(embed = discord.Embed(colour = discord.Colour.blue(), description = msg))
 
     @commands.guild_only()
-    @leaderboard.command(aliases=["r", "reg"], invoke_without_command=True, name="register")
+    @leaderboard.command(aliases=["r", "reg"], name="register")
     async def leaderboard_register(self, ctx, member : discord.Member = None):
         if member != None and not ctx.author.guild_permissions.administrator:
             return await ctx.send(embed = discord.Embed(colour = discord.Colour.red(), description = "Only administrators can register other players!"))
         member = ctx.author if member == None else member
         if await self.config.member(member).registered():
-            return await ctx.send(embed = discord.Embed(colour = discord.Colour.red(), description = "This user is already registered!"))
+            return await ctx.send(embed = discord.Embed(colour = discord.Colour.red(), description = f"{member.mention} is already registered!"))
         await self.config.member(member).registered.set(True)
         await self.config.member(member).name.set(member.display_name)
+        await self.config.member(member).id.set(member.id)
         await self.config.member(member).registered_time.set(int(time.time()))
         await self.config.member(member).wins.set(await self.config.member(member).wins() + 1)
         await ctx.send(embed = discord.Embed(colour = discord.Colour.green(), description = f"{member.mention} was successfully registered"))
