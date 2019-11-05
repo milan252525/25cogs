@@ -48,8 +48,8 @@ class Ladder(commands.Cog):
     async def result(self, ctx, winner : discord.Member, loser : discord.Member):
         result = await self.one_match_result(winner, loser)
         embed = discord.Embed(colour = discord.Color.green())
-        embed.add_field(name = "Winner", value = f"{winner.mention} {result[0]} -> {result[1]}")
-        embed.add_field(name = "Loser", value = f"{loser.mention} {result[2]} -> {result[3]}")
+        embed.add_field(name = "Winner", value = f"{winner.mention} {result[0]} -> {result[1]} ({result[1] - result[0]})", inline = False)
+        embed.add_field(name = "Loser", value = f"{loser.mention} {result[2]} -> {result[3]} ({result[3] - result[2]})", inline = False)
         await ctx.send(embed=embed)
 
     @commands.guild_only()
