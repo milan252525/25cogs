@@ -39,7 +39,7 @@ class Ladder(commands.Cog):
         await ctx.send("LADDER")
 
     @commands.guild_only()
-    @commands.group(aliases=["r", "reg"], invoke_without_command=True, name="register")
+    @leaderboard.command(aliases=["r", "reg"], invoke_without_command=True, name="register")
     async def leaderboard_register(self, ctx, member : discord.Member = None):
         if member != None and not ctx.author.server_permissions.administrator:
             embed = discord.Embed(colour = discord.Colour.red(), description = "Only administrators can register other players!")
