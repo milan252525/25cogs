@@ -37,7 +37,7 @@ class Ladder(commands.Cog):
 
     async def one_match_result(self, winner, loser):
         winner_elo = await self.config.member(winner).elo()
-        loser_elo = await self.config.member(winner).elo()
+        loser_elo = await self.config.member(loser).elo()
         winner_new = self.calculate_elo(winner_elo, loser_elo, True)
         loser_new = self.calculate_elo(loser_elo, winner_elo, False)
         await self.config.member(winner).elo.set(winner_new)
