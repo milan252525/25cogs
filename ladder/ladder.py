@@ -44,7 +44,7 @@ class Ladder(commands.Cog):
         await self.config.member(winner).elo.set(loser_new)
         return winner_elo, winner_new, loser_elo, loser_new
 
-    @commands.command(aliases=['p'])
+    @commands.command()
     async def result(self, ctx, winner : discord.Member, loser : discord.Member):
         result = await self.one_match_result(winner, loser)
         embed = discord.Embed(colour = discord.Color.green())
