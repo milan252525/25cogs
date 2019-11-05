@@ -32,9 +32,25 @@ class Ladder(commands.Cog):
     def calculate_elo(self, old_rating_player_a : int, old_rating_player_b : int, win : bool):
         expected = 1 / (1 + math.pow(10, (-((old_rating_player_a - old_rating_player_b)/400))))
         actual = 1 if win else 0
-        return old_rating_player_a + 30 * (actual - expected)
+        return int(old_rating_player_a + 30 * (actual - expected))
 
-        
+    def one_match_result(self, winner, loser):
+        winner_elo = await self.config.member(winner).elo()
+        loser_elo = await self.config.member(winner).elo()
+        winner_new = self.calculate_elo(winner_elo, loser_elo, True)
+        loser_new = self.calculate_elo(loser_elo, winner_elo, False)
+        await self.config.member(winner).elo.set(winner_new)
+        await self.config.member(winner).elo.set(loser_new)
+        return winner_elo, winner_new, loser_elo, loser_new
+
+    @commands.command(aliases=['p'])
+    async def result(self, ctx, winner : discord.Member, loser : discord.Member):
+        result = self.one_match_result(winner, loser)
+        embed = discord.Embed(colour = discord.Color.green())
+        embed.add_field(name = "Winner", value = f"{winner.mention} {result[0]} -> {result[1]}")
+        embed.add_field(name = "Loser", value = f"{loser.mention} {result[2]} -> {result[3]}")
+        ctx.send(embed=embed)
+
     @commands.guild_only()
     @commands.group(aliases=["lb", "ladder"], invoke_without_command=True)
     async def leaderboard(self, ctx):
@@ -45,7 +61,7 @@ class Ladder(commands.Cog):
         values.sort(key=lambda x: x[0])
         msg = ""
         for v in values:
-            msg += f"{v[1]} `{v[0]}``"
+            msg += f"{v[1]} `{v[0]}`\n"
         await ctx.send(embed = discord.Embed(colour = discord.Colour.blue(), description = msg))
 
     @commands.guild_only()
