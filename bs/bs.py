@@ -20,7 +20,7 @@ class BrawlStarsCog(commands.Cog):
         bsapikey = await self.bot.db.api_tokens.get_raw("bsapi", default={"api_key": None})
         if bsapikey["api_key"] is None:
             raise ValueError("The Brawl Stars API key has not been set. Use [p]set api bsapi api_key,YOURAPIKEY")
-        self.bsapi = brawlstats.Client(bsapikey["api_key"], is_async=True)
+        self.bsapi = brawlstats.BrawlAPI(bsapikey["api_key"], is_async=True)
         
     def badEmbed(self, text):
         bembed = discord.Embed(color=0xff0000)
