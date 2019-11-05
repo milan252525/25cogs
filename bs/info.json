@@ -1,0 +1,9 @@
+{
+  "author": ["milan_25"],
+  "name" : "Brawl Stars",
+  "description": "Brawl Stars cog",
+  "install_msg": "Thank you for installing our Brawl Stars cog. Set your BS API token with `[p]set api bsapi api_key,YOURAPIKEY`",
+  "short": "Brawl Stars related commands",
+  "requirements" : ["brawlstats"],
+  "tags": ["Brawl Stars", "Stats"]
+}

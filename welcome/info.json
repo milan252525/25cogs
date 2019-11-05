@@ -1,0 +1,9 @@
+{
+  "author": ["milan_25"],
+  "name" : "Welcoming process for LA",
+  "description": "Welcoming process for Legendary Alliance server",
+  "install_msg": "Thank you for installing our welcoming cog. Set your CR API token with `[p]set api crapi api_key,YOURAPIKEY`",
+  "short": "Welcoming process for Legendary Alliance server",
+  "requirements" : ["clashroyale"],
+  "tags": ["Clash Royale", "moderation", "welcoming"]
+}

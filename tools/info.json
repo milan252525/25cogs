@@ -1,0 +1,9 @@
+{
+  "author": ["milan_25"],
+  "name" : "Tools",
+  "description": "Cog with miscellaneous tools",
+  "install_msg": "Thank you for installing our Tools cog.",
+  "short": "Cog with miscellaneous tools",
+  "requirements" : [],
+  "tags": ["tools"]
+}
