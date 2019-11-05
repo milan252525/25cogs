@@ -23,7 +23,7 @@ class Ladder(commands.Cog):
             "name" : None,
             "match_history" : [],
             "registered_time" : None,
-            "elo" : 1200
+            "elo" : 1000
         }
         self.config.register_member(**default_member)
         # default_guild = {"leaderboard" : []}
@@ -33,7 +33,7 @@ class Ladder(commands.Cog):
     def calculate_elo(self, old_rating_player_a : int, old_rating_player_b : int, win : bool):
         expected = 1 / (1 + math.pow(10, (-((old_rating_player_a - old_rating_player_b)/400))))
         actual = 1 if win else 0
-        return round(old_rating_player_a + 30 * (actual - expected))
+        return round(old_rating_player_a + 40 * (actual - expected))
 
     async def one_match_result(self, winner, loser):
         winner_elo = await self.config.member(winner).elo()
@@ -62,7 +62,7 @@ class Ladder(commands.Cog):
         values.sort(key=lambda x: x[0], reverse=True)
         msg = ""
         for v in values:
-            msg += f"{v[1]} `{v[0]}`\n"
+            msg += f"`{v[0]}` {v[1]}\n"
         await ctx.send(embed = discord.Embed(colour = discord.Colour.blue(), description = msg))
 
     @commands.guild_only()
