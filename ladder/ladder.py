@@ -47,5 +47,6 @@ class Ladder(commands.Cog):
         member = ctx.author if member == None else member
         await self.config.member(member).name.set(member.display_name)
         await self.config.member(member).registered.set(int(time.time()))
+        await self.config.member(member).wins.set(await self.config.member(member).wins() + 1)
         await ctx.send(f"{member.mention} was successfully registered")
         
