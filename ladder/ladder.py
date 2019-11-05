@@ -41,7 +41,7 @@ class Ladder(commands.Cog):
         winner_new = self.calculate_elo(winner_elo, loser_elo, True)
         loser_new = self.calculate_elo(loser_elo, winner_elo, False)
         await self.config.member(winner).elo.set(winner_new)
-        await self.config.member(winner).elo.set(loser_new)
+        await self.config.member(loser).elo.set(loser_new)
         return winner_elo, winner_new, loser_elo, loser_new
 
     @commands.command()
