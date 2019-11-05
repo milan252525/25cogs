@@ -50,7 +50,7 @@ class Ladder(commands.Cog):
         embed = discord.Embed(colour = discord.Color.green())
         embed.add_field(name = "Winner", value = f"{winner.mention} {result[0]} -> {result[1]}")
         embed.add_field(name = "Loser", value = f"{loser.mention} {result[2]} -> {result[3]}")
-        ctx.send(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.guild_only()
     @commands.group(aliases=["lb", "ladder"], invoke_without_command=True)
