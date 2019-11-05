@@ -29,12 +29,13 @@ class Ladder(commands.Cog):
         # default_guild = {"leaderboard" : []}
         # self.config.register_guild(**default_guild)
 
+    #https://blog.mackie.io/the-elo-algorithm
     def calculate_elo(self, old_rating_player_a : int, old_rating_player_b : int, win : bool):
         expected = 1 / (1 + math.pow(10, (-((old_rating_player_a - old_rating_player_b)/400))))
         actual = 1 if win else 0
         return int(old_rating_player_a + 30 * (actual - expected))
 
-    def one_match_result(self, winner, loser):
+    async def one_match_result(self, winner, loser):
         winner_elo = await self.config.member(winner).elo()
         loser_elo = await self.config.member(winner).elo()
         winner_new = self.calculate_elo(winner_elo, loser_elo, True)
@@ -45,7 +46,7 @@ class Ladder(commands.Cog):
 
     @commands.command(aliases=['p'])
     async def result(self, ctx, winner : discord.Member, loser : discord.Member):
-        result = self.one_match_result(winner, loser)
+        result = await self.one_match_result(winner, loser)
         embed = discord.Embed(colour = discord.Color.green())
         embed.add_field(name = "Winner", value = f"{winner.mention} {result[0]} -> {result[1]}")
         embed.add_field(name = "Loser", value = f"{loser.mention} {result[2]} -> {result[3]}")
