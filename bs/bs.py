@@ -219,20 +219,30 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
             return
         
-        embed=discord.Embed(description=f"```{self.remove_codes(club.description)}```")
-        embed.set_author(name=f"{club.name} #{club.tag}")
+        embed=discord.Embed(description=f"```{self.remove_codes(club.description)}```", colour=club.members[i].name_color)
+        embed.set_author(name=f"{club.name} {club.tag}")
         embed.add_field(name="Total Trophies", value= f"<:bstrophy:552558722770141204> {club.trophies}")
         embed.add_field(name="Required Trophies", value= f"{self.get_league_emoji(club.required_trophies)} {club.required_trophies}")
         embed.add_field(name="Members", value=f"<:icon_gameroom:553299647729238016> {len(club.members)}/100")
         embed.add_field(name="Status", value= f"<:bslock:552560387279814690> {club.type}")
+        for m in club.members:
+            if m.role == "president":
+                embed.add_field(name="President", value= f"<:leader:642112580965367837> {self.get_league_emoji(m.trophies)}`{m.trophies}` {m.name}")
         topm = ""
-        for i in range(10):
+        for i in range(5):
             try:
                 topm += f"{self.get_league_emoji(club.members[i].trophies)}`{club.members[i].trophies}` {self.remove_codes(club.members[i].name)}\n"
             except IndexError:
                 pass
-        embed.add_field(name = "Top Members", value = topm, inline = False)
-        return await ctx.send(embed=randomize_colour(embed))            
+        worstm = ""
+        for i in range(5):
+            try:
+                worstm += f"{self.get_league_emoji(club.members[len(club.members)-6+i].trophies)}`{club.members[len(club.members)-6+i].trophies}` {self.remove_codes(club.members[len(club.members)-6+i].name)}\n"
+            except IndexError:
+                pass
+        embed.add_field(name = "Top Members", value = topm, inline = True)
+        embed.add_field(name = "Lowest Members", value = worstm, inline = True)
+        return await ctx.send(embed=embed)            
             
 
     @commands.guild_only()
