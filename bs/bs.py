@@ -255,20 +255,19 @@ class BrawlStarsCog(commands.Cog):
                 clubs = sorted(clubs, key=lambda sort: (sort.trophies), reverse=True)
                 
                 for i in range(len(clubs)):   
-                    cemoji = "<:bsband:600741378497970177>"
                     key = ""
                     for k in (await self.config.guild(ctx.guild).clubs()).keys():
                         if clubs[i].tag.replace("#", "") == await self.config.guild(ctx.guild).clubs.get_raw(k, "tag"):
                             key = k
                     
-                    await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastMemberCount', value=clubs[i].members_count)            
+                    await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastMemberCount', value=len(clubs[i].members))            
                     await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastRequirement', value=clubs[i].required_trophies)   
                     await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastScore', value=clubs[i].trophies)               
                     await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastPosition', value=i)                 
                    
                     info = await self.config.guild(ctx.guild).clubs.get_raw(key, "info", default="")
-                    e_name = f"<:bsband:600741378497970177> {clubs[i].name} [{key}] #{clubs[i].tag} {info}"
-                    e_value = f"<:bstrophy:552558722770141204>`{clubs[i].trophies}` {self.get_league_emoji(clubs[i].required_trophies)}`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{clubs[i].members_count}`"
+                    e_name = f"<:bsband:600741378497970177> {clubs[i].name} [{key}] {clubs[i].tag} {info}"
+                    e_value = f"<:bstrophy:552558722770141204>`{clubs[i].trophies}` {self.get_league_emoji(clubs[i].required_trophies)}`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
                     embedFields.append([e_name, e_value])
             
             else:
