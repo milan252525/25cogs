@@ -295,7 +295,7 @@ class BrawlStarsCog(commands.Cog):
             for i in range(0, len(embedFields), 8):
                 embed = discord.Embed(colour=colour)
                 embed.set_author(name=f"{ctx.guild.name} clubs", icon_url=ctx.guild.icon_url)
-                footer = "API is offline, showing last saved data." if offline else f"Do you need more info about a club? Use {ctx.prefix}club [key]"
+                footer = "<:offline:642094554019004416> API is offline, showing last saved data." if offline else f"Do you need more info about a club? Use {ctx.prefix}club [key]"
                 embed.set_footer(text = footer)
                 for e in embedFields[i:i+8]:
                     embed.add_field(name=e[0], value=e[1], inline=False)
@@ -382,7 +382,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(administrator = True)
     @clubs.command(name="info")
-    async def clans_info(self, ctx, key : str, *, info : str = ""):
+    async def clubs_info(self, ctx, key : str, *, info : str = ""):
         """Edit club info"""
         await ctx.trigger_typing()
         try:
