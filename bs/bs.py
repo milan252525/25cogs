@@ -190,7 +190,7 @@ class BrawlStarsCog(commands.Cog):
             offline = True
             key = None
 
-        if (key is not None and key != "forceoffline") or ctx.message.replace(ctx.prefix, "") == "club":
+        if (key is not None and key != "forceoffline") or ctx.message.content.replace(ctx.prefix, "") == "club":
             try:
                 if key.startswith("<"):
                     memberid = key.replace("<", "").replace(">", "").replace("@", "").replace("!", "")
