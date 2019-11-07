@@ -29,8 +29,7 @@ class Tools(commands.Cog):
                 except:
                     numberPrev = int(history[2].content.split(" ")[0])
                 if number != numberPrev + 1:
-                    wrongmsg = ["Wrong number!", "I know math is hard... Try using a calculator maybe?", "Improve your counting skils...", "Did you not go to school?", "Thats wrong...", "https://en.wikipedia.org/wiki/Counting", "Try again...", "Mirror, mirror on the wall, who’s the smartest of them all? NOT YOU!"]
-                    await msg.channel.send(f"{choice(wrongmsg)} (Hint: {numberPrev} + 1)", delete_after=2)
+                    await msg.channel.send(f"Wrong number! (Hint: {numberPrev} + 1)", delete_after=2)
                     return await msg.delete()
                 if msg.author == history[1].author:
                     await msg.channel.send(f"Slow down! Let other people count as well!", delete_after=2)
