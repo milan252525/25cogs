@@ -1,7 +1,7 @@
 import discord
 from redbot.core import commands, Config, checks
 from redbot.core.utils.embed import randomize_colour
-from redbot.core.utils.menus import menu, DEFAULT_CONTROLS
+from redbot.core.utils.menus import menu, prev_page, next_page
 from random import choice
 import asyncio
 import brawlstats
@@ -322,21 +322,9 @@ class BrawlStarsCog(commands.Cog):
                 for e in embedFields[i:i+8]:
                     embed.add_field(name=e[0], value=e[1], inline=False)
                 embedsToSend.append(embed)
-             
-            async def next_page(ctx: commands.Context, pages: list, controls: dict, message: discord.Message, page: int, timeout: float, emoji: str):
-                perms = message.channel.permissions_for(ctx.me)
-                if perms.manage_messages:
-                    try:
-                        await message.remove_reaction(emoji, ctx.author)
-                    except discord.NotFound:
-                        pass
-                if page == len(pages) - 1:
-                    page = 0
-                else:
-                    page = page + 1
-                return await menu(ctx, pages, controls, message=message, page=page, timeout=timeout)                  
+                         
             if len(embedsToSend) > 1:                   
-                await menu(ctx, embedsToSend, {"➡": next_page} , timeout=600)
+                await menu(ctx, embedsToSend, {"⬅": prev_page, "➡": next_page,} , timeout=600)
             else:
                 await ctx.send(embed=embedsToSend[0])
                                 
