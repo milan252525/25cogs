@@ -21,6 +21,10 @@ class BrawlStarsCog(commands.Cog):
         if bsapikey["api_key"] is None:
             raise ValueError("The Brawl Stars API key has not been set. Use [p]set api bsapi api_key,YOURAPIKEY")
         self.bsapi = brawlstats.BrawlAPI(bsapikey["api_key"], is_async=True)
+        ofcbsapikey = await self.bot.db.api_tokens.get_raw("ofcbsapi", default={"api_key": None})
+        if ofcbsapikey["api_key"] is None:
+            raise ValueError("The Official Brawl Stars API key has not been set. Use [p]set api ofcbsapi api_key,YOURAPIKEY")
+        self.ofcbsapi = brawlstats.OfficialAPI(ofcbsapikey["api_key"], is_async=True)
         
     def badEmbed(self, text):
         bembed = discord.Embed(color=0xff0000)
@@ -239,9 +243,9 @@ class BrawlStarsCog(commands.Cog):
             try:
                 clubs = []
                 for key in (await self.config.guild(ctx.guild).clubs()).keys():
-                    club = await self.bsapi.get_club(await self.config.guild(ctx.guild).clubs.get_raw(key, "tag"))
+                    club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs.get_raw(key, "tag"))
                     clubs.append(club)
-                    await asyncio.sleep(1)
+                    #await asyncio.sleep(1)
             except brawlstats.errors.RequestError as e:
                 offline = True
             
