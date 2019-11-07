@@ -219,7 +219,7 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
             return
         
-        embed=discord.Embed(description=f"```{self.remove_codes(club.description)}```", colour=club.members[i].name_color)
+        embed=discord.Embed(description=f"```{self.remove_codes(club.description)}```")
         embed.set_author(name=f"{club.name} {club.tag}")
         embed.add_field(name="Total Trophies", value= f"<:bstrophy:552558722770141204> {club.trophies}")
         embed.add_field(name="Required Trophies", value= f"{self.get_league_emoji(club.required_trophies)} {club.required_trophies}")
@@ -242,7 +242,7 @@ class BrawlStarsCog(commands.Cog):
                 pass
         embed.add_field(name = "Top Members", value = topm, inline = True)
         embed.add_field(name = "Lowest Members", value = worstm, inline = True)
-        return await ctx.send(embed=embed)            
+        return await ctx.send(embed=randomize_colour(embed))            
             
 
     @commands.guild_only()
@@ -334,7 +334,7 @@ class BrawlStarsCog(commands.Cog):
                     page = page + 1
                 return await menu(ctx, pages, controls, message=message, page=page, timeout=timeout)                  
             if len(embedsToSend) > 1:                   
-                await menu(ctx, embedsToSend, {"➡": next_page} , timeout=300)
+                await menu(ctx, embedsToSend, {"➡": next_page} , timeout=600)
             else:
                 await ctx.send(embed=embedsToSend[0])
                                 
