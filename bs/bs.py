@@ -20,7 +20,7 @@ class BrawlStarsCog(commands.Cog):
         bsapikey = await self.bot.db.api_tokens.get_raw("bsapi", default={"api_key": None})
         if bsapikey["api_key"] is None:
             raise ValueError("The Brawl Stars API key has not been set. Use [p]set api bsapi api_key,YOURAPIKEY")
-        self.bsapi = brawlstats.BrawlAPI(bsapikey["api_key"], is_async=True)
+        self.bsapi = brawlstats.BrawlAPI(bsapikey["api_key"], is_async=True, prevent_ratelimit=True)
         ofcbsapikey = await self.bot.db.api_tokens.get_raw("ofcbsapi", default={"api_key": None})
         if ofcbsapikey["api_key"] is None:
             raise ValueError("The Official Brawl Stars API key has not been set. Use [p]set api ofcbsapi api_key,YOURAPIKEY")
@@ -73,8 +73,8 @@ class BrawlStarsCog(commands.Cog):
             tag = tag.strip('#')
 
         try:
-            player = await self.bsapi.get_player(tag)
-            await self.config.user(member).tag.set(tag)
+            player = await self.ofcbsapi.get_player(tag)
+            await self.config.user(member).tag.set(tag.replace("#", ""))
             await ctx.send(embed = self.goodEmbed("BS account {} was saved to {}".format(player.name, member.name)))
             
         except brawlstats.errors.NotFoundError:
@@ -84,7 +84,7 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
         
         except Exception as e:
-            await ctx.send("**Something went wrong, please send a personal message to <@590906101554348053> or try again!**")
+            await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
     
     @commands.command(aliases=['rbs'])
     async def renamebs(self, ctx, member:discord.Member=None):
@@ -159,7 +159,7 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
         
         except Exception as e:
-            return await ctx.send("**Something went wrong, please send a personal message to <@590906101554348053> or try again!**")
+            return await ctx.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
         colour = player.name_color_code
         embed=discord.Embed(color=discord.Colour.from_rgb(int(colour[0:2], 16), int(colour[2:4], 16), int(colour[4:6], 16)))

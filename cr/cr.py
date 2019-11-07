@@ -130,7 +130,7 @@ class ClashRoyaleCog(commands.Cog):
             return await ctx.send(embed = self.badEmbed(f"CR API is offline, please try again later! ({str(e)})"))
         
         except Exception as e:
-            return await ctx.send("**Something went wrong, please send a personal message to <@590906101554348053> or try again!**")
+            return await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
 
         embed=discord.Embed()
