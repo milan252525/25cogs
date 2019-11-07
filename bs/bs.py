@@ -177,64 +177,66 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(name="Best Time in Robo Rumble", value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time}")
         embed.add_field(name="Best Time as Big Brawler", value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler}")
         await ctx.send(embed=embed)
+
+    @commands.command()
+    async def club(self, ctx, key:str=None):
+        await ctx.trigger_typing()
+        if key.startswith("<"):
+            memberid = key.replace("<", "").replace(">", "").replace("@", "").replace("!", "")
+            member = discord.utils.get(ctx.guild.members, id=int(memberid))
+            if member is not None:
+                mtag = await self.config.user(member).tag()
+                if mtag is None:
+                    return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {ctx.prefix}bssave <tag>"))
+
+                try:
+                    player = await self.bsapi.get_player(mtag)
+                    if not player.club:
+                        return await ctx.send("This user is not in a club!")
+                    tag = player.club.tag
+                except brawlstats.errors.RequestError as e:
+                    await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+        elif key == None:
+            mtag = await self.config.user(ctx.author).tag()
+            if mtag is None:
+                    return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {ctx.prefix}bssave <tag>"))
+        else:
+            tag = await self.config.guild(ctx.guild).clubs.get_raw(key.lower(), "tag", default=None)
+            if tag is None:
+                return await ctx.send(embed = self.badEmbed(f"{key.title()} isn't saved club in this server!"))
+        try:
+            club = await self.bsapi.get_club(tag)
         
+        except brawlstats.errors.RequestError as e:
+            await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+            return
+        
+        embed=discord.Embed(description=f"```{self.remove_codes(club.description)}```")
+        embed.set_author(name=f"{club.name} #{club.tag}", icon_url=club.badge_url)
+        embed.add_field(name="Total Trophies", value= f"<:bstrophy:552558722770141204> {club.trophies}")
+        embed.add_field(name="Required Trophies", value= f"{self.get_league_emoji(club.required_trophies)} {club.required_trophies}")
+        embed.add_field(name="Members", value=f"<:icon_gameroom:553299647729238016> {club.members_count}/100")
+        embed.add_field(name="Status", value= f"<:bslock:552560387279814690> {club.status}")
+        topm = ""
+        for i in range(10):
+            try:
+                topm += f"{self.get_league_emoji(club.members[i].trophies)}`{club.members[i].trophies}` {self.remove_codes(club.members[i].name)}\n"
+            except IndexError:
+                pass
+        embed.add_field(name = "Top Members", value = topm, inline = False)
+        return await ctx.send(embed=randomize_colour(embed))            
+            
+
     @commands.guild_only()
-    @commands.group(aliases=['club'], invoke_without_command=True)
+    @commands.group(invoke_without_command=True)
     async def clubs(self, ctx, key:str=None):
         """View all clubs saved in this server"""
         offline = False
-        prefix = ctx.prefix
         await ctx.trigger_typing()
 
         if key == "forceoffline":
             offline = True
-            key = None
-
-        if (key is not None and key != "forceoffline") or ctx.message.content.replace(ctx.prefix, "") == "club":
-            try:
-                if key.startswith("<"):
-                    memberid = key.replace("<", "").replace(">", "").replace("@", "").replace("!", "")
-                    member = discord.utils.get(ctx.guild.members, id=int(memberid))
-                    if member is not None:
-                        mtag = await self.config.user(member).tag()
-                        if mtag is None:
-                            return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
-
-                        try:
-                            player = await self.bsapi.get_player(mtag)
-                            if not player.club:
-                                return await ctx.send("This user is not in a club!")
-                            tag = player.club.tag
-                        except brawlstats.errors.RequestError as e:
-                            await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-                else:
-                    tag = await self.config.guild(ctx.guild).clubs.get_raw(key.lower(), "tag", default=None)
-                    if tag is None:
-                        return await ctx.send(embed = self.badEmbed(f"{key.title()} isn't saved club in this server!"))
-                try:
-                    club = await self.bsapi.get_club(tag)
-                
-                except brawlstats.errors.RequestError as e:
-                    await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-                    return
-                
-                embed=discord.Embed(description=f"```{self.remove_codes(club.description)}```")
-                embed.set_author(name=f"{club.name} #{club.tag}", icon_url=club.badge_url)
-                embed.add_field(name="Total Trophies", value= f"<:bstrophy:552558722770141204> {club.trophies}")
-                embed.add_field(name="Required Trophies", value= f"{self.get_league_emoji(club.required_trophies)} {club.required_trophies}")
-                embed.add_field(name="Members", value=f"<:icon_gameroom:553299647729238016> {club.members_count}/100")
-                embed.add_field(name="Status", value= f"<:bslock:552560387279814690> {club.status}")
-                topm = ""
-                for i in range(10):
-                    try:
-                        topm += f"{self.get_league_emoji(club.members[i].trophies)}`{club.members[i].trophies}` {self.remove_codes(club.members[i].name)}\n"
-                    except IndexError:
-                        pass
-                embed.add_field(name = "Top Members", value = topm, inline = False)
-                return await ctx.send(embed=randomize_colour(embed))            
-                
-            except Exception as e:
-                return await ctx.send("**Something went wrong while displaying club, please send a personal message to LA Modmail bot or try again!**")
+            key = None        
         
         if len((await self.config.guild(ctx.guild).clubs()).keys()) < 1:
             return await ctx.send(embed = self.badEmbed(f"This server has no clubs saved. Save a club by using {ctx.prefix}clubs add!"))
