@@ -220,7 +220,7 @@ class BrawlStarsCog(commands.Cog):
             return
         
         embed=discord.Embed(description=f"```{self.remove_codes(club.description)}```")
-        embed.set_author(name=f"{club.name} #{club.tag}", icon_url=club.badge_url)
+        embed.set_author(name=f"{club.name} #{club.tag}")
         embed.add_field(name="Total Trophies", value= f"<:bstrophy:552558722770141204> {club.trophies}")
         embed.add_field(name="Required Trophies", value= f"{self.get_league_emoji(club.required_trophies)} {club.required_trophies}")
         embed.add_field(name="Members", value=f"<:icon_gameroom:553299647729238016> {len(club.members)}/100")
