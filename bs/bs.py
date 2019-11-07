@@ -184,7 +184,15 @@ class BrawlStarsCog(commands.Cog):
         if key == None:
             mtag = await self.config.user(ctx.author).tag()
             if mtag is None:
-                    return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {ctx.prefix}bssave <tag>"))
+                return await ctx.send(embed = self.badEmbed(f"You have no tag saved! Use {ctx.prefix}bssave <tag>"))
+            try:
+                player = await self.ofcbsapi.get_player(mtag)
+                if not player.club.tag:
+                    return await ctx.send("This user is not in a club!")
+                tag = player.club.tag
+            except brawlstats.errors.RequestError as e:
+                await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+
         elif key.startswith("<"):
             memberid = key.replace("<", "").replace(">", "").replace("@", "").replace("!", "")
             member = discord.utils.get(ctx.guild.members, id=int(memberid))
@@ -194,8 +202,8 @@ class BrawlStarsCog(commands.Cog):
                     return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {ctx.prefix}bssave <tag>"))
 
                 try:
-                    player = await self.bsapi.get_player(mtag)
-                    if not player.club:
+                    player = await self.ofcbsapi.get_player(mtag)
+                    if not player.club.tag:
                         return await ctx.send("This user is not in a club!")
                     tag = player.club.tag
                 except brawlstats.errors.RequestError as e:
@@ -205,7 +213,7 @@ class BrawlStarsCog(commands.Cog):
             if tag is None:
                 return await ctx.send(embed = self.badEmbed(f"{key.title()} isn't saved club in this server!"))
         try:
-            club = await self.bsapi.get_club(tag)
+            club = await self.ofcbsapi.get_club(tag)
         
         except brawlstats.errors.RequestError as e:
             await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
@@ -215,8 +223,8 @@ class BrawlStarsCog(commands.Cog):
         embed.set_author(name=f"{club.name} #{club.tag}", icon_url=club.badge_url)
         embed.add_field(name="Total Trophies", value= f"<:bstrophy:552558722770141204> {club.trophies}")
         embed.add_field(name="Required Trophies", value= f"{self.get_league_emoji(club.required_trophies)} {club.required_trophies}")
-        embed.add_field(name="Members", value=f"<:icon_gameroom:553299647729238016> {club.members_count}/100")
-        embed.add_field(name="Status", value= f"<:bslock:552560387279814690> {club.status}")
+        embed.add_field(name="Members", value=f"<:icon_gameroom:553299647729238016> {len(club.members)}/100")
+        embed.add_field(name="Status", value= f"<:bslock:552560387279814690> {club.type}")
         topm = ""
         for i in range(10):
             try:
