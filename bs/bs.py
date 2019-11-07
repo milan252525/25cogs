@@ -223,8 +223,8 @@ class BrawlStarsCog(commands.Cog):
         embed.set_author(name=f"{club.name} #{club.tag}", icon_url=club.badge_url)
         embed.add_field(name="Total Trophies", value= f"<:bstrophy:552558722770141204> {club.trophies}")
         embed.add_field(name="Required Trophies", value= f"{self.get_league_emoji(club.required_trophies)} {club.required_trophies}")
-        embed.add_field(name="Members", value=f"<:icon_gameroom:553299647729238016> {len(club.members)}/100")
-        embed.add_field(name="Status", value= f"<:bslock:552560387279814690> {club.type}")
+        #embed.add_field(name="Members", value=f"<:icon_gameroom:553299647729238016> {len(club.members)}/100")
+        #embed.add_field(name="Status", value= f"<:bslock:552560387279814690> {club.type}")
         topm = ""
         for i in range(10):
             try:
@@ -232,7 +232,7 @@ class BrawlStarsCog(commands.Cog):
             except IndexError:
                 pass
         embed.add_field(name = "Top Members", value = topm, inline = False)
-        return await ctx.send(embed=randomize_colour(embed))            
+        return await ctx.send(embed=embed)            
             
 
     @commands.guild_only()
