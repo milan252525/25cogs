@@ -181,7 +181,11 @@ class BrawlStarsCog(commands.Cog):
     @commands.command()
     async def club(self, ctx, key:str=None):
         await ctx.trigger_typing()
-        if key.startswith("<"):
+        if key == None:
+            mtag = await self.config.user(ctx.author).tag()
+            if mtag is None:
+                    return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {ctx.prefix}bssave <tag>"))
+        elif key.startswith("<"):
             memberid = key.replace("<", "").replace(">", "").replace("@", "").replace("!", "")
             member = discord.utils.get(ctx.guild.members, id=int(memberid))
             if member is not None:
@@ -196,10 +200,6 @@ class BrawlStarsCog(commands.Cog):
                     tag = player.club.tag
                 except brawlstats.errors.RequestError as e:
                     await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-        elif key == None:
-            mtag = await self.config.user(ctx.author).tag()
-            if mtag is None:
-                    return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {ctx.prefix}bssave <tag>"))
         else:
             tag = await self.config.guild(ctx.guild).clubs.get_raw(key.lower(), "tag", default=None)
             if tag is None:
