@@ -214,10 +214,10 @@ class BrawlStarsCog(commands.Cog):
                 return await ctx.send(embed = self.badEmbed(f"{key.title()} isn't saved club in this server!"))
         try:
             club = await self.ofcbsapi.get_club(tag)
-            print(club)
         
         except brawlstats.errors.RequestError as e:
-            return await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+            await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+            return
         
         embed=discord.Embed(description=f"```{self.remove_codes(club.description)}```")
         embed.set_author(name=f"{club.name} #{club.tag}", icon_url=club.badge_url)
@@ -231,7 +231,7 @@ class BrawlStarsCog(commands.Cog):
                 topm += f"{self.get_league_emoji(club.members[i].trophies)}`{club.members[i].trophies}` {self.remove_codes(club.members[i].name)}\n"
             except IndexError:
                 pass
-        #embed.add_field(name = "Top Members", value = topm, inline = False)
+        embed.add_field(name = "Top Members", value = topm, inline = False)
         return await ctx.send(embed=randomize_colour(embed))            
             
 
