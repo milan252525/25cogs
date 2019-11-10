@@ -44,7 +44,7 @@ class Tools(commands.Cog):
         if msg.guild.id == 401883208511389716 and not msg.author.bot and msg.channel.category_id == 401883208511389717:
             if msg.channel.category_id == 401883208511389717:
                 await self.config.member(msg.author).countdownMessage.set(await self.config.member(msg.author).messages() + 1)
-                await self.config.member(msg.author).countdownMessage.set(msg.author.display_name)
+                await self.config.member(msg.author).name.set(msg.author.display_name)
 
     def convertToLeft(self, sec):
         if sec > 3600:
