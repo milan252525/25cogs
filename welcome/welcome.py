@@ -61,7 +61,7 @@ class Welcome(commands.Cog):
                 name = "todetect.jpeg"
             image = await att.save(name)
             text = pytesseract.image_to_string(Image.open(name))
-            await ctx.send(text)
+            print(text)
         except IndexError:
             await ctx.send("No image.")
             
