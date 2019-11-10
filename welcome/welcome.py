@@ -59,8 +59,8 @@ class Welcome(commands.Cog):
                 name = "todetect.jpg"
             elif att.filename[-4:] == "jpeg":
                 name = "todetect.jpeg"
-            image = await att.save(name)
-            text = pytesseract.image_to_string(Image.open(name))
+            await att.save(name)
+            text = pytesseract.image_to_data(Image.open(name))
             print(text)
         except IndexError:
             await ctx.send("No image.")
