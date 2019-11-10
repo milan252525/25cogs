@@ -54,7 +54,7 @@ class Welcome(commands.Cog):
         try:
             att = ctx.message.attachments[0]
             image = await att.read()
-            text = pytesseract.image_to_string(Image.open())
+            text = pytesseract.image_to_string(image)
             await ctx.send(text)
         except IndexError:
             await ctx.send("No image.")
