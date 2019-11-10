@@ -55,7 +55,7 @@ class Welcome(commands.Cog):
             image = ctx.message.attachments[0]
             text = pytesseract.image_to_string(Image.open(image.read()))
             await ctx.send(text)
-        except:
+        except IndexError:
             await ctx.send("No image.")
             
     @commands.guild_only()
