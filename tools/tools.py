@@ -12,7 +12,9 @@ class Tools(commands.Cog):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=2555525)
         default_global = {"countdowns" : {}}
+        default_member = {"messages" : 0}
         self.config.register_global(**default_global)
+        self.config.register_member(**default_member)    
         self.updater.start()
         
     def cog_unload(self):
@@ -20,6 +22,7 @@ class Tools(commands.Cog):
         
     @commands.Cog.listener()
     async def on_message(self, msg):
+        #counting
         if msg.channel.id == 584099500612780053 and not msg.author.bot:
             try:
                 number = int(msg.content.split(" ")[0])
@@ -36,7 +39,11 @@ class Tools(commands.Cog):
                     return await msg.delete()
             except ValueError:
                 await msg.delete()
-                
+
+        #LABS giveaway
+        if msg.guild.id == 401883208511389716 and not msg.author.bot and msg.channel.category_id == 401883208511389717:
+            if msg.channel.category_id == 401883208511389717:
+                await self.config.member(msg.author).countdownMessage.set(await self.config.member(msg.author).messages() + 1)
 
     def convertToLeft(self, sec):
         if sec > 3600:
