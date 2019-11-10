@@ -53,8 +53,14 @@ class Welcome(commands.Cog):
     async def detect(self, ctx):
         try:
             att = ctx.message.attachments[0]
-            image = await att.read()
-            text = pytesseract.image_to_string(image)
+            if att.filename[-3:] == "png":
+                name = "todetect.png"
+            elif att.filename[-3:] == "jpg":
+                name = "todetect.jpg"
+            elif att.filename[-4:] == "jpeg":
+                name = "todetect.jpeg"
+            image = await att.save(name)
+            text = pytesseract.image_to_string(Image.open(name))
             await ctx.send(text)
         except IndexError:
             await ctx.send("No image.")
