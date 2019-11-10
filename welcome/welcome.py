@@ -5,6 +5,11 @@ import clashroyale
 import brawlstats
 import asyncio
 from random import choice
+try:
+    from PIL import Image
+except ImportError:
+    import Image
+import pytesseract
 
 class Welcome(commands.Cog):
 
@@ -43,6 +48,12 @@ class Welcome(commands.Cog):
         if bsapikey["api_key"] is None:
             raise ValueError("The Brawl Stars API key has not been set. Use [p]set api bsapi api_key,YOURAPIKEY")
         self.bsapi = brawlstats.BrawlAPI(bsapikey["api_key"], is_async=True)
+
+    @commands.command(hidden=True)
+    async def detect(self, ctx):
+        image = ctx.message.attachments[1]
+        text = pytesseract.image_to_string(Image.open(image.read()))
+        await ctx.send(text)
             
     @commands.guild_only()
     @commands.command(hidden=True)
