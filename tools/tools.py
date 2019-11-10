@@ -46,6 +46,21 @@ class Tools(commands.Cog):
                 amount = await self.config.member(msg.author).messages()
                 await self.config.member(msg.author).messages.set(amount + 1)
                 await self.config.member(msg.author).name.set(msg.author.display_name)
+                
+        #message redirection
+        if isinstance(message.channel, discord.abc.PrivateChannel) and not message.author.bot and not (message.author.id == 230947675837562880):
+            embed = discord.Embed(description = "Someone DMed me!", colour = discord.Colour.teal())
+            embed.add_field(name="From: ", value=message.author.name, inline=False)
+            embed.add_field(name="ID: ", value=message.author.id, inline=False)
+            if message.content == "":
+                ctn = "Empty message :shrug:"
+            else:
+                ctn = message.content
+            embed.add_field(name="Message:", value=ctn, inline=False)
+            if message.attachments:
+                for i in range(len(message.attachments)):
+                    embed.add_field(name=f"Attachment {str(i+1)}:", value=message.attachments[i].url, inline=False)
+            await self.bot.get_user(230947675837562880).send(embed=embed)
 
     def convertToLeft(self, sec):
         if sec > 3600:
