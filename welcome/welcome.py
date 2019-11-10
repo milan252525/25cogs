@@ -51,9 +51,12 @@ class Welcome(commands.Cog):
 
     @commands.command(hidden=True)
     async def detect(self, ctx):
-        image = ctx.message.attachments[1]
-        text = pytesseract.image_to_string(Image.open(image.read()))
-        await ctx.send(text)
+        try:
+            image = ctx.message.attachments[0]
+            text = pytesseract.image_to_string(Image.open(image.read()))
+            await ctx.send(text)
+        except:
+            await ctx.send("No image.")
             
     @commands.guild_only()
     @commands.command(hidden=True)
