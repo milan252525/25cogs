@@ -42,10 +42,9 @@ class Tools(commands.Cog):
 
         #LABS giveaway
         if not msg.author.bot and isinstance(msg.channel, discord.TextChannel) and msg.guild.id == 401883208511389716 and msg.channel.category_id == 401883208511389717:
-            if msg.channel.category_id == 401883208511389717:
-                amount = await self.config.member(msg.author).messages()
-                await self.config.member(msg.author).messages.set(amount + 1)
-                await self.config.member(msg.author).name.set(msg.author.display_name)
+            amount = await self.config.member(msg.author).messages()
+            await self.config.member(msg.author).messages.set(amount + 1)
+            await self.config.member(msg.author).name.set(msg.author.display_name)
                 
         #message redirection
         if not msg.author.bot and isinstance(msg.channel, discord.abc.PrivateChannel) and not (msg.author.id == 230947675837562880):
