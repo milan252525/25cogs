@@ -41,14 +41,14 @@ class Tools(commands.Cog):
                 await msg.delete()
 
         #LABS giveaway
-        if msg.guild.id == 401883208511389716 and not msg.author.bot and msg.channel.category_id == 401883208511389717:
+        if not msg.author.bot and isinstance(msg.channel, discord.abc.TextChannel) and msg.guild.id == 401883208511389716 and msg.channel.category_id == 401883208511389717:
             if msg.channel.category_id == 401883208511389717:
                 amount = await self.config.member(msg.author).messages()
                 await self.config.member(msg.author).messages.set(amount + 1)
                 await self.config.member(msg.author).name.set(msg.author.display_name)
                 
         #message redirection
-        if isinstance(msg.channel, discord.abc.PrivateChannel) and not msg.author.bot and not (msg.author.id == 230947675837562880):
+        if not msg.author.bot and isinstance(msg.channel, discord.abc.PrivateChannel) and not (msg.author.id == 230947675837562880):
             embed = discord.Embed(description = "Someone DMed me!", colour = discord.Colour.teal())
             embed.add_field(name="From: ", value=msg.author.name, inline=False)
             embed.add_field(name="ID: ", value=msg.author.id, inline=False)
