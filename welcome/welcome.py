@@ -49,21 +49,21 @@ class Welcome(commands.Cog):
             raise ValueError("The Brawl Stars API key has not been set. Use [p]set api bsapi api_key,YOURAPIKEY")
         self.bsapi = brawlstats.BrawlAPI(bsapikey["api_key"], is_async=True)
 
-    @commands.command(hidden=True)
-    async def detect(self, ctx):
-        try:
-            att = ctx.message.attachments[0]
-            if att.filename[-3:] == "png":
-                name = "todetect.png"
-            elif att.filename[-3:] == "jpg":
-                name = "todetect.jpg"
-            elif att.filename[-4:] == "jpeg":
-                name = "todetect.jpeg"
-            await att.save(name)
-            text = pytesseract.image_to_data(Image.open(name))
-            print(text)
-        except IndexError:
-            await ctx.send("No image.")
+    # @commands.command(hidden=True)
+    # async def detect(self, ctx):
+    #     try:
+    #         att = ctx.message.attachments[0]
+    #         if att.filename[-3:] == "png":
+    #             name = "todetect.png"
+    #         elif att.filename[-3:] == "jpg":
+    #             name = "todetect.jpg"
+    #         elif att.filename[-4:] == "jpeg":
+    #             name = "todetect.jpeg"
+    #         await att.save(name)
+    #         text = pytesseract.image_to_data(Image.open(name))
+    #         print(text)
+    #     except IndexError:
+    #         await ctx.send("No image.")
             
     @commands.guild_only()
     @commands.command(hidden=True)
