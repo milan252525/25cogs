@@ -32,7 +32,7 @@ class Events(commands.Cog):
         self.messageupdateloop.cancel()
         self.randomspawnloop.cancel()
 
-    @tasks.loop(seconds=10)
+    @tasks.loop(seconds=15)
     async def messageupdateloop(self):
         new_actions_str = ""
         for action in self.actions:
@@ -45,12 +45,15 @@ class Events(commands.Cog):
                 new_actions_str += f"{action[1]} -{action[2]} HP **(x3)**\n"
                 self.data["bossfight"]["hp_left"] -= action[2]
         self.actions = []
+        if len(new_actions_str) == 0:
+            new_actions_str = "Deal damage by sending messages!"
         if self.data["bossfight"]["hp_left"] <= 0:
             await self.finish()
-        embed = self.data["bossfight"]["embed"]
-        embed.set_field_at(0, name="HP Left", value=f"{self.data['bossfight']['hp_left']}/{self.BOSS_HP}", inline=False)
-        embed.set_field_at(1, name="Action log:", value=new_actions_str)
-        await self.data["bossfight"]["message"].edit(embed=embed)
+        else:
+            embed = self.data["bossfight"]["embed"]
+            embed.set_field_at(0, name="HP Left", value=f"{self.data['bossfight']['hp_left']}/{self.BOSS_HP}", inline=False)
+            embed.set_field_at(1, name="Action log:", value=new_actions_str)
+            await self.data["bossfight"]["message"].edit(embed=embed)
 
 
     @tasks.loop(seconds=15)
@@ -118,7 +121,7 @@ class Events(commands.Cog):
         if msg.author.id not in self.players.keys():
             self.players[msg.author.id] = {"damage" : 0, "power_cubes" : 0}
         damage = (self.players[msg.author.id]["power_cubes"] + 1) * self.DAMAGE_PER_CUBE * 3
-        await message.edit(embed=discord.Embed(description=f"<:sd:614517124219666453> {msg.author.mention} deal triple damage ({damage}) to the bot", colour=discord.Color.blue()))
+        await message.edit(embed=discord.Embed(description=f"<:sd:614517124219666453> {msg.author.mention} dealt triple damage ({damage}) to the bot", colour=discord.Color.blue()))
         self.players[msg.author.id]["damage"] += damage
         self.actions.append(["3D", msg.author.mention, damage])
         await message.delete(delay=3)
@@ -160,4 +163,5 @@ class Events(commands.Cog):
         self.data["bossfight"]["active"] = True
 
         self.messageupdateloop.start()
+        await sleep(5)
         self.randomspawnloop.start()
