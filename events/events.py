@@ -69,12 +69,12 @@ class Events(commands.Cog):
     #     print()
 
     async def finish(self):
-        self.messageupdateloop.cancel()
+        self.messageupdateloop.stop()
         self.randomspawnloop.cancel()
         self.data["bossfight"]["active"] = False
         embed = self.data["bossfight"]["embed"]
         embed.set_field_at(0, name="HP Left", value=f"0/{self.BOSS_HP}", inline=False)
-        embed.set_field_at(1, name="Action log:", value="Boss was defeated!")
+        embed.set_field_at(1, name="Action log:", value="Boss has been defeated!")
         embed.set_footer(text=discord.Embed.Empty)
         await self.data["bossfight"]["message"].edit(embed=embed)
         final = []
