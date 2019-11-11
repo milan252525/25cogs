@@ -3,6 +3,7 @@ from redbot.core import commands, Config, checks
 from discord.ext import tasks
 from asyncio import sleep
 from random import choice, randint
+from copy import deepcopy
 
 class Events(commands.Cog):
     
@@ -13,7 +14,7 @@ class Events(commands.Cog):
         #self.config.register_member(**default_member)
         self.BOSS_HP = 5000
         self.DAMAGE_PER_CUBE = 100
-        self.data = {
+        self.DEFAULT_DATA = {
             "bossfight" : {
                 "active" : False,
                 "channel" : None,
@@ -22,15 +23,16 @@ class Events(commands.Cog):
                 "hp_left" : self.BOSS_HP
                 }
             }
+        self.data = deepcopy(self.DEFAULT_DATA)
         self.actions = []
         self.players = {}
         
 
     def cog_unload(self):
-        self.messageupdateloop.stop()
-        self.randomspawnloop.stop()
+        self.messageupdateloop.cancel()
+        self.randomspawnloop.cancel()
 
-    @tasks.loop(seconds=20)
+    @tasks.loop(seconds=10)
     async def messageupdateloop(self):
         new_actions_str = ""
         for action in self.actions:
@@ -39,6 +41,9 @@ class Events(commands.Cog):
                 self.data["bossfight"]["hp_left"] -= action[2]
             elif action[0] == "P":
                 new_actions_str += f"{action[1]} collected a power cube ({action[2]})\n"
+            if action[0] == "3D":
+                new_actions_str += f"{action[1]} -{action[2]} HP **(x3)**\n"
+                self.data["bossfight"]["hp_left"] -= action[2]
         self.actions = []
         if self.data["bossfight"]["hp_left"] <= 0:
             await self.finish()
@@ -50,21 +55,44 @@ class Events(commands.Cog):
 
     @tasks.loop(seconds=30)
     async def randomspawnloop(self):
-        rand = randint(0,10)
-        if rand < 5:
+        rand = randint(1,10)
+        if rand < 3:
             await self.spawn_cube()
+        if rand < 6:
+            await self.spawn_challenge()
 
     # @tasks.loop(seconds=20)
     # async def randomkillloop(self):
     #     print()
 
     async def finish(self):
+        self.messageupdateloop.cancel()
+        self.randomspawnloop.cancel()
+        self.data["bossfight"]["active"] = False
         embed = self.data["bossfight"]["embed"]
         embed.set_field_at(0, name="HP Left", value=f"0/{self.BOSS_HP}", inline=False)
-        embed.add_field(name="Action log:", value="Boss was defeated!")
-        self.messageupdateloop.stop()
-        self.randomspawnloop.stop()
-
+        embed.set_field_at(1, name="Action log:", value="Boss was defeated!")
+        final = []
+        for k in self.players.keys():
+            final.append([k, self.players[k]["damage"], self.players[k]["power_cubes"]])
+        final.sort(key=lambda x: x[1], reverse=True)
+        msg = ""
+        messages = []
+        for p in final:
+            if len(msg) > 1500:
+                messages.append(msg)
+                msg = ""
+            u = self.bot.get_user(p[0])
+            msg += f"{u.mention} <:damage:643539221428174849> `{p[1]}` <:powercube:643517745199054855> `{p[2]}`\n"
+        if len(msg) > 0:
+            messages.append(msg)
+        for m in messages:
+            await self.data["bossfight"]["channel"].send(m)
+        self.data = deepcopy(self.DEFAULT_DATA)
+        self.actions = []
+        self.players = {}
+        
+        
     async def spawn_cube(self):
         embed = discord.Embed(description="<:powercube:643517745199054855> Power cube spawned!\nPick it up by reacting!", colour=discord.Color.green())
         message = await self.data["bossfight"]["channel"].send(embed=embed)
@@ -79,12 +107,29 @@ class Events(commands.Cog):
         self.actions.append(["P", user.mention, self.players[user.id]["power_cubes"]])
         await message.delete(delay=3)
 
+    async def spawn_challenge(self):
+        word = choice(["shelly", "nita", "colt", "mortis"])
+        embed = discord.Embed(description=f"<:sd:614517124219666453> Deal triple damage to the bot!\nType \"{word}\"!", colour=discord.Color.blue())
+        message = await self.data["bossfight"]["channel"].send(embed=embed)
+        def check(m):
+            return not m.author.bot and word in m.content.lower() and m.channel == self.data["bossfight"]["channel"]
+        msg = await self.bot.wait_for('message', check=check)
+        if msg.author.id not in self.players.keys():
+            self.players[msg.author.id] = {"damage" : 0, "power_cubes" : 0}
+        damage = (self.players[msg.author.id]["power_cubes"] + 1) * self.DAMAGE_PER_CUBE * 3
+        await message.edit(embed=discord.Embed(description=f"<:sd:614517124219666453> {msg.author.mention} deal triple damage ({damage}) to the bot", colour=discord.Color.blue()))
+        self.players[msg.author.id]["damage"] += damage
+        self.actions.append(["3D", msg.author.mention, damage])
+        await message.delete(delay=3)
+
     @commands.Cog.listener()
     async def on_message(self, message):
         if not message.author.bot and self.data["bossfight"]["active"] and message.channel == self.data["bossfight"]["channel"]:
             if message.author.id not in self.players.keys():
                 self.players[message.author.id] = {"damage" : 0, "power_cubes" : 0}
-            self.actions.append(["D", message.author.mention, (self.players[message.author.id]["power_cubes"] + 1) * self.DAMAGE_PER_CUBE])
+            damage = (self.players[message.author.id]["power_cubes"] + 1) * self.DAMAGE_PER_CUBE
+            self.players[message.author.id]["damage"] += damage
+            self.actions.append(["D", message.author.mention, damage])
             await message.delete(delay=1)
             
         
