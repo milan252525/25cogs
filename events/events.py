@@ -34,7 +34,6 @@ class Events(commands.Cog):
             if action[0] == "D":
                 new_actions_str += f"{action[1]} -{action[2]} HP\n"
                 self.data["bossfight"]["hp_left"] -= action[2]
-                damage += action[2]
             elif action[0] == "P":
                 new_actions_str += f"{action[1]} collected a power cube ({action[2]})\n"
         self.actions = []
@@ -65,12 +64,12 @@ class Events(commands.Cog):
                 self.players[user.id] = {"damage" : 0, "power_cubes" : 0}
         self.players[user.id]["power_cubes"] += 1
         await message.edit(embed=discord.Embed(description=f"<:powercube:643517745199054855> {user.mention} collected the power cube!\nCurrent amount: {self.players[user.id]['power_cubes']}", colour=discord.Color.green()))
-        self.actions.append("P", [message.author.mention, self.players[message.author.id]["power_cubes"]])
+        self.actions.append(["P", message.author.mention, self.players[message.author.id]["power_cubes"]])
         await message.delete(delay=3)
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if self.data["bossfight"]["active"] and message.channel == self.data["bossfight"]["channel"]:
+        if not message.author.bot and self.data["bossfight"]["active"] and message.channel == self.data["bossfight"]["channel"]:
             if message.author.id not in self.players.keys():
                 self.players[message.author.id] = {"damage" : 0, "power_cubes" : 0}
             self.actions.append(["D", message.author.mention, (self.players[message.author.id]["power_cubes"] + 1) * 100])
@@ -82,7 +81,6 @@ class Events(commands.Cog):
     @commands.command()
     async def bossfight(self, ctx, channel:discord.TextChannel):
         self.data["bossfight"]["channel"] = channel
-        self.data["bossfight"]["active"] = True
 
         embed = discord.Embed(title="BOSS FIGHT", colour=discord.Colour.red())
         embed.set_thumbnail(url="https://i.imgur.com/fo3Tqfd.png")
@@ -97,6 +95,8 @@ class Events(commands.Cog):
 
         embed.set_field_at(1, name="Action log:", value="Boss Fight started!")
         await self.data["bossfight"]["message"].edit(embed=embed)
+
+        self.data["bossfight"]["active"] = True
 
         self.messageupdateloop.start()
         self.randomspawnloop.start()
