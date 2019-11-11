@@ -43,7 +43,7 @@ class Events(commands.Cog):
         await self.data["bossfight"]["message"].edit(embed=embed)
 
 
-    @tasks.loop(seconds=10)
+    @tasks.loop(seconds=15)
     async def randomspawnloop(self):
         rand = randint(0,10)
         if rand < 5:
@@ -64,7 +64,7 @@ class Events(commands.Cog):
                 self.players[user.id] = {"damage" : 0, "power_cubes" : 0}
         self.players[user.id]["power_cubes"] += 1
         await message.edit(embed=discord.Embed(description=f"<:powercube:643517745199054855> {user.mention} collected the power cube!\nCurrent amount: {self.players[user.id]['power_cubes']}", colour=discord.Color.green()))
-        self.actions.append(["P", message.author.mention, self.players[message.author.id]["power_cubes"]])
+        self.actions.append(["P", message.author.mention, self.players[user.id]["power_cubes"]])
         await message.delete(delay=3)
 
     @commands.Cog.listener()
@@ -91,7 +91,7 @@ class Events(commands.Cog):
         self.data["bossfight"]["message"] = main_message
         self.data["bossfight"]["embed"] = embed
 
-        sleep(5)
+        await sleep(5)
 
         embed.set_field_at(1, name="Action log:", value="Boss Fight started!")
         await self.data["bossfight"]["message"].edit(embed=embed)
