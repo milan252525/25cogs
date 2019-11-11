@@ -58,7 +58,7 @@ class Events(commands.Cog):
         message = await self.data["bossfight"]["channel"].send(embed=embed)
         await message.add_reaction("<:powercube:643517745199054855>")
         def check(reaction, user):
-                return str(reaction.emoji) == "<:powercube:643517745199054855>"
+                return str(reaction.emoji) == "<:powercube:643517745199054855>" and not user.bot
         _, user = await self.bot.wait_for('reaction_add', check=check)
         if user.id not in self.players.keys():
                 self.players[user.id] = {"damage" : 0, "power_cubes" : 0}
