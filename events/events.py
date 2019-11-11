@@ -39,7 +39,7 @@ class Events(commands.Cog):
         self.actions = []
         embed = self.data["bossfight"]["embed"]
         embed.set_field_at(0, name="HP Left", value=f"{self.data['bossfight']['hp_left']}/5000", inline=False)
-        embed.set_field_at(1, name="Action log:", value="Boss Fight started!")
+        embed.set_field_at(1, name="Action log:", value=new_actions_str)
         await self.data["bossfight"]["message"].edit(embed=embed)
 
 
