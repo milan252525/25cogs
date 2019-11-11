@@ -1,0 +1,9 @@
+{
+  "author": ["milan_25"],
+  "name" : "Events",
+  "description": "Cog for LA events",
+  "install_msg": "Thank you for installing our Events cog.",
+  "short": "Cog with miscellaneous tools",
+  "requirements" : [],
+  "tags": ["events"]
+}
