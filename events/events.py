@@ -53,12 +53,12 @@ class Events(commands.Cog):
         await self.data["bossfight"]["message"].edit(embed=embed)
 
 
-    @tasks.loop(seconds=30)
+    @tasks.loop(seconds=15)
     async def randomspawnloop(self):
         rand = randint(1,10)
-        if rand < 3:
+        if rand < 4:
             await self.spawn_cube()
-        if rand < 6:
+        elif rand < 8:
             await self.spawn_challenge()
 
     # @tasks.loop(seconds=20)
@@ -72,6 +72,8 @@ class Events(commands.Cog):
         embed = self.data["bossfight"]["embed"]
         embed.set_field_at(0, name="HP Left", value=f"0/{self.BOSS_HP}", inline=False)
         embed.set_field_at(1, name="Action log:", value="Boss was defeated!")
+        embed.set_footer(text=discord.Embed.Empty)
+        await self.data["bossfight"]["message"].edit(embed=embed)
         final = []
         for k in self.players.keys():
             final.append([k, self.players[k]["damage"], self.players[k]["power_cubes"]])
@@ -87,11 +89,10 @@ class Events(commands.Cog):
         if len(msg) > 0:
             messages.append(msg)
         for m in messages:
-            await self.data["bossfight"]["channel"].send(m)
+            await self.data["bossfight"]["channel"].send(embed=discord.Embed(description=m, colour=discord.Colour.gold()))
         self.data = deepcopy(self.DEFAULT_DATA)
         self.actions = []
         self.players = {}
-        
         
     async def spawn_cube(self):
         embed = discord.Embed(description="<:powercube:643517745199054855> Power cube spawned!\nPick it up by reacting!", colour=discord.Color.green())
@@ -108,7 +109,7 @@ class Events(commands.Cog):
         await message.delete(delay=3)
 
     async def spawn_challenge(self):
-        word = choice(["shelly", "nita", "colt", "mortis"])
+        word = choice(["shelly", "nita", "colt", "mortis", "bull", "bounty", "showdown"])
         embed = discord.Embed(description=f"<:sd:614517124219666453> Deal triple damage to the bot!\nType \"{word}\"!", colour=discord.Color.blue())
         message = await self.data["bossfight"]["channel"].send(embed=embed)
         def check(m):
