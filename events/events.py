@@ -23,6 +23,10 @@ class Events(commands.Cog):
         self.actions = []
         self.players = {}
 
+    def cog_unload(self):
+        self.messageupdateloop.stop()
+        self.randomspawnloop.stop()
+
     @tasks.loop(seconds=20)
     async def messageupdateloop(self):
         new_actions_str = ""
@@ -53,7 +57,7 @@ class Events(commands.Cog):
     async def spawn_cube(self):
         embed = discord.Embed(description="<:powercube:643517745199054855> Power cube spawned!\nPick it up by reacting!", colour=discord.Color.green())
         message = await self.data["bossfight"]["channel"].send(embed=embed)
-        message.add_reaction("<:powercube:643517745199054855>")
+        await message.add_reaction("<:powercube:643517745199054855>")
         def check(reaction, user):
                 return str(reaction.emoji) == "<:powercube:643517745199054855>"
         _, user = await self.bot.wait_for('reaction_add', check=check)
@@ -69,7 +73,7 @@ class Events(commands.Cog):
         if self.data["bossfight"]["active"] and message.channel == self.data["bossfight"]["channel"]:
             if message.author.id not in self.players.keys():
                 self.players[message.author.id] = {"damage" : 0, "power_cubes" : 0}
-            self.actions.append("D", [message.author.mention, (self.players[message.author.id]["power_cubes"] + 1) * 100])
+            self.actions.append(["D", message.author.mention, (self.players[message.author.id]["power_cubes"] + 1) * 100])
             await message.delete(delay=1)
             
         
@@ -92,7 +96,7 @@ class Events(commands.Cog):
         sleep(5)
 
         embed.set_field_at(1, name="Action log:", value="Boss Fight started!")
-        self.data["bossfight"]["message"].edit(embed=embed)
+        await self.data["bossfight"]["message"].edit(embed=embed)
 
         self.messageupdateloop.start()
         self.randomspawnloop.start()
