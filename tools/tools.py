@@ -61,6 +61,27 @@ class Tools(commands.Cog):
                     embed.add_field(name=f"Attachment {str(i+1)}:", value=msg.attachments[i].url, inline=False)
             await self.bot.get_user(230947675837562880).send(embed=embed)
 
+    @commands.guild_only()
+    @commands.is_owner() 
+    @commands.command()
+    async def spamlb(self, ctx):
+        data = await self.config.all_members(ctx.guild)
+        members = []
+        for k in data.keys():
+            members.append([data[k]["name"], data[k]["messages"]])
+        members.sort(key=lambda x: x[1], reverse=True)
+        msg = ""
+        messages = []
+        for p in members:
+            if len(msg) > 1500:
+                messages.append(msg)
+                msg = ""
+            msg += f"{p[0]} `{p[1]}`\n"
+        if len(msg) > 0:
+            messages.append(msg)
+        for m in messages:
+            await ctx.send(embed=discord.Embed(description=m, colour=discord.Colour.gold()))
+
     def convertToLeft(self, sec):
         if sec > 3600:
             return f"{int(sec/3600)} hours {int((sec%3600)/60)} minutes"
