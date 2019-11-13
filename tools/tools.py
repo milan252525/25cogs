@@ -41,7 +41,7 @@ class Tools(commands.Cog):
                 await msg.delete()
 
         #LABS giveaway
-        if not msg.author.bot and isinstance(msg.channel, discord.TextChannel) and msg.guild.id == 401883208511389716 and msg.channel.category_id == 401883208511389717:
+        if not msg.author.bot and isinstance(msg.channel, discord.TextChannel) and msg.guild.id == 401883208511389716 and (msg.channel.category_id == 401883208511389717 or msg.channel.category_id == 576000643135963136):
             amount = await self.config.member(msg.author).messages()
             await self.config.member(msg.author).messages.set(amount + 1)
             await self.config.member(msg.author).name.set(msg.author.display_name)
