@@ -40,7 +40,7 @@ class Tracking(commands.Cog):
                 except brawlstats.errors.RequestError:
                     continue
 
-                await self.config.user(user).tracking_enabled.set_raw(int(time()), stats)
+                await self.config.user(user).stored_stats.set_raw(int(time()), stats)
 
 
     @commands.guild_only()
