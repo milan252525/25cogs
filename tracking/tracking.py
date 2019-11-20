@@ -52,7 +52,9 @@ class Tracking(commands.Cog):
     @commands.has_permissions() 
     @tracking.command(name="update")
     async def tracking_update(self, ctx):
-        pass
+        await self.update()
+        await ctx.send(embed = self.goodEmbed("Updated"))
+
 
     @commands.guild_only()
     @commands.has_permissions() 
