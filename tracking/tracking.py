@@ -36,7 +36,7 @@ class Tracking(commands.Cog):
                 user = self.bot.get_user(uk)
                 tag = await self.bsconfig.user(user).tag()
                 try:
-                    stats = await self.bsapi.get_player(tag)
+                    stats = await self.ofcbsapi.get_player(tag)
                 except brawlstats.errors.RequestError:
                     continue
 
@@ -62,7 +62,7 @@ class Tracking(commands.Cog):
         if tag is None:
             return await ctx.send(embed = self.badEmbed(f"You don't have a tag saved! Use {ctx.prefix}bssave <yourtag>"))
         try:
-            player = await self.bsapi.get_player(tag)
+            player = await self.ofcbsapi.get_player(tag)
             
         except brawlstats.errors.NotFoundError:
             return await ctx.send(embed = self.badEmbed("No player with this tag found, try again!"))
