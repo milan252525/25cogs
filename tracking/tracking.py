@@ -45,14 +45,14 @@ class Tracking(commands.Cog):
                     "trophies" : stats.trophies,
                     "highest_trophies" : stats.highest_trophies,
                     "exp_level" : stats.exp_level,
-                    "3_vs_3_victories" : stats.3_vs_3_victories,
+                    # :'( "3_vs_3_victories" : stats.3_vs_3_victories,
                     "solo_victories" : stats.solo_victories,
                     "duo_victories" : stats.duo_victories,
                     "best_robo_rumble_time" : stats.best_robo_rumble_time,
                     "best_time_as_big_brawler" : stats.best_time_as_big_brawler,
                     "club_tag" : stats.club.tag,
-                    "club_name" : stats.club.name,
-                    "brawlers" : stats.brawlers,
+                    "club_name" : stats.club.name
+                    #"brawlers" : stats.brawlers
                 }
                 await self.config.user(user).stored_stats.set_raw(int(time()), value=to_save)
 
