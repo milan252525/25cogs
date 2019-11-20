@@ -1,0 +1,9 @@
+{
+  "author": ["milan_25"],
+  "name" : "Tracking",
+  "description": "BS stats tracking",
+  "install_msg": "Thank you for installing our tracking cog.",
+  "short": "Cog for BS stats tracking",
+  "requirements" : [],
+  "tags": ["stats", "tracking"]
+}
