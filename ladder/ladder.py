@@ -123,7 +123,7 @@ class Ladder(commands.Cog):
         msg = ""
         for v in values:
             msg += f"`{v[0]}` {v[1]}\n"
-        await ctx.send(title = "ELO Leaderboard", embed = discord.Embed(colour = discord.Colour.blue(), description = msg))
+        await ctx.send(embed = discord.Embed(title = "ELO Leaderboard", colour = discord.Colour.blue(), description = msg))
 
     @commands.guild_only()
     @leaderboard.command(aliases=["r", "reg"], name="register")
