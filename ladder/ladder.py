@@ -57,8 +57,9 @@ class Ladder(commands.Cog):
     @commands.command()
     async def result(self, ctx, winner : discord.Member, loser : discord.Member):
         """
-        Usage: /result winner loser
-        Example: /result milan_25 everyoneelse
+        Report a result of a match
+
+        Order of winner and loser is important!
         """
         result = await self.one_match_result(winner, loser)
         embed = discord.Embed(colour = discord.Color.green())
@@ -87,12 +88,10 @@ class Ladder(commands.Cog):
     async def leaderboard_register(self, ctx, member : discord.Member = None):
         """
         Register yourself to ELO leaderboard
-        
-        Usage: /leaderboard register, /lb reg
 
         Administrators are able to register other members.
 
-        Example: /leaderboard register @milan_25
+        `Example: /leaderboard register [member]`
         """
         if member != None and not ctx.author.guild_permissions.administrator:
             return await ctx.send(embed = discord.Embed(colour = discord.Colour.red(), description = "Only administrators can register other players!"))
@@ -111,8 +110,8 @@ class Ladder(commands.Cog):
     @leaderboard.command(name="reset")
     async def leaderboard_reset(self, ctx):
         """
-        DANGEROUS
         Bot owner only command to reset leaderboard in a server
+        ☢️DANGEROUS☢️
         """
         await self.config.clear_all_members(ctx.guild)
         await ctx.send(embed=self.goodEmbed("Successfully cleared all member data!"))
