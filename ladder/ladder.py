@@ -73,8 +73,6 @@ class Ladder(commands.Cog):
         
         return winner_elo, winner_new, loser_elo, loser_new
 
-     
-
     @commands.command(aliases=["report"])
     async def result(self, ctx, winner : discord.Member, loser : discord.Member):
         """
@@ -86,6 +84,10 @@ class Ladder(commands.Cog):
             return await ctx.send(embed = self.badEmbed(f"{winner.display_name} is not registered! Use {ctx.prefix}lb register"))
         if not await self.config.member(loser).registered():
             return await ctx.send(embed = self.badEmbed(f"{loser.display_name} is not registered! Use {ctx.prefix}lb register"))
+        if not ctx.author.guild_permissions.administrator and not (ctx.author == winner or ctx.author == loser):
+            return await ctx.send(embed = self.badEmbed("Only administrators can report matches of different users!"))
+        if winner == loser:
+            return await ctx.send(embed = self.badEmbed("Nope, that's not possible! Try playing against someone other than you!"))
         result = await self.one_match_result(winner, loser)
         embed = discord.Embed(colour = discord.Color.green())
         embed.add_field(name = "Winner", value = f"{winner.mention} `{result[0]}` > `{result[1]}` (`+{result[1] - result[0]}`)", inline = False)
@@ -97,13 +99,21 @@ class Ladder(commands.Cog):
     async def leaderboard(self, ctx):
         """
         View ELO leaderboard
+        
+        Display leaderboard with `/leaderboard`(same as `/lb`)
 
         Register yourself using `/lb register`
 
         Report result of a match with `/result @winner @loser`
 
-        Administrators are able to register other members
-        `Example: /leaderboard register [member]`
+        View someone's stats with `/stats @someone`
+
+        Administrators are able to register other users
+        `Example: /lb register @user`
+
+        Administrators can set ELO of any user
+        `Example: /lb setelo @user 2525`
+        Use this command carefully!
         """
         players = await self.config.all_members(ctx.guild)
         values = []
@@ -113,7 +123,7 @@ class Ladder(commands.Cog):
         msg = ""
         for v in values:
             msg += f"`{v[0]}` {v[1]}\n"
-        await ctx.send(embed = discord.Embed(colour = discord.Colour.blue(), description = msg))
+        await ctx.send(title = "ELO Leaderboard", embed = discord.Embed(colour = discord.Colour.blue(), description = msg))
 
     @commands.guild_only()
     @leaderboard.command(aliases=["r", "reg"], name="register")
