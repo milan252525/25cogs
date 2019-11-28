@@ -5,6 +5,7 @@ from redbot.core.utils.embed import randomize_colour
 from redbot.core.utils.menus import menu, DEFAULT_CONTROLS
 from random import choice
 import time
+from datetime import datetime
 import math
 
 class Ladder(commands.Cog):
@@ -67,14 +68,14 @@ class Ladder(commands.Cog):
         if await self.config.member(winner).win_streak() > await self.config.member(winner).longest_win_streak():
             await self.config.member(winner).longest_win_streak.set(await self.config.member(winner).win_streak())
 
-        await self.config.member(winner).set_raw("match_history", int(time.time()), value = {"opponent" : loser.id, "win" : True})
-        await self.config.member(loser).set_raw("match_history", int(time.time()), value = {"opponent" : winner.id, "win" : False})
+        await self.config.member(winner).set_raw("match_history", int(time.time()), value = {"opponent" : loser.id, "win" : True, "elo_old" : winner_elo, "elo_new" : winner_new})
+        await self.config.member(loser).set_raw("match_history", int(time.time()), value = {"opponent" : winner.id, "win" : False, "elo_old" : loser_elo, "elo_new" : loser_new})
         
         return winner_elo, winner_new, loser_elo, loser_new
 
-        
+     
 
-    @commands.command()
+    @commands.command(aliases=["report"])
     async def result(self, ctx, winner : discord.Member, loser : discord.Member):
         """
         Report a result of a match
@@ -98,6 +99,8 @@ class Ladder(commands.Cog):
         View ELO leaderboard
 
         Register yourself using `/lb register`
+
+        Report result of a match with `/result @winner @loser`
 
         Administrators are able to register other members
         `Example: /leaderboard register [member]`
@@ -152,3 +155,21 @@ class Ladder(commands.Cog):
             return await ctx.send(embed = self.badEmbed(f"{member.display_name} is not registered!"))
         await self.config.member(member).elo.set(new_elo)
         await ctx.send(embed=self.goodEmbed(f"{member.display_name}'s elo was set to {new_elo}"))
+
+    @commands.guild_only()
+    @leaderboard.command(name="stats")
+    async def leaderboard_stats(self, ctx, member : discord.Member = None):
+        member = ctx.author if member == None else member
+        if not await self.config.member(member).registered():
+            return await ctx.send(embed = self.badEmbed(f"{member.display_name} is not registered!"))
+        embed = discord.Embed(colour = discord.Color.blue())
+        embed.set_author(icon_url=member.avatar_url, name=f"{member.display_name}'s stats'")
+        embed.add_field(name="Current ELO", value=await self.config.member(member).elo())
+        embed.add_field(name="Wins", value=await self.config.member(member).wins())
+        embed.add_field(name="Losses", value=await self.config.member(member).losses())
+        embed.add_field(name="Current Winstreak", value=await self.config.member(member).win_streak())
+        embed.add_field(name="Longest Winstreak", value=await self.config.member(member).longest_win_streak())
+        embed.add_field(name="Registration Date", value=datetime.fromtimestamp(await self.config.member(member).registered_time()).strftime("%d %B %H:%M"))
+        embed.add_field(name="Last Played", value=datetime.fromtimestamp(await self.config.member(member).last_played()).strftime("%d %B %H:%M"))
+        
+        
