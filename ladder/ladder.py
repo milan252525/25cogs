@@ -24,7 +24,7 @@ class Ladder(commands.Cog):
             "longest_win_streak" : 0,
             "highest_rank": None,
             "name" : None,
-            "match_history" : [],
+            "match_history" : {},
             "registered_time" : None,
             "elo" : self.ELO_DEFAULT_VALUE
         }
