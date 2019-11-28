@@ -133,9 +133,10 @@ class Ladder(commands.Cog):
         """
         if member != None and not ctx.author.guild_permissions.administrator:
             return await ctx.send(embed = self.badEmbed("Only administrators can register other players!"))
+        member = ctx.author if member == None else member
         if member.bot:
             return await ctx.send(embed = self.badEmbed("Bots can't participate, sorry!"))
-        member = ctx.author if member == None else member
+        
         if await self.config.member(member).registered() or await self.config.member(member).elo() != self.ELO_DEFAULT_VALUE:
             return await ctx.send(embed = self.badEmbed(f"{member.display_name} is already registered!"))
         await self.config.member(member).registered.set(True)
