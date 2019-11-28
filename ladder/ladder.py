@@ -99,7 +99,7 @@ class Ladder(commands.Cog):
             return await ctx.send(embed = self.badEmbed("Only administrators can register other players!"))
         member = ctx.author if member == None else member
         if (await self.config.member(member).registered()) or (await self.config.member(member).elo() != self.ELO_DEFAULT_VALUE):
-            return await ctx.send(embed self.badEmbed(f"{member.mention} is already registered!"))
+            return await ctx.send(embed = self.badEmbed(f"{member.mention} is already registered!"))
         await self.config.member(member).registered.set(True)
         await self.config.member(member).name.set(member.display_name)
         await self.config.member(member).id.set(member.id)
