@@ -166,13 +166,21 @@ class Ladder(commands.Cog):
         if not await self.config.member(member).registered():
             return await ctx.send(embed = self.badEmbed(f"{member.display_name} is not registered!"))
         embed = discord.Embed(colour = discord.Color.blue())
-        embed.set_author(icon_url=member.avatar_url, name=f"{member.display_name}'s stats'")
+        embed.set_author(icon_url=member.avatar_url, name=f"{member.display_name}'s stats")
         embed.add_field(name="Current ELO", value=await self.config.member(member).elo())
         embed.add_field(name="Wins", value=await self.config.member(member).wins())
         embed.add_field(name="Losses", value=await self.config.member(member).losses())
         embed.add_field(name="Current Winstreak", value=await self.config.member(member).win_streak())
         embed.add_field(name="Longest Winstreak", value=await self.config.member(member).longest_win_streak())
-        embed.add_field(name="Registration Date", value=datetime.fromtimestamp(await self.config.member(member).registered_time()).strftime("%d %B %H:%M"))
-        embed.add_field(name="Last Played", value=datetime.fromtimestamp(await self.config.member(member).last_played()).strftime("%d %B %H:%M"))
+        embed.add_field(name="Registration Date", value=datetime.fromtimestamp(await self.config.member(member).registered_time()).strftime("%d %B %H:%M"), inline=False)
+        embed.add_field(name="Last Played", value=datetime.fromtimestamp(await self.config.member(member).last_played()).strftime("%d %B %H:%M"), inline=False)
+        history = await self.config.member(member).get_raw("match_history")
+        times = history.keys()
+        times.sort()
+        msg = ""
+        for m in times[-10:]:
+            res = "won" if history[m]["win"] else "lost"
+            msg += f"[{datetime.fromtimestamp(m).strftime('%d %B %H:%M')}] {res} vs {self.bot.get_user(history[m]['opponent'].mention)} `{history[m]['elo_old']}` > `{history[m]['elo_new']}`\n"
+        embed.add_field(name="Match History", value=msg, inline=False)
         await ctx.send(embed=embed)
         
