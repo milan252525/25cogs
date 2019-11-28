@@ -51,9 +51,28 @@ class Ladder(commands.Cog):
         loser_elo = await self.config.member(loser).elo()
         winner_new = self.calculate_elo(winner_elo, loser_elo, True)
         loser_new = self.calculate_elo(loser_elo, winner_elo, False)
+        #elo
         await self.config.member(winner).elo.set(winner_new)
         await self.config.member(loser).elo.set(loser_new)
+        #stats
+        await self.config.member(winner).wins.set(await self.config.member(winner).wins() + 1)
+        await self.config.member(loser).losses.set(await self.config.member(loser).losses() + 1)
+
+        await self.config.member(winner).last_played.set(int(time.time()))
+        await self.config.member(loser).last_played.set(int(time.time()))
+
+        await self.config.member(winner).win_streak.set(await self.config.member(winner).win_streak() + 1)
+        await self.config.member(loser).win_streak.set(0)
+
+        if await self.config.member(winner).win_streak() > await self.config.member(winner).longest_win_streak():
+            await self.config.member(winner).longest_win_streak.set(await self.config.member(winner).win_streak())
+
+        await self.config.member(winner).set_raw("match_history", int(time.time()), value = {"opponent" : loser.id, "win" : True})
+        await self.config.member(loser).set_raw("match_history", int(time.time()), value = {"opponent" : winner.id, "win" : False})
+        
         return winner_elo, winner_new, loser_elo, loser_new
+
+        
 
     @commands.command()
     async def result(self, ctx, winner : discord.Member, loser : discord.Member):
@@ -62,6 +81,10 @@ class Ladder(commands.Cog):
 
         Order of winner and loser is important!
         """
+        if not await self.config.member(winner).registered():
+            return await ctx.send(embed = self.badEmbed(f"{winner.display_name} is not registered! Use {ctx.prefix}lb register"))
+        if not await self.config.member(loser).registered():
+            return await ctx.send(embed = self.badEmbed(f"{loser.display_name} is not registered! Use {ctx.prefix}lb register"))
         result = await self.one_match_result(winner, loser)
         embed = discord.Embed(colour = discord.Color.green())
         embed.add_field(name = "Winner", value = f"{winner.mention} `{result[0]}` > `{result[1]}` (`+{result[1] - result[0]}`)", inline = False)
@@ -99,12 +122,11 @@ class Ladder(commands.Cog):
             return await ctx.send(embed = self.badEmbed("Only administrators can register other players!"))
         member = ctx.author if member == None else member
         if await self.config.member(member).registered() or await self.config.member(member).elo() != self.ELO_DEFAULT_VALUE:
-            return await ctx.send(embed = self.badEmbed(f"{member.mention} is already registered!"))
+            return await ctx.send(embed = self.badEmbed(f"{member.display_name} is already registered!"))
         await self.config.member(member).registered.set(True)
         await self.config.member(member).name.set(member.display_name)
         await self.config.member(member).id.set(member.id)
         await self.config.member(member).registered_time.set(int(time.time()))
-        await self.config.member(member).wins.set(await self.config.member(member).wins() + 1)
         await ctx.send(embed = self.goodEmbed(f"{member.display_name} was successfully registered"))
         
     @commands.guild_only()
@@ -126,5 +148,7 @@ class Ladder(commands.Cog):
         """
         if not is_admin_or_superior(self.bot, member):
             return await ctx.send(embed = self.badEmbed("Only administrators can set ELO!"))
+        if not await self.config.member(member).registered():
+            return await ctx.send(embed = self.badEmbed(f"{member.display_name} is not registered!"))
         await self.config.member(member).elo.set(new_elo)
-        await ctx.send(embed=self.goodEmbed(f"{member.display_name}'s elo was set to `{new_elo}`"))
+        await ctx.send(embed=self.goodEmbed(f"{member.display_name}'s elo was set to {new_elo}"))
