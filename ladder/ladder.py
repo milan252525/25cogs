@@ -10,7 +10,7 @@ class Ladder(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=25171725)
+        self.config = Config.get_conf(self, identifier=25171725, force_registration=True)
         default_member = {
             "registered" : False,
             "id" : None, 
