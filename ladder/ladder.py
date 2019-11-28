@@ -31,12 +31,12 @@ class Ladder(commands.Cog):
         
 
     def badEmbed(self, text):
-        bembed = discord.Embed(color=0xff0000)
+        bembed = discord.Embed(color=0xf50707)
         bembed.set_author(name=text, icon_url="https://i.imgur.com/dgE1VCm.png")
         return bembed
         
     def goodEmbed(self, text):
-        gembed = discord.Embed(color=0x45cafc)
+        gembed = discord.Embed(color=0x19d615)
         gembed.set_author(name=text, icon_url="https://i.imgur.com/fSAGoHh.png")
         return gembed
 
@@ -64,8 +64,8 @@ class Ladder(commands.Cog):
         """
         result = await self.one_match_result(winner, loser)
         embed = discord.Embed(colour = discord.Color.green())
-        embed.add_field(name = "Winner", value = f"{winner.mention} {result[0]} -> {result[1]} (+{result[1] - result[0]})", inline = False)
-        embed.add_field(name = "Loser", value = f"{loser.mention} {result[2]} -> {result[3]} ({result[3] - result[2]})", inline = False)
+        embed.add_field(name = "Winner", value = f"{winner.mention} `{result[0]}` > `{result[1]}` (`+{result[1] - result[0]}`)", inline = False)
+        embed.add_field(name = "Loser", value = f"{loser.mention} `{result[2]}` > `{result[3]}` (`{result[3] - result[2]}`)", inline = False)
         await ctx.send(embed=embed)
 
     @commands.guild_only()
@@ -74,7 +74,7 @@ class Ladder(commands.Cog):
         """
         View ELO leaderboard
 
-        Register yourself using /lb register
+        Register yourself using `/lb register`
 
         Administrators are able to register other members
         `Example: /leaderboard register [member]`
@@ -105,7 +105,7 @@ class Ladder(commands.Cog):
         await self.config.member(member).id.set(member.id)
         await self.config.member(member).registered_time.set(int(time.time()))
         await self.config.member(member).wins.set(await self.config.member(member).wins() + 1)
-        await ctx.send(embed = self.goodEmbed(f"{member.mention} was successfully registered"))
+        await ctx.send(embed = self.goodEmbed(f"{member.display_name} was successfully registered"))
         
     @commands.guild_only()
     @commands.is_owner()
@@ -127,4 +127,4 @@ class Ladder(commands.Cog):
         if not is_admin_or_superior(self.bot, member):
             return await ctx.send(embed = self.badEmbed("Only administrators can set ELO!"))
         await self.config.member(member).elo.set(new_elo)
-        await ctx.send(embed=self.goodEmbed(f"{member.mention}'s elo was set to {new_elo}"))
+        await ctx.send(embed=self.goodEmbed(f"{member.display_name}'s elo was set to `{new_elo}`"))
