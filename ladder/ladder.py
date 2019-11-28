@@ -1,5 +1,6 @@
 import discord
-from redbot.core import commands, Config, checks
+from redbot.core import commands, Config
+from redbot.core.utils.mod import is_admin_or_superior
 from redbot.core.utils.embed import randomize_colour
 from redbot.core.utils.menus import menu, DEFAULT_CONTROLS
 from random import choice
@@ -11,6 +12,7 @@ class Ladder(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=25171725)
+        self.ELO_DEFAULT_VALUE = 1500
         default_member = {
             "registered" : False,
             "id" : None, 
@@ -23,11 +25,10 @@ class Ladder(commands.Cog):
             "name" : None,
             "match_history" : [],
             "registered_time" : None,
-            "elo" : 1500
+            "elo" : self.ELO_DEFAULT_VALUE
         }
         self.config.register_member(**default_member)
-        # default_guild = {"leaderboard" : []}
-        # self.config.register_guild(**default_guild)
+        
 
     def badEmbed(self, text):
         bembed = discord.Embed(color=0xff0000)
@@ -72,6 +73,11 @@ class Ladder(commands.Cog):
     async def leaderboard(self, ctx):
         """
         View ELO leaderboard
+
+        Register yourself using /lb register
+
+        Administrators are able to register other members.
+        `Example: /leaderboard register [member]`
         """
         players = await self.config.all_members(ctx.guild)
         values = []
@@ -88,22 +94,18 @@ class Ladder(commands.Cog):
     async def leaderboard_register(self, ctx, member : discord.Member = None):
         """
         Register yourself to ELO leaderboard
-
-        Administrators are able to register other members.
-
-        `Example: /leaderboard register [member]`
         """
         if member != None and not ctx.author.guild_permissions.administrator:
-            return await ctx.send(embed = discord.Embed(colour = discord.Colour.red(), description = "Only administrators can register other players!"))
+            return await ctx.send(embed = self.badEmbed("Only administrators can register other players!"))
         member = ctx.author if member == None else member
-        if await self.config.member(member).registered():
-            return await ctx.send(embed = discord.Embed(colour = discord.Colour.red(), description = f"{member.mention} is already registered!"))
+        if (await self.config.member(member).registered()) or (await self.config.member(member).elo() != self.ELO_DEFAULT_VALUE):
+            return await ctx.send(embed self.badEmbed(f"{member.mention} is already registered!"))
         await self.config.member(member).registered.set(True)
         await self.config.member(member).name.set(member.display_name)
         await self.config.member(member).id.set(member.id)
         await self.config.member(member).registered_time.set(int(time.time()))
         await self.config.member(member).wins.set(await self.config.member(member).wins() + 1)
-        await ctx.send(embed = discord.Embed(colour = discord.Colour.green(), description = f"{member.mention} was successfully registered"))
+        await ctx.send(embed = self.goodEmbed(f"{member.mention} was successfully registered"))
         
     @commands.guild_only()
     @commands.is_owner()
@@ -115,3 +117,13 @@ class Ladder(commands.Cog):
         """
         await self.config.clear_all_members(ctx.guild)
         await ctx.send(embed=self.goodEmbed("Successfully cleared all member data!"))
+
+    @commands.guild_only()
+    @is_admin_or_superior()
+    @leaderboard.command(name="setelo")
+    async def leaderboard_setelo(self, ctx, member : discord.Member, new_elo : int):
+        """
+        Admin only command to set a specific member's ELO
+        """
+        await self.config.member(member).elo.set(new_elo)
+        await ctx.send(embed=self.goodEmbed(f"{member.mention}'s elo was set to {new_elo}"))
