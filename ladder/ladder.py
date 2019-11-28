@@ -180,7 +180,7 @@ class Ladder(commands.Cog):
         msg = ""
         for m in times[-10:]:
             res = "won" if history[m]["win"] else "lost"
-            msg += f"[{datetime.fromtimestamp(m).strftime('%d %B %H:%M')}] {res} vs {self.bot.get_user(history[m]['opponent']).mention} `{history[m]['elo_old']}` > `{history[m]['elo_new']}`\n"
+            msg += f"[{datetime.fromtimestamp(int(m)).strftime('%d %B %H:%M')}] {res} vs {self.bot.get_user(history[m]['opponent']).mention} `{history[m]['elo_old']}` > `{history[m]['elo_new']}`\n"
         embed.add_field(name="Match History", value=msg, inline=False)
         await ctx.send(embed=embed)
         
