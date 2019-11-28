@@ -23,7 +23,7 @@ class Ladder(commands.Cog):
             "name" : None,
             "match_history" : [],
             "registered_time" : None,
-            "elo" : 1000
+            "elo" : 1500
         }
         self.config.register_member(**default_member)
         # default_guild = {"leaderboard" : []}
@@ -56,6 +56,10 @@ class Ladder(commands.Cog):
 
     @commands.command()
     async def result(self, ctx, winner : discord.Member, loser : discord.Member):
+        """
+        Usage: /result winner loser
+        Example: /result milan_25 everyoneelse
+        """
         result = await self.one_match_result(winner, loser)
         embed = discord.Embed(colour = discord.Color.green())
         embed.add_field(name = "Winner", value = f"{winner.mention} {result[0]} -> {result[1]} (+{result[1] - result[0]})", inline = False)
@@ -65,6 +69,9 @@ class Ladder(commands.Cog):
     @commands.guild_only()
     @commands.group(aliases=["lb", "ladder"], invoke_without_command=True)
     async def leaderboard(self, ctx):
+        """
+        View ELO leaderboard
+        """
         players = await self.config.all_members(ctx.guild)
         values = []
         for k in players.keys():
@@ -78,6 +85,15 @@ class Ladder(commands.Cog):
     @commands.guild_only()
     @leaderboard.command(aliases=["r", "reg"], name="register")
     async def leaderboard_register(self, ctx, member : discord.Member = None):
+        """
+        Register yourself to ELO leaderboard
+        
+        Usage: /leaderboard register, /lb reg
+
+        Administrators are able to register other members.
+
+        Example: /leaderboard register @milan_25
+        """
         if member != None and not ctx.author.guild_permissions.administrator:
             return await ctx.send(embed = discord.Embed(colour = discord.Colour.red(), description = "Only administrators can register other players!"))
         member = ctx.author if member == None else member
@@ -94,5 +110,9 @@ class Ladder(commands.Cog):
     @commands.is_owner()
     @leaderboard.command(name="reset")
     async def leaderboard_reset(self, ctx):
+        """
+        DANGEROUS
+        Bot owner only command to reset leaderboard in a server
+        """
         await self.config.clear_all_members(ctx.guild)
         await ctx.send(embed=self.goodEmbed("Successfully cleared all member data!"))
