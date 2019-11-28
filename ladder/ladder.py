@@ -159,6 +159,9 @@ class Ladder(commands.Cog):
     @commands.guild_only()
     @leaderboard.command(name="stats")
     async def leaderboard_stats(self, ctx, member : discord.Member = None):
+        """
+        View someone's stats
+        """
         member = ctx.author if member == None else member
         if not await self.config.member(member).registered():
             return await ctx.send(embed = self.badEmbed(f"{member.display_name} is not registered!"))
@@ -171,5 +174,5 @@ class Ladder(commands.Cog):
         embed.add_field(name="Longest Winstreak", value=await self.config.member(member).longest_win_streak())
         embed.add_field(name="Registration Date", value=datetime.fromtimestamp(await self.config.member(member).registered_time()).strftime("%d %B %H:%M"))
         embed.add_field(name="Last Played", value=datetime.fromtimestamp(await self.config.member(member).last_played()).strftime("%d %B %H:%M"))
-        
+        await ctx.send(embed=embed)
         
