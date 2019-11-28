@@ -10,7 +10,7 @@ class Ladder(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=25171725, force_registration=True)
+        self.config = Config.get_conf(self, identifier=25171725)
         default_member = {
             "registered" : False,
             "id" : None, 
@@ -29,11 +29,21 @@ class Ladder(commands.Cog):
         # default_guild = {"leaderboard" : []}
         # self.config.register_guild(**default_guild)
 
+    def badEmbed(self, text):
+        bembed = discord.Embed(color=0xff0000)
+        bembed.set_author(name=text, icon_url="https://i.imgur.com/dgE1VCm.png")
+        return bembed
+        
+    def goodEmbed(self, text):
+        gembed = discord.Embed(color=0x45cafc)
+        gembed.set_author(name=text, icon_url="https://i.imgur.com/fSAGoHh.png")
+        return gembed
+
     #https://blog.mackie.io/the-elo-algorithm
     def calculate_elo(self, old_rating_player_a : int, old_rating_player_b : int, win : bool):
         expected = 1 / (1 + math.pow(10, (-((old_rating_player_a - old_rating_player_b)/400))))
         actual = 1 if win else 0
-        return round(old_rating_player_a + 40 * (actual - expected))
+        return round(old_rating_player_a + 60 * (actual - expected))
 
     async def one_match_result(self, winner, loser):
         winner_elo = await self.config.member(winner).elo()
@@ -58,7 +68,7 @@ class Ladder(commands.Cog):
         players = await self.config.all_members(ctx.guild)
         values = []
         for k in players.keys():
-            values.append([players[k]["elo"], players[k]["name"]])
+            values.append([players[k]["elo"], self.bot.get_user(k).mention])
         values.sort(key=lambda x: x[0], reverse=True)
         msg = ""
         for v in values:
@@ -80,3 +90,9 @@ class Ladder(commands.Cog):
         await self.config.member(member).wins.set(await self.config.member(member).wins() + 1)
         await ctx.send(embed = discord.Embed(colour = discord.Colour.green(), description = f"{member.mention} was successfully registered"))
         
+    @commands.guild_only()
+    @commands.is_owner()
+    @leaderboard.command(name="reset")
+    async def leaderboard_reset(self, ctx):
+        await self.config.clear_all_members(ctx.guild)
+        await ctx.send(embed=self.goodEmbed("Successfully cleared all member data!"))
