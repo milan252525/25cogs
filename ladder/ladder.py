@@ -76,7 +76,7 @@ class Ladder(commands.Cog):
 
         Register yourself using /lb register
 
-        Administrators are able to register other members.
+        Administrators are able to register other members
         `Example: /leaderboard register [member]`
         """
         players = await self.config.all_members(ctx.guild)
@@ -98,7 +98,7 @@ class Ladder(commands.Cog):
         if member != None and not ctx.author.guild_permissions.administrator:
             return await ctx.send(embed = self.badEmbed("Only administrators can register other players!"))
         member = ctx.author if member == None else member
-        if (await self.config.member(member).registered()) or (await self.config.member(member).elo() != self.ELO_DEFAULT_VALUE):
+        if await self.config.member(member).registered() or await self.config.member(member).elo() != self.ELO_DEFAULT_VALUE:
             return await ctx.send(embed = self.badEmbed(f"{member.mention} is already registered!"))
         await self.config.member(member).registered.set(True)
         await self.config.member(member).name.set(member.display_name)
@@ -119,11 +119,12 @@ class Ladder(commands.Cog):
         await ctx.send(embed=self.goodEmbed("Successfully cleared all member data!"))
 
     @commands.guild_only()
-    @is_admin_or_superior()
     @leaderboard.command(name="setelo")
     async def leaderboard_setelo(self, ctx, member : discord.Member, new_elo : int):
         """
         Admin only command to set a specific member's ELO
         """
+        if not is_admin_or_superior(self.bot, member):
+            return await ctx.send(embed = self.badEmbed("Only administrators can set ELO!"))
         await self.config.member(member).elo.set(new_elo)
         await ctx.send(embed=self.goodEmbed(f"{member.mention}'s elo was set to {new_elo}"))
