@@ -123,6 +123,8 @@ class Ladder(commands.Cog):
         """
         if member != None and not ctx.author.guild_permissions.administrator:
             return await ctx.send(embed = self.badEmbed("Only administrators can register other players!"))
+        if member.bot:
+            return await ctx.send(embed = self.badEmbed("Bots can't participate, sorry!"))
         member = ctx.author if member == None else member
         if await self.config.member(member).registered() or await self.config.member(member).elo() != self.ELO_DEFAULT_VALUE:
             return await ctx.send(embed = self.badEmbed(f"{member.display_name} is already registered!"))
@@ -168,7 +170,7 @@ class Ladder(commands.Cog):
         embed = discord.Embed(colour = discord.Color.blue())
         embed.set_author(icon_url=member.avatar_url, name=f"{member.display_name}'s stats")
         embed.set_footer(text="All times are in UTC")
-        embed.add_field(name="Current ELO", value=await self.config.member(member).elo(), inline=False)
+        embed.add_field(name="Current ELO", value=await self.config.member(member).elo())
         embed.add_field(name="Wins", value=await self.config.member(member).wins())
         embed.add_field(name="Losses", value=await self.config.member(member).losses())
         embed.add_field(name="Current Winstreak", value=await self.config.member(member).win_streak())
