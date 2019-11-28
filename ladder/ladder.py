@@ -175,7 +175,7 @@ class Ladder(commands.Cog):
         embed.add_field(name="Registration Date", value=datetime.fromtimestamp(await self.config.member(member).registered_time()).strftime("%d %B %H:%M"), inline=False)
         embed.add_field(name="Last Played", value=datetime.fromtimestamp(await self.config.member(member).last_played()).strftime("%d %B %H:%M"), inline=False)
         history = await self.config.member(member).get_raw("match_history")
-        times = history.keys()
+        times = list(history.keys())
         times.sort()
         msg = ""
         for m in times[-10:]:
