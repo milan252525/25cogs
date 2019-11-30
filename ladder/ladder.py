@@ -131,7 +131,7 @@ class Ladder(commands.Cog):
         """
         Register yourself to ELO leaderboard
         """
-        if member != None and not ctx.author.guild_permissions.administrator:
+        if member != None and member != ctx.author and not ctx.author.guild_permissions.administrator:
             return await ctx.send(embed = self.badEmbed("Only administrators can register other players!"))
         member = ctx.author if member == None else member
         if member.bot:
@@ -162,7 +162,7 @@ class Ladder(commands.Cog):
         """
         Admin only command to set a specific member's ELO
         """
-        if not is_admin_or_superior(self.bot, member):
+        if not ctx.author.guild_permissions.administrator:
             return await ctx.send(embed = self.badEmbed("Only administrators can set ELO!"))
         if not await self.config.member(member).registered():
             return await ctx.send(embed = self.badEmbed(f"{member.display_name} is not registered!"))
