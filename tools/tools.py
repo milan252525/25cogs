@@ -168,13 +168,15 @@ class Tools(commands.Cog):
         
         await jobChannel.send(embed=randomize_colour(embed))
 
-        @commands.command()
-        async def members(ctx, rolename):
-            role = discord.utils.get(ctx.message.guild.roles, name=rolename)
-            if role is None:
-                await ctx.send("No such role in the server.")
-                return
-            result = role.members
-            if not result:
-                await ctx.send("No members with such role in the server.")
-            await ctx.send(embed=discord.Embed(description=result, colour=discord.Colour.green()))
+    @commands.command()
+    async def members(self, ctx, rolename):
+        role = discord.utils.get(ctx.message.guild.roles, name=rolename)
+        if role is None:
+            await ctx.send("No such role in the server.")
+            return
+        result = role.members
+        if not result:
+            await ctx.send("No members with such role in the server.")
+            return
+        for member in result:
+            await ctx.send(embed=discord.Embed(description=member.mention, colour=discord.Colour.green()))
