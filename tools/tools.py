@@ -184,7 +184,7 @@ class Tools(commands.Cog):
             if len(msg) > 1999:
                 messages.append(msg)
                 msg = ""
-            msg += "{0}\n".format(member.mention)
+            msg += f"{member.mention}\n"
         if len(msg) > 0:
             messages.append(msg)
         for m in messages:
