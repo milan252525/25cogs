@@ -178,5 +178,14 @@ class Tools(commands.Cog):
         if not result:
             await ctx.send("No members with such role in the server.")
             return
+        msg = ""
+        messages = []
         for member in result:
-            await ctx.send(embed=discord.Embed(description=member.mention, colour=discord.Colour.green()))
+            if len(msg) > 1999:
+                messages.append(msg)
+                msg = ""
+            msg += "{0}\n".format(member.mention)
+        if len(msg) > 0:
+            messages.append(msg)
+        for m in messages:
+            await ctx.send(embed=discord.Embed(description=m, colour=discord.Colour.green()))
