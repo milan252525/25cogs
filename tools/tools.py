@@ -177,5 +177,6 @@ class Tools(commands.Cog):
         result = role.members
         if not result:
             await ctx.send("No members with such role in the server.")
+            return
         for member in result:
             await ctx.send(embed=discord.Embed(description=result, colour=discord.Colour.green()))   
