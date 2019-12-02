@@ -170,7 +170,7 @@ class Tools(commands.Cog):
 
     @commands.command()
     async def members(self, ctx, rolename):
-        role = discord.utils.get(ctx.message.guild.roles, name=rolename)
+        role = discord.utils.get(ctx.guild.roles, name=rolename)
         if role is None:
             await ctx.send("No such role in the server.")
             return
