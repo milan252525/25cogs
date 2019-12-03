@@ -170,7 +170,7 @@ class Tools(commands.Cog):
 
     @commands.command()
     async def members(self, ctx, *, rolename):
-        for r in discord.utils.get(ctx.guild.roles):
+        for r in ctx.guild.roles:
             if r.name.lower().startswith(rolename.lower()):
                 role = r
         if role is None:
