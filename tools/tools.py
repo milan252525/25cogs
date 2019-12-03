@@ -169,7 +169,7 @@ class Tools(commands.Cog):
         await jobChannel.send(embed=randomize_colour(embed))
 
     @commands.command()
-    async def members(self, ctx, rolename):
+    async def members(self, ctx, *, rolename):
         for r in discord.utils.get(ctx.guild.roles):
             if r.name.lower().startswith(rolename.lower()):
                 role = r
