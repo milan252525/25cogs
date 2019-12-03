@@ -170,7 +170,9 @@ class Tools(commands.Cog):
 
     @commands.command()
     async def members(self, ctx, *, rolename):
-        role = discord.utils.get(ctx.guild.roles, name=rolename)
+        for r in ctx.guild.roles:
+            if r.name.lower().startswith(rolename.lower()):
+                role = r
         if role is None:
             await ctx.send("No such role in the server.")
             return
