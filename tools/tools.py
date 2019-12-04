@@ -169,7 +169,8 @@ class Tools(commands.Cog):
         await jobChannel.send(embed=randomize_colour(embed))
 
     @commands.command()
-    async def members(self, ctx, *, rolename, mentions: bool = False):
+    async def members(self, ctx, mentions: bool = False, *, rolename):
+        role = None
         for r in ctx.guild.roles:
             if r.name.lower().startswith(rolename.lower()):
                 role = r
@@ -180,7 +181,7 @@ class Tools(commands.Cog):
         if not result:
             await ctx.send("No members with such role in the server.")
             return
-        msg = f"Members: {str(len(result))}\n"
+        msg = f"**Members: {str(len(result))}**\n"
         messages = []
         for member in result:
             if len(msg) > 1999:
