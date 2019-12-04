@@ -180,7 +180,7 @@ class Tools(commands.Cog):
         if not result:
             await ctx.send("No members with such role in the server.")
             return
-        msg = ""
+        msg = f"Members: {str(len(result))}\n"
         messages = []
         for member in result:
             if len(msg) > 1999:
@@ -190,4 +190,7 @@ class Tools(commands.Cog):
         if len(msg) > 0:
             messages.append(msg)
         for m in messages:
+            m.replace('_', '\_')
+            m.replace('*', '\*')
+            m.replace('~', '\~')
             await ctx.send(embed=discord.Embed(description=m, colour=discord.Colour.green()))
