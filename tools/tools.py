@@ -185,7 +185,7 @@ class Tools(commands.Cog):
         if not result:
             await ctx.send("No members with such role in the server.")
             return
-        msg = f"**Members: {str(len(result))}**\n"
+        msg = f"Members: {str(len(result))}\n"
         messages = []
         for member in result:
             if len(msg) > 1999:
