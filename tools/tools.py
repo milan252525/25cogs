@@ -170,7 +170,9 @@ class Tools(commands.Cog):
 
     @commands.command()
     async def members(self, ctx, *, rolename):
+        mentions = False
         if "mentions" in rolename:
+            mentions = True
             rolename.replace("mentions", "").strip()
         role = None
         for r in ctx.guild.roles:
