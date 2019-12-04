@@ -169,7 +169,9 @@ class Tools(commands.Cog):
         await jobChannel.send(embed=randomize_colour(embed))
 
     @commands.command()
-    async def members(self, ctx, mentions: bool = False, *, rolename):
+    async def members(self, ctx, *, rolename):
+        if "mentions" in rolename:
+            rolename.replace("mentions", "").strip()
         role = None
         for r in ctx.guild.roles:
             if r.name.lower().startswith(rolename.lower()):
