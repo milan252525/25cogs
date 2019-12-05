@@ -432,7 +432,7 @@ class BrawlStarsCog(commands.Cog):
                 await ctx.send(f'{str(member)} has no club but has the role {club}')
             elif memberrole is None and player.club != None and 'LA ' in player.club.name:
                 await ctx.send(f'{str(member)} is in {player.club.name}, currently has no club roles')
-            elif player.club.name not in club and player.club != None and 'LA ' in player.club.name:
+            elif player.club != None and player.club.name not in club and 'LA ' in player.club.name:
                 await ctx.send(f'{str(member)} should be in {club}, currently in {player.club.name}')
 
 
