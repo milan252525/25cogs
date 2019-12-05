@@ -63,7 +63,7 @@ class BrawlStarsCog(commands.Cog):
         return text
 
     @commands.command()
-    async def bssave(self, ctx, tag, member: discord.Member = None):
+    async def save(self, ctx, tag, member: discord.Member = None):
         """Save your Brawl Stars player tag"""
         if member == None:
             member = ctx.author        
@@ -106,8 +106,8 @@ class BrawlStarsCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Something went wrong: {str(e)}")
     
-    @commands.command(aliases=['bsp'])
-    async def bsprofile(self, ctx, member:discord.Member=None):
+    @commands.command(aliases=['p'])
+    async def profile(self, ctx, member:discord.Member=None):
         """Brawl Stars profile"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
