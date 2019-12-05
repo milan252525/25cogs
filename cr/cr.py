@@ -32,7 +32,7 @@ class ClashRoyaleCog(commands.Cog):
         return gembed        
 
     @commands.command()
-    async def save(self, ctx, tag, member: discord.Member = None):
+    async def crsave(self, ctx, tag, member: discord.Member = None):
         """Save your Clash Royale player tag"""
         if member == None:
             member = ctx.author        
@@ -76,8 +76,8 @@ class ClashRoyaleCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Something went wrong: {str(e)}")
             
-    @commands.command(aliases=['p'])
-    async def profile(self, ctx, member=None):
+    @commands.command(aliases=['crp'])
+    async def crprofile(self, ctx, member=None):
         """Clash Royale profile"""
         await ctx.trigger_typing()
         prefix = "/"
