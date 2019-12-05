@@ -423,7 +423,7 @@ class BrawlStarsCog(commands.Cog):
                 return await ctx.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
             memberrole = None
-            club = None
+            club = ""
             for role in member.roles:
                 if role.name.startswith('LA '):
                     memberrole = role
