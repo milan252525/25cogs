@@ -403,6 +403,7 @@ class BrawlStarsCog(commands.Cog):
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
+    @commands.command()
     async def sortroles(self, ctx):
         guest = discord.utils.get(ctx.guild.roles, name='Guest')
         for member in ctx.guild.members:
