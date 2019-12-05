@@ -405,6 +405,8 @@ class BrawlStarsCog(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def sortroles(self, ctx):
         for member in ctx.guild.members:
+            if discord.utils.get(member.roles, name='Guest') is not None:
+                continue
             tag = await self.config.user(member).tag()
             if tag is None or tag == "":
                 continue
@@ -420,9 +422,14 @@ class BrawlStarsCog(commands.Cog):
             except Exception as e:
                 return await ctx.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
+            memberrole = None
             for role in member.roles:
                 if role.name.startswith('LA '):
+                    memberrole = role
                     club = role.name.split(':', 1)[0].strip()
+            if memberrole is None:
+                await ctx.send(f'{str(member)} should be in {club}, currently has no club roles')
+                continue
             if club not in player.club.name:
                 await ctx.send(f'{str(member)} should be in {club}, currently in {player.club.name}')
 
