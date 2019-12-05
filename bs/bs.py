@@ -406,9 +406,8 @@ class BrawlStarsCog(commands.Cog):
     @commands.command()
     async def sortroles(self, ctx):
         guest = discord.utils.get(ctx.guild.roles, name='Guest')
-        bot = discord.utils.get(ctx.guild.roles, name='Bots')
         for member in ctx.guild.members:
-            if guest in member.roles or bot in member.roles:
+            if guest in member.roles or member.bot:
                 continue
             tag = await self.config.user(member).tag()
             if tag is None:
