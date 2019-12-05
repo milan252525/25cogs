@@ -405,34 +405,33 @@ class BrawlStarsCog(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def sortroles(self, ctx):
         for member in ctx.guild.members:
-            if discord.utils.get(member.roles, name='Guest') is not None:
-                continue
+            guest = discord.utils.get(ctx.guild.roles, name='Guest')
+            for role in member.roles:
+                if role == guest:
+                    continue
             tag = await self.config.user(member).tag()
-            if tag is None or tag == "":
+            if tag is None:
                 continue
             try:
                 player = await self.bsapi.get_player(tag)
 
-            except brawlstats.errors.NotFoundError:
-                return await ctx.send(embed=self.badEmbed("No player with this tag found, try again!"))
-
             except brawlstats.errors.RequestError as e:
-                return await ctx.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+                await ctx.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+                break
 
             except Exception as e:
                 return await ctx.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
             memberrole = None
+            club = None
             for role in member.roles:
                 if role.name.startswith('LA '):
                     memberrole = role
                     club = role.name.split(':', 1)[0].strip()
-            if player.club is None:
-                await ctx.send(f'{str(member)} has no club, should remove the role')
-                continue
+            if player.club is None and memberrole is not None:
+                await ctx.send(f'{str(member)} has no club but has the role {club}')
             elif memberrole is None:
                 await ctx.send(f'{str(member)} is in {player.club.name}, currently has no club roles')
-                continue
             elif club not in player.club.name:
                 await ctx.send(f'{str(member)} should be in {club}, currently in {player.club.name}')
 
