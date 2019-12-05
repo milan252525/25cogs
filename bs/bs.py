@@ -400,4 +400,30 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed = self.goodEmbed("Club info successfully edited!"))
         except KeyError:
             await ctx.send(embed = self.badEmbed(f"{key.title()} isn't saved club in this server!"))
-        
+
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    async def sortroles(self, ctx):
+        for member in ctx.guild.members:
+            tag = await self.config.user(member).tag()
+            if tag is None or tag == "":
+                continue
+            try:
+                player = await self.bsapi.get_player(tag)
+
+            except brawlstats.errors.NotFoundError:
+                return await ctx.send(embed=self.badEmbed("No player with this tag found, try again!"))
+
+            except brawlstats.errors.RequestError as e:
+                return await ctx.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+
+            except Exception as e:
+                return await ctx.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+
+            for role in member.roles:
+                if role.name.startswith('LA '):
+                    club = role.name.split(':', 1)[0].strip()
+            if club not in player.club.name:
+                await ctx.send(f'{str(member)} should be in {club}, currently in {player.club.name}')
+
+
