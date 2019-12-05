@@ -430,9 +430,9 @@ class BrawlStarsCog(commands.Cog):
                     club = role.name.split(':', 1)[0].strip()
             if (player.club is None or 'LA ' not in player.club.name) and memberrole is not None:
                 await ctx.send(f'{str(member)} has no club but has the role {club}')
-            elif memberrole is None and 'LA ' in player.club.name:
+            elif memberrole is None and player.club != None and 'LA ' in player.club.name:
                 await ctx.send(f'{str(member)} is in {player.club.name}, currently has no club roles')
-            elif player.club.name not in club and 'LA ' in player.club.name:
+            elif player.club.name not in club and player.club != None and 'LA ' in player.club.name:
                 await ctx.send(f'{str(member)} should be in {club}, currently in {player.club.name}')
 
 
