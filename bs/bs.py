@@ -452,7 +452,7 @@ class BrawlStarsCog(commands.Cog):
                     memberroles.append(role)
 
             if len(memberroles) > 1:
-                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"{str(member)} has more than one club role. Removing {', '.join([str(r) for r in memberroles])}"))
+                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"**{str(member)}** has more than one club role.\nRemoving **{', '.join([str(r) for r in memberroles])}**"))
                 for role in memberroles:
                     await self.removeroleifpresent(member, role)
             elif len(memberroles) == 1:
