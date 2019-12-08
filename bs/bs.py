@@ -433,7 +433,7 @@ class BrawlStarsCog(commands.Cog):
             if tag is None:
                 continue
             try:
-                player = await self.bsapi.get_player(tag)
+                player = await self.ofcbsapi.get_player(tag)
                 await asyncio.sleep(0.1)
 
             except brawlstats.errors.RequestError as e:
@@ -452,7 +452,7 @@ class BrawlStarsCog(commands.Cog):
                     memberroles.append(role)
 
             if len(memberroles) > 1:
-                ch.send(f"{str(member)} has more than one club role. Removing...")
+                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"**{str(member)}** has more than one club role.\nRemoving **{', '.join([str(r) for r in memberroles])}**"))
                 for role in memberroles:
                     await self.removeroleifpresent(member, role)
             elif len(memberroles) == 1:
