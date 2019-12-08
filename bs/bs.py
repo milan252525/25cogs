@@ -477,6 +477,7 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.removeroleifpresent(member, memberrole)
                 await ctx.send(msg)
             await asyncio.sleep(0.1)
+        ctx.send("Finished.")
 
     async def removeroleifpresent(self, member: discord.Member, role: discord.Role):
         if role in member.roles:
