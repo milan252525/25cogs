@@ -207,8 +207,8 @@ class BrawlStarsCog(commands.Cog):
                     return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {ctx.prefix}bssave <tag>"))
 
                 try:
-                    mtag = mtag.replace("#", ""
-                    player = await self.ofcbsapi.get_player(mtag))
+                    mtag = mtag.replace("#", "")
+                    player = await self.ofcbsapi.get_player(mtag)
                     print(player.__dict__)
                     if not player.club.tag:
                         return await ctx.send("This user is not in a club!")
