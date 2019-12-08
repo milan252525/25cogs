@@ -417,10 +417,6 @@ class BrawlStarsCog(commands.Cog):
             await member.add_roles(role)
             return f"Added **{str(role)}** to **{str(member)}**\n"
         return ""
-    
-    @sortroles.before_loop
-    async def before_sortroles(self):
-        await asyncio.sleep(10)
             
     @tasks.loop(hours=6)
     async def sortroles(self):
@@ -499,5 +495,9 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.removeroleifpresent(member, memberrole)
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
         await ch.send(embed=discord.Embed(colour=discord.Colour.green(), description="**Finished.**"))
+        
+    @sortroles.before_loop
+    async def before_sortroles(self):
+        await asyncio.sleep(10)
 
 
