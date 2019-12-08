@@ -112,7 +112,7 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(f"Something went wrong: {str(e)}")
     
     @commands.command(aliases=['p', 'bsp'])
-    async def profile(self, ctx, member:discord.Member=None):
+    async def profile(self, ctx, member=None):
         """Brawl Stars profile"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
