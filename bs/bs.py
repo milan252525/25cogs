@@ -62,8 +62,8 @@ class BrawlStarsCog(commands.Cog):
             text = text.replace(code, "")
         return text
 
-    @commands.command()
-    async def bssave(self, ctx, tag, member: discord.Member = None):
+    @commands.command(aliases=['bssave'])
+    async def save(self, ctx, tag, member: discord.Member = None):
         """Save your Brawl Stars player tag"""
         if member == None:
             member = ctx.author        
@@ -106,8 +106,8 @@ class BrawlStarsCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Something went wrong: {str(e)}")
     
-    @commands.command(aliases=['bsp'])
-    async def bsprofile(self, ctx, member:discord.Member=None):
+    @commands.command(aliases=['p', 'bsp'])
+    async def profile(self, ctx, member:discord.Member=None):
         """Brawl Stars profile"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
@@ -423,16 +423,16 @@ class BrawlStarsCog(commands.Cog):
                 return await ctx.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
             memberrole = None
-            club = None
+            club = ""
             for role in member.roles:
                 if role.name.startswith('LA '):
                     memberrole = role
                     club = role.name.split(':', 1)[0].strip()
             if (player.club is None or 'LA ' not in player.club.name) and memberrole is not None:
                 await ctx.send(f'{str(member)} has no club but has the role {club}')
-            elif memberrole is None and 'LA ' in player.club.name:
+            elif memberrole is None and player.club != None and 'LA ' in player.club.name:
                 await ctx.send(f'{str(member)} is in {player.club.name}, currently has no club roles')
-            elif player.club.name not in club and 'LA ' in player.club.name:
+            elif player.club != None and player.club.name not in club and 'LA ' in player.club.name:
                 await ctx.send(f'{str(member)} should be in {club}, currently in {player.club.name}')
 
 

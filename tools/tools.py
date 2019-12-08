@@ -169,7 +169,12 @@ class Tools(commands.Cog):
         await jobChannel.send(embed=randomize_colour(embed))
 
     @commands.command()
-    async def members(self, ctx, *, rolename, mentions: bool = False):
+    async def members(self, ctx, *, rolename):
+        mentions = False
+        if "mentions" in rolename:
+            mentions = True
+            rolename = rolename.replace("mentions", "").strip()
+        role = None
         for r in ctx.guild.roles:
             if r.name.lower().startswith(rolename.lower()):
                 role = r
@@ -194,7 +199,7 @@ class Tools(commands.Cog):
             messages.append(msg)
         for m in messages:
             if not mentions:
-                m.replace('_', '\_')
-                m.replace('*', '\*')
-                m.replace('~', '\~')
+                m = m.replace('_', '\_')
+                m = m.replace('*', '\*')
+                m = m.replace('~', '\~')
             await ctx.send(embed=discord.Embed(description=m, colour=discord.Colour.green()))
