@@ -2,6 +2,7 @@ import discord
 from redbot.core import commands, Config, checks
 from redbot.core.utils.embed import randomize_colour
 from redbot.core.utils.menus import menu, prev_page, next_page
+from discord.ext import tasks
 from random import choice
 import asyncio
 import brawlstats
@@ -15,6 +16,7 @@ class BrawlStarsCog(commands.Cog):
         self.config.register_user(**default_user)
         default_guild = {"clubs" : {}}
         self.config.register_guild(**default_guild)
+        self.sortroles.start()
         
     async def initialize(self):
         bsapikey = await self.bot.db.api_tokens.get_raw("bsapi", default={"api_key": None})
@@ -401,63 +403,6 @@ class BrawlStarsCog(commands.Cog):
         except KeyError:
             await ctx.send(embed = self.badEmbed(f"{key.title()} isn't saved club in this server!"))
 
-    @commands.guild_only()
-    @commands.has_permissions(administrator=True)
-    @commands.command()
-    async def sortroles(self, ctx):
-        labs = discord.utils.get(ctx.guild.roles, id=576028728052809728)
-        guest = discord.utils.get(ctx.guild.roles, id=578260960981286923)
-        for member in ctx.guild.members:
-            if guest in member.roles or member.bot:
-                continue
-            tag = await self.config.user(member).tag()
-            if tag is None:
-                continue
-            try:
-                player = await self.bsapi.get_player(tag)
-
-            except brawlstats.errors.RequestError as e:
-                await ctx.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-                break
-
-            except Exception as e:
-                return await ctx.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
-
-            memberrole = None
-            club = ""
-            msg = ""
-            for role in member.roles:
-                if role.name.startswith('LA '):
-                    memberrole = role
-                    club = role.name.split(':', 1)[0].strip()
-            if (player.club is None or 'LA ' not in player.club.name) and memberrole is not None: #member -> guest
-                msg += await self.removeroleifpresent(member, memberrole)
-                msg += await self.removeroleifpresent(member, labs)
-                msg += await self.addroleifnotpresent(member, guest)
-                await ctx.send(msg)
-            elif memberrole is None and player.club != None and 'LA ' in player.club.name: #guest -> member
-                rolefound = False
-                for r in ctx.guild.roles:
-                    if r.name.startswith(player.club.name):
-                        rolefound = True
-                        msg += await self.addroleifnotpresent(member, r)
-                if not rolefound:
-                    msg += f"Role for the club {player.club.name} not found."
-                msg += await self.addroleifnotpresent(member, labs)
-                msg += await self.removeroleifpresent(member, guest)
-                await ctx.send(msg)
-            elif player.club is not None and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
-                rolefound = False
-                for r in ctx.guild.roles:
-                    if r.name.startswith(player.club.name):
-                        rolefound = True
-                        msg += await self.addroleifnotpresent(member, r)
-                if not rolefound:
-                    msg += f"Role for the club {player.club.name} not found."
-                msg += await self.removeroleifpresent(member, memberrole)
-                await ctx.send(msg)
-            await asyncio.sleep(0.1)
-
     async def removeroleifpresent(self, member: discord.Member, role: discord.Role):
         if role in member.roles:
             await member.remove_roles(role)
@@ -469,3 +414,83 @@ class BrawlStarsCog(commands.Cog):
             await member.add_roles(role)
             return f"Added {str(role)} to {str(member)}\n"
         return ""
+            
+    @tasks.loop(hours=24)
+    async def sortroles(self):
+        ch = self.bot.get_channel(653295573872672810)
+        await ch.send("**Started.**")
+        labs = discord.utils.get(ch.guild.roles, id=576028728052809728)
+        guest = discord.utils.get(ch.guild.roles, id=578260960981286923)
+        newcomer = discord.utils.get(ch.guild.roles, id=534461445656543255)
+        brawlstars = discord.utils.get(ch.guild.roles, id=576002604740378629)
+        for member in ch.guild.members:
+            if guest in member.roles or member.bot:
+                continue
+            tag = await self.config.user(member).tag()
+            if tag is None:
+                continue
+            try:
+                player = await self.bsapi.get_player(tag)
+                await asyncio.sleep(0.1)
+
+            except brawlstats.errors.RequestError as e:
+                await ch.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+                break
+
+            except Exception as e:
+                return await ch.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+
+            memberrole = None
+            club = ""
+            msg = ""
+            for role in member.roles:
+                if role.name.startswith('LA '):
+                    memberrole = role
+                    club = role.name.split(':', 1)[0].strip()
+            if newcomer in member.roles: #newcomer -> member
+                if player.club is None or 'LA ' not in player.club.name:
+                    msg += await self.removeroleifpresent(member, newcomer)
+                    msg += await self.addroleifnotpresent(member, brawlstars)
+                    msg += await self.addroleifnotpresent(member, guest)
+                    await ch.send(msg)
+                elif player.club is not None and 'LA ' in player.club.name:
+                    msg += await self.removeroleifpresent(member, newcomer)
+                    msg += await self.addroleifnotpresent(member, brawlstars)
+                    msg += await self.addroleifnotpresent(member, labs)
+                    rolefound = False
+                    for r in ch.guild.roles:
+                        if r.name.startswith(player.club.name):
+                            rolefound = True
+                            msg += await self.addroleifnotpresent(member, r)
+                    if not rolefound:
+                        msg += f"Role for the club {player.club.name} not found."
+                    await ch.send(msg)
+            elif (player.club is None or 'LA ' not in player.club.name) and memberrole is not None: #member -> guest
+                msg += await self.removeroleifpresent(member, memberrole)
+                msg += await self.removeroleifpresent(member, labs)
+                msg += await self.addroleifnotpresent(member, guest)
+                await ch.send(msg)
+            elif memberrole is None and player.club != None and 'LA ' in player.club.name: #guest -> member
+                rolefound = False
+                for r in ch.guild.roles:
+                    if r.name.startswith(player.club.name):
+                        rolefound = True
+                        msg += await self.addroleifnotpresent(member, r)
+                if not rolefound:
+                    msg += f"Role for the club {player.club.name} not found."
+                msg += await self.addroleifnotpresent(member, labs)
+                msg += await self.removeroleifpresent(member, guest)
+                await ch.send(msg)
+            elif player.club is not None and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
+                rolefound = False
+                for r in ch.guild.roles:
+                    if r.name.startswith(player.club.name):
+                        rolefound = True
+                        msg += await self.addroleifnotpresent(member, r)
+                if not rolefound:
+                    msg += f"Role for the club {player.club.name} not found."
+                msg += await self.removeroleifpresent(member, memberrole)
+                await ch.send(msg)
+        await ch.send("**Finished.**")
+
+
