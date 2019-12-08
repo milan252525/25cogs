@@ -6,6 +6,7 @@ from discord.ext import tasks
 from random import choice
 import asyncio
 import brawlstats
+from typing import Union
 
 class BrawlStarsCog(commands.Cog):
     
@@ -112,7 +113,7 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(f"Something went wrong: {str(e)}")
     
     @commands.command(aliases=['p', 'bsp'])
-    async def profile(self, ctx, member=None):
+    async def profile(self, ctx, *, member:Union[discord.Member, str]=None):
         """Brawl Stars profile"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
@@ -151,14 +152,14 @@ class BrawlStarsCog(commands.Cog):
                         return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
 
         if tag is None or tag == "":
-            desc = "/bsprofile\n/bsprofile @user\n/bsprofile discord_name\n/bsprofile discord_id\n/bsprofile #CRTAG"
+            desc = "/p\n/bsprofile @user\n/p discord_name\n/p discord_id\n/pe #CRTAG"
             embed = discord.Embed(title="Invalid argument!", colour=discord.Colour.red(), description=desc)
             return await ctx.send(embed=embed)
         try:
             player = await self.bsapi.get_player(tag)
             
         except brawlstats.errors.NotFoundError:
-            return await ctx.send(embed = self.badEmbed("No clan with this tag found, try again!"))
+            return await ctx.send(embed = self.badEmbed("No player with this tag found, try again!"))
 
         except brawlstats.errors.RequestError as e:
             return await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
