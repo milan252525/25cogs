@@ -407,6 +407,8 @@ class BrawlStarsCog(commands.Cog):
     async def sortroles(self, ctx):
         labs = discord.utils.get(ctx.guild.roles, id=576028728052809728)
         guest = discord.utils.get(ctx.guild.roles, id=578260960981286923)
+        newcomer = discord.utils.get(ctx.guild.roles, id=534461445656543255)
+        brawlstars = discord.utils.get(ctx.guild.roles, id=576002604740378629)
         for member in ctx.guild.members:
             if guest in member.roles or member.bot:
                 continue
@@ -430,7 +432,25 @@ class BrawlStarsCog(commands.Cog):
                 if role.name.startswith('LA '):
                     memberrole = role
                     club = role.name.split(':', 1)[0].strip()
-            if (player.club is None or 'LA ' not in player.club.name) and memberrole is not None: #member -> guest
+            if newcomer in member.roles: #newcomer -> member
+                if player.club is None or 'LA ' not in player.club.name:
+                    msg += await self.removeroleifpresent(member, newcomer)
+                    msg += await self.addroleifnotpresent(member, brawlstars)
+                    msg += await self.addroleifnotpresent(member, guest)
+                    await ctx.send(msg)
+                elif player.club is not None and 'LA ' in player.club.name:
+                    msg += await self.removeroleifpresent(member, newcomer)
+                    msg += await self.addroleifnotpresent(member, brawlstars)
+                    msg += await self.addroleifnotpresent(member, labs)
+                    rolefound = False
+                    for r in ctx.guild.roles:
+                        if r.name.startswith(player.club.name):
+                            rolefound = True
+                            msg += await self.addroleifnotpresent(member, r)
+                    if not rolefound:
+                        msg += f"Role for the club {player.club.name} not found."
+                    await ctx.send(msg)
+            elif (player.club is None or 'LA ' not in player.club.name) and memberrole is not None: #member -> guest
                 msg += await self.removeroleifpresent(member, memberrole)
                 msg += await self.removeroleifpresent(member, labs)
                 msg += await self.addroleifnotpresent(member, guest)
