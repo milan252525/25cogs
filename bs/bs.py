@@ -436,22 +436,24 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.addroleifnotpresent(member, guest)
                 await ctx.send(msg)
             elif memberrole is None and player.club != None and 'LA ' in player.club.name: #guest -> member
+                rolefound = False
                 for r in ctx.guild.roles:
                     if r.name.startswith(player.club.name):
+                        rolefound = True
                         msg += await self.addroleifnotpresent(member, r)
-                    else:
-                        msg += f"Role for the club {player.club.name} not found.\n"
-                        continue
+                if not rolefound:
+                    msg += f"Role for the club {player.club.name} not found."
                 msg += await self.addroleifnotpresent(member, labs)
                 msg += await self.removeroleifpresent(member, guest)
                 await ctx.send(msg)
             elif player.club is not None and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
+                rolefound = False
                 for r in ctx.guild.roles:
                     if r.name.startswith(player.club.name):
+                        rolefound = True
                         msg += await self.addroleifnotpresent(member, r)
-                    else:
-                        msg += f"Role for the club {player.club.name} not found.\n"
-                        continue
+                if not rolefound:
+                    msg += f"Role for the club {player.club.name} not found."
                 msg += await self.removeroleifpresent(member, memberrole)
                 await ctx.send(msg)
             await asyncio.sleep(0.1)
