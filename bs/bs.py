@@ -185,7 +185,7 @@ class BrawlStarsCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def club(self, ctx, key:str=None):
+    async def club(self, ctx, key:Union[discord.Member, str]=None):
         await ctx.trigger_typing()
         if key == None:
             mtag = await self.config.user(ctx.author).tag()
