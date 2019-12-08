@@ -427,7 +427,7 @@ class BrawlStarsCog(commands.Cog):
         newcomer = discord.utils.get(ch.guild.roles, id=534461445656543255)
         brawlstars = discord.utils.get(ch.guild.roles, id=576002604740378629)
         for member in ch.guild.members:
-            if guest in member.roles or member.bot:
+            if member.bot:
                 continue
             tag = await self.config.user(member).tag()
             if tag is None:
