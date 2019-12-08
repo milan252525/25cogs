@@ -431,37 +431,39 @@ class BrawlStarsCog(commands.Cog):
                     memberrole = role
                     club = role.name.split(':', 1)[0].strip()
             if (player.club is None or 'LA ' not in player.club.name) and memberrole is not None: #member -> guest
-                msg += self.removeroleifpresent(member, memberrole)
-                msg += self.removeroleifpresent(member, labs)
-                msg += self.addroleifnotpresent(member, guest)
+                msg += await self.removeroleifpresent(member, memberrole)
+                msg += await self.removeroleifpresent(member, labs)
+                msg += await self.addroleifnotpresent(member, guest)
                 await ctx.send(msg)
             elif memberrole is None and player.club != None and 'LA ' in player.club.name: #guest -> member
                 for r in ctx.guild.roles:
                     if r.name.startswith(player.club.name):
-                        msg += self.addroleifnotpresent(member, r)
+                        msg += await self.addroleifnotpresent(member, r)
                     else:
                         msg += f"Role for the club {player.club.name} not found.\n"
                         continue
-                msg += self.addroleifnotpresent(member, labs)
-                msg += self.removeroleifpresent(member, guest)
+                msg += await self.addroleifnotpresent(member, labs)
+                msg += await self.removeroleifpresent(member, guest)
                 await ctx.send(msg)
             elif player.club is not None and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
                 for r in ctx.guild.roles:
                     if r.name.startswith(player.club.name):
-                        msg += self.addroleifnotpresent(member, r)
+                        msg += await self.addroleifnotpresent(member, r)
                     else:
                         msg += f"Role for the club {player.club.name} not found.\n"
                         continue
-                msg += self.removeroleifpresent(member, memberrole)
+                msg += await self.removeroleifpresent(member, memberrole)
                 await ctx.send(msg)
             await asyncio.sleep(0.1)
 
     async def removeroleifpresent(self, member: discord.Member, role: discord.Role):
         if role in member.roles:
             await member.remove_roles(role)
-        return f"Removed {str(role)} from {str(member)}\n"
+            return f"Removed {str(role)} from {str(member)}\n"
+        return ""
 
     async def addroleifnotpresent(self, member: discord.Member, role: discord.Role):
         if role not in member.roles:
             await member.add_roles(role)
-        return f"Added {str(role)} to {str(member)}\n"
+            return f"Added {str(role)} to {str(member)}\n"
+        return ""
