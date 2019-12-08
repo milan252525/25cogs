@@ -18,6 +18,9 @@ class BrawlStarsCog(commands.Cog):
         self.config.register_guild(**default_guild)
         self.sortroles.start()
         
+    def cog_unload(self):
+        self.sortroles.stop()
+        
     async def initialize(self):
         bsapikey = await self.bot.db.api_tokens.get_raw("bsapi", default={"api_key": None})
         if bsapikey["api_key"] is None:
@@ -414,6 +417,10 @@ class BrawlStarsCog(commands.Cog):
             await member.add_roles(role)
             return f"Added **{str(role)}** to **{str(member)}**\n"
         return ""
+    
+    @sortroles.before_loop
+    async def before_sortroles(self):
+        await asyncio.sleep(10)
             
     @tasks.loop(hours=6)
     async def sortroles(self):
