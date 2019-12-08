@@ -405,8 +405,8 @@ class BrawlStarsCog(commands.Cog):
     @commands.has_permissions(administrator=True)
     @commands.command()
     async def sortroles(self, ctx):
-        labs = discord.utild.get(ctx.guild.roles, id="576028728052809728")
-        guest = discord.utils.get(ctx.guild.roles, id="578260960981286923")
+        labs = discord.utild.get(ctx.guild.roles, id=576028728052809728)
+        guest = discord.utils.get(ctx.guild.roles, id=578260960981286923)
         msg = ""
         for member in ctx.guild.members:
             if guest in member.roles or member.bot:
