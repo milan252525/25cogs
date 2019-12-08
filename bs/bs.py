@@ -405,9 +405,8 @@ class BrawlStarsCog(commands.Cog):
     @commands.has_permissions(administrator=True)
     @commands.command()
     async def sortroles(self, ctx):
-        labs = discord.utild.get(ctx.guild.roles, id=576028728052809728)
+        labs = discord.utils.get(ctx.guild.roles, id=576028728052809728)
         guest = discord.utils.get(ctx.guild.roles, id=578260960981286923)
-        msg = ""
         for member in ctx.guild.members:
             if guest in member.roles or member.bot:
                 continue
@@ -426,6 +425,7 @@ class BrawlStarsCog(commands.Cog):
 
             memberrole = None
             club = ""
+            msg = ""
             for role in member.roles:
                 if role.name.startswith('LA '):
                     memberrole = role
@@ -434,6 +434,7 @@ class BrawlStarsCog(commands.Cog):
                 msg += self.removeroleifpresent(member, memberrole)
                 msg += self.removeroleifpresent(member, labs)
                 msg += self.addroleifnotpresent(member, guest)
+                await ctx.send(msg)
             elif memberrole is None and player.club != None and 'LA ' in player.club.name: #guest -> member
                 for r in ctx.guild.roles:
                     if r.name.startswith(player.club.name):
@@ -443,6 +444,7 @@ class BrawlStarsCog(commands.Cog):
                         continue
                 msg += self.addroleifnotpresent(member, labs)
                 msg += self.removeroleifpresent(member, guest)
+                await ctx.send(msg)
             elif player.club is not None and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
                 for r in ctx.guild.roles:
                     if r.name.startswith(player.club.name):
@@ -451,7 +453,8 @@ class BrawlStarsCog(commands.Cog):
                         msg += f"Role for the club {player.club.name} not found.\n"
                         continue
                 msg += self.removeroleifpresent(member, memberrole)
-        await ctx.send(msg)
+                await ctx.send(msg)
+            await asyncio.sleep(0.1)
 
     async def removeroleifpresent(self, ctx, member: discord.Member, role: discord.Role):
         if role in member.roles:
