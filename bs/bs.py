@@ -406,19 +406,19 @@ class BrawlStarsCog(commands.Cog):
     async def removeroleifpresent(self, member: discord.Member, role: discord.Role):
         if role in member.roles:
             await member.remove_roles(role)
-            return f"Removed {str(role)} from {str(member)}\n"
+            return f"Removed **{str(role)}** from **{str(member)}**\n"
         return ""
 
     async def addroleifnotpresent(self, member: discord.Member, role: discord.Role):
         if role not in member.roles:
             await member.add_roles(role)
-            return f"Added {str(role)} to {str(member)}\n"
+            return f"Added **{str(role)}** to **{str(member)}**\n"
         return ""
             
-    @tasks.loop(hours=24)
+    @tasks.loop(hours=6)
     async def sortroles(self):
         ch = self.bot.get_channel(653295573872672810)
-        await ch.send("**Started.**")
+        await ch.send(embed=discord.Embed(colour=discord.Colour.green(), description="**Started.**"))
         labs = discord.utils.get(ch.guild.roles, id=576028728052809728)
         guest = discord.utils.get(ch.guild.roles, id=578260960981286923)
         newcomer = discord.utils.get(ch.guild.roles, id=534461445656543255)
@@ -434,11 +434,11 @@ class BrawlStarsCog(commands.Cog):
                 await asyncio.sleep(0.1)
 
             except brawlstats.errors.RequestError as e:
-                await ch.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+                await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"BS API is offline ({str(e)})"))
                 break
 
             except Exception as e:
-                return await ch.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+                return await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"**Something went wrong while requesting {tag}!**"))
 
             memberrole = None
             club = ""
@@ -452,7 +452,7 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.removeroleifpresent(member, newcomer)
                     msg += await self.addroleifnotpresent(member, brawlstars)
                     msg += await self.addroleifnotpresent(member, guest)
-                    await ch.send(msg)
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
                 elif player.club is not None and 'LA ' in player.club.name:
                     msg += await self.removeroleifpresent(member, newcomer)
                     msg += await self.addroleifnotpresent(member, brawlstars)
@@ -463,13 +463,13 @@ class BrawlStarsCog(commands.Cog):
                             rolefound = True
                             msg += await self.addroleifnotpresent(member, r)
                     if not rolefound:
-                        msg += f"Role for the club {player.club.name} not found."
-                    await ch.send(msg)
+                        msg += f"Role for the club **{player.club.name}** not found.\n"
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
             elif (player.club is None or 'LA ' not in player.club.name) and memberrole is not None: #member -> guest
                 msg += await self.removeroleifpresent(member, memberrole)
                 msg += await self.removeroleifpresent(member, labs)
                 msg += await self.addroleifnotpresent(member, guest)
-                await ch.send(msg)
+                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
             elif memberrole is None and player.club != None and 'LA ' in player.club.name: #guest -> member
                 rolefound = False
                 for r in ch.guild.roles:
@@ -480,7 +480,7 @@ class BrawlStarsCog(commands.Cog):
                     msg += f"Role for the club {player.club.name} not found."
                 msg += await self.addroleifnotpresent(member, labs)
                 msg += await self.removeroleifpresent(member, guest)
-                await ch.send(msg)
+                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
             elif player.club is not None and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
                 rolefound = False
                 for r in ch.guild.roles:
@@ -490,7 +490,7 @@ class BrawlStarsCog(commands.Cog):
                 if not rolefound:
                     msg += f"Role for the club {player.club.name} not found."
                 msg += await self.removeroleifpresent(member, memberrole)
-                await ch.send(msg)
-        await ch.send("**Finished.**")
+                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
+        await ch.send(embed=discord.Embed(colour=discord.Colour.green(), description="**Finished.**"))
 
 
