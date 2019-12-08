@@ -402,9 +402,6 @@ class BrawlStarsCog(commands.Cog):
         except KeyError:
             await ctx.send(embed = self.badEmbed(f"{key.title()} isn't saved club in this server!"))
 
-    @commands.guild_only()
-    @commands.has_permissions(administrator=True)
-    @commands.command()
     @tasks.loop(hours=24)
     async def sortroles(self, ctx):
         ch = self.bot.get_channel(653295573872672810)
