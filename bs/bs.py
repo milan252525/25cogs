@@ -453,12 +453,12 @@ class BrawlStarsCog(commands.Cog):
                 msg += self.removeroleifpresent(member, memberrole)
         await ctx.send(msg)
 
-    async def removeroleifpresent(self, member: discord.Member, role: discord.Role):
+    async def removeroleifpresent(self, ctx, member: discord.Member, role: discord.Role):
         if role in member.roles:
             await member.remove_roles(role)
         return f"Removed {str(role)} from {str(member)}\n"
 
-    async def addroleifnotpresent(self, member: discord.Member, role: discord.Role):
+    async def addroleifnotpresent(self, ctx, member: discord.Member, role: discord.Role):
         if role not in member.roles:
             await member.add_roles(role)
         return f"Added {str(role)} to {str(member)}\n"
