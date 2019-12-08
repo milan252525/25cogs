@@ -6,6 +6,7 @@ from discord.ext import tasks
 from random import choice
 import asyncio
 import brawlstats
+from typing import Union
 
 class BrawlStarsCog(commands.Cog):
     
@@ -112,7 +113,7 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(f"Something went wrong: {str(e)}")
     
     @commands.command(aliases=['p', 'bsp'])
-    async def profile(self, ctx, member:discord.Member=None):
+    async def profile(self, ctx, *, member:Union[discord.Member, str]=None):
         """Brawl Stars profile"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
@@ -151,14 +152,14 @@ class BrawlStarsCog(commands.Cog):
                         return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
 
         if tag is None or tag == "":
-            desc = "/bsprofile\n/bsprofile @user\n/bsprofile discord_name\n/bsprofile discord_id\n/bsprofile #CRTAG"
+            desc = "/p\n/bsprofile @user\n/p discord_name\n/p discord_id\n/pe #CRTAG"
             embed = discord.Embed(title="Invalid argument!", colour=discord.Colour.red(), description=desc)
             return await ctx.send(embed=embed)
         try:
             player = await self.bsapi.get_player(tag)
             
         except brawlstats.errors.NotFoundError:
-            return await ctx.send(embed = self.badEmbed("No clan with this tag found, try again!"))
+            return await ctx.send(embed = self.badEmbed("No player with this tag found, try again!"))
 
         except brawlstats.errors.RequestError as e:
             return await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
@@ -184,7 +185,7 @@ class BrawlStarsCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def club(self, ctx, key:str=None):
+    async def club(self, ctx, key:Union[discord.Member, str]=None):
         await ctx.trigger_typing()
         if key == None:
             mtag = await self.config.user(ctx.author).tag()
@@ -192,7 +193,7 @@ class BrawlStarsCog(commands.Cog):
                 return await ctx.send(embed = self.badEmbed(f"You have no tag saved! Use {ctx.prefix}bssave <tag>"))
             try:
                 player = await self.ofcbsapi.get_player(mtag)
-                if not player.club.tag:
+                if not player.club:
                     return await ctx.send("This user is not in a club!")
                 tag = player.club.tag
             except brawlstats.errors.RequestError as e:
@@ -207,12 +208,13 @@ class BrawlStarsCog(commands.Cog):
                     return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {ctx.prefix}bssave <tag>"))
 
                 try:
+                    mtag = mtag.replace("#", "")
                     player = await self.ofcbsapi.get_player(mtag)
-                    if not player.club.tag:
+                    if not player.club:
                         return await ctx.send("This user is not in a club!")
                     tag = player.club.tag
                 except brawlstats.errors.RequestError as e:
-                    await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+                    return await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
         else:
             tag = await self.config.guild(ctx.guild).clubs.get_raw(key.lower(), "tag", default=None)
             if tag is None:
@@ -429,7 +431,7 @@ class BrawlStarsCog(commands.Cog):
         vp = discord.utils.get(ch.guild.roles, id=536993652648574976)
         pres = discord.utils.get(ch.guild.roles, id=536993632918568991)
         for member in ch.guild.members:
-            if guest in member.roles or member.bot:
+            if member.bot:
                 continue
             tag = await self.config.user(member).tag()
             if tag is None:
@@ -462,12 +464,12 @@ class BrawlStarsCog(commands.Cog):
                 club = memberrole.name.split(':', 1)[0].strip()
 
             if newcomer in member.roles: #newcomer -> member
-                if player.club.tag is None or 'LA ' not in player.club.name:
+                if not player.club or 'LA ' not in player.club.name:
                     msg += await self.removeroleifpresent(member, newcomer)
                     msg += await self.addroleifnotpresent(member, brawlstars)
                     msg += await self.addroleifnotpresent(member, guest)
                     await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
-                elif player.club.tag is not None and 'LA ' in player.club.name:
+                elif player.club and 'LA ' in player.club.name:
                     msg += await self.removeroleifpresent(member, newcomer)
                     msg += await self.addroleifnotpresent(member, brawlstars)
                     msg += await self.addroleifnotpresent(member, labs)
@@ -479,12 +481,12 @@ class BrawlStarsCog(commands.Cog):
                     if not rolefound:
                         msg += f"Role for the club **{player.club.name}** not found.\n"
                     await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
-            elif (player.club.tag is None or 'LA ' not in player.club.name) and memberrole is not None: #member -> guest
+            elif (not player.club or 'LA ' not in player.club.name) and memberrole is not None: #member -> guest
                 msg += await self.removeroleifpresent(member, memberrole)
                 msg += await self.removeroleifpresent(member, labs)
                 msg += await self.addroleifnotpresent(member, guest)
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
-            elif memberrole is None and player.club.tag != None and 'LA ' in player.club.name: #guest -> member
+            elif memberrole is None and player.club and 'LA ' in player.club.name: #guest -> member
                 rolefound = False
                 for r in ch.guild.roles:
                     if r.name.split(':', 1)[0].strip() == player.club.name:
@@ -495,7 +497,7 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.addroleifnotpresent(member, labs)
                 msg += await self.removeroleifpresent(member, guest)
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
-            elif player.club.tag is not None and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
+            elif player.club and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
                 rolefound = False
                 for r in ch.guild.roles:
                     if r.name.split(':', 1)[0].strip() == player.club.name:
