@@ -4,6 +4,7 @@ from redbot.core.utils.embed import randomize_colour
 from redbot.core.utils.menus import menu, DEFAULT_CONTROLS
 from random import choice
 import clashroyale
+from typing import Union
 
 class ClashRoyaleCog(commands.Cog):
     
@@ -77,7 +78,7 @@ class ClashRoyaleCog(commands.Cog):
             await ctx.send(f"Something went wrong: {str(e)}")
             
     @commands.command(aliases=['crp'])
-    async def crprofile(self, ctx, member=None):
+    async def crprofile(self, ctx, member:Union[discord.Member, str]=None):
         """Clash Royale profile"""
         await ctx.trigger_typing()
         prefix = "/"
