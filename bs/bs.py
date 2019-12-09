@@ -475,7 +475,7 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.addroleifnotpresent(member, labs)
                     rolefound = False
                     for r in ch.guild.roles:
-                        if r.name.startswith(player.club.name):
+                        if r.name.split(':', 1)[0].strip() == player.club.name:
                             rolefound = True
                             msg += await self.addroleifnotpresent(member, r)
                     if not rolefound:
@@ -489,7 +489,7 @@ class BrawlStarsCog(commands.Cog):
             elif memberrole is None and player.club and 'LA ' in player.club.name: #guest -> member
                 rolefound = False
                 for r in ch.guild.roles:
-                    if r.name.startswith(player.club.name):
+                    if r.name.split(':', 1)[0].strip() == player.club.name:
                         rolefound = True
                         msg += await self.addroleifnotpresent(member, r)
                 if not rolefound:
@@ -500,7 +500,7 @@ class BrawlStarsCog(commands.Cog):
             elif player.club and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
                 rolefound = False
                 for r in ch.guild.roles:
-                    if r.name.startswith(player.club.name):
+                    if r.name.split(':', 1)[0].strip() == player.club.name:
                         rolefound = True
                         msg += await self.addroleifnotpresent(member, r)
                 if not rolefound:
