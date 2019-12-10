@@ -205,7 +205,7 @@ class Tools(commands.Cog):
             await ctx.send(embed=discord.Embed(description=m, colour=discord.Colour.green()))
 
     @commands.command()
-    async def memberswithtworoles(self, ctx, *rolenames):
+    async def members2(self, ctx, *rolenames):
         if len(rolenames) != 2:
             await ctx.send("Please enter two roles.")
             return
