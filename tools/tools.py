@@ -176,8 +176,12 @@ class Tools(commands.Cog):
             rolename = rolename.replace("mentions", "").strip()
         role = None
         for r in ctx.guild.roles:
-            if r.name.lower().startswith(rolename.lower()):
+            if r.name.lower() == rolename.lower():
                 role = r
+                continue
+            elif r.name.lower().startswith(rolename.lower()):
+                role = r
+                continue
         if role is None:
             await ctx.send("No such role in the server.")
             return
@@ -212,8 +216,12 @@ class Tools(commands.Cog):
         roles = []
         for rolename in rolenames:
             for r in ctx.guild.roles:
-                if r.name.lower().startswith(rolename.lower()):
+                if r.name.lower() == rolename.lower():
                     roles.append(r)
+                    continue
+                elif r.name.lower().startswith(rolename.lower()):
+                    roles.append(r)
+                    continue
         if len(roles) < len(rolenames):
             await ctx.send("Not all roles were found.")
             return
