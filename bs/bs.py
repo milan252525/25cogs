@@ -480,10 +480,16 @@ class BrawlStarsCog(commands.Cog):
                             msg += await self.addroleifnotpresent(member, r)
                     if not rolefound:
                         msg += f"Role for the club **{player.club.name}** not found.\n"
+                    if player.club.role == "vice president":
+                        msg += await self.addroleifnotpresent(vp)
+                    elif player.club.role == "president":
+                        msg += await self.addroleifnotpresent(pres)
                     await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
             elif (not player.club or 'LA ' not in player.club.name) and memberrole is not None: #member -> guest
                 msg += await self.removeroleifpresent(member, memberrole)
                 msg += await self.removeroleifpresent(member, labs)
+                msg += await self.removeroleifpresent(member, vp)
+                msg += await self.removeroleifpresent(member, pres)
                 msg += await self.addroleifnotpresent(member, guest)
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
             elif memberrole is None and player.club and 'LA ' in player.club.name: #guest -> member
@@ -496,6 +502,10 @@ class BrawlStarsCog(commands.Cog):
                     msg += f"Role for the club {player.club.name} not found."
                 msg += await self.addroleifnotpresent(member, labs)
                 msg += await self.removeroleifpresent(member, guest)
+                if player.club.role == "vice president":
+                    msg += await self.addroleifnotpresent(vp)
+                elif player.club.role == "president":
+                    msg += await self.addroleifnotpresent(pres)
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
             elif player.club and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
                 rolefound = False
@@ -506,7 +516,16 @@ class BrawlStarsCog(commands.Cog):
                 if not rolefound:
                     msg += f"Role for the club {player.club.name} not found."
                 msg += await self.removeroleifpresent(member, memberrole)
+                if player.club.role == "vice president":
+                    msg += await self.addroleifnotpresent(vp)
+                elif player.club.role == "president":
+                    msg += await self.addroleifnotpresent(pres)
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
+            elif player.club and player.club.name in club and 'LA ' in player.club.name and memberrole is not None: #vp/pres check
+                if player.club.role == "vice president":
+                    msg += await self.addroleifnotpresent(vp)
+                elif player.club.role == "president":
+                    msg += await self.addroleifnotpresent(pres)
         await ch.send(embed=discord.Embed(colour=discord.Colour.green(), description="**Finished.**"))
         
     @sortroles.before_loop
