@@ -203,3 +203,38 @@ class Tools(commands.Cog):
                 m = m.replace('*', '\*')
                 m = m.replace('~', '\~')
             await ctx.send(embed=discord.Embed(description=m, colour=discord.Colour.green()))
+
+    @commands.command()
+    async def memberswithtworoles(self, ctx, *rolenames):
+        if len(rolenames) != 2:
+            await ctx.send("Please enter two roles.")
+            return
+        roles = []
+        for rolename in rolenames:
+            for r in ctx.guild.roles:
+                if r.name.lower().startswith(rolename.lower()):
+                    roles.append(r)
+        if len(roles) < len(rolenames):
+            await ctx.send("Not all roles were found.")
+            return
+        results = []
+        for role in roles:
+            results.append(role.members)
+        result = list(set(results[0]) & set(results[1]))
+        if len(result) == 0:
+            await ctx.send("No members with such role in the server.")
+            return
+        msg = f"Members: {str(len(result))}\n"
+        messages = []
+        for member in result:
+            if len(msg) > 1999:
+                messages.append(msg)
+                msg = ""
+            msg += f"{str(member)}\n"
+        if len(msg) > 0:
+            messages.append(msg)
+        for m in messages:
+            m = m.replace('_', '\_')
+            m = m.replace('*', '\*')
+            m = m.replace('~', '\~')
+            await ctx.send(embed=discord.Embed(description=m, colour=discord.Colour.green()))
