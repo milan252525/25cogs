@@ -222,7 +222,7 @@ class Tools(commands.Cog):
             results.append(role.members)
         result = list(set(results[0]) & set(results[1]))
         if len(result) == 0:
-            await ctx.send("No members with such role in the server.")
+            await ctx.send("No members with such combination of roles in the server.")
             return
         msg = f"Members: {str(len(result))}\n"
         messages = []
