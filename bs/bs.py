@@ -439,6 +439,7 @@ class BrawlStarsCog(commands.Cog):
             try:
                 player = await self.ofcbsapi.get_player(tag)
                 await asyncio.sleep(0.1)
+                clubbs = await self.ofcbsapi.get_club(player.club.tag) if player.club.tag else None
 
             except brawlstats.errors.RequestError as e:
                 await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"BS API is offline ({str(e)})"))
@@ -447,8 +448,6 @@ class BrawlStarsCog(commands.Cog):
             except Exception as e:
                 return await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"**Something went wrong while requesting {tag}!**"))
     
-
-            clubbs = player.get_club()
             memberrole = None
             club = ""
             msg = ""
