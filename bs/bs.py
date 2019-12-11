@@ -152,7 +152,7 @@ class BrawlStarsCog(commands.Cog):
                         return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
 
         if tag is None or tag == "":
-            desc = "/p\n/bsprofile @user\n/p discord_name\n/p discord_id\n/pe #CRTAG"
+            desc = "/p\n/bsprofile @user\n/p discord_name\n/p discord_id\n/p #CRTAG"
             embed = discord.Embed(title="Invalid argument!", colour=discord.Colour.red(), description=desc)
             return await ctx.send(embed=embed)
         try:
@@ -193,7 +193,7 @@ class BrawlStarsCog(commands.Cog):
                 return await ctx.send(embed = self.badEmbed(f"You have no tag saved! Use {ctx.prefix}bssave <tag>"))
             try:
                 player = await self.ofcbsapi.get_player(mtag)
-                if not player.club:
+                if not player.club.tag:
                     return await ctx.send("This user is not in a club!")
                 tag = player.club.tag
             except brawlstats.errors.RequestError as e:
@@ -208,13 +208,12 @@ class BrawlStarsCog(commands.Cog):
                     return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {ctx.prefix}bssave <tag>"))
 
                 try:
-                    mtag = mtag.replace("#", "")
                     player = await self.ofcbsapi.get_player(mtag)
-                    if not player.club:
+                    if not player.club.tag:
                         return await ctx.send("This user is not in a club!")
                     tag = player.club.tag
                 except brawlstats.errors.RequestError as e:
-                    return await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+                    await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
         else:
             tag = await self.config.guild(ctx.guild).clubs.get_raw(key.lower(), "tag", default=None)
             if tag is None:
@@ -428,16 +427,14 @@ class BrawlStarsCog(commands.Cog):
         guest = discord.utils.get(ch.guild.roles, id=578260960981286923)
         newcomer = discord.utils.get(ch.guild.roles, id=534461445656543255)
         brawlstars = discord.utils.get(ch.guild.roles, id=576002604740378629)
-        vp = discord.utils.get(ch.guild.roles, id=536993652648574976)
-        pres = discord.utils.get(ch.guild.roles, id=536993632918568991)
         for member in ch.guild.members:
-            if member.bot:
+            if guest in member.roles or member.bot:
                 continue
             tag = await self.config.user(member).tag()
             if tag is None:
                 continue
             try:
-                player = await self.ofcbsapi.get_player(tag)
+                player = await self.bsapi.get_player(tag)
                 await asyncio.sleep(0.1)
 
             except brawlstats.errors.RequestError as e:
@@ -447,7 +444,6 @@ class BrawlStarsCog(commands.Cog):
             except Exception as e:
                 return await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"**Something went wrong while requesting {tag}!**"))
 
-            clubbs = player.get_club()
             memberrole = None
             club = ""
             msg = ""
@@ -457,7 +453,7 @@ class BrawlStarsCog(commands.Cog):
                     memberroles.append(role)
 
             if len(memberroles) > 1:
-                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"**{str(member)}** has more than one club role.\nRemoving **{', '.join([str(r) for r in memberroles])}**"))
+                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"{str(member)} has more than one club role. Removing {', '.join(memberroles)}"))
                 for role in memberroles:
                     await self.removeroleifpresent(member, role)
             elif len(memberroles) == 1:
@@ -465,76 +461,49 @@ class BrawlStarsCog(commands.Cog):
                 club = memberrole.name.split(':', 1)[0].strip()
 
             if newcomer in member.roles: #newcomer -> member
-                if not player.club or 'LA ' not in player.club.name:
+                if player.club is None or 'LA ' not in player.club.name:
                     msg += await self.removeroleifpresent(member, newcomer)
                     msg += await self.addroleifnotpresent(member, brawlstars)
                     msg += await self.addroleifnotpresent(member, guest)
                     await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
-                elif player.club and 'LA ' in player.club.name:
+                elif player.club is not None and 'LA ' in player.club.name:
                     msg += await self.removeroleifpresent(member, newcomer)
                     msg += await self.addroleifnotpresent(member, brawlstars)
                     msg += await self.addroleifnotpresent(member, labs)
                     rolefound = False
                     for r in ch.guild.roles:
-                        if " ".join(r.name.split(' ', 2)[:2]) == player.club.name:
+                        if r.name.startswith(player.club.name):
                             rolefound = True
                             msg += await self.addroleifnotpresent(member, r)
                     if not rolefound:
                         msg += f"Role for the club **{player.club.name}** not found.\n"
-                    for m in clubbs.members:
-                        if player.name == m.name:
-                            if m.role.lower() == "vice president":
-                                msg += await self.addroleifnotpresent(vp)
-                            elif m.role.lower() == "president":
-                                msg += await self.addroleifnotpresent(pres)
                     await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
-            elif (not player.club or 'LA ' not in player.club.name) and memberrole is not None: #member -> guest
+            elif (player.club is None or 'LA ' not in player.club.name) and memberrole is not None: #member -> guest
                 msg += await self.removeroleifpresent(member, memberrole)
                 msg += await self.removeroleifpresent(member, labs)
-                msg += await self.removeroleifpresent(member, vp)
-                msg += await self.removeroleifpresent(member, pres)
                 msg += await self.addroleifnotpresent(member, guest)
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
-            elif memberrole is None and player.club and 'LA ' in player.club.name: #guest -> member
+            elif memberrole is None and player.club != None and 'LA ' in player.club.name: #guest -> member
                 rolefound = False
                 for r in ch.guild.roles:
-                    if " ".join(r.name.split(' ', 2)[:2]) == player.club.name:
+                    if r.name.startswith(player.club.name):
                         rolefound = True
                         msg += await self.addroleifnotpresent(member, r)
                 if not rolefound:
                     msg += f"Role for the club {player.club.name} not found."
                 msg += await self.addroleifnotpresent(member, labs)
                 msg += await self.removeroleifpresent(member, guest)
-                for m in clubbs.members:
-                    if player.name == m.name:
-                        if m.role.lower() == "vice president":
-                            msg += await self.addroleifnotpresent(vp)
-                        elif m.role.lower() == "president":
-                            msg += await self.addroleifnotpresent(pres)
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
-            elif player.club and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
+            elif player.club is not None and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
                 rolefound = False
                 for r in ch.guild.roles:
-                    if " ".join(r.name.split(' ', 2)[:2]) == player.club.name:
+                    if r.name.startswith(player.club.name):
                         rolefound = True
                         msg += await self.addroleifnotpresent(member, r)
                 if not rolefound:
                     msg += f"Role for the club {player.club.name} not found."
                 msg += await self.removeroleifpresent(member, memberrole)
-                for m in clubbs.members:
-                    if player.name == m.name:
-                        if m.role.lower() == "vice president":
-                            msg += await self.addroleifnotpresent(vp)
-                        elif m.role.lower() == "president":
-                            msg += await self.addroleifnotpresent(pres)
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
-            elif player.club and player.club.name in club and 'LA ' in player.club.name and memberrole is not None: #vp/pres check
-                for m in clubbs.members:
-                    if player.name == m.name:
-                        if m.role.lower() == "vice president":
-                            msg += await self.addroleifnotpresent(vp)
-                        elif m.role.lower() == "president":
-                            msg += await self.addroleifnotpresent(pres)
         await ch.send(embed=discord.Embed(colour=discord.Colour.green(), description="**Finished.**"))
         
     @sortroles.before_loop
