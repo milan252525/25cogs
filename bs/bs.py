@@ -446,8 +446,8 @@ class BrawlStarsCog(commands.Cog):
 
             except Exception as e:
                 return await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"**Something went wrong while requesting {tag}!**"))
-    
-            clubbs = await player.get_club()
+            if player.club.tag:
+                clubbs = await player.get_club()
             memberrole = None
             club = ""
             msg = ""
