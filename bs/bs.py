@@ -231,7 +231,7 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(name="Required Trophies", value= f"{self.get_league_emoji(club.required_trophies)} `{club.required_trophies}`")
         embed.add_field(name="Average Trophies", value= f"<:bstrophy:552558722770141204> `{club.trophies//len(club.members)}`")
         for m in club.members:
-            if m.role == "president":
+            if m.role == "President":
                 embed.add_field(name="President", value= f"{self.get_league_emoji(m.trophies)}`{m.trophies}` {m.name}")
                 break
         embed.add_field(name="Members", value=f"<:icon_gameroom:553299647729238016> {len(club.members)}/100")
@@ -477,9 +477,9 @@ class BrawlStarsCog(commands.Cog):
                         if " ".join(r.name.split(' ', 2)[:2]) == player.club.name:
                             rolefound = True
                             msg += await self.addroleifnotpresent(member, r)
-                            if player.club.role.lower() == "vice president":
+                            if player.club.role == 'Vice President':
                                 msg += await self.addroleifnotpresent(member, vp)
-                            elif player.club.role.lower() == "president":
+                            elif player.club.role == 'President':
                                 msg += await self.addroleifnotpresent(member, pres)
                     if not rolefound:
                         msg += f"Role for the club **{player.club.name}** not found.\n"
@@ -497,9 +497,9 @@ class BrawlStarsCog(commands.Cog):
                     if " ".join(r.name.split(' ', 2)[:2]) == player.club.name:
                         rolefound = True
                         msg += await self.addroleifnotpresent(member, r)
-                        if player.club.role.lower() == "vice president":
+                        if player.club.role == 'Vice President':
                             msg += await self.addroleifnotpresent(member, vp)
-                        elif player.club.role.lower() == "president":
+                        elif player.club.role == 'President':
                             msg += await self.addroleifnotpresent(member, pres)
                 if not rolefound:
                     msg += f"Role for the club {player.club.name} not found."
@@ -512,29 +512,21 @@ class BrawlStarsCog(commands.Cog):
                     if " ".join(r.name.split(' ', 2)[:2]) == player.club.name:
                         rolefound = True
                         msg += await self.addroleifnotpresent(member, r)
-                        if player.club.role.lower() == "vice president":
+                        if player.club.role == 'Vice President':
                             msg += await self.addroleifnotpresent(member, vp)
-                        elif player.club.role.lower() == "president":
+                        elif player.club.role == 'President':
                             msg += await self.addroleifnotpresent(member, pres)
                 if not rolefound:
                     msg += f"Role for the club {player.club.name} not found."
                 msg += await self.removeroleifpresent(member, memberrole)
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
             elif player.club is not None and player.club.name in club and 'LA ' in player.club.name and memberrole is not None:  #pres/vp check
-                if player.club.role.lower() == "vice president":
+                if player.club.role == 'Vice President':
                     msg += await self.addroleifnotpresent(member, vp)
-                elif player.club.role.lower() == "president":
+                elif player.club.role == 'President':
                     msg += await self.addroleifnotpresent(member, pres)
         await ch.send(embed=discord.Embed(colour=discord.Colour.green(), description="**Finished.**"))
         
     @sortroles.before_loop
     async def before_sortroles(self):
         await asyncio.sleep(10)
-
-    @commands.command(aliases=['pcr'])
-    async def playerclubroletest(self, ctx):
-        await ctx.trigger_typing()
-        pres = await self.bsapi.get_player("82CCQUP")
-        vp = await self.bsapi.get_player("89L8CV8UR")
-        await ctx.send(f"pres={pres.club.role}")
-        await ctx.send(f"vp={vp.club.role}")
