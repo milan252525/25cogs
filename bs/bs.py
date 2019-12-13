@@ -530,3 +530,11 @@ class BrawlStarsCog(commands.Cog):
     @sortroles.before_loop
     async def before_sortroles(self):
         await asyncio.sleep(10)
+
+    @commands.command(aliases=['pcr'])
+    async def playerclubroletest(self, ctx):
+        await ctx.trigger_typing()
+        pres = await self.bsapi.get_player("82CCQUP")
+        vp = await self.bsapi.get_player("89L8CV8UR")
+        await ctx.send(f"pres={pres.club.role}")
+        await ctx.send(f"vp={vp.club.role}")
