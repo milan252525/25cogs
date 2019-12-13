@@ -231,7 +231,7 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(name="Required Trophies", value= f"{self.get_league_emoji(club.required_trophies)} `{club.required_trophies}`")
         embed.add_field(name="Average Trophies", value= f"<:bstrophy:552558722770141204> `{club.trophies//len(club.members)}`")
         for m in club.members:
-            if m.role == "President":
+            if m.role == "president":
                 embed.add_field(name="President", value= f"{self.get_league_emoji(m.trophies)}`{m.trophies}` {m.name}")
                 break
         embed.add_field(name="Members", value=f"<:icon_gameroom:553299647729238016> {len(club.members)}/100")
