@@ -525,6 +525,7 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.addroleifnotpresent(member, vp)
                 elif player.club.role == 'President':
                     msg += await self.addroleifnotpresent(member, pres)
+                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
         
     @sortroles.before_loop
     async def before_sortroles(self):
