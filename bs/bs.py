@@ -523,23 +523,11 @@ class BrawlStarsCog(commands.Cog):
             elif player.club is not None and player.club.name in club and 'LA ' in player.club.name and memberrole is not None:  #pres/vp check
                 if player.club.role == 'Vice President':
                     msg += await self.addroleifnotpresent(member, vp)
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
                 elif player.club.role == 'President':
                     msg += await self.addroleifnotpresent(member, pres)
-                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
         
     @sortroles.before_loop
     async def before_sortroles(self):
         await asyncio.sleep(10)
-
-    @commands.command
-    async def vpprescheck(self, ctx):
-        vptag = await self.bsapi.get_player("20J9QR8G0")
-        prestag = await self.bsapi.get_player("82CCQUP")
-        vp = False
-        pres = False
-        if vptag.club.role == "Vice President":
-            vp = True
-        if prestag.club.role == "President":
-            pres = True
-        await ctx.send(f"vp={vp}")
-        await ctx.send(f"pres={pres}")
