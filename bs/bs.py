@@ -20,7 +20,7 @@ class BrawlStarsCog(commands.Cog):
         self.sortroles.start()
         
     def cog_unload(self):
-        self.sortroles.stop()
+        self.sortroles.cancel()
         
     async def initialize(self):
         bsapikey = await self.bot.db.api_tokens.get_raw("bsapi", default={"api_key": None})
