@@ -388,7 +388,7 @@ class Welcome(commands.Cog):
         overwrites = {member.guild.default_role: discord.PermissionOverwrite(read_messages=False), member: discord.PermissionOverwrite(read_messages=True, send_messages=True, read_message_history=True, add_reactions=True), roleStaff: discord.PermissionOverwrite(read_messages=True, send_messages=True, read_message_history=True)}
         setupChannel = await member.guild.create_text_channel(member.name, category=welcomeCategory, overwrites=overwrites, topic=f"{member.id}" , reason=f"Channel created for {member.display_name} role setup.")
         globalChat = self.bot.get_channel(593248015729295362)
-        welcomeLog = self.bot.get_channel(602906701762396160)
+        welcomeLog = self.bot.get_channel(655517081353322561)
         logMessages = []
         logMessages.append(await welcomeLog.send(f"--------------------\n__**{member.display_name}:**__"))
         async def appendLog(txt):
