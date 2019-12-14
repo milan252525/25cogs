@@ -422,7 +422,7 @@ class BrawlStarsCog(commands.Cog):
     @tasks.loop(hours=6)
     async def sortroles(self):
         ch = self.bot.get_channel(653295573872672810)
-        await ch.send(embed=discord.Embed(colour=discord.Colour.green(), description="**Started.**"))
+        await ch.trigger_typing()
         labs = discord.utils.get(ch.guild.roles, id=576028728052809728)
         guest = discord.utils.get(ch.guild.roles, id=578260960981286923)
         newcomer = discord.utils.get(ch.guild.roles, id=534461445656543255)
@@ -525,8 +525,20 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.addroleifnotpresent(member, vp)
                 elif player.club.role == 'President':
                     msg += await self.addroleifnotpresent(member, pres)
-        await ch.send(embed=discord.Embed(colour=discord.Colour.green(), description="**Finished.**"))
         
     @sortroles.before_loop
     async def before_sortroles(self):
         await asyncio.sleep(10)
+
+    @commands.command
+    async def vpprescheck(self, ctx):
+        vptag = await self.bsapi.get_player("20J9QR8G0")
+        prestag = await self.bsapi.get_player("82CCQUP")
+        vp = False
+        pres = False
+        if vptag.club.role == "Vice President":
+            vp = True
+        if prestag.club.role == "President":
+            pres = True
+        await ctx.send(f"vp={vp}")
+        await ctx.send(f"pres={pres}")
