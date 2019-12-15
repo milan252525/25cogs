@@ -500,7 +500,7 @@ class BrawlStarsCog(commands.Cog):
                             msg += await self.addroleifnotpresent(member, vp)
                         elif player.club.role == 'President':
                             msg += await self.addroleifnotpresent(member, pres)
-                        elif player.club.role == 'Member':
+                        elif player.club.role == 'Member' or player.club.role == 'Senior':
                             msg += await self.removeroleifpresent(member, vp)
                             msg += await self.removeroleifpresent(member, pres)
                 if not rolefound:
@@ -517,7 +517,7 @@ class BrawlStarsCog(commands.Cog):
                             msg += await self.addroleifnotpresent(member, vp)
                         elif player.club.role == 'President':
                             msg += await self.addroleifnotpresent(member, pres)
-                        elif player.club.role == 'Member':
+                        elif player.club.role == 'Member' or player.club.role == 'Senior':
                             msg += await self.removeroleifpresent(member, vp)
                             msg += await self.removeroleifpresent(member, pres)
                 if not rolefound:
@@ -528,7 +528,7 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.addroleifnotpresent(member, vp)
                 elif player.club.role == 'President':
                     msg += await self.addroleifnotpresent(member, pres)
-                elif player.club.role == 'Member':
+                elif player.club.role == 'Member' or player.club.role == 'Senior':
                     msg += await self.removeroleifpresent(member, vp)
                     msg += await self.removeroleifpresent(member, pres)
             if msg != "":
