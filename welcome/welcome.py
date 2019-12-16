@@ -632,7 +632,7 @@ class Welcome(commands.Cog):
                     else:
                         sendTagEmbed = discord.Embed(title="Please tell me your Brawl Stars tag!",
                                                      colour=discord.Colour.blue())
-                        sendTagEmbed.set_image(url="https://i.imgur.com/IB3EjVe.png")
+                        sendTagEmbed.set_image(url="https://i.imgur.com/trjFkYP.png")
                         await setupChannel.send(embed=sendTagEmbed)
 
                         def checkmsg(m):
