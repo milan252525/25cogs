@@ -632,7 +632,7 @@ class Welcome(commands.Cog):
                     else:
                         sendTagEmbed = discord.Embed(title="Please tell me your Brawl Stars tag!",
                                                      colour=discord.Colour.blue())
-                        sendTagEmbed.set_image(url="https://imgur.com/IB3EjVe")
+                        sendTagEmbed.set_image(url="https://i.imgur.com/IB3EjVe.png")
                         await setupChannel.send(embed=sendTagEmbed)
 
                         def checkmsg(m):
@@ -650,7 +650,7 @@ class Welcome(commands.Cog):
                         playerEmbed = discord.Embed(color=discord.Colour.blue())
                         playerEmbed.set_author(name=f"{player.name}", icon_url="https://i.imgur.com/ZwIP41S.png")
                         playerEmbed.add_field(name="Trophies",
-                                              value=f"{self.get_league_emoji(player.trophies)} {player.trophies}")
+                                              value=f"<:bstrophy:552558722770141204>{player.trophies}")
                         if player.club is not None:
                             playerEmbed.add_field(name="Club", value=f"<:bsband:600741378497970177> {player.club.name}")
                             playerEmbed.add_field(name="Role", value=f"<:role:614520101621989435> {player.club.role.capitalize()}")
@@ -765,23 +765,3 @@ class Welcome(commands.Cog):
                                                     description="Process finished, this channel will get deleted in 5 minutes!"))
         await asyncio.sleep(300)
         await setupChannel.delete(reason="Welcoming process finished.")
-
-        def get_league_emoji(self, trophies: int):
-            if trophies < 500:
-                return "<:league_icon_00:553294108802678787>"
-            elif trophies < 1000:
-                return "<:league_icon_01:553294108735569921>"
-            elif trophies < 2000:
-                return "<:league_icon_02:553294109167583296>"
-            elif trophies < 3000:
-                return "<:league_icon_03:553294109264052226>"
-            elif trophies < 4000:
-                return "<:league_icon_04:553294344413511682>"
-            elif trophies < 6000:
-                return "<:league_icon_05:553294344912764959>"
-            elif trophies < 8000:
-                return "<:league_icon_06:553294344841461775>"
-            elif trophies < 10000:
-                return "<:league_icon_07:553294109515972640>"
-            else:
-                return "<:league_icon_08:553294109217914910>"
