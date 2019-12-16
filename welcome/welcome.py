@@ -604,7 +604,7 @@ class Welcome(commands.Cog):
         repeat = True
         while repeat:
             repeat = False
-            text = "**CHOOSE ONE OF THE OPTIONS BELOW:**\n-----------------------------------------------------------\n<:BrawlStars:401883208511389716> **Save Brawl Stars account and join the server**\n-----------------------------------------------------------\n<:HelpIcon:598803665989402624> **Talk to support**\n-----------------------------------------------------------"
+            text = "**CHOOSE ONE OF THE OPTIONS BELOW:**\n-----------------------------------------------------------\n<:league_icon_08:553294109217914910> **Save Brawl Stars account and join the server**\n-----------------------------------------------------------\n<:HelpIcon:598803665989402624> **Talk to support**\n-----------------------------------------------------------"
             chooseGameMessage = await setupChannel.send(text)
             await chooseGameMessage.add_reaction("<:BrawlStars:401883208511389716>")
             await chooseGameMessage.add_reaction("<:HelpIcon:598803665989402624>")
@@ -718,10 +718,10 @@ class Welcome(commands.Cog):
                                     await appendLog(f"Assigned roles: {wins20Role.name}")
                                 except discord.Forbidden:
                                     await appendLog(
-                                        f":exclamation:Couldn't change roles of this user. ({wins20Role.name})")'''
+                                        f":exclamation:Couldn't change roles of this user. ({wins20Role.name})")
 
                             await setupChannel.send(
-                                f"Your account has been saved!\n\nLet us know if you need anything by sending a personal message to <@590906101554348053>.\n\nHead over to {globalChat.mention} to introduce yourself to our community!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance Fight Club*")
+                                f"Your account has been saved!\n\nLet us know if you need anything by sending a personal message to <@590906101554348053>.\n\nHead over to {globalChat.mention} to introduce yourself to our community!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance Fight Club*")'''
 
                         elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
                             await appendLog(f"User's account: No")
