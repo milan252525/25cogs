@@ -24,6 +24,8 @@ class Welcome(commands.Cog):
             await self.do_setup(member, new = True)
         if member.guild.id == 593248015729295360 and not member.bot:
             await self.do_setup_LAFC(member, new = True)
+        if member.guild.id == 654334199494606848 and not member.bot:
+            await self.do_setup_LABSevent(member, new = True)
     
     @commands.Cog.listener()
     async def on_member_remove(self, member):
@@ -37,6 +39,12 @@ class Welcome(commands.Cog):
             for ch in welcomeCategory.channels:
                 if ch.topic == str(member.id):
                     await ch.delete(reason="User left.")
+        if member.guild.id == 654334199494606848 and not member.bot:
+            welcomeCategory = discord.utils.get(member.guild.categories, id=654334199993466880)
+            for ch in welcomeCategory.channels:
+                if ch.topic == str(member.id):
+                    await ch.delete(reason="User left.")
+
 
     async def initialize(self):
         crapikey = await self.bot.db.api_tokens.get_raw("crapi", default={"api_key": None})
@@ -74,6 +82,8 @@ class Welcome(commands.Cog):
             await self.do_setup(member)
         elif ctx.guild.id == 593248015729295360:
             await self.do_setup_LAFC(member)
+        elif ctx.guild.id == 654334199494606848:
+            await self.do_setup_LABSevent(member)
         else:
             await ctx.send("Can't use setup in this server!")
 
@@ -553,3 +563,225 @@ class Welcome(commands.Cog):
         await setupChannel.send(embed=discord.Embed(colour=discord.Colour.blue(), description="Process finished, this channel will get deleted in 5 minutes!"))
         await asyncio.sleep(300)
         await setupChannel.delete(reason="Welcoming process finished.")
+
+    async def do_setup_LABSevent(self, member, new=False):
+        welcomeCategory = discord.utils.get(member.guild.categories, id=654334199993466880)
+        eventsStaff = member.guild.get_role(656072241808670730)
+        overwrites = {member.guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                      member: discord.PermissionOverwrite(read_messages=True, send_messages=True,
+                                                          read_message_history=True, add_reactions=True),
+                      eventsStaff: discord.PermissionOverwrite(read_messages=True, send_messages=True,
+                                                             read_message_history=True)}
+        setupChannel = await member.guild.create_text_channel(member.name, category=welcomeCategory,
+                                                              overwrites=overwrites, topic=f"{member.id}",
+                                                              reason=f"Channel created for {member.display_name} role setup.")
+        #globalChat = self.bot.get_channel(593248015729295362)
+        welcomeLog = self.bot.get_channel(654334199993466882)
+        logMessages = []
+        logMessages.append(await welcomeLog.send(f"--------------------\n__**{member.display_name}:**__"))
+
+        async def appendLog(txt):
+            count = 0
+            for page in pagify(txt):
+                if len(logMessages) < count + 1:
+                    logMessages[count] = await welcomeLog.send(page)
+                else:
+                    await logMessages[count].edit(content=f"{logMessages[count].content}\n{page}")
+                count += 1
+
+        '''welcomeEmbed = discord.Embed(colour=discord.Colour.blue())
+        welcomeEmbed.set_image(url="https://i.imgur.com/tG8Rio3.png")
+        welcomeEmbed2 = discord.Embed(colour=discord.Colour.blue())
+        welcomeEmbed2.set_image(url="https://i.imgur.com/wiY1LP4.png")
+        await setupChannel.send(member.mention, embed=welcomeEmbed)
+        await setupChannel.send(
+            "Welcome to the **LA Fight Club**.\n\nWe are a gamer run community devoted to enhancing the player experience.\nLeaders of many clan families and esport organizations have come together to bring you this community.\n\nWe cater to players looking for a more competitive edge while keeping good sportsmanship.\nWe have frequent tournaments/events for cash prizes.",
+            embed=welcomeEmbed2)
+        await setupChannel.send(
+            "You can read about how we function at <#595045518594408461>\nPlease follow our discord and gaming rules which can be viewed in detail at <#593310003591381005>")
+        await asyncio.sleep(2)'''
+
+        repeat = True
+        while repeat:
+            repeat = False
+            text = "**CHOOSE ONE OF THE OPTIONS BELOW:**\n-----------------------------------------------------------\n<:BrawlStars:401883208511389716> **Save Brawl Stars account and join the server**\n-----------------------------------------------------------\n<:HelpIcon:598803665989402624> **Talk to support**\n-----------------------------------------------------------"
+            chooseGameMessage = await setupChannel.send(text)
+            await chooseGameMessage.add_reaction("<:BrawlStars:401883208511389716>")
+            await chooseGameMessage.add_reaction("<:HelpIcon:598803665989402624>")
+
+            def check(reaction, user):
+                return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in [
+                    "<:BrawlStars:401883208511389716>", "<:HelpIcon:598803665989402624>"]
+
+            reaction, _ = await self.bot.wait_for('reaction_add', check=check)
+
+            if str(reaction.emoji) == "<:BrawlStars:401883208511389716>":
+                await appendLog("Chosen game: Brawl Stars")
+
+                tag = await self.bsconfig.user(member).tag()
+
+                repeatSave = True
+                while repeatSave:
+                    repeatSave = False
+                    accountConfirm = "Is this your account?"
+                    accountFound = "**Brawl Stars** account with this tag found:"
+
+                    if tag is not None:
+                        accountConfirm = "Would you like to keep this account saved?"
+                        accountFound = "I found this BS account assigned to your Discord account in a database:"
+                    else:
+                        sendTagEmbed = discord.Embed(title="Please tell me your Brawl Stars tag!",
+                                                     colour=discord.Colour.blue())
+                        sendTagEmbed.set_image(url="https://imgur.com/IB3EjVe")
+                        await setupChannel.send(embed=sendTagEmbed)
+
+                        def checkmsg(m):
+                            return m.channel == setupChannel and m.author == member
+
+                        tagMessage = await self.bot.wait_for('message', check=checkmsg)
+                        tag = tagMessage.content.lower().replace('O', '0').replace(' ', '')
+                        if tag.startswith("#"):
+                            tag = tag.strip('#')
+                        await appendLog(f"Tag input: {tag}")
+
+                    try:
+                        player = await self.bsapi.get_player(tag)
+                        await appendLog(f"BS account found: {player.name}")
+                        playerEmbed = discord.Embed(color=discord.Colour.blue())
+                        playerEmbed.set_author(name=f"{player.name}", icon_url="https://i.imgur.com/ZwIP41S.png")
+                        playerEmbed.add_field(name="Trophies",
+                                              value=f"{self.get_league_emoji(player.trophies)} {player.trophies}")
+                        if player.club is not None:
+                            playerEmbed.add_field(name="Club", value=f"<:bsband:600741378497970177> {player.club.name}")
+                            playerEmbed.add_field(name="Role", value=f"<:role:614520101621989435> {player.club.role.capitalize()}")
+                        else:
+                            playerEmbed.add_field(name="Club", value="None")
+                        playerEmbed.add_field(name=f"{accountConfirm} (Choose reaction)",
+                                              value="<:yesconfirm:595535992329601034> Yes\t<:nocancel:595535992199315466> No",
+                                              inline=False)
+                        confirmMessage = await setupChannel.send(accountFound, embed=playerEmbed)
+                        await confirmMessage.add_reaction("<:yesconfirm:595535992329601034>")
+                        await confirmMessage.add_reaction("<:nocancel:595535992199315466>")
+
+                        def ccheck(reaction, user):
+                            return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in [
+                                "<:yesconfirm:595535992329601034>", "<:nocancel:595535992199315466>"]
+
+                        reaction, _ = await self.bot.wait_for('reaction_add', check=ccheck)
+
+                        if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
+                            await appendLog(f"User's account: Yes")
+                            nick = f"{player.name} | {player.clan.name}" if player.clan is not None else f"{player.name}"
+                            try:
+                                await member.edit(nick=nick[:31])
+                                await appendLog(f"Nickname changed: {nick[:31]}")
+                            except discord.Forbidden:
+                                await appendLog(
+                                    f":exclamation:Couldn't change nickname of this user. ({nick[:31]})")
+
+                            await self.crconfig.user(member).tag.set(tag)
+                            await appendLog("Saved tag: Brawl Stars")
+
+                            try:
+                                roleMember = member.guild.get_role(654334569528688641)
+                                await member.add_roles(roleMember)
+                                await appendLog(f"Assigned roles: {roleMember.name}")
+                            except discord.Forbidden:
+                                await appendLog(
+                                    f":exclamation:Couldn't change roles of this user. ({roleMember.name})")
+
+                            '''trophyRole = None
+                            if player.trophies >= 8000:
+                                trophyRole = member.guild.get_role(600325526007054346)
+                            elif player.trophies >= 7000:
+                                trophyRole = member.guild.get_role(594960052604108811)
+                            elif player.trophies >= 6000:
+                                trophyRole = member.guild.get_role(594960023088660491)
+                            elif player.trophies >= 5000:
+                                trophyRole = member.guild.get_role(594959970181709828)
+                            elif player.trophies >= 4000:
+                                trophyRole = member.guild.get_role(594959895904649257)
+                            elif player.trophies >= 3000:
+                                trophyRole = member.guild.get_role(598396866299953165)
+                            if trophyRole is not None:
+                                try:
+                                    await member.add_roles(trophyRole)
+                                    await appendLog(f"Assigned roles: {trophyRole.name}")
+                                except discord.Forbidden:
+                                    await appendLog(
+                                        f":exclamation:Couldn't change roles of this user. ({trophyRole.name})")
+
+                            if player.challengeMaxWins >= 20:
+                                try:
+                                    wins20Role = member.guild.get_role(593776990604230656)
+                                    await member.add_roles(wins20Role)
+                                    await appendLog(f"Assigned roles: {wins20Role.name}")
+                                except discord.Forbidden:
+                                    await appendLog(
+                                        f":exclamation:Couldn't change roles of this user. ({wins20Role.name})")'''
+
+                            await setupChannel.send(
+                                f"Your account has been saved!\n\nLet us know if you need anything by sending a personal message to <@590906101554348053>.\n\nHead over to {globalChat.mention} to introduce yourself to our community!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance Fight Club*")
+
+                        elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
+                            await appendLog(f"User's account: No")
+                            tag = None
+                            repeatSave = True
+
+                    except brawlstats.errors.NotFoundError:
+                        repeat = True
+                        await setupChannel.send("No player with this tag found, try again!")
+                        await appendLog(f":exclamation:Error occured: {str(e)}")
+                    except ValueError as e:
+                        repeat = True
+                        await setupChannel.send(
+                            f"**{str(e)}\nTry again or send a personal message to <@590906101554348053>!**")
+                        await appendLog(f":exclamation:Error occured: {str(e)}")
+                    except brawlstats.errors.RequestError as e:
+                        repeat = True
+                        await setupChannel.send(f"Brawl Stars API is offline, please try again later! ({str(e)})")
+                        await appendLog(f":exclamation:Error occured: {str(e)}")
+                    except Exception as e:
+                        repeat = True
+                        print(str(e))
+                        await setupChannel.send(
+                            "**Something went wrong, please send a personal message to <@590906101554348053> or try again!**")
+                        await appendLog(f":exclamation:Error occured: {str(e)}")
+
+            elif str(reaction.emoji) == "<:HelpIcon:598803665989402624>":
+                await appendLog("Chosen option: Talk to support")
+                await setupChannel.send(
+                    "You have stated that you require support, please send a DM to <@590906101554348053> and state the problem you require support for. Once received our staff will be with you shortly!")
+                await asyncio.sleep(5)
+                repeat = True
+
+        '''if new:
+            wlcm = ["Are you ready to fight?", "Do you have what it takes to become a champion?",
+                    "Ready to showcase your skill?", "Are you ready to prove yourself?"]
+            await globalChat.send(
+                f"<:lafclogo:603670041044582516> {member.mention} welcome to LA Fight Club! {choice(wlcm)}")'''
+        await appendLog(f"**Finished**")
+        await setupChannel.send(embed=discord.Embed(colour=discord.Colour.blue(),
+                                                    description="Process finished, this channel will get deleted in 5 minutes!"))
+        await asyncio.sleep(300)
+        await setupChannel.delete(reason="Welcoming process finished.")
+
+        def get_league_emoji(self, trophies: int):
+            if trophies < 500:
+                return "<:league_icon_00:553294108802678787>"
+            elif trophies < 1000:
+                return "<:league_icon_01:553294108735569921>"
+            elif trophies < 2000:
+                return "<:league_icon_02:553294109167583296>"
+            elif trophies < 3000:
+                return "<:league_icon_03:553294109264052226>"
+            elif trophies < 4000:
+                return "<:league_icon_04:553294344413511682>"
+            elif trophies < 6000:
+                return "<:league_icon_05:553294344912764959>"
+            elif trophies < 8000:
+                return "<:league_icon_06:553294344841461775>"
+            elif trophies < 10000:
+                return "<:league_icon_07:553294109515972640>"
+            else:
+                return "<:league_icon_08:553294109217914910>"
