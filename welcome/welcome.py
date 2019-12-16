@@ -604,18 +604,18 @@ class Welcome(commands.Cog):
         repeat = True
         while repeat:
             repeat = False
-            text = "**CHOOSE ONE OF THE OPTIONS BELOW:**\n-----------------------------------------------------------\n<:league_icon_08:553294109217914910> **Save Brawl Stars account and join the server**\n-----------------------------------------------------------\n<:HelpIcon:598803665989402624> **Talk to support**\n-----------------------------------------------------------"
+            text = "**CHOOSE ONE OF THE OPTIONS BELOW:**\n-----------------------------------------------------------\n<:BrawlStars:595528113929060374> **Save Brawl Stars account and join the server**\n-----------------------------------------------------------\n<:HelpIcon:598803665989402624> **Talk to support**\n-----------------------------------------------------------"
             chooseGameMessage = await setupChannel.send(text)
-            await chooseGameMessage.add_reaction("<:BrawlStars:401883208511389716>")
+            await chooseGameMessage.add_reaction("<:BrawlStars:595528113929060374>")
             await chooseGameMessage.add_reaction("<:HelpIcon:598803665989402624>")
 
             def check(reaction, user):
                 return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in [
-                    "<:BrawlStars:401883208511389716>", "<:HelpIcon:598803665989402624>"]
+                    "<:BrawlStars:595528113929060374>", "<:HelpIcon:598803665989402624>"]
 
             reaction, _ = await self.bot.wait_for('reaction_add', check=check)
 
-            if str(reaction.emoji) == "<:BrawlStars:401883208511389716>":
+            if str(reaction.emoji) == "<:BrawlStars:595528113929060374>":
                 await appendLog("Chosen game: Brawl Stars")
 
                 tag = await self.bsconfig.user(member).tag()
