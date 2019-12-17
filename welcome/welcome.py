@@ -575,7 +575,7 @@ class Welcome(commands.Cog):
         setupChannel = await member.guild.create_text_channel(member.name, category=welcomeCategory,
                                                               overwrites=overwrites, topic=f"{member.id}",
                                                               reason=f"Channel created for {member.display_name} role setup.")
-        #globalChat = self.bot.get_channel(593248015729295362)
+        globalChat = self.bot.get_channel(656512846057963541)
         welcomeLog = self.bot.get_channel(654334199993466882)
         logMessages = []
         logMessages.append(await welcomeLog.send(f"--------------------\n__**{member.display_name}:**__"))
@@ -698,8 +698,8 @@ class Welcome(commands.Cog):
 
 
 
-                            '''await setupChannel.send(
-                                f"Your account has been saved!\n\nLet us know if you need anything by sending a personal message to LA Modmail.\n\nHead over to {globalChat.mention} to introduce yourself to our community!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance*")'''
+                            await setupChannel.send(
+                                f"Your account has been saved!\n\nLet us know if you need anything by sending a personal message to LA Modmail.\n\nHead over to {globalChat.mention} to introduce yourself to our community!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance*")
 
                         elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
                             await appendLog(f"User's account: No")
@@ -739,7 +739,7 @@ class Welcome(commands.Cog):
             wlcm = ["Are you ready to fight?", "Do you have what it takes to become a champion?",
                     "Ready to showcase your skill?", "Are you ready to prove yourself?"]
             await globalChat.send(
-                f"<:lafclogo:603670041044582516> {member.mention} welcome to LA Fight Club! {choice(wlcm)}")'''
+                f"<:lafclogo:603670041044582516> {member.mention} welcome to LA Events! {choice(wlcm)}")'''
         await appendLog(f"**Finished**")
         await setupChannel.send(embed=discord.Embed(colour=discord.Colour.blue(),
                                                     description="Process finished, this channel will get deleted in 5 minutes!"))
