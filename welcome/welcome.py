@@ -197,7 +197,7 @@ class Welcome(commands.Cog):
 
                         #CHECK FOR LA CLAN
                         
-                        await setupChannel.send("Your account has been saved!\n\n**WHAT TO DO NEXT?**\n\nPlease go to <#534426447868198922> to open up the channels of your choice and personalize your experience.\n\nCheck out <#440974277894864906> for bot use and <#488321784781996032> to help navigate the site.\n\nLet us know if you need anything by sending a personal message to <@590906101554348053>.\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance Community*")
+                        await setupChannel.send("Your account has been saved!\n\n**WHAT TO DO NEXT?**\n\nPlease go to <#534426447868198922> to open up the channels of your choice and personalize your experience.\n\nCheck out <#440974277894864906> for bot use and <#488321784781996032> to help navigate the site.\n\nLet us know if you need anything by sending a personal message to LA Modmail.\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance Community*")
                         if showCR and showBS:
                             saveOtherGame = await setupChannel.send(embed=discord.Embed(colour=discord.Colour.blue(), description="Would you like to save Brawl Stars account as well?"))
                             await saveOtherGame.add_reaction("<:yesconfirm:595535992329601034>")
@@ -229,7 +229,7 @@ class Welcome(commands.Cog):
                     await appendLog(f":exclamation:Error occured: {str(e)}")
                 except ValueError as e:
                     repeat = True
-                    await setupChannel.send(f"**{str(e)}\nTry again or send a personal message to <@590906101554348053>!**")
+                    await setupChannel.send(f"**{str(e)}\nTry again or send a personal message to LA Modmail!**")
                     await appendLog(f":exclamation:Error occured: {str(e)}")
                 except clashroyale.RequestError as e:
                     repeat = True
@@ -237,7 +237,7 @@ class Welcome(commands.Cog):
                     await appendLog(f":exclamation:Error occured: {str(e)}")
                 except Exception as e:
                     repeat = True
-                    await setupChannel.send("**Something went wrong, please send a personal message to <@590906101554348053> or try again!**")
+                    await setupChannel.send("**Something went wrong, please send a personal message to LA Modmail or try again!**")
                     await appendLog(f":exclamation:Error occured: {str(e)}")
 
 
@@ -296,7 +296,7 @@ class Welcome(commands.Cog):
 
                         #CHECK FOR LA CLUB
                         
-                        await setupChannel.send("Your account has been saved!\n\n**WHAT TO DO NEXT?**\n\nCheck out <#440974277894864906> for bot use and <#488321784781996032> to help navigate the site.\n\nLet us know if you need anything by sending a personal message to <@590906101554348053>.\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance Community*")
+                        await setupChannel.send("Your account has been saved!\n\n**WHAT TO DO NEXT?**\n\nCheck out <#440974277894864906> for bot use and <#488321784781996032> to help navigate the site.\n\nLet us know if you need anything by sending a personal message to LA Modmail.\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance Community*")
                         if showCR and showBS:
                             saveOtherGame = await setupChannel.send(embed=discord.Embed(colour=discord.Colour.blue(), description="Would you like to save Clash Royale account as well?"))
                             await saveOtherGame.add_reaction("<:yesconfirm:595535992329601034>")
@@ -333,7 +333,7 @@ class Welcome(commands.Cog):
                     await appendLog(f":exclamation:Error occured: {str(e)}")
                 except Exception as e:
                     repeat = True
-                    await setupChannel.send("**Something went wrong, please send a personal message to <@590906101554348053> or try again!**")
+                    await setupChannel.send("**Something went wrong, please send a personal message to LA Modmail or try again!**")
                     await appendLog(f":exclamation:Error occured: {str(e)}")
                     
             elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
@@ -365,14 +365,14 @@ class Welcome(commands.Cog):
                         except discord.Forbidden:
                             await appendLog(f":exclamation:Couldn't change roles of this user. ({roleVisitor.name})")
                             repeat = False
-                        await setupChannel.send("You have been given access to our general channels as a visitor. If you like to gain member - exclusive - access you can always restart the setup-procedure by doing `/setup`.\n\nWe hope you enjoy your stay here. If you might have any questions or require support don't refrain on sending <@590906101554348053> a DM and our staff will be with you shortly!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance*")
+                        await setupChannel.send("You have been given access to our general channels as a visitor. If you like to gain member - exclusive - access you can always restart the setup-procedure by doing `/setup`.\n\nWe hope you enjoy your stay here. If you might have any questions or require support don't refrain on sending LA Modmail a DM and our staff will be with you shortly!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance*")
                         
                     elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
                         repeat = True
                         
                 elif str(reaction.emoji) == "<:HelpIcon:598803665989402624>":
                     await appendLog("Chosen option: Talk to support")
-                    await setupChannel.send("You have stated that you require support, please send a DM to <@590906101554348053> and state the problem you require support for. Once received our staff will be with you shortly!")
+                    await setupChannel.send("You have stated that you require support, please send a DM to LA Modmail and state the problem you require support for. Once received our staff will be with you shortly!")
                     await asyncio.sleep(5)
                     repeat = True
                     
@@ -388,7 +388,7 @@ class Welcome(commands.Cog):
         if new:
             await globalChat.send(f"<:LA:602901892141547540> {member.mention} welcome to LA Gaming!")
         await appendLog(f"**Finished**")
-        await setupChannel.send(embed=discord.Embed(colour=discord.Colour.blue(), description="This channel will get deleted in 5 minutes!\n\nIf you have any questions or need help please send a personal message to <@590906101554348053>.".upper()))
+        await setupChannel.send(embed=discord.Embed(colour=discord.Colour.blue(), description="This channel will get deleted in 5 minutes!\n\nIf you have any questions or need help please send a personal message to LA Modmail.".upper()))
         await asyncio.sleep(300)
         await setupChannel.delete(reason="Welcoming process finished.")
         
@@ -525,7 +525,7 @@ class Welcome(commands.Cog):
                                 except discord.Forbidden:
                                     await appendLog(f":exclamation:Couldn't change roles of this user. ({wins20Role.name})")
 
-                            await setupChannel.send(f"Your account has been saved!\n\nLet us know if you need anything by sending a personal message to <@590906101554348053>.\n\nHead over to {globalChat.mention} to introduce yourself to our community!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance Fight Club*")
+                            await setupChannel.send(f"Your account has been saved!\n\nLet us know if you need anything by sending a personal message to LA Modmail.\n\nHead over to {globalChat.mention} to introduce yourself to our community!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance Fight Club*")
 
                         elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
                             await appendLog(f"User's account: No")
@@ -538,7 +538,7 @@ class Welcome(commands.Cog):
                         await appendLog(f":exclamation:Error occured: {str(e)}")
                     except ValueError as e:
                         repeat = True
-                        await setupChannel.send(f"**{str(e)}\nTry again or send a personal message to <@590906101554348053>!**")
+                        await setupChannel.send(f"**{str(e)}\nTry again or send a personal message to LA Modmail!**")
                         await appendLog(f":exclamation:Error occured: {str(e)}")
                     except clashroyale.RequestError as e:
                         repeat = True
@@ -547,12 +547,12 @@ class Welcome(commands.Cog):
                     except Exception as e:
                         repeat = True
                         print(str(e))
-                        await setupChannel.send("**Something went wrong, please send a personal message to <@590906101554348053> or try again!**")
+                        await setupChannel.send("**Something went wrong, please send a personal message to LA Modmail or try again!**")
                         await appendLog(f":exclamation:Error occured: {str(e)}")
                     
             elif str(reaction.emoji) == "<:HelpIcon:598803665989402624>":
                 await appendLog("Chosen option: Talk to support")
-                await setupChannel.send("You have stated that you require support, please send a DM to <@590906101554348053> and state the problem you require support for. Once received our staff will be with you shortly!")
+                await setupChannel.send("You have stated that you require support, please send a DM to LA Modmail and state the problem you require support for. Once received our staff will be with you shortly!")
                 await asyncio.sleep(5)
                 repeat = True
         
@@ -575,7 +575,7 @@ class Welcome(commands.Cog):
         setupChannel = await member.guild.create_text_channel(member.name, category=welcomeCategory,
                                                               overwrites=overwrites, topic=f"{member.id}",
                                                               reason=f"Channel created for {member.display_name} role setup.")
-        #globalChat = self.bot.get_channel(593248015729295362)
+        globalChat = self.bot.get_channel(656512846057963541)
         welcomeLog = self.bot.get_channel(654334199993466882)
         logMessages = []
         logMessages.append(await welcomeLog.send(f"--------------------\n__**{member.display_name}:**__"))
@@ -600,6 +600,8 @@ class Welcome(commands.Cog):
         await setupChannel.send(
             "You can read about how we function at <#595045518594408461>\nPlease follow our discord and gaming rules which can be viewed in detail at <#593310003591381005>")
         await asyncio.sleep(2)'''
+
+
 
         repeat = True
         while repeat:
@@ -684,44 +686,20 @@ class Welcome(commands.Cog):
 
                             try:
                                 roleMember = member.guild.get_role(654334569528688641)
-                                await member.add_roles(roleMember)
+                                roleGuest = member.guild.get_role(656506416911351848)
+                                if "LA " in player.club.name:
+                                    await member.add_roles(roleMember)
+                                elif "LA " not in player.club.name:
+                                    await member.add_roles(roleGuest)
                                 await appendLog(f"Assigned roles: {roleMember.name}")
                             except discord.Forbidden:
                                 await appendLog(
                                     f":exclamation:Couldn't change roles of this user. ({roleMember.name})")
 
-                            '''trophyRole = None
-                            if player.trophies >= 8000:
-                                trophyRole = member.guild.get_role(600325526007054346)
-                            elif player.trophies >= 7000:
-                                trophyRole = member.guild.get_role(594960052604108811)
-                            elif player.trophies >= 6000:
-                                trophyRole = member.guild.get_role(594960023088660491)
-                            elif player.trophies >= 5000:
-                                trophyRole = member.guild.get_role(594959970181709828)
-                            elif player.trophies >= 4000:
-                                trophyRole = member.guild.get_role(594959895904649257)
-                            elif player.trophies >= 3000:
-                                trophyRole = member.guild.get_role(598396866299953165)
-                            if trophyRole is not None:
-                                try:
-                                    await member.add_roles(trophyRole)
-                                    await appendLog(f"Assigned roles: {trophyRole.name}")
-                                except discord.Forbidden:
-                                    await appendLog(
-                                        f":exclamation:Couldn't change roles of this user. ({trophyRole.name})")
 
-                            if player.challengeMaxWins >= 20:
-                                try:
-                                    wins20Role = member.guild.get_role(593776990604230656)
-                                    await member.add_roles(wins20Role)
-                                    await appendLog(f"Assigned roles: {wins20Role.name}")
-                                except discord.Forbidden:
-                                    await appendLog(
-                                        f":exclamation:Couldn't change roles of this user. ({wins20Role.name})")
 
                             await setupChannel.send(
-                                f"Your account has been saved!\n\nLet us know if you need anything by sending a personal message to <@590906101554348053>.\n\nHead over to {globalChat.mention} to introduce yourself to our community!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance Fight Club*")'''
+                                f"Your account has been saved!\n\nLet us know if you need anything by sending a personal message to LA Modmail.\n\nHead over to {globalChat.mention} to introduce yourself to our community!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance*")
 
                         elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
                             await appendLog(f"User's account: No")
@@ -735,7 +713,7 @@ class Welcome(commands.Cog):
                     except ValueError as e:
                         repeat = True
                         await setupChannel.send(
-                            f"**{str(e)}\nTry again or send a personal message to <@590906101554348053>!**")
+                            f"**{str(e)}\nTry again or send a personal message to LA Modmail!**")
                         await appendLog(f":exclamation:Error occured: {str(e)}")
                     except brawlstats.errors.RequestError as e:
                         repeat = True
@@ -745,21 +723,23 @@ class Welcome(commands.Cog):
                         repeat = True
                         print(str(e))
                         await setupChannel.send(
-                            "**Something went wrong, please send a personal message to <@590906101554348053> or try again!**")
+                            "**Something went wrong, please send a personal message to LA Modmail or try again!**")
                         await appendLog(f":exclamation:Error occured: {str(e)}")
 
             elif str(reaction.emoji) == "<:HelpIcon:598803665989402624>":
                 await appendLog("Chosen option: Talk to support")
                 await setupChannel.send(
-                    "You have stated that you require support, please send a DM to <@590906101554348053> and state the problem you require support for. Once received our staff will be with you shortly!")
+                    "You have stated that you require support, please send a DM to LA Modmail and state the problem you require support for. Once received our staff will be with you shortly!")
                 await asyncio.sleep(5)
                 repeat = True
+
+
 
         '''if new:
             wlcm = ["Are you ready to fight?", "Do you have what it takes to become a champion?",
                     "Ready to showcase your skill?", "Are you ready to prove yourself?"]
             await globalChat.send(
-                f"<:lafclogo:603670041044582516> {member.mention} welcome to LA Fight Club! {choice(wlcm)}")'''
+                f"<:lafclogo:603670041044582516> {member.mention} welcome to LA Events! {choice(wlcm)}")'''
         await appendLog(f"**Finished**")
         await setupChannel.send(embed=discord.Embed(colour=discord.Colour.blue(),
                                                     description="Process finished, this channel will get deleted in 5 minutes!"))
