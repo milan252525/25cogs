@@ -575,6 +575,21 @@ class Welcome(commands.Cog):
         setupChannel = await member.guild.create_text_channel(member.name, category=welcomeCategory,
                                                               overwrites=overwrites, topic=f"{member.id}",
                                                               reason=f"Channel created for {member.display_name} role setup.")
+
+        lang = "**CHOOSE ONE OF THE OPTIONS BELOW:**\n-----------------------------------------------------------\n<:flag_gb:>**English**\n-----------------------------------------------------------\n<:flag_es:> **Español**\n-----------------------------------------------------------"
+        chooseLangMessage = await setupChannel.send(lang)
+        await chooseLangMessage.add_reaction("<:flag_gb:>")
+        await chooseLangMessage.add_reaction("<:flag_es:>")
+
+        def check(reaction, user):
+            return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in [
+                "<:flag_gb:>", "<:flag_es:>"]
+
+        reaction, _ = await self.bot.wait_for('reaction_add', check=check)
+
+        if str(reaction.emoji) == "<:flag_es:>":
+            await self.continuesetupBSES(setupChannel, member, new)
+
         globalChat = self.bot.get_channel(656512846057963541)
         welcomeLog = self.bot.get_channel(654334199993466882)
         logMessages = []
@@ -588,6 +603,8 @@ class Welcome(commands.Cog):
                 else:
                     await logMessages[count].edit(content=f"{logMessages[count].content}\n{page}")
                 count += 1
+
+
 
         '''welcomeEmbed = discord.Embed(colour=discord.Colour.blue())
         welcomeEmbed.set_image(url="https://i.imgur.com/tG8Rio3.png")
@@ -699,6 +716,175 @@ class Welcome(commands.Cog):
 
 
                             await setupChannel.send(
+                                f"Spanish.\n\nHead over to {globalChat.mention} to introduce yourself to our community!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance*")
+
+                        elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
+                            await appendLog(f"User's account: No")
+                            tag = None
+                            repeatSave = True
+
+                    except brawlstats.errors.NotFoundError:
+                        repeat = True
+                        await setupChannel.send("No player with this tag found, try again!")
+                        await appendLog(f":exclamation:Error occured: {str(e)}")
+                    except ValueError as e:
+                        repeat = True
+                        await setupChannel.send(
+                            f"**{str(e)}\nTry again or send a personal message to LA Modmail!**")
+                        await appendLog(f":exclamation:Error occured: {str(e)}")
+                    except brawlstats.errors.RequestError as e:
+                        repeat = True
+                        await setupChannel.send(f"Brawl Stars API is offline, please try again later! ({str(e)})")
+                        await appendLog(f":exclamation:Error occured: {str(e)}")
+                    except Exception as e:
+                        repeat = True
+                        print(str(e))
+                        await setupChannel.send(
+                            "**Something went wrong, please send a personal message to LA Modmail or try again!**")
+                        await appendLog(f":exclamation:Error occured: {str(e)}")
+
+            elif str(reaction.emoji) == "<:HelpIcon:598803665989402624>":
+                await appendLog("Chosen option: Talk to support")
+                await setupChannel.send(
+                    "Spanish.")
+                await asyncio.sleep(5)
+                repeat = True
+
+
+
+        if new:
+            wlcm = ["Are you ready to fight?", "Do you have what it takes to become a champion?",
+                    "Ready to showcase your skill?", "Are you ready to prove yourself?"]
+            await globalChat.send(
+                f"{member.mention} welcome to LA Events! {choice(wlcm)}")
+        await appendLog(f"**Finished**")
+        await setupChannel.send(embed=discord.Embed(colour=discord.Colour.blue(),
+                                                    description="Process finished, this channel will get deleted in 5 minutes!"))
+        await asyncio.sleep(300)
+        await setupChannel.delete(reason="Welcoming process finished.")
+
+    async def continuesetupBSES(self, setupChannel, member, new=False):
+        globalChat = self.bot.get_channel(656512846057963541)
+        welcomeLog = self.bot.get_channel(654334199993466882)
+        logMessages = []
+        logMessages.append(await welcomeLog.send(f"--------------------\n__**{member.display_name}:**__"))
+
+        async def appendLog(txt):
+            count = 0
+            for page in pagify(txt):
+                if len(logMessages) < count + 1:
+                    logMessages[count] = await welcomeLog.send(page)
+                else:
+                    await logMessages[count].edit(content=f"{logMessages[count].content}\n{page}")
+                count += 1
+
+        '''welcomeEmbed = discord.Embed(colour=discord.Colour.blue())
+        welcomeEmbed.set_image(url="https://i.imgur.com/tG8Rio3.png")
+        welcomeEmbed2 = discord.Embed(colour=discord.Colour.blue())
+        welcomeEmbed2.set_image(url="https://i.imgur.com/wiY1LP4.png")
+        await setupChannel.send(member.mention, embed=welcomeEmbed)
+        await setupChannel.send(
+            "Welcome to the **LA Fight Club**.\n\nWe are a gamer run community devoted to enhancing the player experience.\nLeaders of many clan families and esport organizations have come together to bring you this community.\n\nWe cater to players looking for a more competitive edge while keeping good sportsmanship.\nWe have frequent tournaments/events for cash prizes.",
+            embed=welcomeEmbed2)
+        await setupChannel.send(
+            "You can read about how we function at <#595045518594408461>\nPlease follow our discord and gaming rules which can be viewed in detail at <#593310003591381005>")
+        await asyncio.sleep(2)'''
+
+        repeat = True
+        while repeat:
+            repeat = False
+            text = "**CHOOSE ONE OF THE OPTIONS BELOW:**\n-----------------------------------------------------------\n<:BrawlStars:595528113929060374> **Save Brawl Stars account and join the server**\n-----------------------------------------------------------\n<:HelpIcon:598803665989402624> **Talk to support**\n-----------------------------------------------------------"
+            chooseGameMessage = await setupChannel.send(text)
+            await chooseGameMessage.add_reaction("<:BrawlStars:595528113929060374>")
+            await chooseGameMessage.add_reaction("<:HelpIcon:598803665989402624>")
+
+            def check(reaction, user):
+                return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in [
+                    "<:BrawlStars:595528113929060374>", "<:HelpIcon:598803665989402624>"]
+
+            reaction, _ = await self.bot.wait_for('reaction_add', check=check)
+
+            if str(reaction.emoji) == "<:BrawlStars:595528113929060374>":
+                await appendLog("Chosen game: Brawl Stars")
+
+                tag = await self.bsconfig.user(member).tag()
+
+                repeatSave = True
+                while repeatSave:
+                    repeatSave = False
+                    accountConfirm = "Is this your account?"
+                    accountFound = "**Brawl Stars** account with this tag found:"
+
+                    if tag is not None:
+                        accountConfirm = "Would you like to keep this account saved?"
+                        accountFound = "I found this BS account assigned to your Discord account in a database:"
+                    else:
+                        sendTagEmbed = discord.Embed(title="Please tell me your Brawl Stars tag!",
+                                                     colour=discord.Colour.blue())
+                        sendTagEmbed.set_image(url="https://i.imgur.com/trjFkYP.png")
+                        await setupChannel.send(embed=sendTagEmbed)
+
+                        def checkmsg(m):
+                            return m.channel == setupChannel and m.author == member
+
+                        tagMessage = await self.bot.wait_for('message', check=checkmsg)
+                        tag = tagMessage.content.lower().replace('O', '0').replace(' ', '')
+                        if tag.startswith("#"):
+                            tag = tag.strip('#')
+                        await appendLog(f"Tag input: {tag}")
+
+                    try:
+                        player = await self.bsapi.get_player(tag)
+                        await appendLog(f"BS account found: {player.name}")
+                        playerEmbed = discord.Embed(color=discord.Colour.blue())
+                        playerEmbed.set_author(name=f"{player.name}", icon_url="https://i.imgur.com/ZwIP41S.png")
+                        playerEmbed.add_field(name="Trophies",
+                                              value=f"<:bstrophy:552558722770141204>{player.trophies}")
+                        if player.club is not None:
+                            playerEmbed.add_field(name="Club", value=f"<:bsband:600741378497970177> {player.club.name}")
+                            playerEmbed.add_field(name="Role",
+                                                  value=f"<:role:614520101621989435> {player.club.role.capitalize()}")
+                        else:
+                            playerEmbed.add_field(name="Club", value="None")
+                        playerEmbed.add_field(name=f"{accountConfirm} (Choose reaction)",
+                                              value="<:yesconfirm:595535992329601034> Yes\t<:nocancel:595535992199315466> No",
+                                              inline=False)
+                        confirmMessage = await setupChannel.send(accountFound, embed=playerEmbed)
+                        await confirmMessage.add_reaction("<:yesconfirm:595535992329601034>")
+                        await confirmMessage.add_reaction("<:nocancel:595535992199315466>")
+
+                        def ccheck(reaction, user):
+                            return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in [
+                                "<:yesconfirm:595535992329601034>", "<:nocancel:595535992199315466>"]
+
+                        reaction, _ = await self.bot.wait_for('reaction_add', check=ccheck)
+
+                        if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
+                            await appendLog(f"User's account: Yes")
+                            nick = f"{player.name} | {player.clan.name}" if player.clan is not None else f"{player.name}"
+                            try:
+                                await member.edit(nick=nick[:31])
+                                await appendLog(f"Nickname changed: {nick[:31]}")
+                            except discord.Forbidden:
+                                await appendLog(
+                                    f":exclamation:Couldn't change nickname of this user. ({nick[:31]})")
+
+                            await self.crconfig.user(member).tag.set(tag)
+                            await appendLog("Saved tag: Brawl Stars")
+
+                            try:
+                                roleMember = member.guild.get_role(654334569528688641)
+                                roleGuest = member.guild.get_role(656506416911351848)
+                                if "LA " in player.club.name:
+                                    await member.add_roles(roleMember)
+                                elif "LA " not in player.club.name:
+                                    await member.add_roles(roleGuest)
+                                await appendLog(f"Assigned roles: {roleMember.name}")
+                            except discord.Forbidden:
+                                await appendLog(
+                                    f":exclamation:Couldn't change roles of this user. ({roleMember.name})")
+
+                            await setupChannel.send(
                                 f"Your account has been saved!\n\nLet us know if you need anything by sending a personal message to LA Modmail.\n\nHead over to {globalChat.mention} to introduce yourself to our community!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance*")
 
                         elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
@@ -732,8 +918,6 @@ class Welcome(commands.Cog):
                     "You have stated that you require support, please send a DM to LA Modmail and state the problem you require support for. Once received our staff will be with you shortly!")
                 await asyncio.sleep(5)
                 repeat = True
-
-
 
         if new:
             wlcm = ["Are you ready to fight?", "Do you have what it takes to become a champion?",
