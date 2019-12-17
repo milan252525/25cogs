@@ -717,7 +717,7 @@ class Welcome(commands.Cog):
 
 
                             await setupChannel.send(
-                                f"Spanish.\n\nHead over to {globalChat.mention} to introduce yourself to our community!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance*")
+                                f"Your account has been saved!\n\nLet us know if you need anything by sending a personal message to LA Modmail.\n\nHead over to {globalChat.mention} to introduce yourself to our community!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance*")
 
                         elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
                             await appendLog(f"User's account: No")
@@ -747,7 +747,7 @@ class Welcome(commands.Cog):
             elif str(reaction.emoji) == "<:HelpIcon:598803665989402624>":
                 await appendLog("Chosen option: Talk to support")
                 await setupChannel.send(
-                    "Spanish.")
+                    "You have stated that you require support, please send a DM to LA Modmail and state the problem you require support for. Once received our staff will be with you shortly!")
                 await asyncio.sleep(5)
                 repeat = True
 
@@ -886,7 +886,7 @@ class Welcome(commands.Cog):
                                     f":exclamation:Couldn't change roles of this user. ({roleMember.name})")
 
                             await setupChannel.send(
-                                f"Your account has been saved!\n\nLet us know if you need anything by sending a personal message to LA Modmail.\n\nHead over to {globalChat.mention} to introduce yourself to our community!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance*")
+                                f"Spanish.\n\nHead over to {globalChat.mention} to introduce yourself to our community!\n\n**Thank you, and enjoy your stay!**\n*- Legendary Alliance*")
 
                         elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
                             await appendLog(f"User's account: No")
@@ -916,7 +916,7 @@ class Welcome(commands.Cog):
             elif str(reaction.emoji) == "<:HelpIcon:598803665989402624>":
                 await appendLog("Chosen option: Talk to support")
                 await setupChannel.send(
-                    "You have stated that you require support, please send a DM to LA Modmail and state the problem you require support for. Once received our staff will be with you shortly!")
+                    "Spanish.")
                 await asyncio.sleep(5)
                 repeat = True
 
