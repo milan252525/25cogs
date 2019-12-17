@@ -589,6 +589,7 @@ class Welcome(commands.Cog):
 
         if str(reaction.emoji) == "<:flag_es:>":
             await self.continuesetupBSES(setupChannel, member, new)
+            return
 
         globalChat = self.bot.get_channel(656512846057963541)
         welcomeLog = self.bot.get_channel(654334199993466882)
