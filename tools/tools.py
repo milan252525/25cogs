@@ -252,8 +252,8 @@ class Tools(commands.Cog):
     async def laban(self, ctx, member:discord.Member):
         if not ctx.author.guild_permissions.administrator:
             return await ctx.send("You must be administrator to use this command!")
-        guilds = [440960893916807188, 401883208511389716, 593248015729295360, 654334199494606848, 515962414190166041, 460550486257565697, 619563541598306324] 
-        msg = "Attempting to ban **{member}** in all LA servers:"
+        guilds = [440960893916807188, 401883208511389716, 593248015729295360, 654334199494606848, 515962414190166041, 460550486257565697] 
+        msg = f"Attempting to ban **{member}** in all LA servers:"
         for id in guilds:
             try:
                 guild = self.bot.get_guild(id)
@@ -261,14 +261,11 @@ class Tools(commands.Cog):
                 await guild.ban(m, reason="Banned from all LA servers.")
                 msg += f"\n<:good:450013422717763609> **{guild.name}**"
             except discord.Forbidden:
-                msg += f"\n<:bad:450013438756782081> **{guild.name}** **(Forbidden to ban)**"
+                msg += f"\n<:bad:450013438756782081> **{guild.name}** (Forbidden to ban)"
             except discord.HTTPException as he:
-                msg += f"\n<:bad:450013438756782081> **{guild.name}** **({he})**"
+                msg += f"\n<:bad:450013438756782081> **{guild.name}** ({he})"
             except AttributeError as he:
-                msg += f"\n<:bad:450013438756782081> **{id}** **({he})**"
+                msg += f"\n<:bad:450013438756782081> **{id}** ({he})"
             except Exception as e:
-                msg += f"\n<:bad:450013438756782081> **{guild.name}** **({e})**"
-        await ctx.send(msg)
-       
-    
-        await ctx.send(embed=discord.Embed(description=f"{str(member)} was successfully banned from all LA servers.", colour=discord.Colour.red()))
+                msg += f"\n<:bad:450013438756782081> **{guild.name}** ({e})"
+        await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.red()))
