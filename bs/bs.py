@@ -419,7 +419,7 @@ class BrawlStarsCog(commands.Cog):
             return f"Added **{str(role)}** to **{str(member)}**\n"
         return ""
             
-    @tasks.loop(hours=6)
+    #@tasks.loop(hours=4)
     async def sortroles(self):
         ch = self.bot.get_channel(653295573872672810)
         await ch.trigger_typing()
