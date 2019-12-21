@@ -247,6 +247,7 @@ class Tools(commands.Cog):
             m = m.replace('~', '\~')
             await ctx.send(embed=discord.Embed(description=m, colour=discord.Colour.green()))
 
+    @commands.guild_only()
     @commands.command()
     async def laban(self, ctx, member):
         if not ctx.author.guild_permissions.administrator:
