@@ -250,16 +250,21 @@ class Tools(commands.Cog):
     @commands.is_owner()
     @commands.command()
     async def ultimateban(self, ctx, member):
-        lamain = self.bot.get_guild("440960893916807188")
-        await lamain.ban(member)
-        labs = self.bot.get_guild("401883208511389716")
-        await labs.ban(member)
-        lafc = self.bot.get_guild("593248015729295360")
-        await lafc.ban(member)
-        laevents = self.bot.get_guild("654334199494606848")
-        await laevents.ban(member)
-        laquan = self.bot.get_guild("515962414190166041")
-        await laquan.ban(member)
-        laspain = self.bot.get_guild("460550486257565697")
-        await laspain.ban(member)
+        guilds = [440960893916807188, 401883208511389716, 593248015729295360, 654334199494606848, 515962414190166041, 460550486257565697, 619563541598306324] 
+        msg = "Attempting to ban **{member}** in all LA servers:"
+        for id in guilds:
+            guild = self.bot.get_guild(id)
+            m = discord.Object(member.id)
+            try:
+                await guild.ban(m, reason="Banned from all LA servers.")
+                msg += f"\n<:good:450013422717763609> **{guild.name}**"
+            except discord.Forbidden:
+                msg += f"\n<:bad:450013438756782081> **{guild.name}** **(Forbidden to ban)**"
+            except discord.HTTPException as he:
+                msg += f"\n<:bad:450013438756782081> **{guild.name}** **({he})**"
+            except Exception as e:
+                msg += f"\n<:bad:450013438756782081> **{guild.name}** **({e})**"
+        await ctx.send(msg)
+       
+    
         await ctx.send(embed=discord.Embed(description=f"{str(member)} was successfully banned from all LA servers.", colour=discord.Colour.red()))
