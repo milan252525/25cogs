@@ -255,15 +255,17 @@ class Tools(commands.Cog):
         guilds = [440960893916807188, 401883208511389716, 593248015729295360, 654334199494606848, 515962414190166041, 460550486257565697, 619563541598306324] 
         msg = "Attempting to ban **{member}** in all LA servers:"
         for id in guilds:
-            guild = self.bot.get_guild(id)
-            m = discord.Object(member.id)
             try:
+                guild = self.bot.get_guild(id)
+                m = discord.Object(member.id)
                 await guild.ban(m, reason="Banned from all LA servers.")
                 msg += f"\n<:good:450013422717763609> **{guild.name}**"
             except discord.Forbidden:
                 msg += f"\n<:bad:450013438756782081> **{guild.name}** **(Forbidden to ban)**"
             except discord.HTTPException as he:
                 msg += f"\n<:bad:450013438756782081> **{guild.name}** **({he})**"
+            except AttributeError as he:
+                msg += f"\n<:bad:450013438756782081> **{id}** **({he})**"
             except Exception as e:
                 msg += f"\n<:bad:450013438756782081> **{guild.name}** **({e})**"
         await ctx.send(msg)
