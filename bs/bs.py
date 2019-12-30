@@ -164,7 +164,7 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(name="Highest Trophies", value=f"<:totaltrophies:614517396111097866> {player.highest_trophies}")
         embed.add_field(name="Level", value=f"<:exp:614517287809974405> {player.exp_level}")
         embed.add_field(name="Unlocked Brawlers", value=f"<:brawlers:614518101983232020> {len(player.brawlers)}")
-        if "club" in player.raw_data:
+        if "tag" in player.raw_data["club"]:
             embed.add_field(name="Club", value=f"<:bsband:600741378497970177> {player.club.name}")
             club = await player.get_club()
             for m in club.members:
