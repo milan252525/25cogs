@@ -102,7 +102,7 @@ class BrawlStarsCog(commands.Cog):
         if tag is None:
             return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
         
-        player = await self.bsapi.get_player(tag)
+        player = await self.ofcbsapi.get_player(tag)
         nick = f"{player.name} | {player.club.name}" if player.club is not None else f"{player.name}"
         try:
             await member.edit(nick=nick[:31])
@@ -156,7 +156,7 @@ class BrawlStarsCog(commands.Cog):
             embed = discord.Embed(title="Invalid argument!", colour=discord.Colour.red(), description=desc)
             return await ctx.send(embed=embed)
         try:
-            player = await self.bsapi.get_player(tag)
+            player = await self.ofcbsapi.get_player(tag)
             
         except brawlstats.errors.NotFoundError:
             return await ctx.send(embed = self.badEmbed("No player with this tag found, try again!"))
@@ -176,7 +176,9 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(name="Unlocked Brawlers", value=f"<:brawlers:614518101983232020> {player.brawlers_unlocked}")
         if player.club is not None:
             embed.add_field(name="Club", value=f"<:bsband:600741378497970177> {player.club.name}")
-            embed.add_field(name="Role", value=f"<:role:614520101621989435> {player.club.role.capitalize()}")
+            for m in player.club.members:
+                if m.tag == player.tag:
+                    embed.add_field(name="Role", value=f"<:role:614520101621989435> {m.role.capitalize()}")
         embed.add_field(name="3v3 Wins", value=f"<:3v3:614519914815815693> {player.victories}")
         embed.add_field(name="Solo SD Wins", value=f"<:sd:614517124219666453> {player.solo_showdown_victories}")
         embed.add_field(name="Duo SD Wins", value=f"<:duosd:614517166997372972> {player.duo_showdown_victories}")
@@ -354,7 +356,7 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(embed = self.badEmbed("This club is already saved!"))
 
         try:
-            club = await self.bsapi.get_club(tag)
+            club = await self.ofcbsapi.get_club(tag)
             result = {
                 "name" : club.name,
                 "nick" : key.title(),
@@ -419,7 +421,7 @@ class BrawlStarsCog(commands.Cog):
             return f"Added **{str(role)}** to **{str(member)}**\n"
         return ""
             
-    #@tasks.loop(hours=4)
+    @tasks.loop(hours=4)
     async def sortroles(self):
         ch = self.bot.get_channel(653295573872672810)
         await ch.trigger_typing()
@@ -436,7 +438,7 @@ class BrawlStarsCog(commands.Cog):
             if tag is None:
                 continue
             try:
-                player = await self.bsapi.get_player(tag)
+                player = await self.ofcbsapi.get_player(tag)
                 await asyncio.sleep(0.1)
 
             except brawlstats.errors.RequestError as e:
@@ -478,10 +480,10 @@ class BrawlStarsCog(commands.Cog):
                         if " ".join(r.name.split(' ', 2)[:2]) == player.club.name:
                             rolefound = True
                             msg += await self.addroleifnotpresent(member, r)
-                            if player.club.role == 'Vice President':
+                            '''if player.club.role == 'Vice President':
                                 msg += await self.addroleifnotpresent(member, vp)
                             elif player.club.role == 'President':
-                                msg += await self.addroleifnotpresent(member, pres)
+                                msg += await self.addroleifnotpresent(member, pres)'''
                     if not rolefound:
                         msg += f"Role for the club **{player.club.name}** not found.\n"
             elif (player.club is None or 'LA ' not in player.club.name) and memberrole is not None: #member -> guest
@@ -496,13 +498,13 @@ class BrawlStarsCog(commands.Cog):
                     if " ".join(r.name.split(' ', 2)[:2]) == player.club.name:
                         rolefound = True
                         msg += await self.addroleifnotpresent(member, r)
-                        if player.club.role == 'Vice President':
+                        '''if player.club.role == 'Vice President':
                             msg += await self.addroleifnotpresent(member, vp)
                         elif player.club.role == 'President':
                             msg += await self.addroleifnotpresent(member, pres)
                         elif player.club.role == 'Member' or player.club.role == 'Senior':
                             msg += await self.removeroleifpresent(member, vp)
-                            msg += await self.removeroleifpresent(member, pres)
+                            msg += await self.removeroleifpresent(member, pres)'''
                 if not rolefound:
                     msg += f"Role for the club {player.club.name} not found."
                 msg += await self.addroleifnotpresent(member, labs)
@@ -513,24 +515,24 @@ class BrawlStarsCog(commands.Cog):
                     if " ".join(r.name.split(' ', 2)[:2]) == player.club.name:
                         rolefound = True
                         msg += await self.addroleifnotpresent(member, r)
-                        if player.club.role == 'Vice President':
+                        '''if player.club.role == 'Vice President':
                             msg += await self.addroleifnotpresent(member, vp)
                         elif player.club.role == 'President':
                             msg += await self.addroleifnotpresent(member, pres)
                         elif player.club.role == 'Member' or player.club.role == 'Senior':
                             msg += await self.removeroleifpresent(member, vp)
-                            msg += await self.removeroleifpresent(member, pres)
+                            msg += await self.removeroleifpresent(member, pres)'''
                 if not rolefound:
                     msg += f"Role for the club {player.club.name} not found."
                 msg += await self.removeroleifpresent(member, memberrole)
-            elif player.club is not None and player.club.name in club and 'LA ' in player.club.name and memberrole is not None:  #pres/vp check
+                '''elif player.club is not None and player.club.name in club and 'LA ' in player.club.name and memberrole is not None:  #pres/vp check
                 if player.club.role == 'Vice President':
                     msg += await self.addroleifnotpresent(member, vp)
                 elif player.club.role == 'President':
                     msg += await self.addroleifnotpresent(member, pres)
                 elif player.club.role == 'Member' or player.club.role == 'Senior':
                     msg += await self.removeroleifpresent(member, vp)
-                    msg += await self.removeroleifpresent(member, pres)
+                    msg += await self.removeroleifpresent(member, pres)'''
             if msg != "":
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
         
