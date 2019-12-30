@@ -19,10 +19,10 @@ class BrawlStarsCog(commands.Cog):
         self.config.register_guild(**default_guild)
         self.sortroles.start()
         
-    def cog_unload(self):
+    async def cog_unload(self):
         self.sortroles.cancel()
-        self.bsapi.close()
-        self.ofcbsapi.close()
+        await self.bsapi.close()
+        await self.ofcbsapi.close()
         
     async def initialize(self):
         bsapikey = await self.bot.db.api_tokens.get_raw("bsapi", default={"api_key": None})
@@ -180,7 +180,7 @@ class BrawlStarsCog(commands.Cog):
             embed.add_field(name="Club", value=f"<:bsband:600741378497970177> {player.club.name}")
             club = await player.get_club()
             for m in club.members:
-                if m.raw_data['tag'] == player.raw_data['tag']:
+                if m.tag == player.raw_data['tag']:
                     embed.add_field(name="Role", value=f"<:role:614520101621989435> {m.role.capitalize()}")
         embed.add_field(name="3v3 Wins", value=f"<:3v3:614519914815815693> {player.raw_data['3vs3Victories']}")
         embed.add_field(name="Solo SD Wins", value=f"<:sd:614517124219666453> {player.solo_victories}")
@@ -211,7 +211,7 @@ class BrawlStarsCog(commands.Cog):
             except brawlstats.errors.RequestError as e:
                 await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
-        elif key.startswith("<"):
+        elif str(key).startswith("<"):
             memberid = key.replace("<", "").replace(">", "").replace("@", "").replace("!", "")
             member = discord.utils.get(ctx.guild.members, id=int(memberid))
             if member is not None:
