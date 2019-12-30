@@ -19,10 +19,8 @@ class BrawlStarsCog(commands.Cog):
         self.config.register_guild(**default_guild)
         self.sortroles.start()
         
-    async def cog_unload(self):
+    def cog_unload(self):
         self.sortroles.cancel()
-        await self.bsapi.close()
-        await self.ofcbsapi.close()
         
     async def initialize(self):
         bsapikey = await self.bot.db.api_tokens.get_raw("bsapi", default={"api_key": None})
@@ -159,14 +157,14 @@ class BrawlStarsCog(commands.Cog):
         except Exception as e:
             return await ctx.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
-        colour = player.name_color.replace("0x", "")
-        embed=discord.Embed(color=discord.Colour.from_rgb(int(colour[0:2], 16), int(colour[2:4], 16), int(colour[4:6], 16)))
+        colour = player.name_color
+        embed=discord.Embed(color=discord.Colour.from_rgb(int(colour[2:4], 16), int(colour[4:6], 16), int(colour[6:8], 16)))
         embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
         embed.add_field(name="Trophies", value=f"{self.get_league_emoji(player.trophies)} {player.trophies}")
         embed.add_field(name="Highest Trophies", value=f"<:totaltrophies:614517396111097866> {player.highest_trophies}")
         embed.add_field(name="Level", value=f"<:exp:614517287809974405> {player.exp_level}")
         embed.add_field(name="Unlocked Brawlers", value=f"<:brawlers:614518101983232020> {len(player.brawlers)}")
-        if player.club.tag is not None:
+        if "club" in player.raw_data:
             embed.add_field(name="Club", value=f"<:bsband:600741378497970177> {player.club.name}")
             club = await player.get_club()
             for m in club.members:
@@ -488,7 +486,7 @@ class BrawlStarsCog(commands.Cog):
                                 msg += await self.addroleifnotpresent(member, pres)'''
                     if not rolefound:
                         msg += f"Role for the club **{player.club.name}** not found.\n"
-            elif ("club" not in player.raw_data or 'LA ' not in player.club.name) and memberrole is not None: #member -> guest
+            elif memberrole is not None and ("club" not in player.raw_data or 'LA ' not in player.club.name): #member -> guest
                 msg += await self.removeroleifpresent(member, memberrole)
                 msg += await self.removeroleifpresent(member, labs)
                 msg += await self.removeroleifpresent(member, vp)
