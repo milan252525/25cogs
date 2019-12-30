@@ -466,12 +466,12 @@ class BrawlStarsCog(commands.Cog):
                 club = memberrole.name
 
             if newcomer in member.roles: #newcomer -> member
-                if "club" not in player.raw_data or 'LA ' not in player.club.name:
+                if "tag" not in player.raw_data["club"] or 'LA ' not in player.club.name:
                     msg += await self.removeroleifpresent(member, newcomer)
                     msg += await self.addroleifnotpresent(member, brawlstars)
                     msg += await self.addroleifnotpresent(member, guest)
                     await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
-                elif "club" in player.raw_data and 'LA ' in player.club.name:
+                elif "tag" in player.raw_data["club"] and 'LA ' in player.club.name:
                     msg += await self.removeroleifpresent(member, newcomer)
                     msg += await self.addroleifnotpresent(member, brawlstars)
                     msg += await self.addroleifnotpresent(member, labs)
@@ -486,13 +486,13 @@ class BrawlStarsCog(commands.Cog):
                                 msg += await self.addroleifnotpresent(member, pres)'''
                     if not rolefound:
                         msg += f"Role for the club **{player.club.name}** not found.\n"
-            elif memberrole is not None and ("club" not in player.raw_data or 'LA ' not in player.club.name): #member -> guest
+            elif memberrole is not None and ("tag" not in player.raw_data["club"]a or 'LA ' not in player.club.name): #member -> guest
                 msg += await self.removeroleifpresent(member, memberrole)
                 msg += await self.removeroleifpresent(member, labs)
                 msg += await self.removeroleifpresent(member, vp)
                 msg += await self.removeroleifpresent(member, pres)
                 msg += await self.addroleifnotpresent(member, guest)
-            elif memberrole is None and "club" in player.raw_data and 'LA ' in player.club.name: #guest -> member
+            elif memberrole is None and "tag" in player.raw_data["club"] and 'LA ' in player.club.name: #guest -> member
                 rolefound = False
                 for r in ch.guild.roles:
                     if " ".join(r.name.split(' ', 2)[:2]) == player.club.name:
@@ -509,7 +509,7 @@ class BrawlStarsCog(commands.Cog):
                     msg += f"Role for the club {player.club.name} not found."
                 msg += await self.addroleifnotpresent(member, labs)
                 msg += await self.removeroleifpresent(member, guest)
-            elif "club" in player.raw_data and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
+            elif "tag" in player.raw_data["club"] and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
                 rolefound = False
                 for r in ch.guild.roles:
                     if " ".join(r.name.split(' ', 2)[:2]) == player.club.name:
