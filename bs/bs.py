@@ -167,21 +167,22 @@ class BrawlStarsCog(commands.Cog):
         except Exception as e:
             return await ctx.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
-        colour = player.name_color_code
+        colour = player.name_color
         embed=discord.Embed(color=discord.Colour.from_rgb(int(colour[0:2], 16), int(colour[2:4], 16), int(colour[4:6], 16)))
-        embed.set_author(name=f"{player.name} #{player.tag}", icon_url="https://i.imgur.com/ZwIP41S.png")
+        embed.set_author(name=f"{player.name} #{tag}", icon_url="https://i.imgur.com/ZwIP41S.png")
         embed.add_field(name="Trophies", value=f"{self.get_league_emoji(player.trophies)} {player.trophies}")
         embed.add_field(name="Highest Trophies", value=f"<:totaltrophies:614517396111097866> {player.highest_trophies}")
         embed.add_field(name="Level", value=f"<:exp:614517287809974405> {player.exp_level}")
-        embed.add_field(name="Unlocked Brawlers", value=f"<:brawlers:614518101983232020> {player.brawlers_unlocked}")
-        if player.club is not None:
+        embed.add_field(name="Unlocked Brawlers", value=f"<:brawlers:614518101983232020> {len(player.brawlers)}")
+        if player.club.tag is not None:
             embed.add_field(name="Club", value=f"<:bsband:600741378497970177> {player.club.name}")
-            for m in player.club.members:
-                if m.tag == player.tag:
+            club = await player.get_club()
+            for m in club.members:
+                if m.tag == tag:
                     embed.add_field(name="Role", value=f"<:role:614520101621989435> {m.role.capitalize()}")
-        embed.add_field(name="3v3 Wins", value=f"<:3v3:614519914815815693> {player.victories}")
-        embed.add_field(name="Solo SD Wins", value=f"<:sd:614517124219666453> {player.solo_showdown_victories}")
-        embed.add_field(name="Duo SD Wins", value=f"<:duosd:614517166997372972> {player.duo_showdown_victories}")
+        embed.add_field(name="3v3 Wins", value=f"<:3v3:614519914815815693> {player.x3_vs_3_victories}")
+        embed.add_field(name="Solo SD Wins", value=f"<:sd:614517124219666453> {player.solo_victories}")
+        embed.add_field(name="Duo SD Wins", value=f"<:duosd:614517166997372972> {player.duo_victories}")
         embed.add_field(name="Best Time in Robo Rumble", value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time}")
         embed.add_field(name="Best Time as Big Brawler", value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler}")
         await ctx.send(embed=embed)
