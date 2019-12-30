@@ -181,7 +181,7 @@ class BrawlStarsCog(commands.Cog):
             for m in club.members:
                 if m.name == player.name:
                     embed.add_field(name="Role", value=f"<:role:614520101621989435> {m.role.capitalize()}")
-        embed.add_field(name="3v3 Wins", value=f"<:3v3:614519914815815693> {player.raw["3vs3Victories"]}")
+        embed.add_field(name="3v3 Wins", value=f"<:3v3:614519914815815693> {player.raw['3vs3Victories']}")
         embed.add_field(name="Solo SD Wins", value=f"<:sd:614517124219666453> {player.solo_victories}")
         embed.add_field(name="Duo SD Wins", value=f"<:duosd:614517166997372972> {player.duo_victories}")
         embed.add_field(name="Best Time in Robo Rumble", value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time//60}:{player.best_robo_rumble_time%60}")
