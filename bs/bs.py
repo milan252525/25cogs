@@ -186,9 +186,9 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(name="Duo SD Wins", value=f"<:duosd:614517166997372972> {player.duo_victories}")
         embed.add_field(name="Best Time in Robo Rumble", value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time//60}:{player.best_robo_rumble_time%60}")
         embed.add_field(name="Best Time as Big Brawler", value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler//60}:{player.best_time_as_big_brawler%60}")
-        if player.raw_data['powerPlayPoints']:     
+        if "powerPlayPoints" in player.raw_data:     
             embed.add_field(name="Power Play Points", value=f"<:powertrophies:661266876235513867> {player.raw_data['powerPlayPoints']}")
-        if player.raw_data['highestPowerPlayPoints']:         
+        if "highestPowerPlayPoints" in player.raw_data:          
             embed.add_field(name="Highest PP Points", value=f"<:powertrophies:661266876235513867> {player.raw_data['highestPowerPlayPoints']}")
         embed.add_field(name="Qualified For Championship", value=f"<:powertrophies:661266876235513867> {player.raw_data['isQualifiedFromChampionshipChallenge']}")
         await ctx.send(embed=embed)
