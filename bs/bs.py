@@ -21,6 +21,8 @@ class BrawlStarsCog(commands.Cog):
         
     def cog_unload(self):
         self.sortroles.cancel()
+        self.bsapi.close()
+        self.ofcbsapi.close()
         
     async def initialize(self):
         bsapikey = await self.bot.db.api_tokens.get_raw("bsapi", default={"api_key": None})
@@ -167,10 +169,9 @@ class BrawlStarsCog(commands.Cog):
         except Exception as e:
             return await ctx.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
-        tag = tag.replace("#", "").upper()
         colour = player.name_color.replace("0x", "")
         embed=discord.Embed(color=discord.Colour.from_rgb(int(colour[0:2], 16), int(colour[2:4], 16), int(colour[4:6], 16)))
-        embed.set_author(name=f"{player.name} #{tag}", icon_url="https://i.imgur.com/ZwIP41S.png")
+        embed.set_author(name=f"{player.name} #{player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
         embed.add_field(name="Trophies", value=f"{self.get_league_emoji(player.trophies)} {player.trophies}")
         embed.add_field(name="Highest Trophies", value=f"<:totaltrophies:614517396111097866> {player.highest_trophies}")
         embed.add_field(name="Level", value=f"<:exp:614517287809974405> {player.exp_level}")
@@ -179,15 +180,17 @@ class BrawlStarsCog(commands.Cog):
             embed.add_field(name="Club", value=f"<:bsband:600741378497970177> {player.club.name}")
             club = await player.get_club()
             for m in club.members:
-                if m.name == player.name:
+                if m.raw_data['tag'] == player.raw_data['tag']:
                     embed.add_field(name="Role", value=f"<:role:614520101621989435> {m.role.capitalize()}")
         embed.add_field(name="3v3 Wins", value=f"<:3v3:614519914815815693> {player.raw_data['3vs3Victories']}")
         embed.add_field(name="Solo SD Wins", value=f"<:sd:614517124219666453> {player.solo_victories}")
         embed.add_field(name="Duo SD Wins", value=f"<:duosd:614517166997372972> {player.duo_victories}")
-        embed.add_field(name="Best Time in Robo Rumble", value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time//60}:{player.best_robo_rumble_time%60}")
-        embed.add_field(name="Best Time as Big Brawler", value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler//60}:{player.best_time_as_big_brawler%60}")
+        embed.add_field(name="Best Time in Robo Rumble", value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time//60}:{str(player.best_robo_rumble_time%60).rjust(2, "0")}")
+        embed.add_field(name="Best Time as Big Brawler", value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler//60}:{str(player.best_time_as_big_brawler%60)}.rjust(2, "0")}")
         if "powerPlayPoints" in player.raw_data:     
             embed.add_field(name="Power Play Points", value=f"<:powertrophies:661266876235513867> {player.raw_data['powerPlayPoints']}")
+        else:
+            embed.add_field(name="Power Play Points", value=f"<:powertrophies:661266876235513867> 0")
         if "highestPowerPlayPoints" in player.raw_data:          
             embed.add_field(name="Highest PP Points", value=f"<:powertrophies:661266876235513867> {player.raw_data['highestPowerPlayPoints']}")
         embed.add_field(name="Qualified For Championship", value=f"<:powertrophies:661266876235513867> {player.raw_data['isQualifiedFromChampionshipChallenge']}")
@@ -473,12 +476,12 @@ class BrawlStarsCog(commands.Cog):
                 club = memberrole.name
 
             if newcomer in member.roles: #newcomer -> member
-                if player.club is None or 'LA ' not in player.club.name:
+                if "club" not in player.raw_data or 'LA ' not in player.club.name:
                     msg += await self.removeroleifpresent(member, newcomer)
                     msg += await self.addroleifnotpresent(member, brawlstars)
                     msg += await self.addroleifnotpresent(member, guest)
                     await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
-                elif player.club is not None and 'LA ' in player.club.name:
+                elif "club" in player.raw_data and 'LA ' in player.club.name:
                     msg += await self.removeroleifpresent(member, newcomer)
                     msg += await self.addroleifnotpresent(member, brawlstars)
                     msg += await self.addroleifnotpresent(member, labs)
@@ -493,13 +496,13 @@ class BrawlStarsCog(commands.Cog):
                                 msg += await self.addroleifnotpresent(member, pres)'''
                     if not rolefound:
                         msg += f"Role for the club **{player.club.name}** not found.\n"
-            elif (player.club is None or 'LA ' not in player.club.name) and memberrole is not None: #member -> guest
+            elif ("club" not in player.raw_data or 'LA ' not in player.club.name) and memberrole is not None: #member -> guest
                 msg += await self.removeroleifpresent(member, memberrole)
                 msg += await self.removeroleifpresent(member, labs)
                 msg += await self.removeroleifpresent(member, vp)
                 msg += await self.removeroleifpresent(member, pres)
                 msg += await self.addroleifnotpresent(member, guest)
-            elif memberrole is None and player.club != None and 'LA ' in player.club.name: #guest -> member
+            elif memberrole is None and "club" in player.raw_data and 'LA ' in player.club.name: #guest -> member
                 rolefound = False
                 for r in ch.guild.roles:
                     if " ".join(r.name.split(' ', 2)[:2]) == player.club.name:
@@ -516,7 +519,7 @@ class BrawlStarsCog(commands.Cog):
                     msg += f"Role for the club {player.club.name} not found."
                 msg += await self.addroleifnotpresent(member, labs)
                 msg += await self.removeroleifpresent(member, guest)
-            elif player.club is not None and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
+            elif "club" in player.raw_data and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
                 rolefound = False
                 for r in ch.guild.roles:
                     if " ".join(r.name.split(' ', 2)[:2]) == player.club.name:
