@@ -170,6 +170,8 @@ class BrawlStarsCog(commands.Cog):
             for m in club.members:
                 if m.tag == player.raw_data['tag']:
                     embed.add_field(name="Role", value=f"<:role:614520101621989435> {m.role.capitalize()}")
+        else:
+            embed.add_field(name="Club", value=f"<:noclub:661285120287834122> Not in a club")
         embed.add_field(name="3v3 Wins", value=f"<:3v3:614519914815815693> {player.raw_data['3vs3Victories']}")
         embed.add_field(name="Solo SD Wins", value=f"<:sd:614517124219666453> {player.solo_victories}")
         embed.add_field(name="Duo SD Wins", value=f"<:duosd:614517166997372972> {player.duo_victories}")
@@ -486,7 +488,7 @@ class BrawlStarsCog(commands.Cog):
                                 msg += await self.addroleifnotpresent(member, pres)'''
                     if not rolefound:
                         msg += f"Role for the club **{player.club.name}** not found.\n"
-            elif memberrole is not None and ("tag" not in player.raw_data["club"]a or 'LA ' not in player.club.name): #member -> guest
+            elif memberrole is not None and ("tag" not in player.raw_data["club"] or 'LA ' not in player.club.name): #member -> guest
                 msg += await self.removeroleifpresent(member, memberrole)
                 msg += await self.removeroleifpresent(member, labs)
                 msg += await self.removeroleifpresent(member, vp)
