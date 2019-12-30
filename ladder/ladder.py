@@ -73,7 +73,7 @@ class Ladder(commands.Cog):
         
         return winner_elo, winner_new, loser_elo, loser_new
 
-    @commands.command(aliases=["report"])
+    @commands.command()
     async def result(self, ctx, winner : discord.Member, loser : discord.Member):
         """
         Report a result of a match
