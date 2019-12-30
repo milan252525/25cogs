@@ -171,7 +171,7 @@ class BrawlStarsCog(commands.Cog):
 
         colour = player.name_color.replace("0x", "")
         embed=discord.Embed(color=discord.Colour.from_rgb(int(colour[0:2], 16), int(colour[2:4], 16), int(colour[4:6], 16)))
-        embed.set_author(name=f"{player.name} #{player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
+        embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
         embed.add_field(name="Trophies", value=f"{self.get_league_emoji(player.trophies)} {player.trophies}")
         embed.add_field(name="Highest Trophies", value=f"<:totaltrophies:614517396111097866> {player.highest_trophies}")
         embed.add_field(name="Level", value=f"<:exp:614517287809974405> {player.exp_level}")
@@ -211,21 +211,18 @@ class BrawlStarsCog(commands.Cog):
             except brawlstats.errors.RequestError as e:
                 await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
-        elif str(key).startswith("<"):
-            memberid = key.replace("<", "").replace(">", "").replace("@", "").replace("!", "")
-            member = discord.utils.get(ctx.guild.members, id=int(memberid))
-            if member is not None:
-                mtag = await self.config.user(member).tag()
-                if mtag is None:
-                    return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {ctx.prefix}bssave <tag>"))
-
-                try:
-                    player = await self.ofcbsapi.get_player(mtag)
-                    if not player.club.tag:
-                        return await ctx.send("This user is not in a club!")
-                    tag = player.club.tag
-                except brawlstats.errors.RequestError as e:
-                    await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+        elif isinstance(key, discord.Member):
+            member=key
+            mtag = await self.config.user(member).tag()
+            if mtag is None:
+                return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {ctx.prefix}bssave <tag>"))
+            try:
+                player = await self.ofcbsapi.get_player(mtag)
+                if not player.club.tag:
+                    return await ctx.send("This user is not in a club!")
+                tag = player.club.tag
+            except brawlstats.errors.RequestError as e:
+                await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
         else:
             tag = await self.config.guild(ctx.guild).clubs.get_raw(key.lower(), "tag", default=None)
             if tag is None:
