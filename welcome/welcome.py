@@ -57,6 +57,12 @@ class Welcome(commands.Cog):
             raise ValueError("The Brawl Stars API key has not been set. Use [p]set api bsapi api_key,YOURAPIKEY")
         self.bsapi = brawlstats.BrawlAPI(bsapikey["api_key"], is_async=True)
 
+        ofcbsapikey = await self.bot.db.api_tokens.get_raw("ofcbsapi", default={"api_key": None})
+        if ofcbsapikey["api_key"] is None:
+            raise ValueError(
+                "The Official Brawl Stars API key has not been set. Use [p]set api ofcbsapi api_key,YOURAPIKEY")
+        self.ofcbsapi = brawlstats.OfficialAPI(ofcbsapikey["api_key"], is_async=True)
+
     # @commands.command(hidden=True)
     # async def detect(self, ctx):
     #     try:
@@ -254,14 +260,17 @@ class Welcome(commands.Cog):
                     tag = tag.strip('#')
 
                 try:
-                    player = await self.bsapi.get_player(tag)
+                    player = await self.ofcbsapi.get_player(tag)
                     await appendLog(f"BS account found: {player.name}")
                     playerEmbed = discord.Embed(color=discord.Colour.blue())
                     playerEmbed.set_author(name=f"{player.name}", icon_url="https://i.imgur.com/40U8PnF.png")
                     playerEmbed.add_field(name="Trophies", value=f"<:bstrophy:552558722770141204>{player.trophies}")
                     if player.club is not None:
                         playerEmbed.add_field(name="Club", value=f"<:bsband:600741378497970177>{player.club.name}")
-                        playerEmbed.add_field(name="Role", value=f"<:bs_role:600748317940645918>{player.club.role.capitalize()}")
+                        club = await player.get_club()
+                        for m in club.members:
+                            if m.name == player.name:
+                                playerEmbed.add_field(name="Role", value=f"<:bs_role:600748317940645918> {m.role.capitalize()}")
                     else:
                         playerEmbed.add_field(name="Club", value="None")
                         
@@ -647,7 +656,7 @@ class Welcome(commands.Cog):
                         await appendLog(f"Tag input: {tag}")
 
                     try:
-                        player = await self.bsapi.get_player(tag)
+                        player = await self.ofcbsapi.get_player(tag)
                         await appendLog(f"BS account found: {player.name}")
                         playerEmbed = discord.Embed(color=discord.Colour.blue())
                         playerEmbed.set_author(name=f"{player.name}", icon_url="https://i.imgur.com/ZwIP41S.png")
@@ -655,7 +664,11 @@ class Welcome(commands.Cog):
                                               value=f"<:bstrophy:552558722770141204>{player.trophies}")
                         if player.club is not None:
                             playerEmbed.add_field(name="Club", value=f"<:bsband:600741378497970177> {player.club.name}")
-                            playerEmbed.add_field(name="Role", value=f"<:role:614520101621989435> {player.club.role.capitalize()}")
+                            club = await player.get_club()
+                            for m in club.members:
+                                if m.name == player.name:
+                                    playerEmbed.add_field(name="Role",
+                                                    value=f"<:role:614520101621989435> {m.role.capitalize()}")
                         else:
                             playerEmbed.add_field(name="Club", value="None")
                         playerEmbed.add_field(name=f"{accountConfirm} (Choose reaction)",
