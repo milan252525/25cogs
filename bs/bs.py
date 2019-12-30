@@ -167,7 +167,7 @@ class BrawlStarsCog(commands.Cog):
         except Exception as e:
             return await ctx.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
-        tag = tag.replace("#", "")
+        tag = tag.replace("#", "").upper()
         colour = player.name_color.replace("0x", "")
         embed=discord.Embed(color=discord.Colour.from_rgb(int(colour[0:2], 16), int(colour[2:4], 16), int(colour[4:6], 16)))
         embed.set_author(name=f"{player.name} #{tag}", icon_url="https://i.imgur.com/ZwIP41S.png")
@@ -184,8 +184,8 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(name="3v3 Wins", value=f"<:3v3:614519914815815693> {player.x3_vs_3_victories}")
         embed.add_field(name="Solo SD Wins", value=f"<:sd:614517124219666453> {player.solo_victories}")
         embed.add_field(name="Duo SD Wins", value=f"<:duosd:614517166997372972> {player.duo_victories}")
-        embed.add_field(name="Best Time in Robo Rumble", value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time}")
-        embed.add_field(name="Best Time as Big Brawler", value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler}")
+        embed.add_field(name="Best Time in Robo Rumble", value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time//60}:{player.best_robo_rumble_time%60}")
+        embed.add_field(name="Best Time as Big Brawler", value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler//60}:{player.best_time_as_big_brawler%60}")
         await ctx.send(embed=embed)
 
     @commands.command()
