@@ -127,19 +127,9 @@ class BrawlStarsCog(commands.Cog):
             tag = await self.config.user(member).tag()
             if tag is None:
                 return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
-        elif isinstance(member, str) and member.startswith("<"):
-            id = member.replace("<", "").replace(">", "").replace("@", "").replace("!", "")
-            try:
-                member = discord.utils.get(ctx.guild.members, id=int(id))
-                if member is not None:
-                    tag = await self.config.user(member).tag()
-                    if tag is None:
-                        return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
-            except ValueError:
-                pass
-        elif isinstance(member, str) and member.startswith("#"):
+        elif member.startswith("#"):
             tag = member.upper().replace('O', '0')
-        elif isinstance(member, str):
+        else:
             try:
                 member = discord.utils.get(ctx.guild.members, id=int(member))
                 if member is not None:
@@ -223,12 +213,17 @@ class BrawlStarsCog(commands.Cog):
                 tag = player.club.tag
             except brawlstats.errors.RequestError as e:
                 await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+        elif key.startswith("#"):
+            tag = key.upper().replace('O', '0')
         else:
             tag = await self.config.guild(ctx.guild).clubs.get_raw(key.lower(), "tag", default=None)
             if tag is None:
                 return await ctx.send(embed = self.badEmbed(f"{key.title()} isn't saved club in this server!"))
         try:
             club = await self.ofcbsapi.get_club(tag)
+                        
+        except brawlstats.errors.NotFoundError:
+            return await ctx.send(embed = self.badEmbed("No club with this tag found, try again!"))
         
         except brawlstats.errors.RequestError as e:
             await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
