@@ -179,7 +179,7 @@ class BrawlStarsCog(commands.Cog):
             embed.add_field(name="Club", value=f"<:bsband:600741378497970177> {player.club.name}")
             club = await player.get_club()
             for m in club.members:
-                if m.tag == tag:
+                if m.name == player.name:
                     embed.add_field(name="Role", value=f"<:role:614520101621989435> {m.role.capitalize()}")
         embed.add_field(name="3v3 Wins", value=f"<:3v3:614519914815815693> {player.x3_vs_3_victories}")
         embed.add_field(name="Solo SD Wins", value=f"<:sd:614517124219666453> {player.solo_victories}")
