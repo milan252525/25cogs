@@ -480,7 +480,12 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.addroleifnotpresent(member, labs)
                     rolefound = False
                     for r in ch.guild.roles:
-                        if " ".join(r.name.split(' ', 2)[:2]) == player.club.name:
+                        clubname = ""
+                        if len(r.name.split(' ', 2)) == 3:
+                            clubname  = " ".join(r.name.split(' ', 2)[:2])
+                        elif len(r.name.split(' ', 2)) == 4:
+                            clubname  = " ".join(r.name.split(' ', 3)[:3])
+                        if clubname == player.club.name:
                             rolefound = True
                             msg += await self.addroleifnotpresent(member, r)
                             '''if player.club.role == 'Vice President':
@@ -498,7 +503,12 @@ class BrawlStarsCog(commands.Cog):
             elif memberrole is None and "tag" in player.raw_data["club"] and 'LA ' in player.club.name: #guest -> member
                 rolefound = False
                 for r in ch.guild.roles:
-                    if " ".join(r.name.split(' ', 2)[:2]) == player.club.name:
+                    clubname = ""
+                    if len(r.name.split(' ', 2)) == 3:
+                        clubname  = " ".join(r.name.split(' ', 2)[:2])
+                    elif len(r.name.split(' ', 2)) == 4:
+                        clubname  = " ".join(r.name.split(' ', 3)[:3])
+                    if clubname == player.club.name:
                         rolefound = True
                         msg += await self.addroleifnotpresent(member, r)
                         c = await player.get_club()
@@ -521,7 +531,12 @@ class BrawlStarsCog(commands.Cog):
             elif "tag" in player.raw_data["club"] and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
                 rolefound = False
                 for r in ch.guild.roles:
-                    if " ".join(r.name.split(' ', 2)[:2]) == player.club.name:
+                    clubname = ""
+                    if len(r.name.split(' ', 2)) == 3:
+                        clubname  = " ".join(r.name.split(' ', 2)[:2])
+                    elif len(r.name.split(' ', 2)) == 4:
+                        clubname  = " ".join(r.name.split(' ', 3)[:3])
+                    if clubname == player.club.name:
                         rolefound = True
                         msg += await self.addroleifnotpresent(member, r)
                         c = await player.get_club()
