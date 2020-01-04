@@ -1,5 +1,13 @@
-# (discord.py)[https://discordpy.readthedocs.io/en/latest/] cogs for Legendary Alliance
+# Python cogs for Legendary Alliance's Discord bot
+(discord.py)[https://discordpy.readthedocs.io/en/latest/]
 
+### Author
+(milan_25)[https://github.com/milan252525]
+
+### Contributors
+(datura-metel)[https://github.com/datura-metel]
+
+## Cogs
 #### BS
 (Brawl Stars)[https://blog.brawlstars.com/index.html] player stats, club list
 #### CR
