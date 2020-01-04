@@ -1,17 +1,17 @@
 # Python cogs for Legendary Alliance's Discord bot
-(discord.py)[https://discordpy.readthedocs.io/en/latest/]
+[discord.py](https://discordpy.readthedocs.io/en/latest/)
 
 ### Author
-(milan_25)[https://github.com/milan252525]
+[milan_25](https://github.com/milan252525)
 
 ### Contributors
-(datura-metel)[https://github.com/datura-metel]
+[datura-metel](https://github.com/datura-metel)
 
 ## Cogs
 #### BS
-(Brawl Stars)[https://blog.brawlstars.com/index.html] player stats, club list
+[Brawl Stars](https://blog.brawlstars.com/index.html) player stats, club list
 #### CR
-(Clash Royale)[https://clashroyale.com/] player stats, clan list
+[Clash Royale](https://clashroyale.com/) player stats, clan list
 #### Ladder
 ELO leaderboard
 #### Tools
