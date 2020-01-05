@@ -292,7 +292,7 @@ class Tools(commands.Cog):
                 embed = discord.Embed(colour=discord.Colour.green(), description=message)
                 for attach in ctx.message.attachments:
                     embed.add_field(name="", value=attach.url, inline=False)
-                await ch.send(embed)
+                await ch.send(embed=embed)
 
             elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
                 await ctx.send(f"Skipping **{guild.name}**.")
