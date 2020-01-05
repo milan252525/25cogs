@@ -483,7 +483,7 @@ class BrawlStarsCog(commands.Cog):
                         clubname = ""
                         if len(r.name.split(' ', 2)) == 3:
                             clubname  = " ".join(r.name.split(' ', 2)[:2])
-                        elif len(r.name.split(' ', 2)) == 4:
+                        elif len(r.name.split(' ', 3)) == 4:
                             clubname  = " ".join(r.name.split(' ', 3)[:3])
                         if clubname == player.club.name:
                             rolefound = True
@@ -506,7 +506,7 @@ class BrawlStarsCog(commands.Cog):
                     clubname = ""
                     if len(r.name.split(' ', 2)) == 3:
                         clubname  = " ".join(r.name.split(' ', 2)[:2])
-                    elif len(r.name.split(' ', 2)) == 4:
+                    elif len(r.name.split(' ', 3)) == 4:
                         clubname  = " ".join(r.name.split(' ', 3)[:3])
                     if clubname == player.club.name:
                         rolefound = True
@@ -534,7 +534,7 @@ class BrawlStarsCog(commands.Cog):
                     clubname = ""
                     if len(r.name.split(' ', 2)) == 3:
                         clubname  = " ".join(r.name.split(' ', 2)[:2])
-                    elif len(r.name.split(' ', 2)) == 4:
+                    elif len(r.name.split(' ', 3)) == 4:
                         clubname  = " ".join(r.name.split(' ', 3)[:3])
                     if clubname == player.club.name:
                         rolefound = True
