@@ -253,7 +253,7 @@ class Tools(commands.Cog):
     async def laban(self, ctx, member:Union[discord.Member, str]):
         if not ctx.author.guild_permissions.administrator:
             return await ctx.send("You must be administrator to use this command!")
-        guilds = [440960893916807188, 401883208511389716, 593248015729295360, 654334199494606848, 515962414190166041, 460550486257565697] 
+        guilds = [440960893916807188, 401883208511389716, 593248015729295360, 654334199494606848, 515962414190166041, 460550486257565697, 473169548301041674] 
         msg = f"Attempting to ban **{member}** in all LA servers:"
         for id in guilds:
             try:
