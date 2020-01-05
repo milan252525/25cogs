@@ -293,7 +293,7 @@ class Tools(commands.Cog):
                 await ch.send(embed=embed)
                 for attach in ctx.message.attachments:
                     fileembed = discord.Embed(color=discord.Colour.green())
-                    fileembed.set_image(attach.url)
+                    fileembed.set_image(url=attach.url)
                     await ch.send(embed=fileembed)
 
 
