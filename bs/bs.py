@@ -473,7 +473,6 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.removeroleifpresent(member, newcomer)
                     msg += await self.addroleifnotpresent(member, brawlstars)
                     msg += await self.addroleifnotpresent(member, guest)
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
                 elif "name" in player.raw_data["club"] and 'LA ' in player.club.name:
                     msg += await self.removeroleifpresent(member, newcomer)
                     msg += await self.addroleifnotpresent(member, brawlstars)
@@ -481,9 +480,9 @@ class BrawlStarsCog(commands.Cog):
                     rolefound = False
                     for r in ch.guild.roles:
                         clubname = ""
-                        if len(r.name.split(' ', 2)) == 3:
+                        if len(r.name.split(' ')) == 3:
                             clubname  = " ".join(r.name.split(' ', 2)[:2])
-                        elif len(r.name.split(' ', 3)) == 4:
+                        elif len(r.name.split(' ')) == 4:
                             clubname  = " ".join(r.name.split(' ', 3)[:3])
                         if clubname == player.club.name:
                             rolefound = True
@@ -504,9 +503,9 @@ class BrawlStarsCog(commands.Cog):
                 rolefound = False
                 for r in ch.guild.roles:
                     clubname = ""
-                    if len(r.name.split(' ', 2)) == 3:
+                    if len(r.name.split(' ')) == 3:
                         clubname  = " ".join(r.name.split(' ', 2)[:2])
-                    elif len(r.name.split(' ', 3)) == 4:
+                    elif len(r.name.split(' ')) == 4:
                         clubname  = " ".join(r.name.split(' ', 3)[:3])
                     if clubname == player.club.name:
                         rolefound = True
@@ -532,9 +531,9 @@ class BrawlStarsCog(commands.Cog):
                 rolefound = False
                 for r in ch.guild.roles:
                     clubname = ""
-                    if len(r.name.split(' ', 2)) == 3:
+                    if len(r.name.split(' ')) == 3:
                         clubname  = " ".join(r.name.split(' ', 2)[:2])
-                    elif len(r.name.split(' ', 3)) == 4:
+                    elif len(r.name.split(' ')) == 4:
                         clubname  = " ".join(r.name.split(' ', 3)[:3])
                     if clubname == player.club.name:
                         rolefound = True
