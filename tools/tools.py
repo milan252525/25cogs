@@ -273,7 +273,7 @@ class Tools(commands.Cog):
 
     @commands.has_permissions(administrator=True)
     @commands.command()
-    async def announcement(self, ctx, message):
+    async def announcement(self, ctx, *, message):
         guilds = dict([(465641254580125696, 663418911378898954), (663416919646535695, 663418966475145277)])
         for key in guilds:
             guild = self.bot.get_guild(key)
@@ -290,7 +290,7 @@ class Tools(commands.Cog):
             if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
                 ch = self.bot.get_channel(guilds[key])
                 embed = discord.Embed(colour=discord.Colour.green(), description=message)
-                for attach in message.attachments:
+                for attach in ctx.message.attachments:
                     embed.add_field(name="", value=attach.url, inline=False)
                 await ch.send(embed)
 
