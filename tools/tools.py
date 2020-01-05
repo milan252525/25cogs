@@ -273,7 +273,7 @@ class Tools(commands.Cog):
 
     @commands.has_permissions(administrator=True)
     @commands.command()
-    async def announce(self, ctx, *message):
+    async def announcement(self, ctx, *message):
         guilds = dict([(465641254580125696, 663418911378898954), (663416919646535695, 663418966475145277)])
         for key in guilds:
             checkmessage = ctx.send(f"Do you want to send an announcement to {key.name}?")
