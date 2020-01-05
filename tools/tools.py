@@ -5,6 +5,7 @@ from discord.ext import tasks
 from datetime import datetime
 from time import time
 from random import choice
+from typing import Union
 
 class Tools(commands.Cog):
     
@@ -249,7 +250,7 @@ class Tools(commands.Cog):
 
     @commands.guild_only()
     @commands.command()
-    async def laban(self, ctx, member:discord.Member):
+    async def laban(self, ctx, member:Union[discord.Member, str]):
         if not ctx.author.guild_permissions.administrator:
             return await ctx.send("You must be administrator to use this command!")
         guilds = [440960893916807188, 401883208511389716, 593248015729295360, 654334199494606848, 515962414190166041, 460550486257565697] 
@@ -257,7 +258,7 @@ class Tools(commands.Cog):
         for id in guilds:
             try:
                 guild = self.bot.get_guild(id)
-                m = discord.Object(member.id)
+                m = discord.Object(member.id if isinstance(member, discord.Member) else member)
                 await guild.ban(m, reason="Banned from all LA servers.")
                 msg += f"\n<:good:450013422717763609> **{guild.name}**"
             except discord.Forbidden:
