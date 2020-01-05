@@ -287,7 +287,7 @@ class Tools(commands.Cog):
             reaction, _ = await self.bot.wait_for('reaction_add', check=check)
 
             if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
-                ch = self.bot.get_channel(guilds.get(key))
+                ch = self.bot.get_channel(guilds[key])
                 await ch.send(embed=discord.Embed(colour=discord.Colour.green(), description=message))
 
             elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
