@@ -275,7 +275,7 @@ class Tools(commands.Cog):
     @commands.command()
     async def announcement(self, ctx, *, message):
         guilds = dict([(465641254580125696, 663418911378898954), (663416919646535695, 663418966475145277), (440960893916807188, 538380432748838912), (401883208511389716, 402131630497464340)])
-        if ctx.guild.id not in guilds.keys() or ctx.guild.id != 594736382727946250:
+        if ctx.guild.id != 594736382727946250 or ctx.guild.id not in guilds.keys():
             await ctx.send("This command can't be used in this server.")
             return
         for key in guilds:
