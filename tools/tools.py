@@ -277,7 +277,7 @@ class Tools(commands.Cog):
         guilds = dict([(465641254580125696, 663418911378898954), (663416919646535695, 663418966475145277)])
         for key in guilds:
             guild = self.bot.get_guild(key)
-            checkmessage = await ctx.send(f"Do you want to send an announcement to {guild.name}?")
+            checkmessage = await ctx.send(f"Do you want to send an announcement to **{guild.name}**?")
             await checkmessage.add_reaction("<:yesconfirm:595535992329601034>")
             await checkmessage.add_reaction("<:nocancel:595535992199315466>")
 
@@ -289,7 +289,10 @@ class Tools(commands.Cog):
 
             if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
                 ch = self.bot.get_channel(guilds[key])
-                await ch.send(embed=discord.Embed(colour=discord.Colour.green(), description=message))
+                embed = discord.Embed(colour=discord.Colour.green(), description=message)
+                for attach in message.attachments:
+                    embed.add_field(name="", value=attach.url, inline=False)
+                await ch.send(embed)
 
             elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
-                await ctx.send(f"Skipping {guild.name}.")
+                await ctx.send(f"Skipping **{guild.name}**.")
