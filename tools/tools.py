@@ -290,7 +290,8 @@ class Tools(commands.Cog):
                 ch = self.bot.get_channel(guilds[key])
                 embed = discord.Embed(colour=discord.Colour.green(), description=message)
                 for attach in ctx.message.attachments:
-                    embed.add_field(name="'\u200b'", value=attach.url, inline=False)
+                    for i in range(len(ctx.message.attachments)):
+                        embed.add_field(name=f"Attachment {str(i+1)}:", value=attach, inline=False)
                 await ch.send(embed=embed)
 
             elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
