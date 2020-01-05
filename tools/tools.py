@@ -289,7 +289,6 @@ class Tools(commands.Cog):
             if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
                 ch = self.bot.get_channel(guilds[key])
                 embed = discord.Embed(colour=discord.Colour.green(), description=message)
-                i = 1
                 for attach in ctx.message.attachments:
                     embed.add_field(name="'\u200b'", value=attach.url, inline=False)
                 await ch.send(embed=embed)
