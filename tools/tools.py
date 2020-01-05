@@ -269,3 +269,25 @@ class Tools(commands.Cog):
             except Exception as e:
                 msg += f"\n<:bad:450013438756782081> **{guild.name}** ({e})"
         await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.red()))
+
+    @commands.has_permissions(administrator=True)
+    @commands.command()
+    async def announce(self, ctx, *message):
+        guilds = dict([(465641254580125696, 663418911378898954), (663416919646535695, 663418966475145277)])
+        for key in guilds:
+            checkmessage = ctx.send(f"Do you want to send an announcement to {key.name}?")
+            await checkmessage.add_reaction("<:yesconfirm:595535992329601034>")
+            await checkmessage.add_reaction("<:nocancel:595535992199315466>")
+
+            def check(reaction, user):
+                return (user == ctx.author or user.id == 230947675837562880) and str(reaction.emoji) in [
+                    "<:yesconfirm:595535992329601034>", "<:nocancel:595535992199315466>"]
+
+            reaction, _ = await self.bot.wait_for('reaction_add', check=check)
+
+            if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
+                ch = self.bot.get_channel(guilds.get(key))
+                await ch.send(embed=discord.Embed(colour=discord.Colour.green(), description=message))
+
+            elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
+                await ctx.send(f"Skipping {key.name}.")
