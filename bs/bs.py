@@ -493,7 +493,7 @@ class BrawlStarsCog(commands.Cog):
                             elif player.club.role == 'President':
                                 msg += await self.addroleifnotpresent(member, pres)'''
                     if not rolefound:
-                        msg += f"Role for the club **{player.club.name}** not found.\n"
+                        msg += f"Role for the club {player.club.name} not found. Input: {clubname}.\n"
             elif memberrole is not None and ("name" not in player.raw_data["club"] or 'LA ' not in player.club.name): #member -> guest
                 msg += await self.removeroleifpresent(member, memberrole)
                 msg += await self.removeroleifpresent(member, labs)
@@ -525,7 +525,7 @@ class BrawlStarsCog(commands.Cog):
                             msg += await self.removeroleifpresent(member, vp)
                             msg += await self.removeroleifpresent(member, pres)
                 if not rolefound:
-                    msg += f"Role for the club {player.club.name} not found."
+                    msg += f"Role for the club {player.club.name} not found. Input: {clubname}.\n"
                 msg += await self.addroleifnotpresent(member, labs)
                 msg += await self.removeroleifpresent(member, guest)
             elif "tag" in player.raw_data["club"] and player.club.name not in club and 'LA ' in player.club.name and memberrole is not None: #one club -> another club
@@ -553,7 +553,7 @@ class BrawlStarsCog(commands.Cog):
                             msg += await self.removeroleifpresent(member, vp)
                             msg += await self.removeroleifpresent(member, pres)
                 if not rolefound:
-                    msg += f"Role for the club {player.club.name} not found."
+                    msg += f"Role for the club {player.club.name} not found. Input: {clubname}.\n"
                 msg += await self.removeroleifpresent(member, memberrole)
             elif player.club is not None and player.club.name in club and 'LA ' in player.club.name and memberrole is not None:  #pres/vp check
                 c = await player.get_club()
