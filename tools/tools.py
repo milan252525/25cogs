@@ -279,6 +279,7 @@ class Tools(commands.Cog):
             await ctx.send("This command can't be used in this server.")
             return
 
+        everyone = False
         everyonemessage = await ctx.send("Do you want to mention everyone?")
         await everyonemessage.add_reaction("<:yesconfirm:595535992329601034>")
         await everyonemessage.add_reaction("<:nocancel:595535992199315466>")
