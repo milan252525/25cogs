@@ -274,7 +274,7 @@ class Tools(commands.Cog):
     @commands.has_permissions(administrator=True)
     @commands.command()
     async def announcement(self, ctx, *, message):
-        guilds = dict([(465641254580125696, 663418911378898954), (663416919646535695, 663418966475145277), (440960893916807188, 538380432748838912), (401883208511389716, 402131630497464340)])
+        guilds = dict([(465641254580125696, 663418911378898954), (663416919646535695, 663418966475145277)])#, (440960893916807188, 538380432748838912), (401883208511389716, 402131630497464340)])
         if ctx.guild.id != 594736382727946250 and ctx.guild.id not in guilds.keys():
             await ctx.send("This command can't be used in this server.")
             return
@@ -296,6 +296,29 @@ class Tools(commands.Cog):
         elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
             await ctx.send("Won't mention everyone.")
 
+        mentions = []
+        mentionsmessage = await ctx.send("Do you want to mention other roles?")
+        await mentionsmessage.add_reaction("<:yesconfirm:595535992329601034>")
+        await mentionsmessage.add_reaction("<:nocancel:595535992199315466>")
+
+        def check(reaction, user):
+            return (user == ctx.author or user.id == 230947675837562880) and str(reaction.emoji) in [
+                "<:yesconfirm:595535992329601034>", "<:nocancel:595535992199315466>"]
+
+        reaction, _ = await self.bot.wait_for('reaction_add', check=check)
+
+        if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
+            await ctx.send("List IDs of the roles you want to mention.")
+
+            def checkmsg(m):
+                return m.channel == ctx.channel and m.author == ctx.author
+
+            msg = await self.bot.wait_for('message', check=checkmsg)
+            mentions = msg.split(' ')
+
+        elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
+            await ctx.send("Won't mention other roles.")
+
         for key in guilds:
             guild = self.bot.get_guild(key)
             checkmessage = await ctx.send(f"Do you want to send an announcement to **{guild.name}**?")
@@ -311,8 +334,18 @@ class Tools(commands.Cog):
             if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
                 ch = self.bot.get_channel(guilds[key])
                 embed = discord.Embed(colour=discord.Colour.green(), description=message)
+
                 if everyone:
                     await ch.send(ch.guild.default_role)
+                for mention in mentions:
+                    role = discord.utils.get(ch.guild.roles, id=mention)
+                    if role is None:
+                        continue
+                    elif role not in ch.guild.roles:
+                        continue
+                    elif role in ch.guild.roles and role.mentionable:
+                        await ch.send(role.mention)
+
                 await ch.send(embed=embed)
                 for attach in ctx.message.attachments:
                     fileembed = discord.Embed(color=discord.Colour.green())
