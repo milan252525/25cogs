@@ -340,8 +340,7 @@ class Tools(commands.Cog):
                 for mention in mentions:
                     role = discord.utils.get(ch.guild.roles, id=mention)
                     if role is None:
-                        continue
-                    elif role not in ch.guild.roles:
+                        await ch.send(f"Didn't find role {mention}.")
                         continue
                     elif role in ch.guild.roles and role.mentionable:
                         await ch.send(role.mention)
