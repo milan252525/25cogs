@@ -338,9 +338,8 @@ class Tools(commands.Cog):
                 if everyone:
                     await ch.send(ch.guild.default_role)
                 for mention in mentions:
-                    role = discord.utils.get(ch.guild.roles, id=mention)
+                    role = discord.utils.get(ch.guild.roles, id=int(mention))
                     if role is None:
-                        await ch.send(f"Didn't find role {mention}.")
                         continue
                     elif role in ch.guild.roles and role.mentionable:
                         await ch.send(role.mention)
