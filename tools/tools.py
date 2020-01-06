@@ -314,7 +314,7 @@ class Tools(commands.Cog):
                 return m.channel == ctx.channel and m.author == ctx.author
 
             msg = await self.bot.wait_for('message', check=checkmsg)
-            mentions = msg.split(' ')
+            mentions = msg.content.split(' ')
 
         elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
             await ctx.send("Won't mention other roles.")
