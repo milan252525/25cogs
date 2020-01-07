@@ -308,15 +308,10 @@ class BrawlStarsCog(commands.Cog):
         embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
 
         brawlers = ""
-        messages = []
         for brawler in player.raw_data['brawlers']:
-            if len(brawlers) > 1999:
-                messages.append(brawlers)
-                brawlers = ""
             brawlers += f"{self.get_brawler_emoji(brawler.get('name'))} {brawler.get('name').lower().capitalize()}: {brawler.get('trophies')}\n"
-        for m in messages:
-            embed.add_field(name="**Brawlers:**", value=m)
-        await ctx.send(embed=embed)
+        embed.add_field(name="**Brawlers:**", value=brawlers)
+        await ctx.send(brawlers)
 
     @commands.command()
     async def club(self, ctx, key:Union[discord.Member, str]=None):
