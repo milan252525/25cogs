@@ -187,7 +187,7 @@ class BrawlStarsCog(commands.Cog):
             embed.add_field(name="Highest PP Points", value=f"<:powertrophies:661266876235513867> {player.raw_data['highestPowerPlayPoints']}")
         embed.add_field(name="Qualified For Championship", value=f"<:powertrophies:661266876235513867> {player.raw_data['isQualifiedFromChampionshipChallenge']}")
         for brawler in player.raw_data['brawlers']:
-            embed.add_field(name=f"{brawler.name}", value= f"{brawler.trophies}")
+            embed.add_field(name=f"{brawler.get('name')}", value= f"{brawler.get('trophies')}")
         await ctx.send(embed=embed)
 
     @commands.command()
