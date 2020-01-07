@@ -314,7 +314,7 @@ class BrawlStarsCog(commands.Cog):
                 messages.append(brawlers)
                 brawlers = ""
             brawlers += f"{self.get_brawler_emoji(brawler.get('name'))} {brawler.get('name').lower().capitalize()}: {brawler.get('trophies')}\n"
-            ctx.send(brawlers)
+            await ctx.send(brawlers)
         for m in messages:
             embed.add_field(name="**Brawlers:**", value=m)
         await ctx.send(embed=embed)
