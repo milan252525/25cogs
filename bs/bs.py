@@ -158,9 +158,8 @@ class BrawlStarsCog(commands.Cog):
         except Exception as e:
             return await ctx.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
-        colour = player.name_color
-        embed=discord.Embed(color=discord.Colour.from_rgb(int(colour[2:4], 16), int(colour[4:6], 16), int(colour[6:8], 16)))
-        print(player.name_color)
+        colour = player.name_color if player.name_color is not None else "0xffffffff"
+        embed=discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
         embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
         embed.add_field(name="Trophies", value=f"{self.get_league_emoji(player.trophies)} {player.trophies}")
         embed.add_field(name="Highest Trophies", value=f"<:totaltrophies:614517396111097866> {player.highest_trophies}")
