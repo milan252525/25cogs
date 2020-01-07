@@ -353,3 +353,10 @@ class Tools(commands.Cog):
 
             elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
                 await ctx.send(f"Skipping **{guild.name}**.")
+
+    @commands.command()
+    async def listservers(self, ctx):
+        msg = "Currently bot is in those servers:\n"
+        for server in self.bot.servers:
+            msg += f"**{server.name}**\n"
+        await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.blue()))
