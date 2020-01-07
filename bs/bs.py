@@ -246,7 +246,7 @@ class BrawlStarsCog(commands.Cog):
         embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
         brawlers = ""
         for brawler in player.raw_data['brawlers']:
-            brawlers += f"<:shelly:664232553422651393> {brawler.get('name').lower().capitalize()}: {brawler.get('trophies')}\n"
+            brawlers += f"{self.get_brawler_emoji(brawler.get('name'))} {brawler.get('name').lower().capitalize()}: {brawler.get('trophies')}\n"
         embed.add_field(name="**Brawlers:**", value=brawlers)
         await ctx.send(embed=embed)
 
