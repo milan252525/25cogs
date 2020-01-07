@@ -343,8 +343,9 @@ class Tools(commands.Cog):
                     if role is None:
                         continue
                     elif role in ch.guild.roles and role.mentionable:
-                        pings += role.mention + "\n"
-                await ch.send(pings)
+                        pings += role.mention + ", "
+                if pings != "Attention to: ":
+                    await ch.send(pings)
 
                 await ch.send(embed=embed)
                 for attach in ctx.message.attachments:
