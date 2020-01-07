@@ -274,7 +274,7 @@ class Tools(commands.Cog):
     @commands.has_permissions(administrator=True)
     @commands.command()
     async def announcement(self, ctx, *, message):
-        guilds = dict([(465641254580125696, 663418911378898954), (663416919646535695, 663418966475145277), (440960893916807188, 538380432748838912), (401883208511389716, 402131630497464340)])
+        guilds = dict([(664086049110097980, 664086049710014486)])#, (440960893916807188, 538380432748838912), (401883208511389716, 402131630497464340)])
         if ctx.author.id != 294438945578811393 and ctx.author.id != 355514130737922048:
             await ctx.send("You can't use this command.")
             return
@@ -337,13 +337,14 @@ class Tools(commands.Cog):
 
                 pings = "Attention to: "
                 if everyone:
-                    msg += ch.guild.default_role + "\n"
+                    pings += ch.guild.default_role + "\n"
                 for mention in mentions:
                     role = discord.utils.get(ch.guild.roles, id=int(mention))
                     if role is None:
                         continue
                     elif role in ch.guild.roles and role.mentionable:
-                        msg += role.mention + "\n"
+                        pings += role.mention + "\n"
+                await ch.send(pings)
 
                 await ch.send(embed=embed)
                 for attach in ctx.message.attachments:
