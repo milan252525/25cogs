@@ -302,11 +302,6 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(
                 "****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
-        colour = player.name_color if player.name_color is not None else "0xffffffff"
-        embed = discord.Embed(
-            color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
-        embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
-
         brawlers = ""
         messages = []
         for brawler in player.raw_data['brawlers']:
@@ -316,8 +311,11 @@ class BrawlStarsCog(commands.Cog):
             brawlers += f"{self.get_brawler_emoji(brawler.get('name'))} {brawler.get('name').lower().capitalize()}: {brawler.get('trophies')}\n"
         ctx.send(messages)
         for m in messages:
+            embed = discord.Embed(
+                color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
+            embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
             embed.add_field(name="**Brawlers:**", value=m)
-        await ctx.send(embed=embed)
+            await ctx.send(embed=embed)
 
     @commands.command()
     async def club(self, ctx, key:Union[discord.Member, str]=None):
