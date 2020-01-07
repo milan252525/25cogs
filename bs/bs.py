@@ -7,6 +7,7 @@ from random import choice
 import asyncio
 import brawlstats
 from typing import Union
+from re import sub
 
 class BrawlStarsCog(commands.Cog):
     
@@ -453,17 +454,12 @@ class BrawlStarsCog(commands.Cog):
                 break
             except Exception as e:
                 return await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"**Something went wrong while requesting {tag}!**"))           
-
+      
             msg = ""            
             player_in_club = "name" in player.raw_data["club"]
             member_roles = []
-            member_role = None
-            club_name = "".join([i if ord(i) < 128 else " " for i in (player.club.name if player_in_club else "")]).strip()
-            member_role_expected = discord.utils.get(ch.guild.roles, name=club_name)
-            
-            if player_in_club and member_role_expected is None:
-                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Role for the club {player.club.name} not found. Input: {club_name}.\n"))
-                continue
+            member_role = None                   
+            member_role_expected = None
                         
             for role in member.roles:
                 if role.name.startswith('LA '):
@@ -487,6 +483,13 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.addroleifnotpresent(member, guest, brawlstars)
 
             if player_in_club and "LA " in player.club.name:
+                for role in ch.guild:
+                    if sub(r'[^\x00-\x7f]',r'', role).strip() == player.club.name:
+                        member_role_expected = role
+                        break
+                if member_role_expected is None:
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Role for the club {player.club.name} not found. Input: {club_name}.\n"))
+                    continue
                 msg += await self.removeroleifpresent(member, guest, newcomer)
                 msg += await self.addroleifnotpresent(member, labs, brawlstars)
                 if member_role is None:
