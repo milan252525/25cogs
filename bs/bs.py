@@ -499,9 +499,9 @@ class BrawlStarsCog(commands.Cog):
                 player_club = await player.get_club()
                 for mem in player_club.members:
                     if mem.tag == player.raw_data['tag']:
-                        if mem.role == 'Vice President':
+                        if mem.role.lower() == 'vicepresident':
                             msg += await self.addroleifnotpresent(member, vp)
-                        elif mem.role == 'President':
+                        elif mem.role.lower() == 'president':
                             msg += await self.addroleifnotpresent(member, pres)
                         else:
                             msg += await self.removeroleifpresent(member, vp, pres)
@@ -512,4 +512,4 @@ class BrawlStarsCog(commands.Cog):
 
     @sortroles.before_loop
     async def before_sortroles(self):
-        await asyncio.sleep(10)
+        await asyncio.sleep(5)
