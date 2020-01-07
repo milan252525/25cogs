@@ -308,7 +308,7 @@ class Tools(commands.Cog):
         reaction, _ = await self.bot.wait_for('reaction_add', check=check)
 
         if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
-            await ctx.send("List IDs of the roles you want to mention.")
+            await ctx.send("List IDs of the roles you want to mention, separated by a space.")
 
             def checkmsg(m):
                 return m.channel == ctx.channel and m.author == ctx.author
@@ -318,6 +318,29 @@ class Tools(commands.Cog):
 
         elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
             await ctx.send("Won't mention other roles.")
+
+        links = []
+        linksmessage = await ctx.send("Do you want to send links?")
+        await linksmessage.add_reaction("<:yesconfirm:595535992329601034>")
+        await linksmessage.add_reaction("<:nocancel:595535992199315466>")
+
+        def check(reaction, user):
+            return (user == ctx.author or user.id == 230947675837562880) and str(reaction.emoji) in [
+                "<:yesconfirm:595535992329601034>", "<:nocancel:595535992199315466>"]
+
+        reaction, _ = await self.bot.wait_for('reaction_add', check=check)
+
+        if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
+            await ctx.send("List the links you want to add to the announcement, separated by a space.")
+
+            def checkmsg(m):
+                return m.channel == ctx.channel and m.author == ctx.author
+
+            msg = await self.bot.wait_for('message', check=checkmsg)
+            links = msg.content.split(' ')
+
+        elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
+            await ctx.send("Won't add links.")
 
         for key in guilds:
             guild = self.bot.get_guild(key)
@@ -343,9 +366,16 @@ class Tools(commands.Cog):
                     if role is None:
                         continue
                     elif role in ch.guild.roles and role.mentionable:
+                        await ctx.send(f"Mentioned role **{str(role)}** in **{guild.name}**.")
                         pings += role.mention + ", "
                 if pings != "Attention to: ":
                     await ch.send(pings[:-2])
+
+                linksmsg = "Links: "
+                for link in links:
+                    linksmsg += link + ", "
+                if linksmsg != "Links: ":
+                    await ch.send(linksmsg[:-2])
 
                 await ch.send(embed=embed)
                 for attach in ctx.message.attachments:
