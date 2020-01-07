@@ -186,8 +186,62 @@ class BrawlStarsCog(commands.Cog):
         if "highestPowerPlayPoints" in player.raw_data:          
             embed.add_field(name="Highest PP Points", value=f"<:powertrophies:661266876235513867> {player.raw_data['highestPowerPlayPoints']}")
         embed.add_field(name="Qualified For Championship", value=f"<:powertrophies:661266876235513867> {player.raw_data['isQualifiedFromChampionshipChallenge']}")
+        await ctx.send(embed=embed)
+
+    @commands.command(aliases=['b'])
+    async def brawlers(self, ctx, *, member: Union[discord.Member, str] = None):
+        """Brawl Stars brawlers"""
+        await ctx.trigger_typing()
+        prefix = ctx.prefix
+        tag = ""
+
+        member = ctx.author if member is None else member
+
+        if isinstance(member, discord.Member):
+            tag = await self.config.user(member).tag()
+            if tag is None:
+                return await ctx.send(embed=self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+        elif member.startswith("#"):
+            tag = member.upper().replace('O', '0')
+        else:
+            try:
+                member = discord.utils.get(ctx.guild.members, id=int(member))
+                if member is not None:
+                    tag = await self.config.user(member).tag()
+                    if tag is None:
+                        return await ctx.send(
+                            embed=self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+            except ValueError:
+                member = discord.utils.get(ctx.guild.members, name=member)
+                if member is not None:
+                    tag = await self.config.user(member).tag()
+                    if tag is None:
+                        return await ctx.send(
+                            embed=self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+
+        if tag is None or tag == "":
+            desc = "/p\n/bsprofile @user\n/p discord_name\n/p discord_id\n/p #CRTAG"
+            embed = discord.Embed(title="Invalid argument!", colour=discord.Colour.red(), description=desc)
+            return await ctx.send(embed=embed)
+        try:
+            player = await self.ofcbsapi.get_player(tag)
+
+        except brawlstats.errors.NotFoundError:
+            return await ctx.send(embed=self.badEmbed("No player with this tag found, try again!"))
+
+        except brawlstats.errors.RequestError as e:
+            return await ctx.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+
+        except Exception as e:
+            return await ctx.send(
+                "****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+
+        colour = player.name_color if player.name_color is not None else "0xffffffff"
+        embed = discord.Embed(
+            color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
+        embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
         for brawler in player.raw_data['brawlers']:
-            embed.add_field(name=f"{brawler.get('name').lower().capitalize()}", value= f"{brawler.get('trophies')}")
+            embed.add_field(name=f"{brawler.get('name').lower().capitalize()}", value=f"{brawler.get('trophies')}")
         await ctx.send(embed=embed)
 
     @commands.command()
