@@ -306,15 +306,11 @@ class BrawlStarsCog(commands.Cog):
 
         brawlers = ""
         messages = []
-        list = dict({})
         for brawler in player.raw_data['brawlers']:
-            list[brawler.get('name').lower().capitalize()] = brawler.get('trophies')
-        list = {k: v for k, v in sorted(list.items(), key=lambda item: item[1])}
-        for key in list:
             if len(brawlers) > 900:
                 messages.append(brawlers)
                 brawlers = ""
-            brawlers += f"{self.get_brawler_emoji(list.)} **{key}**: {list.get(key)} <:bstrophy:552558722770141204>\n"
+            brawlers += f"{self.get_brawler_emoji(brawler.get('name'))} **{brawler.get('name').lower().capitalize()}**: {brawler.get('trophies')} <:bstrophy:552558722770141204>\n"
         if len(brawlers) > 0:
             messages.append(brawlers)
         for m in messages:
