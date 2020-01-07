@@ -365,7 +365,7 @@ class Tools(commands.Cog):
                     role = discord.utils.get(ch.guild.roles, id=int(mention))
                     if role is None:
                         continue
-                    elif role in ch.guild.roles and role.mentionable:
+                    elif role in ch.guild.roles:
                         await ctx.send(f"Mentioned role **{str(role)}** in **{guild.name}**.")
                         pings += role.mention + ", "
                 if pings != "Attention to: ":
