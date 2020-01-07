@@ -307,16 +307,11 @@ class BrawlStarsCog(commands.Cog):
             color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
         embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
 
-        messages = []
         brawlers = ""
-        for brawler in player.raw_data['brawlers']:
-            if len(brawlers) > 1999:
-                messages.append(brawlers)
-                brawlers = ""
-            brawlers += f"{self.get_brawler_emoji(brawler.get('name'))} {brawler.get('name').lower().capitalize()}: {brawler.get('trophies')}\n"
-            await ctx.send(brawlers)
-        for m in messages:
-            embed.add_field(name="**Brawlers:**", value=m)
+        await ctx.send(len(player.raw_data['brawlers']))
+        #for brawler in player.raw_data['brawlers']:
+            #brawlers += f"{self.get_brawler_emoji(brawler.get('name'))} {brawler.get('name').lower().capitalize()}: {brawler.get('trophies')}\n"
+        embed.add_field(name="**Brawlers:**", value=brawlers)
         await ctx.send(embed=embed)
 
     @commands.command()
