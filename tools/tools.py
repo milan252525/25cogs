@@ -337,7 +337,7 @@ class Tools(commands.Cog):
 
                 pings = "Attention to: "
                 if everyone:
-                    await ch.send(ch.guild.default_role)
+                    pings += str(ch.guild.default_role).mention + ", "
                 for mention in mentions:
                     role = discord.utils.get(ch.guild.roles, id=int(mention))
                     if role is None:
@@ -345,7 +345,7 @@ class Tools(commands.Cog):
                     elif role in ch.guild.roles and role.mentionable:
                         pings += role.mention + ", "
                 if pings != "Attention to: ":
-                    await ch.send(pings)
+                    await ch.send(pings[:-2])
 
                 await ch.send(embed=embed)
                 for attach in ctx.message.attachments:
