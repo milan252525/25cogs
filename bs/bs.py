@@ -307,7 +307,7 @@ class BrawlStarsCog(commands.Cog):
         brawlers = ""
         messages = []
         for brawler in player.raw_data['brawlers']:
-            if len(brawlers) > 1000:
+            if len(brawlers) > 800:
                 messages.append(brawlers)
                 brawlers = ""
             brawlers += f"{self.get_brawler_emoji(brawler.get('name'))} {brawler.get('name').lower().capitalize()}: {brawler.get('trophies')}\n"
