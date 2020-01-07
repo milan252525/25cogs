@@ -306,8 +306,7 @@ class BrawlStarsCog(commands.Cog):
 
         brawlers = ""
         messages = []
-        brawlerslist = player.raw_data['brawlers']
-        brawlerslist = {k: v for k, v in sorted(brawlerslist.items(), key=lambda item: item[1])}
+        brawlerslist = sort(player.raw_data['brawlers'])
         for brawler in brawlerslist:
             if len(brawlers) > 900:
                 messages.append(brawlers)
