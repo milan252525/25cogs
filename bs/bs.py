@@ -483,7 +483,7 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.addroleifnotpresent(member, guest, brawlstars)
 
             if player_in_club and "LA " in player.club.name:
-                for role in ch.guild:
+                for role in ch.guild.roles:
                     if sub(r'[^\x00-\x7f]',r'', role).strip() == player.club.name:
                         member_role_expected = role
                         break
