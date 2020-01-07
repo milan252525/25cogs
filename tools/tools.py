@@ -373,7 +373,7 @@ class Tools(commands.Cog):
 
                 linksmsg = "Links: "
                 for link in links:
-                    linksmsg += link + ", "
+                    linksmsg += link + " , "
                 if linksmsg != "Links: ":
                     await ch.send(linksmsg[:-2])
 
