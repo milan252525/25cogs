@@ -240,8 +240,10 @@ class BrawlStarsCog(commands.Cog):
         embed = discord.Embed(
             color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
         embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
+        brawlers = ""
         for brawler in player.raw_data['brawlers']:
-            embed.add_field(name=f"{brawler.get('name').lower().capitalize()}", value=f"{brawler.get('trophies')}")
+            brawlers += f"{brawler.get('name').lower().capitalize()}: {brawler.get('trophies')}\n"
+        embed.add_field(name="**Brawlers:**", value=brawlers)
         await ctx.send(embed=embed)
 
     @commands.command()
