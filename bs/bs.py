@@ -462,7 +462,7 @@ class BrawlStarsCog(commands.Cog):
             member_role_expected = discord.utils.get(ch.guild.roles, name=club_name)
             
             if player_in_club and member_role_expected is None:
-                msg += f"Role for the club {player.club.name} not found. Input: {club_name}.\n"
+                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Role for the club {player.club.name} not found. Input: {club_name}.\n"))
                 continue
                         
             for role in member.roles:
