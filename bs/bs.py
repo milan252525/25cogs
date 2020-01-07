@@ -62,6 +62,10 @@ class BrawlStarsCog(commands.Cog):
             return "<:league_icon_07:553294109515972640>"
         else:
             return "<:league_icon_08:553294109217914910>"
+
+    def get_brawler_emoji(self, name : str):
+        if name == "SHELLY":
+            return "<:shelly:664232553422651393>"
         
     def remove_codes(self, text : str):
         toremove = ["</c>", "<c1>", "<c2>", "<c3>", "<c4>", "<c5>", "<c6>", "<c7>", "<c8>", "<c9>", "<c0>"]
@@ -242,7 +246,7 @@ class BrawlStarsCog(commands.Cog):
         embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
         brawlers = ""
         for brawler in player.raw_data['brawlers']:
-            brawlers += f"{brawler.get('name').lower().capitalize()}: {brawler.get('trophies')}\n"
+            brawlers += self.get_brawler_emoji(brawler.get('name')) + f" {brawler.get('name').lower().capitalize()}: {brawler.get('trophies')}\n"
         embed.add_field(name="**Brawlers:**", value=brawlers)
         await ctx.send(embed=embed)
 
