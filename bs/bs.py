@@ -306,6 +306,7 @@ class BrawlStarsCog(commands.Cog):
 
         brawlers = ""
         messages = []
+        await ctx.send(player.raw_data['brawlers'].__class__.__name__)
         brawlerslist = player.raw_data['brawlers'].sort()
         for brawler in brawlerslist:
             if len(brawlers) > 900:
