@@ -275,7 +275,7 @@ class Tools(commands.Cog):
     @commands.command()
     async def announcement(self, ctx, *, message):
         guilds = dict([(664086049110097980, 664086049710014486)])#, (440960893916807188, 538380432748838912), (401883208511389716, 402131630497464340)])
-        if ctx.author.id != 294438945578811393 and ctx.author.id != 355514130737922048:
+        if ctx.author.id != 294438945578811393 and ctx.author.id != 355514130737922048 and ctx.author.id != 359131399132807178:
             await ctx.send("You can't use this command.")
             return
 
