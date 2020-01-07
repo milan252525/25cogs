@@ -357,6 +357,6 @@ class Tools(commands.Cog):
     @commands.command()
     async def listservers(self, ctx):
         msg = "Currently bot is in those servers:\n"
-        for server in self.bot.servers:
-            msg += f"**{server.name}**\n"
+        for guild in self.bot.guilds:
+            msg += f"**{guild.name}**\n"
         await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.blue()))
