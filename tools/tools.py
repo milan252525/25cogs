@@ -337,7 +337,7 @@ class Tools(commands.Cog):
 
                 pings = "Attention to: "
                 if everyone:
-                    pings += str(ch.guild.default_role).mention + ", "
+                    pings += str(ch.guild.default_role) + ", "
                 for mention in mentions:
                     role = discord.utils.get(ch.guild.roles, id=int(mention))
                     if role is None:
