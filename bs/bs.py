@@ -459,7 +459,7 @@ class BrawlStarsCog(commands.Cog):
             member_roles = []
             member_role = None
             club_name = "".join([i if ord(i) < 128 else " " for i in (player.club.name if player_in_club else "")]).strip()
-            member_role_expected = discord.utils.get(ch.roles, name = club_name)
+            member_role_expected = discord.utils.get(ch.guild.roles, name=club_name)
             
             if player_in_club and member_role_expected is None:
                 msg += f"Role for the club {player.club.name} not found. Input: {club_name}.\n"
