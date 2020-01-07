@@ -335,14 +335,15 @@ class Tools(commands.Cog):
                 ch = self.bot.get_channel(guilds[key])
                 embed = discord.Embed(colour=discord.Colour.green(), description=message)
 
+                pings = "Attention to: "
                 if everyone:
-                    await ch.send(ch.guild.default_role)
+                    msg += ch.guild.default_role + "\n"
                 for mention in mentions:
                     role = discord.utils.get(ch.guild.roles, id=int(mention))
                     if role is None:
                         continue
                     elif role in ch.guild.roles and role.mentionable:
-                        await ch.send(role.mention)
+                        msg += role.mention + "\n"
 
                 await ch.send(embed=embed)
                 for attach in ctx.message.attachments:
