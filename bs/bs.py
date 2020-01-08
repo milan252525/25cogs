@@ -769,7 +769,7 @@ class BrawlStarsCog(commands.Cog):
         nick = f"{player.name}"
         try:
             await member.edit(nick=nick[:31])
-            msg += f"Done! New nickname: `{nick[:31]}`\n"
+            msg += f"New nickname: `{nick[:31]}`\n"
         except discord.Forbidden:
             msg += f"I dont have permission to change nickname of this user!\n"
         except Exception as e:
