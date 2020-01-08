@@ -718,3 +718,63 @@ class BrawlStarsCog(commands.Cog):
     @sortroles.before_loop
     async def before_sortroles(self):
         await asyncio.sleep(5)
+
+    @commands.command()
+    async def newcomer(self, ctx, tag):
+        await ctx.trigger_typing()
+        newcomer = ch.guild.get_role(534461445656543255)
+
+        if newcomer not in ctx.author.roles:
+            await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description="You aren't a newcomer, why are you using this?"))
+
+        await self.save(tag, ctx.author)
+
+        player_in_club = "name" in player.raw_data["club"]
+        member_roles = []
+        member_role = None
+        member_role_expected = None
+
+        for role in member.roles:
+            if role.name.startswith('LA '):
+                member_roles.append(role)
+
+        if len(member_roles) > 1:
+            msg += f"**{str(member)}** has more than one club role. Removing **{', '.join([str(r) for r in member_roles])}**"
+            for role in member_roles:
+                await self.removeroleifpresent(member, role)
+        elif len(member_roles) == 1:
+            member_role = member_roles[0]
+
+        if not player_in_club:
+            msg += await self.removeroleifpresent(member, labs, vp, pres, newcomer)
+            msg += await self.addroleifnotpresent(member, guest)
+            if member_role is not None:
+                msg += await self.removeroleifpresent(member, member_role)
+
+        if player_in_club and "LA " not in player.club.name:
+            msg += await self.removeroleifpresent(member, labs, vp, pres, newcomer)
+            msg += await self.addroleifnotpresent(member, guest, brawlstars)
+
+        if player_in_club and "LA " in player.club.name:
+            for role in ch.guild.roles:
+                if sub(r'[^\x00-\x7f]', r'', role.name).strip() == player.club.name:
+                    member_role_expected = role
+                    break
+            if member_role_expected is None:
+                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Role for the club {player.club.name} not found. Input: {club_name}.\n"))
+            msg += await self.removeroleifpresent(member, guest, newcomer)
+            msg += await self.addroleifnotpresent(member, labs, brawlstars)
+            if member_role is None:
+                msg += await self.addroleifnotpresent(member, member_role_expected)
+                if member_role != member_role_expected:
+                    msg += await self.removeroleifpresent(member, member_role)
+            player_club = await player.get_club()
+            for mem in player_club.members:
+                if mem.tag == player.raw_data['tag']:
+                    if mem.role.lower() == 'vicepresident':
+                        msg += await self.addroleifnotpresent(member, vp)
+                    elif mem.role.lower() == 'president':
+                        msg += await self.addroleifnotpresent(member, pres)
+                    else:
+                        msg += await self.removeroleifpresent(member, vp, pres)
+                    break
