@@ -321,6 +321,46 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command()
+    async def brawler(self, ctx, brawler : str):
+        """Brawl Stars brawler specific info"""
+        await ctx.trigger_typing()
+        prefix = ctx.prefix
+        tag = ""
+
+        member = ctx.author
+
+        tag = await self.config.user(member).tag()
+        if tag is None:
+            return await ctx.send(embed=self.badEmbed(f"You have no tag saved! Use {prefix}bssave <tag>"))
+
+        if tag is None or tag == "":
+            desc = "/p\n/bsprofile @user\n/p discord_name\n/p discord_id\n/p #CRTAG"
+            embed = discord.Embed(title="Invalid argument!", colour=discord.Colour.red(), description=desc)
+            return await ctx.send(embed=embed)
+        try:
+            player = await self.ofcbsapi.get_player(tag)
+
+        except brawlstats.errors.NotFoundError:
+            return await ctx.send(embed=self.badEmbed("No player with this tag found, try again!"))
+
+        except brawlstats.errors.RequestError as e:
+            return await ctx.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+
+        except Exception as e:
+            return await ctx.send(
+                "****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+
+        br = player.raw_data['brawlers'].get(brawler.upper())
+
+        colour = player.name_color if player.name_color is not None else "0xffffffff"
+        embed = discord.Embed(
+            color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
+        embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
+        embed.add_field(name="Highest Trophies", value=f"<:totaltrophies:614517396111097866> {br.highest_trophies}")
+        await ctx.send(embed=embed)
+
+
+    @commands.command()
     async def club(self, ctx, key:Union[discord.Member, str]=None):
         await ctx.trigger_typing()
         if key == None:
