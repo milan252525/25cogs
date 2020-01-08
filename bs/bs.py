@@ -731,7 +731,24 @@ class BrawlStarsCog(commands.Cog):
         if newcomer not in ctx.author.roles:
             await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description="You aren't a newcomer, why are you using this?"))
 
-        await self.save(tag, ctx.author)
+        tag = tag.lower().replace('O', '0')
+        if tag.startswith("#"):
+            tag = tag.strip('#')
+
+        try:
+            player = await self.ofcbsapi.get_player(tag)
+            await self.config.user(member).tag.set(tag.replace("#", ""))
+            await ctx.send(embed=self.goodEmbed("BS account {} was saved to {}".format(player.name, member.name)))
+
+        except brawlstats.errors.NotFoundError:
+            await ctx.send(embed=self.badEmbed("No player with this tag found, try again!"))
+
+        except brawlstats.errors.RequestError as e:
+            await ctx.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+
+        except Exception as e:
+            await ctx.send(
+                "**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
         player_in_club = "name" in player.raw_data["club"]
         member_roles = []
