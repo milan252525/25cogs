@@ -329,7 +329,7 @@ class BrawlStarsCog(commands.Cog):
             pair.append(brawler.get('name'))
             pair.append(brawler.get('trophies'))
             brawlers.append(pair)
-        brawlers = sorted(brawlers, key=lambda x: x[1])
+        brawlers = sorted(brawlers, key=lambda x: x[1], reverse=True)
         brawlersmsg = ""
         for brawler in brawlers:
             if len(brawlersmsg) > 900:
