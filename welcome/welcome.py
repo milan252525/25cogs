@@ -26,8 +26,8 @@ class Welcome(commands.Cog):
             await self.do_setup_LAFC(member, new = True)
         if member.guild.id == 654334199494606848 and not member.bot:
             await self.do_setup_LABSevent(member, new = True)
-        if member.guild.id == 401883208511389716 and not member.bot:
-            await self.do_setup_LABS(member)
+        #if member.guild.id == 401883208511389716 and not member.bot:
+            #await self.do_setup_LABS(member)
     
     @commands.Cog.listener()
     async def on_member_remove(self, member):
