@@ -352,8 +352,8 @@ class BrawlStarsCog(commands.Cog):
 
         br = None
         for b in player.raw_data['brawlers']:
-            if b.name == brawler.upper():
-                br = player.raw_data['brawlers'].get(brawler.upper())
+            if b.get('name') == brawler.upper():
+                br = b
         if br is None:
             return await ctx.send(embed=self.badEmbed(f"There's no such brawler!"))
 
