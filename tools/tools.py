@@ -69,9 +69,9 @@ class Tools(commands.Cog):
             message_profanity = predict([msg.content.replace("/", "")])
             if message_profanity[0] == 1:
                 info = f"[**{msg.author.display_name}**] {msg.channel.mention}: *{msg.content}*"
-                await msg.guild.get_channel(664514537004859436).send(info)
+                return await msg.guild.get_channel(664514537004859436).send(info)
             message_profanity_prob = predict_prob([msg.content.replace("/", "")])
-            if message_profanity_prob[0] > 0.4:
+            if message_profanity_prob[0] > 0.2:
                 info = f"[**{msg.author.display_name}**] ({message_profanity_prob[0]*100}%) {msg.channel.mention}: *{msg.content}*"
                 await msg.guild.get_channel(664514537004859436).send(info)
 
