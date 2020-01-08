@@ -341,11 +341,29 @@ class Tools(commands.Cog):
         elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
             await ctx.send("Won't add links.")
 
+        all = False
+        allmessage = await ctx.send("Send an announcement to all available servers?")
+        await allmessage.add_reaction("<:yesconfirm:595535992329601034>")
+        await allmessage.add_reaction("<:nocancel:595535992199315466>")
+
+        def check(reaction, user):
+            return (user == ctx.author or user.id == 230947675837562880) and str(reaction.emoji) in [
+                "<:yesconfirm:595535992329601034>", "<:nocancel:595535992199315466>"]
+
+        reaction, _ = await self.bot.wait_for('reaction_add', check=check)
+
+        if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
+            all = True
+
+        elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
+            await ctx.send("Choose the servers to send the announcement to.")
+
         for key in guilds:
             guild = self.bot.get_guild(key)
-            checkmessage = await ctx.send(f"Do you want to send an announcement to **{guild.name}**?")
-            await checkmessage.add_reaction("<:yesconfirm:595535992329601034>")
-            await checkmessage.add_reaction("<:nocancel:595535992199315466>")
+            if not all:
+                checkmessage = await ctx.send(f"Do you want to send an announcement to **{guild.name}**?")
+                await checkmessage.add_reaction("<:yesconfirm:595535992329601034>")
+                await checkmessage.add_reaction("<:nocancel:595535992199315466>")
 
             def check(reaction, user):
                 return (user == ctx.author or user.id == 230947675837562880) and str(reaction.emoji) in [
@@ -353,7 +371,7 @@ class Tools(commands.Cog):
 
             reaction, _ = await self.bot.wait_for('reaction_add', check=check)
 
-            if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
+            if str(reaction.emoji) == "<:yesconfirm:595535992329601034>" or all:
                 ch = self.bot.get_channel(guilds[key])
                 embed = discord.Embed(colour=discord.Colour.green(), description=message)
 
