@@ -750,6 +750,7 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(
                 "**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
+        member = ctx.author
         player_in_club = "name" in player.raw_data["club"]
         member_roles = []
         member_role = None
