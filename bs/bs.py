@@ -380,8 +380,13 @@ class BrawlStarsCog(commands.Cog):
             color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
         embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
         embed.add_field(name="Brawler", value=f"{self.get_brawler_emoji(brawler.upper())} {brawler.lower().capitalize()}")
-        embed.add_field(name="Trophies", value=f"{self.get_rank_emoji(br.get('rank'))} {br.get('trophies')}")
-        embed.add_field(name="Highest Trophies", value=f"<:totaltrophies:614517396111097866> {br.get('highestTrophies')}")
+        embed.add_field(name="Trophies", value=f"<:bstrophy:552558722770141204> {br.get('trophies')}")
+        embed.add_field(name="Highest Trophies", value=f"{self.get_rank_emoji(br.get('rank'))} {br.get('highestTrophies')}")
+        embed.add_field(name="Power Level", value=f"<:pp:664267845336825906> {br.get('power')}")
+        starpowers = ""
+        for star in br.get('starPowers'):
+            starpowers += f"<:starpower:664267686720700456> {star.get('name')}\n"
+        embed.add_field(name="Star Powers", value=starpowers)
         await ctx.send(embed=embed)
 
 
