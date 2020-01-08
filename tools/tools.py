@@ -69,7 +69,7 @@ class Tools(commands.Cog):
         #profanity filter
         if msg.guild.id == 401883208511389716 and not msg.author.bot:
             message_profanity = predict([msg.content])
-            if message_profanity[0] == 1 or not self.pf.is_profane([msg.content):
+            if message_profanity[0] == 1 or not self.pf.is_profane(msg.content):
                 info = f"[**{msg.author.display_name}**] {msg.channel.mention}: *{msg.content}*"
                 return await msg.guild.get_channel(664514537004859436).send(info)
             message_profanity_prob = predict_prob([msg.content.replace("/", "")])
