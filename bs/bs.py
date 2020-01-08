@@ -733,6 +733,7 @@ class BrawlStarsCog(commands.Cog):
         brawlstars = ctx.guild.get_role(576002604740378629)
         vp = ctx.guild.get_role(536993652648574976)
         pres = ctx.guild.get_role(536993632918568991)
+        member = ctx.author
 
         if newcomer not in ctx.author.roles:
             await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description="You aren't a newcomer, why are you using this?"))
@@ -756,7 +757,6 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(e)
                 #"**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
-        member = ctx.author
         msg = ""
         player_in_club = "name" in player.raw_data["club"]
         member_roles = []
