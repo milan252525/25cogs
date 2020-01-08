@@ -26,6 +26,8 @@ class Welcome(commands.Cog):
             await self.do_setup_LAFC(member, new = True)
         if member.guild.id == 654334199494606848 and not member.bot:
             await self.do_setup_LABSevent(member, new = True)
+        if member.guild.id == 401883208511389716 and not member.bot:
+            await self.do_setup_LABS(member)
     
     @commands.Cog.listener()
     async def on_member_remove(self, member):
@@ -758,3 +760,7 @@ class Welcome(commands.Cog):
                                                     description="Process finished, this channel will get deleted in 5 minutes!"))
         await asyncio.sleep(300)
         await setupChannel.delete(reason="Welcoming process finished.")
+
+    async def do_setup_LABS(self, member):
+        roles = self.bot.get_channel(547087959015292929)
+
