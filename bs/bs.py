@@ -324,7 +324,10 @@ class BrawlStarsCog(commands.Cog):
 
         brawlers = ""
         messages = []
-        for brawler in player.raw_data['brawlers']:
+        brawlerssorted = player.raw_data['brawlers']
+        for b in sorted(brawlerssorted, key=brawlerssorted.get, reverse=True):
+            b, brawlerssorted[b]
+        for brawler in brawlerssorted:
             if len(brawlers) > 900:
                 messages.append(brawlers)
                 brawlers = ""
@@ -340,7 +343,7 @@ class BrawlStarsCog(commands.Cog):
 
     @commands.command()
     async def brawler(self, ctx, brawler : str, member: discord.Member = None):
-        """Brawl Stars brawler specific info"""
+        """Brawler specific info"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
 
