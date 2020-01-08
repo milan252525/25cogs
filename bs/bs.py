@@ -713,9 +713,11 @@ class BrawlStarsCog(commands.Cog):
                     if mem.tag == player.raw_data['tag']:
                         if mem.role.lower() == 'vicepresident':
                             msg += await self.addroleifnotpresent(member, vp)
+                            msg += await self.removeroleifpresent(member, pres)
                         elif mem.role.lower() == 'president':
                             msg += await self.addroleifnotpresent(member, pres)
-                        else:
+                            msg += await self.removeroleifpresent(member, vp)
+                        elif mem.role.lower() == 'member':
                             msg += await self.removeroleifpresent(member, vp, pres)
                         break
 
