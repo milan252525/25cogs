@@ -734,9 +734,6 @@ class BrawlStarsCog(commands.Cog):
         vp = ctx.guild.get_role(536993652648574976)
         pres = ctx.guild.get_role(536993632918568991)
 
-        if newcomer not in ctx.author.roles:
-            await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description="You aren't a newcomer, why are you using this?"))
-
         tag = tag.lower().replace('O', '0')
         if tag.startswith("#"):
             tag = tag.strip('#')
@@ -759,11 +756,11 @@ class BrawlStarsCog(commands.Cog):
         nick = f"{player.name}"
         try:
             await member.edit(nick=nick[:31])
-            await ctx.send(f"Done! New nickname: `{nick[:31]}`")
+            await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Done! New nickname: `{nick[:31]}`"))
         except discord.Forbidden:
-            await ctx.send(f"I dont have permission to change nickname of this user!")
+            await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"I dont have permission to change nickname of this user!"))
         except Exception as e:
-            await ctx.send(f"Something went wrong: {str(e)}")
+            await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Something went wrong: {str(e)}"))
 
         msg = ""
         player_in_club = "name" in player.raw_data["club"]
