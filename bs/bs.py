@@ -771,22 +771,14 @@ class BrawlStarsCog(commands.Cog):
 
         msg = ""
         player_in_club = "name" in player.raw_data["club"]
-        member_roles = []
-        member_role = None
         member_role_expected = None
 
-        for role in member.roles:
-            if role.name.startswith('LA '):
-                member_roles.append(role)
-
         if not player_in_club:
-            msg += await self.removeroleifpresent(member, labs, vp, pres, newcomer)
+            msg += await self.removeroleifpresent(member, newcomer)
             msg += await self.addroleifnotpresent(member, guest)
-            if member_role is not None:
-                msg += await self.removeroleifpresent(member, member_role)
 
         if player_in_club and "LA " not in player.club.name:
-            msg += await self.removeroleifpresent(member, labs, vp, pres, newcomer)
+            msg += await self.removeroleifpresent(member, newcomer)
             msg += await self.addroleifnotpresent(member, guest, brawlstars)
 
         if player_in_club and "LA " in player.club.name:
@@ -797,12 +789,9 @@ class BrawlStarsCog(commands.Cog):
             if member_role_expected is None:
                 await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Role for the club {player.club.name} not found. Input: {club_name}.\n"))
                 return
-            msg += await self.removeroleifpresent(member, guest, newcomer)
+            msg += await self.removeroleifpresent(member, newcomer)
             msg += await self.addroleifnotpresent(member, labs, brawlstars)
-            if member_role is None:
-                msg += await self.addroleifnotpresent(member, member_role_expected)
-                if member_role != member_role_expected:
-                    msg += await self.removeroleifpresent(member, member_role)
+            msg += await self.addroleifnotpresent(member, member_role_expected)
             player_club = await player.get_club()
             for mem in player_club.members:
                 if mem.tag == player.raw_data['tag']:
@@ -810,8 +799,6 @@ class BrawlStarsCog(commands.Cog):
                         msg += await self.addroleifnotpresent(member, vp)
                     elif mem.role.lower() == 'president':
                         msg += await self.addroleifnotpresent(member, pres)
-                    elif mem.role.lower() == 'member':
-                        msg += await self.removeroleifpresent(member, vp, pres)
                     break
         if msg != "":
             await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
