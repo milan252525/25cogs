@@ -339,13 +339,13 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command()
-    async def brawler(self, ctx, brawler : str):
+    async def brawler(self, ctx, brawler : str, member: discord.Member = None):
         """Brawl Stars brawler specific info"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
-        tag = ""
 
-        member = ctx.author
+        if member == None:
+            member = ctx.author
 
         tag = await self.config.user(member).tag()
         if tag is None:
