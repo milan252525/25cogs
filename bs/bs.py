@@ -350,7 +350,12 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(
                 "****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
-        br = player.raw_data['brawlers'].get(brawler.upper())
+        br = None
+        for b in player.raw_data['brawlers']:
+            if b.name == brawler.upper():
+                br = player.raw_data['brawlers'].get(brawler.upper())
+        if br is None:
+            return await ctx.send(embed=self.badEmbed(f"There's no such brawler!"))
 
         colour = player.name_color if player.name_color is not None else "0xffffffff"
         embed = discord.Embed(
