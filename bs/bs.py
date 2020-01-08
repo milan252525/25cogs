@@ -153,16 +153,6 @@ class BrawlStarsCog(commands.Cog):
             text = text.replace(code, "")
         return text
 
-    def sortbrawlers(self, brawlers : list):
-        swapped = True
-        while swapped:
-            swapped = False
-            for i in range(len(brawlers) - 1):
-                if brawlers[i][1] < brawlers[i + 1][1]:
-                    brawlers[i], brawlers[i + 1] = brawlers[i + 1], brawlers[i]
-                    swapped = True
-        return brawlers
-
     @commands.command(aliases=['bssave'])
     async def save(self, ctx, tag, member: discord.Member = None):
         """Save your Brawl Stars player tag"""
@@ -339,7 +329,7 @@ class BrawlStarsCog(commands.Cog):
             pair.append(brawler.get('name'))
             pair.append(brawler.get('trophies'))
             brawlers.append(pair)
-        brawlers = self.sortbrawlers(brawlers)
+        brawlers = sorted(brawlers, key=lambda x: x[1])
         brawlersmsg = ""
         for brawler in brawlers:
             if len(brawlersmsg) > 900:
@@ -788,13 +778,6 @@ class BrawlStarsCog(commands.Cog):
         for role in member.roles:
             if role.name.startswith('LA '):
                 member_roles.append(role)
-
-        if len(member_roles) > 1:
-            msg += f"**{str(member)}** has more than one club role. Removing **{', '.join([str(r) for r in member_roles])}**"
-            for role in member_roles:
-                await self.removeroleifpresent(member, role)
-        elif len(member_roles) == 1:
-            member_role = member_roles[0]
 
         if not player_in_club:
             msg += await self.removeroleifpresent(member, labs, vp, pres, newcomer)
