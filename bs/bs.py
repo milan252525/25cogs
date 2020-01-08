@@ -63,6 +63,24 @@ class BrawlStarsCog(commands.Cog):
         else:
             return "<:league_icon_08:553294109217914910>"
 
+    def get_rank_emoji(self, rank : int):
+        if 1 <= rank < 5:
+            return "<:rank1:664262410265165824>"
+        elif 5 <= rank < 10:
+            return "<:rank5:664262466812772377>"
+        elif 10 <= rank < 15:
+            return "<:rank10:664262501344608257>"
+        elif 15 <= rank < 20:
+            return "<:rank15:664262551139254312>"
+        elif 20 <= rank < 25:
+            return "<:rank20:664262586266681371>"
+        elif 25 <= rank < 30:
+            return "<:rank25:664262630223118357> "
+        elif 30 <= rank < 35:
+            return "<:rank30:664262657557397536>"
+        elif 35 <= rank:
+            return "<:rank35:664262686028333056>"
+
     def get_brawler_emoji(self, name : str):
         if name == "SHELLY":
             return "<:shelly:664235199076237323>"
@@ -362,7 +380,8 @@ class BrawlStarsCog(commands.Cog):
             color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
         embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
         embed.add_field(name="Brawler", value=f"{self.get_brawler_emoji(brawler.upper())} {brawler.lower().capitalize()}")
-        embed.add_field(name="Highest Trophies", value=f"<:totaltrophies:614517396111097866> {br.get('highest_trophies')}")
+        embed.add_field(name="Trophies", value=f"{self.get_rank_emoji(br.get('rank'))} {br.get('trophies')}")
+        embed.add_field(name="Highest Trophies", value=f"<:totaltrophies:614517396111097866> {br.get('highestTrophies')}")
         await ctx.send(embed=embed)
 
 
