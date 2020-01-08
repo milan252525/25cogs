@@ -7,6 +7,7 @@ from time import time
 from random import choice
 from typing import Union
 from profanity_check import predict, predict_prob
+from profanityfilter import ProfanityFilter
 
 class Tools(commands.Cog):
     
@@ -16,7 +17,8 @@ class Tools(commands.Cog):
         default_global = {"countdowns" : {}}
         default_member = {"messages" : 0, "name" : None}
         self.config.register_global(**default_global)
-        self.config.register_member(**default_member)    
+        self.config.register_member(**default_member)
+        self.pf = ProfanityFilter()
         self.updater.start()
         
     def cog_unload(self):
@@ -66,8 +68,8 @@ class Tools(commands.Cog):
             
         #profanity filter
         if msg.guild.id == 401883208511389716 and not msg.author.bot:
-            message_profanity = predict([msg.content.replace("/", "")])
-            if message_profanity[0] == 1:
+            message_profanity = predict([msg.content])
+            if message_profanity[0] == 1 or not self.pf.is_profane([msg.content):
                 info = f"[**{msg.author.display_name}**] {msg.channel.mention}: *{msg.content}*"
                 return await msg.guild.get_channel(664514537004859436).send(info)
             message_profanity_prob = predict_prob([msg.content.replace("/", "")])
