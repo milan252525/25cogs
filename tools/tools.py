@@ -6,6 +6,7 @@ from datetime import datetime
 from time import time
 from random import choice
 from typing import Union
+from profanity_check import predict, predict_prob
 
 class Tools(commands.Cog):
     
@@ -42,7 +43,8 @@ class Tools(commands.Cog):
                 await msg.delete()
 
         #spamlb LABS
-        if not msg.author.bot and isinstance(msg.channel, discord.TextChannel) and msg.guild.id == 401883208511389716:
+        #disabled
+        if False and not msg.author.bot and isinstance(msg.channel, discord.TextChannel) and msg.guild.id == 401883208511389716:
             amount = await self.config.member(msg.author).messages()
             await self.config.member(msg.author).messages.set(amount + 1)
             await self.config.member(msg.author).name.set(msg.author.display_name)
@@ -61,6 +63,17 @@ class Tools(commands.Cog):
                 for i in range(len(msg.attachments)):
                     embed.add_field(name=f"Attachment {str(i+1)}:", value=msg.attachments[i].url, inline=False)
             await self.bot.get_user(230947675837562880).send(embed=embed)
+            
+        #profanity filter
+        if msg.guild.id == 401883208511389716 and not msg.author.bot:
+            message_profanity = predict([msg.content.replace("/", "")])
+            if message_profanity[0] == 1:
+                info = f"[**{msg.author.display_name}**] {msg.channel.mention}: *{msg.content}*"
+                await msg.guild.get_channel(664514537004859436).send(info)
+            message_profanity_prob = predict_prob([msg.content.replace("/", "")])
+            if message_profanity_prob[0] > 0.4:
+                info = f"[**{msg.author.display_name}**] ({message_profanity_prob[0]*100}%) {msg.channel.mention}: *{msg.content}*"
+                await msg.guild.get_channel(664514537004859436).send(info)
 
     @commands.guild_only()
     @commands.is_owner() 
