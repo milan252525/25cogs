@@ -726,7 +726,13 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send("This command can't be used in this server.")
 
         await ctx.trigger_typing()
+
+        labs = ctx.guild.get_role(576028728052809728)
+        guest = ctx.guild.get_role(578260960981286923)
         newcomer = ctx.guild.get_role(534461445656543255)
+        brawlstars = ctx.guild.get_role(576002604740378629)
+        vp = ctx.guild.get_role(536993652648574976)
+        pres = ctx.guild.get_role(536993632918568991)
 
         if newcomer not in ctx.author.roles:
             await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description="You aren't a newcomer, why are you using this?"))
