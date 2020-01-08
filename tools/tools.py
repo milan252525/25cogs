@@ -271,7 +271,6 @@ class Tools(commands.Cog):
                 msg += f"\n<:bad:450013438756782081> **{guild.name}** ({e})"
         await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.red()))
 
-    @commands.has_permissions(administrator=True)
     @commands.command()
     async def announcement(self, ctx, *, message):
         guilds = dict([(663416919646535695, 663418966475145277), (465641254580125696, 663418911378898954), (664086049110097980, 664086049710014486)])#, (440960893916807188, 538380432748838912), (401883208511389716, 402131630497464340)])
