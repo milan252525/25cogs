@@ -720,9 +720,13 @@ class BrawlStarsCog(commands.Cog):
         await asyncio.sleep(5)
 
     @commands.command()
+    @commands.guild_only()
     async def newcomer(self, ctx, tag):
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send("This command can't be used in this server.")
+
         await ctx.trigger_typing()
-        newcomer = ch.guild.get_role(534461445656543255)
+        newcomer = ctx.guild.get_role(534461445656543255)
 
         if newcomer not in ctx.author.roles:
             await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description="You aren't a newcomer, why are you using this?"))
