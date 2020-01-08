@@ -322,16 +322,13 @@ class BrawlStarsCog(commands.Cog):
 
         colour = player.name_color if player.name_color is not None else "0xffffffff"
 
-        brawlers = ""
+        brawlers = []
         messages = []
-        brawlerssorted = player.raw_data['brawlers']
-        for b in sorted(brawlerssorted, key=brawlerssorted.get, reverse=True):
-            b, brawlerssorted[b]
-        for brawler in brawlerssorted:
+        for brawler in player.raw_data['brawlers']:
             if len(brawlers) > 900:
                 messages.append(brawlers)
                 brawlers = ""
-            brawlers += f"{self.get_brawler_emoji(brawler.get('name'))} **{brawler.get('name').lower().capitalize()}**: {brawler.get('trophies')} <:bstrophy:552558722770141204>\n"
+            brawlers.append(f"{self.get_brawler_emoji(brawler.get('name'))} **{brawler.get('name').lower().capitalize()}**: {brawler.get('trophies')} <:bstrophy:552558722770141204>\n")
         if len(brawlers) > 0:
             messages.append(brawlers)
         for m in messages:
@@ -813,7 +810,7 @@ class BrawlStarsCog(commands.Cog):
                         msg += await self.addroleifnotpresent(member, vp)
                     elif mem.role.lower() == 'president':
                         msg += await self.addroleifnotpresent(member, pres)
-                    else:
+                    elif mem.role.lower() == 'member':
                         msg += await self.removeroleifpresent(member, vp, pres)
                     break
         if msg != "":
