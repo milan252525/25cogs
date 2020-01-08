@@ -386,7 +386,10 @@ class BrawlStarsCog(commands.Cog):
         starpowers = ""
         for star in br.get('starPowers'):
             starpowers += f"<:starpower:664267686720700456> {star.get('name')}\n"
-        embed.add_field(name="Star Powers", value=starpowers)
+        if starpowers != "":
+            embed.add_field(name="Star Powers", value=starpowers)
+        else:
+            embed.add_field(name="Star Powers", value="<:starpower:664267686720700456> None")
         await ctx.send(embed=embed)
 
 
