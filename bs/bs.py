@@ -721,7 +721,7 @@ class BrawlStarsCog(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    async def newcomer(self, ctx, tag):
+    async def newcomer(self, ctx, tag, member : discord.Member):
         if ctx.guild.id != 401883208511389716:
             return await ctx.send("This command can't be used in this server.")
 
@@ -733,7 +733,6 @@ class BrawlStarsCog(commands.Cog):
         brawlstars = ctx.guild.get_role(576002604740378629)
         vp = ctx.guild.get_role(536993652648574976)
         pres = ctx.guild.get_role(536993632918568991)
-        member = ctx.author
 
         if newcomer not in ctx.author.roles:
             await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description="You aren't a newcomer, why are you using this?"))
@@ -756,6 +755,15 @@ class BrawlStarsCog(commands.Cog):
         except Exception as e:
             await ctx.send(
                 "**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+
+        nick = f"{player.name}"
+        try:
+            await member.edit(nick=nick[:31])
+            await ctx.send(f"Done! New nickname: `{nick[:31]}`")
+        except discord.Forbidden:
+            await ctx.send(f"I dont have permission to change nickname of this user!")
+        except Exception as e:
+            await ctx.send(f"Something went wrong: {str(e)}")
 
         msg = ""
         player_in_club = "name" in player.raw_data["club"]
