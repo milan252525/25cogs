@@ -158,7 +158,7 @@ class BrawlStarsCog(commands.Cog):
         while swapped:
             swapped = False
             for i in range(len(brawlers) - 1):
-                if brawlers[i][1] > brawlers[i + 1][1]:
+                if brawlers[i][1] < brawlers[i + 1][1]:
                     brawlers[i], brawlers[i + 1] = brawlers[i + 1], brawlers[i]
                     swapped = True
         return brawlers
@@ -336,7 +336,7 @@ class BrawlStarsCog(commands.Cog):
         messages = []
         for brawler in player.raw_data['brawlers']:
             pair = []
-            pair.append(brawler.get('name').lower().capitalize())
+            pair.append(brawler.get('name'))
             pair.append(brawler.get('trophies'))
             brawlers.append(pair)
         brawlers = self.sortbrawlers(brawlers)
