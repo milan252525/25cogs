@@ -753,8 +753,8 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         except Exception as e:
-            await ctx.send(
-                "**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+            await ctx.send(e)
+                #"**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
         member = ctx.author
         msg = ""
