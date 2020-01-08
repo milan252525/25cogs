@@ -745,31 +745,35 @@ class BrawlStarsCog(commands.Cog):
         if tag.startswith("#"):
             tag = tag.strip('#')
 
+        msg = ""
         try:
             player = await self.ofcbsapi.get_player(tag)
             await self.config.user(member).tag.set(tag.replace("#", ""))
-            await ctx.send(embed=self.goodEmbed("BS account {} was saved to {}".format(player.name, member.name)))
+            await msg += "BS account {} was saved to {}\n".format(player.name, member.name)
 
         except brawlstats.errors.NotFoundError:
-            await ctx.send(embed=self.badEmbed("No player with this tag found, try again!"))
+            await ctx.send(embed=self.badEmbed("No player with this tag found!"))
+            return
 
         except brawlstats.errors.RequestError as e:
             await ctx.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+            return
 
         except Exception as e:
             await ctx.send(
                 "**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+            return
 
         nick = f"{player.name}"
         try:
             await member.edit(nick=nick[:31])
-            await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Done! New nickname: `{nick[:31]}`"))
+            msg += f"Done! New nickname: `{nick[:31]}`\n"
         except discord.Forbidden:
-            await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"I dont have permission to change nickname of this user!"))
+            msg += f"I dont have permission to change nickname of this user!\n"
         except Exception as e:
             await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Something went wrong: {str(e)}"))
+            return
 
-        msg = ""
         player_in_club = "name" in player.raw_data["club"]
         member_role_expected = None
 
