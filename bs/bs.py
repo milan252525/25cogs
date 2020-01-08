@@ -158,7 +158,7 @@ class BrawlStarsCog(commands.Cog):
         while swapped:
             swapped = False
             for i in range(len(brawlers) - 1):
-                if brawlers[i][2] > brawlers[i + 1][2]:
+                if brawlers[i][1] > brawlers[i + 1][1]:
                     brawlers[i], brawlers[i + 1] = brawlers[i + 1], brawlers[i]
                     swapped = True
         return brawlers
