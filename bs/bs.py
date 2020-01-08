@@ -345,7 +345,7 @@ class BrawlStarsCog(commands.Cog):
             if len(brawlersmsg) > 900:
                 messages.append(brawlersmsg)
                 brawlersmsg = ""
-            brawlersmsg += (f"{self.get_brawler_emoji(brawler.get('name'))} **{brawler.get('name').lower().capitalize()}**: {brawler.get('trophies')} <:bstrophy:552558722770141204>\n")
+            brawlersmsg += (f"{self.get_brawler_emoji(brawler[0])} **{brawler[0].lower().capitalize()}**: {brawler[1]} <:bstrophy:552558722770141204>\n")
         if len(brawlersmsg) > 0:
             messages.append(brawlersmsg)
         for m in messages:
