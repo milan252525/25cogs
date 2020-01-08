@@ -153,6 +153,16 @@ class BrawlStarsCog(commands.Cog):
             text = text.replace(code, "")
         return text
 
+    def sortbrawlers(self, brawlers : list):
+        swapped = True
+        while swapped:
+            swapped = False
+            for i in range(len(brawlers) - 1):
+                if brawlers[i][2] > brawlers[i + 1][2]:
+                    brawlers[i], brawlers[i + 1] = brawlers[i + 1], brawlers[i]
+                    swapped = True
+        return brawlers
+
     @commands.command(aliases=['bssave'])
     async def save(self, ctx, tag, member: discord.Member = None):
         """Save your Brawl Stars player tag"""
@@ -325,12 +335,19 @@ class BrawlStarsCog(commands.Cog):
         brawlers = []
         messages = []
         for brawler in player.raw_data['brawlers']:
-            if len(brawlers) > 900:
-                messages.append(brawlers)
-                brawlers = ""
-            brawlers.append(f"{self.get_brawler_emoji(brawler.get('name'))} **{brawler.get('name').lower().capitalize()}**: {brawler.get('trophies')} <:bstrophy:552558722770141204>\n")
-        if len(brawlers) > 0:
-            messages.append(brawlers)
+            pair = []
+            pair.append(brawler.get('name').lower().capitalize())
+            pair.append(brawler.get('trophies'))
+            brawlers.append(pair)
+        brawlers = self.sortbrawlers(brawlers)
+        brawlersmsg = ""
+        for brawler in brawlers:
+            if len(brawlersmsg) > 900:
+                messages.append(brawlersmsg)
+                brawlersmsg = ""
+            brawlersmsg += (f"{self.get_brawler_emoji(brawler.get('name'))} **{brawler.get('name').lower().capitalize()}**: {brawler.get('trophies')} <:bstrophy:552558722770141204>\n")
+        if len(brawlersmsg) > 0:
+            messages.append(brawlersmsg)
         for m in messages:
             embed = discord.Embed(
                 color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
