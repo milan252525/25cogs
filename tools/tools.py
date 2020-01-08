@@ -360,18 +360,7 @@ class Tools(commands.Cog):
 
         for key in guilds:
             guild = self.bot.get_guild(key)
-            if not all:
-                checkmessage = await ctx.send(f"Do you want to send an announcement to **{guild.name}**?")
-                await checkmessage.add_reaction("<:yesconfirm:595535992329601034>")
-                await checkmessage.add_reaction("<:nocancel:595535992199315466>")
-
-            def check(reaction, user):
-                return (user == ctx.author or user.id == 230947675837562880) and str(reaction.emoji) in [
-                    "<:yesconfirm:595535992329601034>", "<:nocancel:595535992199315466>"]
-
-            reaction, _ = await self.bot.wait_for('reaction_add', check=check)
-
-            if str(reaction.emoji) == "<:yesconfirm:595535992329601034>" or all:
+            if all:
                 ch = self.bot.get_channel(guilds[key])
                 embed = discord.Embed(colour=discord.Colour.green(), description=message)
 
@@ -399,10 +388,49 @@ class Tools(commands.Cog):
                     fileembed = discord.Embed(color=discord.Colour.green())
                     fileembed.set_image(url=attach.url)
                     await ch.send(embed=fileembed)
+            elif not all:
+                checkmessage = await ctx.send(f"Do you want to send an announcement to **{guild.name}**?")
+                await checkmessage.add_reaction("<:yesconfirm:595535992329601034>")
+                await checkmessage.add_reaction("<:nocancel:595535992199315466>")
+
+                def check(reaction, user):
+                    return (user == ctx.author or user.id == 230947675837562880) and str(reaction.emoji) in [
+                        "<:yesconfirm:595535992329601034>", "<:nocancel:595535992199315466>"]
+
+                reaction, _ = await self.bot.wait_for('reaction_add', check=check)
+
+                if str(reaction.emoji) == "<:yesconfirm:595535992329601034>" or all:
+                    ch = self.bot.get_channel(guilds[key])
+                    embed = discord.Embed(colour=discord.Colour.green(), description=message)
+
+                    pings = "Attention to: "
+                    if everyone:
+                        pings += str(ch.guild.default_role) + ", "
+                    for mention in mentions:
+                        role = discord.utils.get(ch.guild.roles, id=int(mention))
+                        if role is None:
+                            continue
+                        elif role in ch.guild.roles:
+                            await ctx.send(f"Mentioned role **{str(role)}** in **{guild.name}**.")
+                            pings += role.mention + ", "
+                    if pings != "Attention to: ":
+                        await ch.send(pings[:-2])
+
+                    linksmsg = "Links: "
+                    for link in links:
+                        linksmsg += link + " , "
+                    if linksmsg != "Links: ":
+                        await ch.send(linksmsg[:-2])
+
+                    await ch.send(embed=embed)
+                    for attach in ctx.message.attachments:
+                        fileembed = discord.Embed(color=discord.Colour.green())
+                        fileembed.set_image(url=attach.url)
+                        await ch.send(embed=fileembed)
 
 
-            elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
-                await ctx.send(f"Skipping **{guild.name}**.")
+                elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
+                    await ctx.send(f"Skipping **{guild.name}**.")
 
     @commands.command()
     async def listservers(self, ctx):
