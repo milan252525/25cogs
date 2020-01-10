@@ -706,8 +706,9 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.addroleifnotpresent(member, labs, brawlstars)
                 if member_role is None:
                     msg += await self.addroleifnotpresent(member, member_role_expected)
-                    if member_role != member_role_expected:
-                        msg += await self.removeroleifpresent(member, member_role)
+                elif member_role != member_role_expected:
+                    msg += await self.removeroleifpresent(member, member_role)
+                    msg += await self.addroleifnotpresent(member, member_role_expected)
                 player_club = await player.get_club()
                 for mem in player_club.members:
                     if mem.tag == player.raw_data['tag']:
