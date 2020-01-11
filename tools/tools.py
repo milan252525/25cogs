@@ -360,13 +360,13 @@ class Tools(commands.Cog):
         reaction, _ = await self.bot.wait_for('reaction_add', check=check)
 
         if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
-            await ctx.send("List the link names and links, separated by a space, e.g. \"twitter twitter.com instagram instagram.com\". Warning: don't enter a link without a name!")
+            await ctx.send("List the link names and links, separated by \" + \", e.g. \"twitter + twitter.com + instagram + instagram.com\". Warning: don't enter a link without a name!")
 
             def checkmsg(m):
                 return m.channel == ctx.channel and m.author == ctx.author
 
             msg = await self.bot.wait_for('message', check=checkmsg)
-            linkstemp = msg.content.split(' ')
+            linkstemp = msg.content.split(' + ')
             for i in range(len(linkstemp) - 1):
                 if i % 2 != 0:
                     continue
