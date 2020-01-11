@@ -289,19 +289,20 @@ class Tools(commands.Cog):
     @commands.command()
     async def announcement(self, ctx, *, message):
         guilds = dict()
+        guilds[664086049110097980] = 664086049710014486 #playground
         guilds[663416919646535695] = 663418966475145277 #la announcement test
-        guilds[401883208511389716] = 402131630497464340 #LA Gaming - Brawl Stars
-        guilds[440960893916807188] = 538380432748838912 #LA Gaming
-        guilds[460550486257565697] = 590976482319269928 #LA Spain
-        guilds[473169548301041674] = 596191959559700491 #LA Knights
-        guilds[515962414190166041] = 515965947207614465 #LA Quantum
-        guilds[593248015729295360] = 593310903055941634 #LA Fight Club
-        guilds[609481228562857985] = 609484084095352842 #LA Gaming - Competitive
-        guilds[609857211208040450] = 648967703142596608 #LA eSports
-        guilds[655889917821321217] = 655909661257498635 #LA Poland BS
-        guilds[663716223258984496] = 663803783318339584 #LA Asia
-        guilds[654334199494606848] = 665548085362950155 #LA Events
-        guilds[594736382727946250] = 594736382732140545 #LA Leadership
+        #guilds[401883208511389716] = 402131630497464340 #LA Gaming - Brawl Stars
+        #guilds[440960893916807188] = 538380432748838912 #LA Gaming
+        #guilds[460550486257565697] = 590976482319269928 #LA Spain
+        #guilds[473169548301041674] = 596191959559700491 #LA Knights
+        #guilds[515962414190166041] = 515965947207614465 #LA Quantum
+        #guilds[593248015729295360] = 593310903055941634 #LA Fight Club
+        #guilds[609481228562857985] = 609484084095352842 #LA Gaming - Competitive
+        #guilds[609857211208040450] = 648967703142596608 #LA eSports
+        #guilds[655889917821321217] = 655909661257498635 #LA Poland BS
+        #guilds[663716223258984496] = 663719871598821396 #LA Asia
+        #guilds[654334199494606848] = 665548085362950155 #LA Events
+        #guilds[594736382727946250] = 594736382732140545 #LA Leadership
 
         if ctx.author.id != 294438945578811393 and ctx.author.id != 355514130737922048 and ctx.author.id != 359131399132807178 and ctx.author.id != 585275812429824041:
             await ctx.send("You can't use this command.")
@@ -347,7 +348,7 @@ class Tools(commands.Cog):
         elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
             await ctx.send("Won't mention other roles.")
 
-        links = []
+        links = dict()
         linksmessage = await ctx.send("Do you want to send links?")
         await linksmessage.add_reaction("<:yesconfirm:595535992329601034>")
         await linksmessage.add_reaction("<:nocancel:595535992199315466>")
@@ -359,13 +360,15 @@ class Tools(commands.Cog):
         reaction, _ = await self.bot.wait_for('reaction_add', check=check)
 
         if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
-            await ctx.send("List the links you want to add to the announcement, separated by a space.")
+            await ctx.send("List the link names and links, separated by a space, e.g. \"twitter twitter.com instagram instagram.com\". Warning: don't enter a link without a name!")
 
             def checkmsg(m):
                 return m.channel == ctx.channel and m.author == ctx.author
 
             msg = await self.bot.wait_for('message', check=checkmsg)
-            links = msg.content.split(' ')
+            linkstemp = msg.content.split(' ')
+            for i in range(len(linkstemp) - 1):
+                links[linkstemp[i]] = linkstemp[i + 1]
 
         elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
             await ctx.send("Won't add links.")
@@ -392,6 +395,7 @@ class Tools(commands.Cog):
             if all:
                 ch = self.bot.get_channel(guilds[key])
                 embed = discord.Embed(colour=discord.Colour.green(), description=message)
+                await ch.send(embed=embed)
 
                 pings = "Attention to: "
                 if everyone:
@@ -403,20 +407,19 @@ class Tools(commands.Cog):
                     elif role in ch.guild.roles:
                         await ctx.send(f"Mentioned role **{str(role)}** in **{guild.name}**.")
                         pings += role.mention + ", "
-                #if pings != "Attention to: ":
-                    #await ch.send(pings[:-2])
+                if pings != "Attention to: ":
+                    await ch.send(pings[:-2])
 
-                linksmsg = "Links: "
-                for link in links:
-                    linksmsg += link + " , "
-                #if linksmsg != "Links: ":
-                    #await ch.send(linksmsg[:-2])
+                linksmsg = ""
+                for key in links:
+                    linksmsg += key.capitalize() + ": " + links[key] + "\n"
+                if linksmsg != "":
+                    await ch.send(linksmsg)
 
-                #await ch.send(embed=embed)
                 for attach in ctx.message.attachments:
                     fileembed = discord.Embed(color=discord.Colour.green())
                     fileembed.set_image(url=attach.url)
-                    #await ch.send(embed=fileembed)
+                    await ch.send(embed=fileembed)
             elif not all:
                 checkmessage = await ctx.send(f"Do you want to send an announcement to **{guild.name}**?")
                 await checkmessage.add_reaction("<:yesconfirm:595535992329601034>")
@@ -431,6 +434,7 @@ class Tools(commands.Cog):
                 if str(reaction.emoji) == "<:yesconfirm:595535992329601034>" or all:
                     ch = self.bot.get_channel(guilds[key])
                     embed = discord.Embed(colour=discord.Colour.green(), description=message)
+                    await ch.send(embed=embed)
 
                     pings = "Attention to: "
                     if everyone:
@@ -442,20 +446,19 @@ class Tools(commands.Cog):
                         elif role in ch.guild.roles:
                             await ctx.send(f"Mentioned role **{str(role)}** in **{guild.name}**.")
                             pings += role.mention + ", "
-                    #if pings != "Attention to: ":
-                        #await ch.send(pings[:-2])
+                    if pings != "Attention to: ":
+                        await ch.send(pings[:-2])
 
-                    linksmsg = "Links: "
-                    for link in links:
-                        linksmsg += link + " , "
-                    #if linksmsg != "Links: ":
-                        #await ch.send(linksmsg[:-2])
+                    linksmsg = ""
+                    for key in links:
+                        linksmsg += key.capitalize() + ": " + links[key] + "\n"
+                    if linksmsg != "":
+                        await ch.send(linksmsg)
 
-                    #await ch.send(embed=embed)
                     for attach in ctx.message.attachments:
                         fileembed = discord.Embed(color=discord.Colour.green())
                         fileembed.set_image(url=attach.url)
-                        #await ch.send(embed=fileembed)
+                        await ch.send(embed=fileembed)
 
 
                 elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
