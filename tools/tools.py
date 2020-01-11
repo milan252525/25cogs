@@ -368,6 +368,8 @@ class Tools(commands.Cog):
             msg = await self.bot.wait_for('message', check=checkmsg)
             linkstemp = msg.content.split(' ')
             for i in range(len(linkstemp) - 1):
+                if i % 2 != 0:
+                    continue
                 links[linkstemp[i]] = linkstemp[i + 1]
 
         elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
