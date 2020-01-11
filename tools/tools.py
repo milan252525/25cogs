@@ -403,20 +403,20 @@ class Tools(commands.Cog):
                     elif role in ch.guild.roles:
                         await ctx.send(f"Mentioned role **{str(role)}** in **{guild.name}**.")
                         pings += role.mention + ", "
-                if pings != "Attention to: ":
-                    await ch.send(pings[:-2])
+                #if pings != "Attention to: ":
+                    #await ch.send(pings[:-2])
 
                 linksmsg = "Links: "
                 for link in links:
                     linksmsg += link + " , "
-                if linksmsg != "Links: ":
-                    await ch.send(linksmsg[:-2])
+                #if linksmsg != "Links: ":
+                    #await ch.send(linksmsg[:-2])
 
-                await ch.send(embed=embed)
+                #await ch.send(embed=embed)
                 for attach in ctx.message.attachments:
                     fileembed = discord.Embed(color=discord.Colour.green())
                     fileembed.set_image(url=attach.url)
-                    await ch.send(embed=fileembed)
+                    #await ch.send(embed=fileembed)
             elif not all:
                 checkmessage = await ctx.send(f"Do you want to send an announcement to **{guild.name}**?")
                 await checkmessage.add_reaction("<:yesconfirm:595535992329601034>")
@@ -442,20 +442,20 @@ class Tools(commands.Cog):
                         elif role in ch.guild.roles:
                             await ctx.send(f"Mentioned role **{str(role)}** in **{guild.name}**.")
                             pings += role.mention + ", "
-                    if pings != "Attention to: ":
-                        await ch.send(pings[:-2])
+                    #if pings != "Attention to: ":
+                        #await ch.send(pings[:-2])
 
                     linksmsg = "Links: "
                     for link in links:
                         linksmsg += link + " , "
-                    if linksmsg != "Links: ":
-                        await ch.send(linksmsg[:-2])
+                    #if linksmsg != "Links: ":
+                        #await ch.send(linksmsg[:-2])
 
-                    await ch.send(embed=embed)
+                    #await ch.send(embed=embed)
                     for attach in ctx.message.attachments:
                         fileembed = discord.Embed(color=discord.Colour.green())
                         fileembed.set_image(url=attach.url)
-                        await ch.send(embed=fileembed)
+                        #await ch.send(embed=fileembed)
 
 
                 elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
