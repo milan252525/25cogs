@@ -414,7 +414,7 @@ class Tools(commands.Cog):
 
                 linksmsg = ""
                 for key in links:
-                    linksmsg += key.capitalize() + ": " + links[key] + "\n"
+                    linksmsg += key + ": " + links[key] + "\n"
                 if linksmsg != "":
                     await ch.send(linksmsg)
 
@@ -453,7 +453,7 @@ class Tools(commands.Cog):
 
                     linksmsg = ""
                     for key in links:
-                        linksmsg += key.capitalize() + ": " + links[key] + "\n"
+                        linksmsg += key + ": " + links[key] + "\n"
                     if linksmsg != "":
                         await ch.send(linksmsg)
 
