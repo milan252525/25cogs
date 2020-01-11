@@ -118,7 +118,8 @@ class Ladder(commands.Cog):
         players = await self.config.all_members(ctx.guild)
         values = []
         for k in players.keys():
-            values.append([players[k]["elo"], self.bot.get_user(k).mention])
+            if self.bot.get_user(k) is not None:
+                values.append([players[k]["elo"], self.bot.get_user(k).mention])
         values.sort(key=lambda x: x[0], reverse=True)
         msg = ""
         for v in values:
