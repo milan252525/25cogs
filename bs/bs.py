@@ -735,6 +735,12 @@ class BrawlStarsCog(commands.Cog):
         if ctx.guild.id != 401883208511389716:
             return await ctx.send("This command can't be used in this server.")
 
+        mod = ctx.guild.get_role(520719415109746690)
+        roles = ctx.guild.get_role(564552111875162112)
+
+        if mod not in ctx.author.roles and roles not in ctx.autor.roles and not ctx.author.guild_permissions.administrator:
+            return await ctx.send("You can't use this command.")
+
         await ctx.trigger_typing()
 
         labs = ctx.guild.get_role(576028728052809728)
@@ -743,6 +749,11 @@ class BrawlStarsCog(commands.Cog):
         brawlstars = ctx.guild.get_role(576002604740378629)
         vp = ctx.guild.get_role(536993652648574976)
         pres = ctx.guild.get_role(536993632918568991)
+        es = ctx.guild.get_role(548557736120418313)
+        hr = ctx.guild.get_role(564213036257247234)
+        fi = ctx.guild.get_role(608436019469090817)
+        hi = ctx.guild.get_role(610351625113960469)
+        pl = ctx.guild.get_role(576148906602397717)
 
         tag = tag.lower().replace('O', '0')
         if tag.startswith("#"):
@@ -792,6 +803,16 @@ class BrawlStarsCog(commands.Cog):
             for role in ctx.guild.roles:
                 if sub(r'[^\x00-\x7f]', r'', role.name).strip() == player.club.name:
                     member_role_expected = role
+                    if "🇪🇸" in str(role):
+                        msg += await self.addroleifnotpresent(member, es)
+                    elif "🇭🇷" in str(role):
+                        msg += await self.addroleifnotpresent(member, hr)
+                    elif "🇫🇮" in str(role):
+                        msg += await self.addroleifnotpresent(member, fi)
+                    elif "🇮🇳" in str(role):
+                        msg += await self.addroleifnotpresent(member, hi)
+                    elif "🇵🇱" in str(role):
+                        msg += await self.addroleifnotpresent(member, pl)
                     break
             if member_role_expected is None:
                 await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Role for the club {player.club.name} not found. Input: {club_name}.\n"))
