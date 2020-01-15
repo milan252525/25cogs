@@ -738,7 +738,7 @@ class BrawlStarsCog(commands.Cog):
         mod = ctx.guild.get_role(520719415109746690)
         roles = ctx.guild.get_role(564552111875162112)
 
-        if mod not in ctx.author.roles and roles not in ctx.autor.roles and not ctx.author.guild_permissions.administrator:
+        if mod not in ctx.author.roles and roles not in ctx.author.roles and not ctx.author.guild_permissions.administrator:
             return await ctx.send("You can't use this command.")
 
         await ctx.trigger_typing()
