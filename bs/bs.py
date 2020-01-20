@@ -548,7 +548,7 @@ class BrawlStarsCog(commands.Cog):
                 embedsToSend.append(embed)
                          
             if len(embedsToSend) > 1:                   
-                await menu(ctx, embedsToSend, {"⬅": prev_page, "➡": next_page,} , timeout=600)
+                await menu(ctx, embedsToSend, {"⬅": prev_page, "➡": next_page,} , timeout=2000)
             else:
                 await ctx.send(embed=embedsToSend[0])
                                 
