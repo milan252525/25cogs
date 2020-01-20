@@ -5,11 +5,6 @@ import clashroyale
 import brawlstats
 import asyncio
 from random import choice
-try:
-    from PIL import Image
-except ImportError:
-    import Image
-import pytesseract
 
 class Welcome(commands.Cog):
 
@@ -49,20 +44,19 @@ class Welcome(commands.Cog):
 
 
     async def initialize(self):
-        crapikey = await self.bot.db.api_tokens.get_raw("crapi", default={"api_key": None})
+        crapikey = await self.bot.get_shared_api_tokens("crapi")
         if crapikey["api_key"] is None:
-            raise ValueError("The Clash Royale API key has not been set. Use [p]set api crapi api_key,YOURAPIKEY")
+            raise ValueError("The Clash Royale API key has not been set.")
         self.crapi = clashroyale.OfficialAPI(crapikey["api_key"], is_async=True)
         
-        bsapikey = await self.bot.db.api_tokens.get_raw("bsapi", default={"api_key": None})
+        bsapikey = await self.bot.get_shared_api_tokens("bsapi")
         if bsapikey["api_key"] is None:
-            raise ValueError("The Brawl Stars API key has not been set. Use [p]set api bsapi api_key,YOURAPIKEY")
-        self.bsapi = brawlstats.BrawlAPI(bsapikey["api_key"], is_async=True)
-
-        ofcbsapikey = await self.bot.db.api_tokens.get_raw("ofcbsapi", default={"api_key": None})
+            raise ValueError("The Brawl Stars API key has not been set.")
+        self.bsapi = brawlstats.BrawlAPI(bsapikey["api_key"], is_async=True, prevent_ratelimit=True)
+        
+        ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
         if ofcbsapikey["api_key"] is None:
-            raise ValueError(
-                "The Official Brawl Stars API key has not been set. Use [p]set api ofcbsapi api_key,YOURAPIKEY")
+            raise ValueError("The Official Brawl Stars API key has not been set.")
         self.ofcbsapi = brawlstats.OfficialAPI(ofcbsapikey["api_key"], is_async=True)
 
     # @commands.command(hidden=True)
