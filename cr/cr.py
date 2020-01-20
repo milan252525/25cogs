@@ -17,10 +17,10 @@ class ClashRoyaleCog(commands.Cog):
         self.config.register_guild(**default_guild)
         
     async def initialize(self):
-        apikey = await self.bot.db.api_tokens.get_raw("crapi", default={"api_key": None})
-        if apikey["api_key"] is None:
-            raise ValueError("The Clash Royale API key has not been set. Use [p]set api crapi api_key,YOURAPIKEY")
-        self.crapi = clashroyale.OfficialAPI(apikey["api_key"], is_async=True)
+        crapikey = await self.bot.get_shared_api_tokens("crapi")
+        if crapikey["api_key"] is None:
+            raise ValueError("The Clash Royale API key has not been set.")
+        self.crapi = clashroyale.OfficialAPI(crapikey["api_key"], is_async=True)
 
     def badEmbed(self, text):
         bembed = discord.Embed(color=0xff0000)
