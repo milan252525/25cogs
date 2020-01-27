@@ -618,7 +618,7 @@ class Welcome(commands.Cog):
             await chooseGameMessage.add_reaction("<:EyeSpect:598799975052345344>")
 
             def check(reaction, user):
-                return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in [
+                return (user == member or user.id == 230947675837562880 or user.id == 359131399132807178) and str(reaction.emoji) in [
                     "<:BrawlStars:595528113929060374>", "<:HelpIcon:598803665989402624>", "<:EyeSpect:598799975052345344>"]
 
             reaction, _ = await self.bot.wait_for('reaction_add', check=check)
