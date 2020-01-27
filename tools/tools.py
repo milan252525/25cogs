@@ -6,8 +6,8 @@ from datetime import datetime
 from time import time
 from random import choice
 from typing import Union
-from profanity_check import predict, predict_prob
-from profanityfilter import ProfanityFilter
+#from profanity_check import predict, predict_prob
+#from profanityfilter import ProfanityFilter
 
 class Tools(commands.Cog):
     
@@ -18,7 +18,7 @@ class Tools(commands.Cog):
         default_member = {"messages" : 0, "name" : None}
         self.config.register_global(**default_global)
         self.config.register_member(**default_member)
-        self.pf = ProfanityFilter()
+        #self.pf = ProfanityFilter()
         self.updater.start()
         
     def cog_unload(self):
