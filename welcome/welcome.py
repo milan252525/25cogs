@@ -746,9 +746,13 @@ class Welcome(commands.Cog):
             elif str(reaction.emoji) == "<:EyeSpect:598799975052345344>":
                 await appendLog("Chosen option: Spectator")
                 try:
+                    await setupChannel.send("1")
                     roleSpectator = member.guild_get_role(671381405695082507)
+                    await setupChannel.send("1")
                     await member.add_roles(roleSpectator)
+                    await setupChannel.send("1")
                     await appendLog(f"Assigned roles: {roleSpectator.name}")
+                    await setupChannel.send("1")
                 except discord.Forbidden:
                     await appendLog(
                         f":exclamation:Couldn't change roles of this user. ({roleSpectator.name})")
