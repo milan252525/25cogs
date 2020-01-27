@@ -720,6 +720,7 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.removeroleifpresent(member, member_role)
                     msg += await self.addroleifnotpresent(member, member_role_expected)
                 try:
+                    await asyncio.sleep(0.5)
                     player_club = await player.get_club()
                     for mem in player_club.members:
                         if mem.tag == player.raw_data['tag']:
@@ -733,7 +734,7 @@ class BrawlStarsCog(commands.Cog):
                                 msg += await self.removeroleifpresent(member, vp, pres)
                             break
                 except brawlstats.errors.RequestError:
-                    msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
+                    pass
             if msg != "":
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
 
