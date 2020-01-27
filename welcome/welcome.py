@@ -611,15 +611,15 @@ class Welcome(commands.Cog):
         repeat = True
         while repeat:
             repeat = False
-            text = "**CHOOSE ONE OF THE OPTIONS BELOW:**\n-----------------------------------------------------------\n<:BrawlStars:595528113929060374> **Save Brawl Stars account and join the server**\n-----------------------------------------------------------\n<:HelpIcon:598803665989402624> **Talk to support**\n-----------------------------------------------------------\n:eye: **Join as a spectator**\n-----------------------------------------------------------"
+            text = "**CHOOSE ONE OF THE OPTIONS BELOW:**\n-----------------------------------------------------------\n<:BrawlStars:595528113929060374> **Save Brawl Stars account and join the server**\n-----------------------------------------------------------\n<:HelpIcon:598803665989402624> **Talk to support**\n-----------------------------------------------------------\n<:EyeSpect:598799975052345344> **Join as a spectator**\n-----------------------------------------------------------"
             chooseGameMessage = await setupChannel.send(text)
             await chooseGameMessage.add_reaction("<:BrawlStars:595528113929060374>")
             await chooseGameMessage.add_reaction("<:HelpIcon:598803665989402624>")
-            await chooseGameMessage.add_reaction("<:eye:>")
+            await chooseGameMessage.add_reaction("<:EyeSpect:598799975052345344>")
 
             def check(reaction, user):
                 return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in [
-                    "<:BrawlStars:595528113929060374>", "<:HelpIcon:598803665989402624>", "<:eye:>"]
+                    "<:BrawlStars:595528113929060374>", "<:HelpIcon:598803665989402624>", "<:EyeSpect:598799975052345344>"]
 
             reaction, _ = await self.bot.wait_for('reaction_add', check=check)
 
@@ -743,7 +743,7 @@ class Welcome(commands.Cog):
                 await asyncio.sleep(5)
                 repeat = True
 
-            elif str(reaction.emoji) == "<:eye:>":
+            elif str(reaction.emoji) == "<:EyeSpect:598799975052345344>":
                 await appendLog("Chosen option: Spectator")
                 roleSpectator = member.guild_get_role(671381405695082507)
                 await member.add_roles(roleSpectator)
