@@ -795,7 +795,7 @@ class BrawlStarsCog(commands.Cog):
 
         if not player_in_club:
             msg += await self.removeroleifpresent(member, newcomer)
-            msg += await self.addroleifnotpresent(member, guest)
+            msg += await self.addroleifnotpresent(member, guest, brawlstars)
 
         if player_in_club and "LA " not in player.club.name:
             msg += await self.removeroleifpresent(member, newcomer)
