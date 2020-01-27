@@ -611,14 +611,15 @@ class Welcome(commands.Cog):
         repeat = True
         while repeat:
             repeat = False
-            text = "**CHOOSE ONE OF THE OPTIONS BELOW:**\n-----------------------------------------------------------\n<:BrawlStars:595528113929060374> **Save Brawl Stars account and join the server**\n-----------------------------------------------------------\n<:HelpIcon:598803665989402624> **Talk to support**\n-----------------------------------------------------------"
+            text = "**CHOOSE ONE OF THE OPTIONS BELOW:**\n-----------------------------------------------------------\n<:BrawlStars:595528113929060374> **Save Brawl Stars account and join the server**\n-----------------------------------------------------------\n<:HelpIcon:598803665989402624> **Talk to support**\n-----------------------------------------------------------\n:eye: **Join as a spectator**\n-----------------------------------------------------------"
             chooseGameMessage = await setupChannel.send(text)
             await chooseGameMessage.add_reaction("<:BrawlStars:595528113929060374>")
             await chooseGameMessage.add_reaction("<:HelpIcon:598803665989402624>")
+            await chooseGameMessage.add_reaction(":eye:")
 
             def check(reaction, user):
                 return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in [
-                    "<:BrawlStars:595528113929060374>", "<:HelpIcon:598803665989402624>"]
+                    "<:BrawlStars:595528113929060374>", "<:HelpIcon:598803665989402624>", ":eye:"]
 
             reaction, _ = await self.bot.wait_for('reaction_add', check=check)
 
@@ -741,6 +742,12 @@ class Welcome(commands.Cog):
                     "You have stated that you require support, please send a DM to LA Modmail and state the problem you require support for. Once received our staff will be with you shortly!")
                 await asyncio.sleep(5)
                 repeat = True
+
+            elif str(reaction.emoji) == ":eye:":
+                await appendLog("Chosen option: Spectator")
+                roleSpectator = member.guild_get_role(671381405695082507)
+                await member.add_roles(roleSpectator)
+                await setupChannel.send("You stated that you want to join as a spectator. Your roles were set accordingly.")
 
 
 
