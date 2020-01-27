@@ -672,9 +672,11 @@ class BrawlStarsCog(commands.Cog):
                 if error_counter == 5:
                     await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 5 request errors! Displaying the last one:\n({str(e)})"))
                     break
+                continue
             except Exception as e:
                 return await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))           
-      
+                continue
+                        
             msg = ""            
             player_in_club = "name" in player.raw_data["club"]
             member_roles = []
