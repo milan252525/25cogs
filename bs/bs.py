@@ -706,7 +706,7 @@ class BrawlStarsCog(commands.Cog):
 
             if player_in_club and "LA " in player.club.name:
                 for role in ch.guild.roles:
-                    if sub(r'[^\x00-\x7f]',r'', role.name).strip() == player.club.name:
+                    if sub(r'[^\x00-\x7f]',r'', role.name).strip() == sub(r'[^\x00-\x7f]',r'', player.club.name).strip():
                         member_role_expected = role
                         break
                 if member_role_expected is None:
