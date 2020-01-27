@@ -718,19 +718,21 @@ class BrawlStarsCog(commands.Cog):
                 elif member_role != member_role_expected:
                     msg += await self.removeroleifpresent(member, member_role)
                     msg += await self.addroleifnotpresent(member, member_role_expected)
-                player_club = await player.get_club()
-                for mem in player_club.members:
-                    if mem.tag == player.raw_data['tag']:
-                        if mem.role.lower() == 'vicepresident':
-                            msg += await self.addroleifnotpresent(member, vp)
-                            msg += await self.removeroleifpresent(member, pres)
-                        elif mem.role.lower() == 'president':
-                            msg += await self.addroleifnotpresent(member, pres)
-                            msg += await self.removeroleifpresent(member, vp)
-                        elif mem.role.lower() == 'member':
-                            msg += await self.removeroleifpresent(member, vp, pres)
-                        break
-
+                try:
+                    player_club = await player.get_club()
+                    for mem in player_club.members:
+                        if mem.tag == player.raw_data['tag']:
+                            if mem.role.lower() == 'vicepresident':
+                                msg += await self.addroleifnotpresent(member, vp)
+                                msg += await self.removeroleifpresent(member, pres)
+                            elif mem.role.lower() == 'president':
+                                msg += await self.addroleifnotpresent(member, pres)
+                                msg += await self.removeroleifpresent(member, vp)
+                            elif mem.role.lower() == 'member':
+                                msg += await self.removeroleifpresent(member, vp, pres)
+                            break
+                except brawlstats.errors.RequestError:
+                    msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
             if msg != "":
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
 
