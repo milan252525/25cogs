@@ -746,7 +746,7 @@ class Welcome(commands.Cog):
             elif str(reaction.emoji) == "<:EyeSpect:598799975052345344>":
                 await appendLog("Chosen option: Spectator")
                 try:
-                    roleSpectator = member.guild_get_role(671381405695082507)
+                    roleSpectator = member.guild.get_role(671381405695082507)
                     await member.add_roles(roleSpectator)
                     await appendLog(f"Assigned roles: {roleSpectator.name}")
                 except discord.Forbidden:
