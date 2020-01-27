@@ -24,13 +24,13 @@ class BrawlStarsCog(commands.Cog):
         self.sortroles.cancel()
         
     async def initialize(self):
-        bsapikey = await self.bot.db.api_tokens.get_raw("bsapi", default={"api_key": None})
+        bsapikey = await self.bot.get_shared_api_tokens("bsapi")
         if bsapikey["api_key"] is None:
-            raise ValueError("The Brawl Stars API key has not been set. Use [p]set api bsapi api_key,YOURAPIKEY")
+            raise ValueError("The Brawl Stars API key has not been set.")
         self.bsapi = brawlstats.BrawlAPI(bsapikey["api_key"], is_async=True, prevent_ratelimit=True)
-        ofcbsapikey = await self.bot.db.api_tokens.get_raw("ofcbsapi", default={"api_key": None})
+        ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
         if ofcbsapikey["api_key"] is None:
-            raise ValueError("The Official Brawl Stars API key has not been set. Use [p]set api ofcbsapi api_key,YOURAPIKEY")
+            raise ValueError("The Official Brawl Stars API key has not been set.")
         self.ofcbsapi = brawlstats.OfficialAPI(ofcbsapikey["api_key"], is_async=True)
         
     def badEmbed(self, text):
@@ -550,7 +550,7 @@ class BrawlStarsCog(commands.Cog):
                 embedsToSend.append(embed)
                          
             if len(embedsToSend) > 1:                   
-                await menu(ctx, embedsToSend, {"⬅": prev_page, "➡": next_page,} , timeout=600)
+                await menu(ctx, embedsToSend, {"⬅": prev_page, "➡": next_page,} , timeout=2000)
             else:
                 await ctx.send(embed=embedsToSend[0])
                                 
