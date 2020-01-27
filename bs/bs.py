@@ -146,6 +146,8 @@ class BrawlStarsCog(commands.Cog):
             return "<:barley:664235839316033536>"
         elif name == "8-BIT":
             return "<:8bit:664235332522213418>"
+        elif name == "MR. P":
+            return "<:mrp:671379771585855508>"
         
     def remove_codes(self, text : str):
         toremove = ["</c>", "<c1>", "<c2>", "<c3>", "<c4>", "<c5>", "<c6>", "<c7>", "<c8>", "<c9>", "<c0>"]
@@ -342,7 +344,7 @@ class BrawlStarsCog(commands.Cog):
             embed = discord.Embed(
                 color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
             embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url="https://i.imgur.com/ZwIP41S.png")
-            embed.add_field(name=f"**Brawlers({len(brawlers)}\\32):**", value=m)
+            embed.add_field(name=f"**Brawlers({len(brawlers)}\\33):**", value=m)
             await ctx.send(embed=embed)
 
     @commands.command()
