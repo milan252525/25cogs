@@ -656,6 +656,7 @@ class BrawlStarsCog(commands.Cog):
         brawlstars = ch.guild.get_role(576002604740378629)
         vp = ch.guild.get_role(536993652648574976)
         pres = ch.guild.get_role(536993632918568991)
+        error_counter = 0
         
         for member in ch.guild.members:
             if member.bot:
@@ -667,10 +668,12 @@ class BrawlStarsCog(commands.Cog):
                 player = await self.ofcbsapi.get_player(tag)
                 await asyncio.sleep(0.1)
             except brawlstats.errors.RequestError as e:
-                await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"**RequestError** ({str(e)})"))
-                break
+                error_counter += 1
+                if error_counter == 5:
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 5 request errors! Displaying the last one:\n({str(e)})"))
+                    break
             except Exception as e:
-                return await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"**Something went wrong while requesting {tag}!**"))           
+                return await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))           
       
             msg = ""            
             player_in_club = "name" in player.raw_data["club"]
