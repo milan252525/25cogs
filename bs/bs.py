@@ -246,7 +246,7 @@ class BrawlStarsCog(commands.Cog):
 
         colour = player.name_color if player.name_color is not None else "0xffffffff"
         embed=discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
-        embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=member.avatar_url)
+        embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=member.avatar_url if isinstance(member, discord.Member) else "https://i.imgur.com/ZwIP41S.png")
         embed.add_field(name="Trophies", value=f"{self.get_league_emoji(player.trophies)} {player.trophies}")
         embed.add_field(name="Highest Trophies", value=f"<:totaltrophies:614517396111097866> {player.highest_trophies}")
         embed.add_field(name="Level", value=f"<:exp:614517287809974405> {player.exp_level}")
@@ -346,7 +346,7 @@ class BrawlStarsCog(commands.Cog):
         for m in messages:
             embed = discord.Embed(
                 color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
-            embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=member.avatar_url)
+            embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=member.avatar_url if isinstance(member, discord.Member) else "https://i.imgur.com/ZwIP41S.png")
             embed.add_field(name=f"**Brawlers({len(brawlers)}\\33):**", value=m)
             await ctx.send(embed=embed)
 
@@ -390,7 +390,7 @@ class BrawlStarsCog(commands.Cog):
         colour = player.name_color if player.name_color is not None else "0xffffffff"
         embed = discord.Embed(
             color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
-        embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=member.avatar_url)
+        embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=member.avatar_url if isinstance(member, discord.Member) else "https://i.imgur.com/ZwIP41S.png")
         embed.add_field(name="Brawler", value=f"{self.get_brawler_emoji(brawler.upper())} {brawler.lower().capitalize()}")
         embed.add_field(name="Trophies", value=f"<:bstrophy:552558722770141204> {br.get('trophies')}")
         embed.add_field(name="Highest Trophies", value=f"{self.get_rank_emoji(br.get('rank'))} {br.get('highestTrophies')}")
@@ -825,13 +825,16 @@ class BrawlStarsCog(commands.Cog):
             msg += await self.removeroleifpresent(member, newcomer)
             msg += await self.addroleifnotpresent(member, labs, brawlstars)
             msg += await self.addroleifnotpresent(member, member_role_expected)
-            player_club = await player.get_club()
-            for mem in player_club.members:
-                if mem.tag == player.raw_data['tag']:
-                    if mem.role.lower() == 'vicepresident':
-                        msg += await self.addroleifnotpresent(member, vp)
-                    elif mem.role.lower() == 'president':
-                        msg += await self.addroleifnotpresent(member, pres)
-                    break
+            try:
+                player_club = await player.get_club()
+                for mem in player_club.members:
+                    if mem.tag == player.raw_data['tag']:
+                        if mem.role.lower() == 'vicepresident':
+                            msg += await self.addroleifnotpresent(member, vp)
+                        elif mem.role.lower() == 'president':
+                            msg += await self.addroleifnotpresent(member, pres)
+                        break
+            except brawlstats.errors.RequestError:
+                msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
         if msg != "":
             await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
