@@ -710,7 +710,7 @@ class BrawlStarsCog(commands.Cog):
                         member_role_expected = role
                         break
                 if member_role_expected is None:
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Role for the club {player.club.name} not found. Input: {club_name}.\n"))
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Role for the club {player.club.name} not found."))
                     continue
                 msg += await self.removeroleifpresent(member, guest, newcomer)
                 msg += await self.addroleifnotpresent(member, labs, brawlstars)
