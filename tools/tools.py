@@ -48,7 +48,7 @@ class Tools(commands.Cog):
         if msg.channel.id == 670726361085902878 and not msg.author.bot:
             try:
                 word = msg.content
-                history = await msg.channel.history(limit=1).flatten()
+                history = await msg.channel.history(limit=2).flatten()
                 if word[0].lower() != history[1][-1:]:
                     await msg.channel.send(f"Write a word that starts with {history[1][-1:].lower()}, please.", delete_after=2)
                     return await msg.delete()
