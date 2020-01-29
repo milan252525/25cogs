@@ -44,6 +44,20 @@ class Tools(commands.Cog):
             except ValueError:
                 await msg.delete()
 
+        #word-chain
+        if msg.channel.id == 670726361085902878 and not msg.author.bot:
+            try:
+                word = msg.content
+                history = await msg.channel.history(limit=1).flatten()
+                if word[0].lower() != history[1][-1:]:
+                    await msg.channel.send(f"Write a word that starts with {history[1][-1:].lower()}, please.", delete_after=2)
+                    return await msg.delete()
+                if msg.author == history[1].author:
+                    await msg.channel.send(f"Don't write two words consecutively.", delete_after=2)
+                    return await msg.delete()
+            except ValueError:
+                await msg.delete()
+
         #spamlb LABS
         #disabled
         if False and not msg.author.bot and isinstance(msg.channel, discord.TextChannel) and msg.guild.id == 401883208511389716:
