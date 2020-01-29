@@ -511,10 +511,12 @@ class Tools(commands.Cog):
     async def acceptrequest(self, ctx, *, messageid):
         msg = await ctx.channel.fetch_message(messageid)
         for embed in msg.embeds:
-            author = embed.fields[0]
+            for field in embed.fields:
+                await ctx.send(field.value)
+            """author = embed.fields[0]
             date = embed.fields[1]
             desc = embed.fields[2]
-            contact = embed.fields[3]
+            contact = embed.fields[3]"""
 
         embed = discord.Embed(title=f"Request", colour=discord.Colour.green())
         embed.set_thumbnail(url=ctx.author.avatar_url)
