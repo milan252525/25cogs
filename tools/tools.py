@@ -526,6 +526,6 @@ class Tools(commands.Cog):
         embed.add_field(name="Date:", value=date, inline=False)
         embed.add_field(name="Job description:", value=desc, inline=False)
         embed.add_field(name="How to contact:", value=contact, inline=False)
-        embed.add_field(name="Accepted by:", value=f"{author.mention} ({author.top_role})", inline=False)
+        embed.add_field(name="Accepted by:", value=f"{ctx.author.mention} ({ctx.author.top_role})", inline=False)
         await msg.edit(embed=embed)
 
