@@ -497,7 +497,7 @@ class Tools(commands.Cog):
 
     @commands.command()
     async def acceptrequest(self, ctx, *, messageid):
-        msg = await client.get_message(ctx.channel, messageid)
+        msg = await self.bot.get_message(ctx.channel, messageid)
         for embed in message.embeds:
             desc = embed.description
         await msg.edit(embed=discord.Embed(colour=discord.Colour.green(), title="Request", footer=f"Accepted by {str(ctx.author)}", description=desc))
