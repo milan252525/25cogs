@@ -493,10 +493,10 @@ class Tools(commands.Cog):
         def check(msg):
             return msg.channel == author.dm_channel and msg.author == author
 
-        await author.send("How should interested people contact you:")
-        contact = (await self.bot.wait_for('message', check=check)).content
         await author.send("Description of the job:")
         jobdesc = (await self.bot.wait_for('message', check=check)).content
+        await author.send("How should interested people contact you:")
+        contact = (await self.bot.wait_for('message', check=check)).content
 
         embed = discord.Embed(title=f"Request", colour=discord.Colour.red())
         embed.set_thumbnail(url=author.avatar_url)
@@ -515,10 +515,10 @@ class Tools(commands.Cog):
         desc = ""
         contact = ""
         for embed in msg.embeds:
-            author = embed.fields[0]
-            date = embed.fields[1]
-            desc = embed.fields[2]
-            contact = embed.fields[3]
+            author = embed.fields[0].value
+            date = embed.fields[1].value
+            desc = embed.fields[2].value
+            contact = embed.fields[3].value
 
         embed = discord.Embed(title=f"Request", colour=discord.Colour.green())
         embed.set_thumbnail(url=ctx.author.avatar_url)
@@ -526,6 +526,6 @@ class Tools(commands.Cog):
         embed.add_field(name="Date:", value=date, inline=False)
         embed.add_field(name="Job description:", value=desc, inline=False)
         embed.add_field(name="How to contact:", value=contact, inline=False)
-        embed.set_footer(text=f"Accepted by {str(ctx.author)}")
+        embed.add_field(name="Accepted by:", value=str(ctx.author), inline=False)
         await msg.edit(embed=embed)
 
