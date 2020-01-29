@@ -470,7 +470,7 @@ class Tools(commands.Cog):
 
                     await checkmessage.remove_reaction("<:yesconfirm:595535992329601034>", self.bot.get_user(599286708911210557))
                     await checkmessage.remove_reaction("<:nocancel:595535992199315466>", self.bot.get_user(599286708911210557))
-                    await message.edit(content=f"Announced in **{guild.name}**.")
+                    await checkmessage.edit(content=f"Announced in **{guild.name}**.")
 
 
     @commands.command()
