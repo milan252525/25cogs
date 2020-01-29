@@ -510,8 +510,11 @@ class Tools(commands.Cog):
         msg = await ctx.channel.fetch_message(messageid)
         for embed in msg.embeds:
             desc = embed.description
+            await ctx.send(embed.description)
             title = embed.title
+            await ctx.send(embed.title)
             thumbnail = embed.thumbnail
+            await ctx.send(embed.thumbnail)
         embed = discord.Embed(colour=discord.Colour.green(), title=title, description=desc, thumbnail=thumbnail)
         embed.set_footer(text=f"Accepted by {str(ctx.author)}")
         await msg.edit(embed=embed)
