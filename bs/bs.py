@@ -696,7 +696,7 @@ class BrawlStarsCog(commands.Cog):
 
             if len(member_roles) == 1:
                 member_role = member_roles[0]
-                await self.removeroleifpresent(member, role)
+                await self.removeroleifpresent(member, member_role)
 
             if not player_in_club:
                 msg += await self.removeroleifpresent(member, labs, vp, pres, newcomer)
