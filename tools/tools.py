@@ -493,13 +493,15 @@ class Tools(commands.Cog):
         def check(msg):
             return msg.channel == author.dm_channel and msg.author == author
 
-        await author.send("Description of the job:")
-        jobdesc = (await self.bot.wait_for('message', check=check)).content
         await author.send("How should interested people contact you:")
         contact = (await self.bot.wait_for('message', check=check)).content
+        await author.send("Description of the job:")
+        jobdesc = (await self.bot.wait_for('message', check=check)).content
 
         embed = discord.Embed(title=f"Request", colour=discord.Colour.red())
         embed.set_thumbnail(url=author.avatar_url)
+        embed.add_field(name="Posted by:", value=f"{author.mention} ({author.top_role})", inline=False)
+        embed.add_field(name="Date:", value=datetime.now().strftime('%d %b %Y'), inline=False)
         embed.add_field(name="Job description:", value=jobdesc, inline=False)
         embed.add_field(name="How to contact:", value=contact, inline=False)
 
@@ -509,13 +511,17 @@ class Tools(commands.Cog):
     async def acceptrequest(self, ctx, *, messageid):
         msg = await ctx.channel.fetch_message(messageid)
         for embed in msg.embeds:
-            desc = embed.description
-            await ctx.send(embed.description)
-            title = embed.title
-            await ctx.send(embed.title)
-            thumbnail = embed.thumbnail
-            await ctx.send(embed.thumbnail)
-        embed = discord.Embed(colour=discord.Colour.green(), title=title, description=desc, thumbnail=thumbnail)
+            author = embed.fields[0]
+            date = embed.fields[1]
+            desc = embed.fields[2]
+            contact = embed.fields[3]
+
+        embed = discord.Embed(title=f"Request", colour=discord.Colour.green())
+        embed.set_thumbnail(url=ctx.author.avatar_url)
+        embed.add_field(name="Posted by:", value=author, inline=False)
+        embed.add_field(name="Date:", value=date, inline=False)
+        embed.add_field(name="Job description:", value=desc, inline=False)
+        embed.add_field(name="How to contact:", value=contact, inline=False)
         embed.set_footer(text=f"Accepted by {str(ctx.author)}")
         await msg.edit(embed=embed)
 
