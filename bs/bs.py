@@ -913,7 +913,7 @@ class BrawlStarsCog(commands.Cog):
                         break
                 if member_role_expected is None:
                     msg += await self.removeroleifpresent(member, newcomer)
-                    msg += await self.addroleifnotpresent(member, lafamily, guest)
+                    msg += await self.addroleifnotpresent(member, lafamily)
                     return await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
                 msg += await self.removeroleifpresent(member, newcomer)
                 msg += await self.addroleifnotpresent(member, lafamily, member_role_expected)
