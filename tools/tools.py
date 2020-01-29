@@ -55,7 +55,7 @@ class Tools(commands.Cog):
                 if msg.author == history[1].author:
                     await msg.channel.send(f"Don't write two words consecutively.", delete_after=2)
                     return await msg.delete()
-                if len(word) < 3:
+                if len(word) > 3:
                     await msg.channel.send(f"Use words with atleast 3 letters.", delete_after=2)
                     return await msg.delete()
                 if len(word.split(" ")) < 3:
