@@ -49,9 +49,9 @@ class Tools(commands.Cog):
             try:
                 word = msg.content
                 history = await msg.channel.history(limit=2).flatten()
-                #if word[0].lower() != history[1][-1:]:
-                    #await msg.channel.send(f"Write a word that starts with {history[1][-1:].lower()}, please.", delete_after=2)
-                    #return await msg.delete()
+                if word[0].lower() != history[1].content[-1:]:
+                    await msg.channel.send(f"Write a word that starts with {history[1][-1:].lower()}, please.", delete_after=2)
+                    return await msg.delete()
                 if msg.author == history[1].author:
                     await msg.channel.send(f"Don't write two words consecutively.", delete_after=2)
                     return await msg.delete()
