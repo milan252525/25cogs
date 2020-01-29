@@ -855,7 +855,7 @@ class BrawlStarsCog(commands.Cog):
         for mem in player_club.members:
             if mem.tag == player.raw_data['tag']:
                 if mem.role.lower() == 'vicepresident':
-                    msg += await self.addroleifnotpresent(member, vp)
+                    await ctx.send("midir is vp")
                 elif mem.role.lower() == 'president':
-                    msg += await self.addroleifnotpresent(member, pres)
-        ctx.send("test successful")
+                    await ctx.send("midir is pres")
+        await ctx.send("test successful")
