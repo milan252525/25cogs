@@ -486,7 +486,9 @@ class Tools(commands.Cog):
     @commands.command()
     async def request(self, ctx):
         author = ctx.author
+        intro = await ctx.send("Please head over to a DM with me to answer some questions.")
         await ctx.message.delete(delay=10)
+        await intro.delete(delay=10)
 
         def check(msg):
             return msg.channel == author.dm_channel and msg.author == author
@@ -509,7 +511,7 @@ class Tools(commands.Cog):
         for embed in msg.embeds:
             desc = embed.description
             title = embed.title
-            thumbnail = thumbnail
+            thumbnail = embed.thumbnail
         embed = discord.Embed(colour=discord.Colour.green(), title=title, description=desc, thumbnail=thumbnail)
         embed.set_footer(text=f"Accepted by {str(ctx.author)}")
         await msg.edit(embed=embed)
