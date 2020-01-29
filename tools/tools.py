@@ -511,19 +511,18 @@ class Tools(commands.Cog):
     async def acceptrequest(self, ctx, *, messageid):
         msg = await ctx.channel.fetch_message(messageid)
         for embed in msg.embeds:
-            for field in embed.fields:
-                await ctx.send(field.value)
+            await ctx.send(embed=embed)
             """author = embed.fields[0]
             date = embed.fields[1]
             desc = embed.fields[2]
             contact = embed.fields[3]"""
 
-        embed = discord.Embed(title=f"Request", colour=discord.Colour.green())
+        """embed = discord.Embed(title=f"Request", colour=discord.Colour.green())
         embed.set_thumbnail(url=ctx.author.avatar_url)
         embed.add_field(name="Posted by:", value=author, inline=False)
         embed.add_field(name="Date:", value=date, inline=False)
         embed.add_field(name="Job description:", value=desc, inline=False)
         embed.add_field(name="How to contact:", value=contact, inline=False)
         embed.set_footer(text=f"Accepted by {str(ctx.author)}")
-        await msg.edit(embed=embed)
+        await msg.edit(embed=embed)"""
 
