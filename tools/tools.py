@@ -483,14 +483,6 @@ class Tools(commands.Cog):
                     await checkmessage.remove_reaction("<:nocancel:595535992199315466>", self.bot.get_user(599286708911210557))
                     await checkmessage.edit(content=f"Skipped **{guild.name}**.")
 
-
-    @commands.command()
-    async def listservers(self, ctx):
-        msg = "Currently bot is in those servers:\n"
-        for guild in self.bot.guilds:
-            msg += f"**{guild.name}**\n"
-        await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.blue()))
-
     @commands.command()
     async def request(self, ctx, *, message):
         await ctx.send(embed=discord.Embed(description=message, colour=discord.Colour.red(), title="Request"))
@@ -502,5 +494,5 @@ class Tools(commands.Cog):
             desc = embed.description
         embed = discord.Embed(colour=discord.Colour.green(), title="Request", description=desc)
         embed.set_footer(text=f"Accepted by {str(ctx.author)}")
-        await msg.edit(embed)
+        await msg.edit(embed=embed)
 
