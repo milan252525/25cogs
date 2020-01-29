@@ -52,7 +52,7 @@ class Tools(commands.Cog):
                 #if word[0].lower() != history[1][-1:]:
                     #await msg.channel.send(f"Write a word that starts with {history[1][-1:].lower()}, please.", delete_after=2)
                     #return await msg.delete()
-                print(msg.author == history[1].author)
+                await msg.channel.send(f"{msg.author == history[1].author}", delete_after=2)
                     #await msg.channel.send(f"Don't write two words consecutively.", delete_after=2)
                     #return await msg.delete()
             except ValueError:
