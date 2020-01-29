@@ -490,3 +490,15 @@ class Tools(commands.Cog):
         for guild in self.bot.guilds:
             msg += f"**{guild.name}**\n"
         await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.blue()))
+
+    @commands.command()
+    async def request(self, ctx, *, message):
+        await ctx.send(embed=discord.Embed(description=message, colour=discord.Colour.red(), title="Request"))
+
+    @commands.command()
+    async def acceptrequest(self, ctx, *, messageid):
+        msg = await client.get_message(ctx.channel, messageid)
+        for embed in message.embeds:
+            desc = embed.description
+        await msg.edit(embed=discord.Embed(colour=discord.Colour.green(), title="Request", footer=f"Accepted by {str(ctx.author)}", description=desc))
+
