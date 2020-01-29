@@ -98,7 +98,7 @@ class Tools(commands.Cog):
                 info = f"[**{msg.author.display_name}**] ({message_profanity_prob[0]*100}%) {msg.channel.mention}: *{msg.content}*"
                 await msg.guild.get_channel(664514537004859436).send(info)
 
-    @commands.guild_only()
+    """@commands.guild_only()
     @commands.is_owner() 
     @commands.command()
     async def spamlb(self, ctx):
@@ -117,7 +117,7 @@ class Tools(commands.Cog):
         if len(msg) > 0:
             messages.append(msg)
         for m in messages:
-            await ctx.send(embed=discord.Embed(description=m, colour=discord.Colour.gold()))
+            await ctx.send(embed=discord.Embed(description=m, colour=discord.Colour.gold()))"""
 
     def convertToLeft(self, sec):
         if sec > 3600:
@@ -500,5 +500,7 @@ class Tools(commands.Cog):
         msg = await ctx.channel.fetch_message(messageid)
         for embed in msg.embeds:
             desc = embed.description
-        await msg.edit(embed=discord.Embed(colour=discord.Colour.green(), title="Request", footer=f"Accepted by {str(ctx.author)}", description=desc))
+        embed = discord.Embed(colour=discord.Colour.green(), title="Request", description=desc)
+        embed.set_footer(text=f"Accepted by {str(ctx.author)}")
+        await msg.edit(embed)
 
