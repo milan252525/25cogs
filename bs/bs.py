@@ -745,104 +745,188 @@ class BrawlStarsCog(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def newcomer(self, ctx, tag, member : discord.Member):
-        if ctx.guild.id != 401883208511389716:
-            return await ctx.send("This command can't be used in this server.")
+        if ctx.guild.id == 401883208511389716:
+            mod = ctx.guild.get_role(520719415109746690)
+            roles = ctx.guild.get_role(564552111875162112)
 
-        mod = ctx.guild.get_role(520719415109746690)
-        roles = ctx.guild.get_role(564552111875162112)
+            if mod not in ctx.author.roles and roles not in ctx.author.roles and not ctx.author.guild_permissions.administrator:
+                return await ctx.send("You can't use this command.")
 
-        if mod not in ctx.author.roles and roles not in ctx.author.roles and not ctx.author.guild_permissions.administrator:
-            return await ctx.send("You can't use this command.")
+            await ctx.trigger_typing()
 
-        await ctx.trigger_typing()
+            labs = ctx.guild.get_role(576028728052809728)
+            guest = ctx.guild.get_role(578260960981286923)
+            newcomer = ctx.guild.get_role(534461445656543255)
+            brawlstars = ctx.guild.get_role(576002604740378629)
+            vp = ctx.guild.get_role(536993652648574976)
+            pres = ctx.guild.get_role(536993632918568991)
+            es = ctx.guild.get_role(548557736120418313)
+            hr = ctx.guild.get_role(564213036257247234)
+            fi = ctx.guild.get_role(608436019469090817)
+            hi = ctx.guild.get_role(610351625113960469)
+            pl = ctx.guild.get_role(576148906602397717)
 
-        labs = ctx.guild.get_role(576028728052809728)
-        guest = ctx.guild.get_role(578260960981286923)
-        newcomer = ctx.guild.get_role(534461445656543255)
-        brawlstars = ctx.guild.get_role(576002604740378629)
-        vp = ctx.guild.get_role(536993652648574976)
-        pres = ctx.guild.get_role(536993632918568991)
-        es = ctx.guild.get_role(548557736120418313)
-        hr = ctx.guild.get_role(564213036257247234)
-        fi = ctx.guild.get_role(608436019469090817)
-        hi = ctx.guild.get_role(610351625113960469)
-        pl = ctx.guild.get_role(576148906602397717)
+            tag = tag.lower().replace('O', '0')
+            if tag.startswith("#"):
+                tag = tag.strip('#')
 
-        tag = tag.lower().replace('O', '0')
-        if tag.startswith("#"):
-            tag = tag.strip('#')
-
-        msg = ""
-        try:
-            player = await self.ofcbsapi.get_player(tag)
-            await self.config.user(member).tag.set(tag.replace("#", ""))
-            msg += "BS account **{}** was saved to **{}**\n".format(player.name, member.name)
-
-        except brawlstats.errors.NotFoundError:
-            await ctx.send(embed=self.badEmbed("No player with this tag found!"))
-            return
-
-        except brawlstats.errors.RequestError as e:
-            await ctx.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-            return
-
-        except Exception as e:
-            await ctx.send(
-                "**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
-            return
-
-        nick = f"{player.name}"
-        try:
-            await member.edit(nick=nick[:31])
-            msg += f"New nickname: **{nick[:31]}**\n"
-        except discord.Forbidden:
-            msg += f"I dont have permission to change nickname of this user!\n"
-        except Exception as e:
-            await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Something went wrong: {str(e)}"))
-            return
-
-        player_in_club = "name" in player.raw_data["club"]
-        member_role_expected = None
-
-        if not player_in_club:
-            msg += await self.removeroleifpresent(member, newcomer)
-            msg += await self.addroleifnotpresent(member, guest, brawlstars)
-
-        if player_in_club and "LA " not in player.club.name:
-            msg += await self.removeroleifpresent(member, newcomer)
-            msg += await self.addroleifnotpresent(member, guest, brawlstars)
-
-        if player_in_club and "LA " in player.club.name:
-            for role in ctx.guild.roles:
-                if sub(r'[^\x00-\x7f]', r'', role.name).strip() == player.club.name:
-                    member_role_expected = role
-                    if "🇪🇸" in str(role):
-                        msg += await self.addroleifnotpresent(member, es)
-                    elif "🇭🇷" in str(role):
-                        msg += await self.addroleifnotpresent(member, hr)
-                    elif "🇫🇮" in str(role):
-                        msg += await self.addroleifnotpresent(member, fi)
-                    elif "🇮🇳" in str(role):
-                        msg += await self.addroleifnotpresent(member, hi)
-                    elif "🇵🇱" in str(role):
-                        msg += await self.addroleifnotpresent(member, pl)
-                    break
-            if member_role_expected is None:
-                await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Role for the club {player.club.name} not found. Input: {club_name}.\n"))
-                return
-            msg += await self.removeroleifpresent(member, newcomer)
-            msg += await self.addroleifnotpresent(member, labs, brawlstars)
-            msg += await self.addroleifnotpresent(member, member_role_expected)
+            msg = ""
             try:
-                player_club = await player.get_club()
-                for mem in player_club.members:
-                    if mem.tag == player.raw_data['tag']:
-                        if mem.role.lower() == 'vicepresident':
-                            msg += await self.addroleifnotpresent(member, vp)
-                        elif mem.role.lower() == 'president':
-                            msg += await self.addroleifnotpresent(member, pres)
+                player = await self.ofcbsapi.get_player(tag)
+                await self.config.user(member).tag.set(tag.replace("#", ""))
+                msg += "BS account **{}** was saved to **{}**\n".format(player.name, member.name)
+
+            except brawlstats.errors.NotFoundError:
+                await ctx.send(embed=self.badEmbed("No player with this tag found!"))
+                return
+
+            except brawlstats.errors.RequestError as e:
+                await ctx.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+                return
+
+            except Exception as e:
+                await ctx.send(
+                    "**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+                return
+
+            nick = f"{player.name}"
+            try:
+                await member.edit(nick=nick[:31])
+                msg += f"New nickname: **{nick[:31]}**\n"
+            except discord.Forbidden:
+                msg += f"I dont have permission to change nickname of this user!\n"
+            except Exception as e:
+                await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Something went wrong: {str(e)}"))
+                return
+
+            player_in_club = "name" in player.raw_data["club"]
+            member_role_expected = None
+
+            if not player_in_club:
+                msg += await self.removeroleifpresent(member, newcomer)
+                msg += await self.addroleifnotpresent(member, guest, brawlstars)
+
+            if player_in_club and "LA " not in player.club.name:
+                msg += await self.removeroleifpresent(member, newcomer)
+                msg += await self.addroleifnotpresent(member, guest, brawlstars)
+
+            if player_in_club and "LA " in player.club.name:
+                for role in ctx.guild.roles:
+                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(r'[^\x00-\x7f]', r'', player.club.name).strip():
+                        member_role_expected = role
+                        if "🇪🇸" in str(role):
+                            msg += await self.addroleifnotpresent(member, es)
+                        elif "🇭🇷" in str(role):
+                            msg += await self.addroleifnotpresent(member, hr)
+                        elif "🇫🇮" in str(role):
+                            msg += await self.addroleifnotpresent(member, fi)
+                        elif "🇮🇳" in str(role):
+                            msg += await self.addroleifnotpresent(member, hi)
+                        elif "🇵🇱" in str(role):
+                            msg += await self.addroleifnotpresent(member, pl)
                         break
-            except brawlstats.errors.RequestError:
-                msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
-        if msg != "":
-            await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
+                if member_role_expected is None:
+                    await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Role for the club {player.club.name} not found. Input: {club_name}.\n"))
+                    return
+                msg += await self.removeroleifpresent(member, newcomer)
+                msg += await self.addroleifnotpresent(member, labs, brawlstars)
+                msg += await self.addroleifnotpresent(member, member_role_expected)
+                try:
+                    player_club = await player.get_club()
+                    for mem in player_club.members:
+                        if mem.tag == player.raw_data['tag']:
+                            if mem.role.lower() == 'vicepresident':
+                                msg += await self.addroleifnotpresent(member, vp)
+                            elif mem.role.lower() == 'president':
+                                msg += await self.addroleifnotpresent(member, pres)
+                            break
+                except brawlstats.errors.RequestError:
+                    msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
+            if msg != "":
+                await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
+
+        elif ctx.guild.id == 663716223258984496:
+            mod = ctx.guild.get_role(663792825493618709)
+            staff = ctx.guild.get_role(663792418751250432)
+
+            if mod not in ctx.author.roles and staff not in ctx.author.roles and not ctx.author.guild_permissions.administrator:
+                return await ctx.send("You can't use this command.")
+
+            await ctx.trigger_typing()
+
+            lafamily = ctx.guild.get_role(663795352666636305)
+            guest = ctx.guild.get_role(663798304194166854)
+            newcomer = ctx.guild.get_role(663799853889093652)
+            vp = ctx.guild.get_role(663793699972579329)
+            pres = ctx.guild.get_role(663793444199596032)
+            leadership = ctx.guild.get_role(663910848569409598)
+
+            tag = tag.lower().replace('O', '0')
+            if tag.startswith("#"):
+                tag = tag.strip('#')
+
+            msg = ""
+            try:
+                player = await self.ofcbsapi.get_player(tag)
+                await self.config.user(member).tag.set(tag.replace("#", ""))
+                msg += "BS account **{}** was saved to **{}**\n".format(player.name, member.name)
+
+            except brawlstats.errors.NotFoundError:
+                await ctx.send(embed=self.badEmbed("No player with this tag found!"))
+                return
+
+            except brawlstats.errors.RequestError as e:
+                await ctx.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+                return
+
+            except Exception as e:
+                await ctx.send(
+                    "**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+                return
+
+            nick = f"{player.name}"
+            try:
+                await member.edit(nick=nick[:31])
+                msg += f"New nickname: **{nick[:31]}**\n"
+            except discord.Forbidden:
+                msg += f"I dont have permission to change nickname of this user!\n"
+            except Exception as e:
+                await ctx.send(
+                    embed=discord.Embed(colour=discord.Colour.blue(), description=f"Something went wrong: {str(e)}"))
+                return
+
+            player_in_club = "name" in player.raw_data["club"]
+            member_role_expected = None
+
+            if not player_in_club:
+                msg += await self.removeroleifpresent(member, newcomer)
+                msg += await self.addroleifnotpresent(member, guest)
+
+            if player_in_club and "LA " not in player.club.name:
+                msg += await self.removeroleifpresent(member, newcomer)
+                msg += await self.addroleifnotpresent(member, guest)
+
+            if player_in_club and "LA " in player.club.name:
+                for role in ctx.guild.roles:
+                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(r'[^\x00-\x7f]', r'', player.club.name).strip():
+                        member_role_expected = role
+                        break
+                if member_role_expected is None:
+                    msg += await self.removeroleifpresent(member, newcomer)
+                    msg += await self.addroleifnotpresent(member, lafamily, guest)
+                    return
+                msg += await self.removeroleifpresent(member, newcomer)
+                msg += await self.addroleifnotpresent(member, lafamily, member_role_expected)
+                try:
+                    player_club = await player.get_club()
+                    for mem in player_club.members:
+                        if mem.tag == player.raw_data['tag']:
+                            if mem.role.lower() == 'vicepresident':
+                                msg += await self.addroleifnotpresent(member, vp, leadership)
+                            elif mem.role.lower() == 'president':
+                                msg += await self.addroleifnotpresent(member, pres, leadership)
+                            break
+                except brawlstats.errors.RequestError:
+                    msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
+            if msg != "":
+                await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
