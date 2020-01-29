@@ -484,15 +484,33 @@ class Tools(commands.Cog):
                     await checkmessage.edit(content=f"Skipped **{guild.name}**.")
 
     @commands.command()
-    async def request(self, ctx, *, message):
-        await ctx.send(embed=discord.Embed(description=message, colour=discord.Colour.red(), title="Request"))
+    async def request(self, ctx):
+        author = ctx.author
+        await ctx.message.delete(delay=10)
+
+        def check(msg):
+            return msg.channel == author.dm_channel and msg.author == author
+
+        await author.send("Description of the job:")
+        jobdesc = (await self.bot.wait_for('message', check=check)).content
+        await author.send("How should interested people contact you:")
+        contact = (await self.bot.wait_for('message', check=check)).content
+
+        embed = discord.Embed(title=f"Request", colour=discord.Colour.red())
+        embed.set_thumbnail(url=author.avatar_url)
+        embed.add_field(name="Job description:", value=jobdesc, inline=False)
+        embed.add_field(name="How to contact:", value=contact, inline=False)
+
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def acceptrequest(self, ctx, *, messageid):
         msg = await ctx.channel.fetch_message(messageid)
         for embed in msg.embeds:
             desc = embed.description
-        embed = discord.Embed(colour=discord.Colour.green(), title="Request", description=desc)
+            title = embed.title
+            thumbnail = thumbnail
+        embed = discord.Embed(colour=discord.Colour.green(), title=title, description=desc, thumbnail=thumbnail)
         embed.set_footer(text=f"Accepted by {str(ctx.author)}")
         await msg.edit(embed=embed)
 
