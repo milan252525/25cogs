@@ -47,14 +47,7 @@ class Tools(commands.Cog):
         #word-chain
         if msg.channel.id == 670726361085902878 and not msg.author.bot:
             try:
-                word = msg.content
-                history = await msg.channel.history(limit=2).flatten()
-                if word[0].lower() != history[1][-1:]:
-                    await msg.channel.send(f"Write a word that starts with {history[1][-1:].lower()}, please.", delete_after=2)
-                    return await msg.delete()
-                if msg.author == history[1].author:
-                    await msg.channel.send(f"Don't write two words consecutively.", delete_after=2)
-                    return await msg.delete()
+                await msg.channel.send("Test successful", delete_after=2)
             except ValueError:
                 await msg.delete()
 
