@@ -477,8 +477,8 @@ class Tools(commands.Cog):
                         fileembed.set_image(url=attach.url)
                         await ch.send(embed=fileembed)
 
-                    await checkmessage.remove_reaction("<:yesconfirm:595535992329601034>", bot.get_user(599286708911210557))
-                    await checkmessage.remove_reaction("<:nocancel:595535992199315466>", bot.get_user(599286708911210557))
+                    await checkmessage.remove_reaction("<:yesconfirm:595535992329601034>", self.bot.get_user(599286708911210557))
+                    await checkmessage.remove_reaction("<:nocancel:595535992199315466>", self.bot.get_user(599286708911210557))
                     await message.edit(content=f"Announced in **{guild.name}**.")
 
 
