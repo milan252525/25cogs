@@ -439,7 +439,7 @@ class Tools(commands.Cog):
 
                 reaction, _ = await self.bot.wait_for('reaction_add', check=check)
 
-                if str(reaction.emoji) == "<:yesconfirm:595535992329601034>" or all:
+                if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
                     ch = self.bot.get_channel(guilds[key])
                     embed = discord.Embed(colour=discord.Colour.green(), description=message)
                     await ch.send(embed=embed)
@@ -471,6 +471,11 @@ class Tools(commands.Cog):
                     await checkmessage.remove_reaction("<:yesconfirm:595535992329601034>", self.bot.get_user(599286708911210557))
                     await checkmessage.remove_reaction("<:nocancel:595535992199315466>", self.bot.get_user(599286708911210557))
                     await checkmessage.edit(content=f"Announced in **{guild.name}**.")
+
+                elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
+                    await checkmessage.remove_reaction("<:yesconfirm:595535992329601034>", self.bot.get_user(599286708911210557))
+                    await checkmessage.remove_reaction("<:nocancel:595535992199315466>", self.bot.get_user(599286708911210557))
+                    await checkmessage.edit(content=f"Skipped **{guild.name}**.")
 
 
     @commands.command()
