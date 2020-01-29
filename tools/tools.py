@@ -337,9 +337,6 @@ class Tools(commands.Cog):
         if str(reaction.emoji) == "<:yesconfirm:595535992329601034>":
             everyone = True
 
-        elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
-            await ctx.send("Won't mention everyone.")
-
         mentions = []
         mentionsmessage = await ctx.send("Do you want to mention other roles?")
         await mentionsmessage.add_reaction("<:yesconfirm:595535992329601034>")
@@ -359,9 +356,6 @@ class Tools(commands.Cog):
 
             msg = await self.bot.wait_for('message', check=checkmsg)
             mentions = msg.content.split(' ')
-
-        elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
-            await ctx.send("Won't mention other roles.")
 
         links = dict()
         linksmessage = await ctx.send("Do you want to send links?")
@@ -386,9 +380,6 @@ class Tools(commands.Cog):
                 if i % 2 != 0:
                     continue
                 links[linkstemp[i]] = linkstemp[i + 1]
-
-        elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
-            await ctx.send("Won't add links.")
 
         all = False
         allmessage = await ctx.send("Send an announcement to all available servers?")
