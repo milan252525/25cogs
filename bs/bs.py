@@ -736,7 +736,7 @@ class BrawlStarsCog(commands.Cog):
                 except brawlstats.errors.RequestError:
                     pass
             if msg != "":
-                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
+                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member))
 
     @sortroles.before_loop
     async def before_sortroles(self):
