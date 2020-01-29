@@ -510,9 +510,8 @@ class Tools(commands.Cog):
     @commands.command()
     async def acceptrequest(self, ctx, *, messageid):
         msg = await ctx.channel.fetch_message(messageid)
-        for embed in msg.embeds:
-            await ctx.send(embed=embed)
-            """author = embed.fields[0]
+        await ctx.send(msg)
+        """author = embed.fields[0]
             date = embed.fields[1]
             desc = embed.fields[2]
             contact = embed.fields[3]"""
