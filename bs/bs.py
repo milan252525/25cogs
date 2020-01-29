@@ -846,16 +846,3 @@ class BrawlStarsCog(commands.Cog):
                 msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
         if msg != "":
             await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
-
-    @commands.command()
-    @commands.guild_only()
-    async def getrole(self, ctx):
-        player = await self.ofcbsapi.get_player("89L8CV8UR")
-        player_club = await player.get_club()
-        for mem in player_club.members:
-            if mem.tag == player.raw_data['tag']:
-                if mem.role.lower() == 'vicepresident':
-                    await ctx.send("midir is vp")
-                elif mem.role.lower() == 'president':
-                    await ctx.send("midir is pres")
-        await ctx.send("test successful")
