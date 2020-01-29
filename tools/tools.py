@@ -304,20 +304,20 @@ class Tools(commands.Cog):
     @commands.command()
     async def announcement(self, ctx, *, message):
         guilds = dict()
-        #guilds[664086049110097980] = 664086049710014486 #playground
+        guilds[664086049110097980] = 664086049710014486 #playground
         guilds[663416919646535695] = 663418966475145277 #la announcement test
-        guilds[401883208511389716] = 402131630497464340 #LA Gaming - Brawl Stars
-        guilds[440960893916807188] = 538380432748838912 #LA Gaming
-        guilds[460550486257565697] = 590976482319269928 #LA Spain
-        guilds[473169548301041674] = 596191959559700491 #LA Knights
-        guilds[515962414190166041] = 515965947207614465 #LA Quantum
-        guilds[593248015729295360] = 593310903055941634 #LA Fight Club
-        guilds[609481228562857985] = 609484084095352842 #LA Gaming - Competitive
-        guilds[609857211208040450] = 648967703142596608 #LA eSports
-        guilds[655889917821321217] = 655909661257498635 #LA Poland BS
-        guilds[663716223258984496] = 663803783318339584 #LA Asia
-        guilds[654334199494606848] = 665548085362950155 #LA Events
-        guilds[594736382727946250] = 594736382732140545 #LA Leadership
+        #guilds[401883208511389716] = 402131630497464340 #LA Gaming - Brawl Stars
+        #guilds[440960893916807188] = 538380432748838912 #LA Gaming
+        #guilds[460550486257565697] = 590976482319269928 #LA Spain
+        #guilds[473169548301041674] = 596191959559700491 #LA Knights
+        #guilds[515962414190166041] = 515965947207614465 #LA Quantum
+        #guilds[593248015729295360] = 593310903055941634 #LA Fight Club
+        #guilds[609481228562857985] = 609484084095352842 #LA Gaming - Competitive
+        #guilds[609857211208040450] = 648967703142596608 #LA eSports
+        #guilds[655889917821321217] = 655909661257498635 #LA Poland BS
+        #guilds[663716223258984496] = 663803783318339584 #LA Asia
+        #guilds[654334199494606848] = 665548085362950155 #LA Events
+        #guilds[594736382727946250] = 594736382732140545 #LA Leadership
 
         if ctx.author.id != 294438945578811393 and ctx.author.id != 355514130737922048 and ctx.author.id != 359131399132807178 and ctx.author.id != 585275812429824041:
             await ctx.send("You can't use this command.")
@@ -477,9 +477,10 @@ class Tools(commands.Cog):
                         fileembed.set_image(url=attach.url)
                         await ch.send(embed=fileembed)
 
+                    await checkmessage.remove_reaction("<:yesconfirm:595535992329601034>")
+                    await checkmessage.remove_reaction("<:nocancel:595535992199315466>")
+                    await message.edit(content=f"Announced in **{guild.name}**.")
 
-                elif str(reaction.emoji) == "<:nocancel:595535992199315466>":
-                    await ctx.send(f"Skipping **{guild.name}**.")
 
     @commands.command()
     async def listservers(self, ctx):
