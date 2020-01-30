@@ -756,8 +756,8 @@ class BrawlStarsCog(commands.Cog):
             vp = ch.guild.get_role(663793699972579329)
             pres = ch.guild.get_role(663793444199596032)
             leadership = ch.guild.get_role(663910848569409598)
-            community = ctx.guild.get_role(663909497676496957)
-            leadershipemb = ctx.guild.get_role(663909060797530132)
+            community = ch.guild.get_role(663909497676496957)
+            leadershipemb = ch.guild.get_role(663909060797530132)
             error_counter = 0
 
             for member in ch.guild.members:
