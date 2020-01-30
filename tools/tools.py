@@ -487,6 +487,7 @@ class Tools(commands.Cog):
 
     @commands.command()
     async def acceptrequest(self, ctx, *, messageid):
+        author = ctx.author
         intro = await ctx.send("Please head over to a DM with me to answer some questions.")
         await ctx.message.delete(delay=10)
         await intro.delete(delay=10)
