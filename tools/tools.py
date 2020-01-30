@@ -449,7 +449,13 @@ class Tools(commands.Cog):
                     await checkmessage.edit(content=f"Skipped **{guild.name}**.")
 
     @commands.command()
+    @commands.guild_only()
     async def request(self, ctx):
+        if ctx.guild.id != 594736382727946250:
+            await ctx.send("Can't be used in this server.")
+
+        programming = self.bot.get_channel(672139829361770496)
+        graphics = self.bot.get_channel(672161329263411242)
         author = ctx.author
         intro = await ctx.send("Please head over to a DM with me to answer some questions.")
         await ctx.message.delete(delay=10)
@@ -458,6 +464,13 @@ class Tools(commands.Cog):
         def check(msg):
             return msg.channel == author.dm_channel and msg.author == author
 
+        ch = None
+        await author.send("Is it a graphics or programming request? (graphics/programming)")
+        channel = (await self.bot.wait_for('message', check=check)).content
+        if channel.lower() == "graphics":
+            ch = graphics
+        elif channel.lower() == "programming":
+            ch = programming
         await author.send("Description of the job:")
         jobdesc = (await self.bot.wait_for('message', check=check)).content
         await author.send("How should interested people contact you:")
@@ -470,11 +483,18 @@ class Tools(commands.Cog):
         embed.add_field(name="Job description:", value=jobdesc, inline=False)
         embed.add_field(name="How to contact:", value=contact, inline=False)
 
-        await ctx.send(embed=embed)
+        await ch.send(embed=embed)
 
     @commands.command()
     async def acceptrequest(self, ctx, *, messageid):
-        msg = await ctx.channel.fetch_message(messageid)
+        programming = self.bot.get_channel(672139829361770496)
+        graphics = self.bot.get_channel(672161329263411242)
+
+        try:
+            msg = await programming.fetch_message(messageid)
+        except NotFound:
+            msg = await graphics.fetch_message(messageid)
+
         author = ""
         date = ""
         desc = ""
