@@ -492,7 +492,7 @@ class Tools(commands.Cog):
 
         try:
             msg = await programming.fetch_message(messageid)
-        except NotFound:
+        except:
             msg = await graphics.fetch_message(messageid)
 
         author = ""
