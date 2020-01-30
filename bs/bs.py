@@ -744,7 +744,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortroles(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=4)
+    @tasks.loop(hours=5)
     async def sortrolesasia(self):
         ch = self.bot.get_channel(672267298001911838)
         await ch.trigger_typing()
