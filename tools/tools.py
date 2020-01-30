@@ -476,7 +476,7 @@ class Tools(commands.Cog):
         await author.send("How should interested people contact you:")
         contact = (await self.bot.wait_for('message', check=check)).content
 
-        embed = discord.Embed(title=f"Request", colour=discord.Colour.red())
+        embed = discord.Embed(title=f"{channel.capitalize()} request", colour=discord.Colour.red())
         embed.set_thumbnail(url=author.avatar_url)
         embed.add_field(name="Posted by:", value=f"{author.mention} ({author.top_role})", inline=False)
         embed.add_field(name="Date:", value=datetime.now().strftime('%d %b %Y'), inline=False)
@@ -487,6 +487,16 @@ class Tools(commands.Cog):
 
     @commands.command()
     async def acceptrequest(self, ctx, *, messageid):
+        intro = await ctx.send("Please head over to a DM with me to answer some questions.")
+        await ctx.message.delete(delay=10)
+        await intro.delete(delay=10)
+
+        def check(msg):
+            return msg.channel == author.dm_channel and msg.author == author
+
+        await author.send("Add a comment. It can be the time you need to do the task, immediate questions that arise, etc.")
+        comment = (await self.bot.wait_for('message', check=check)).content
+
         programming = self.bot.get_channel(672139829361770496)
         graphics = self.bot.get_channel(672161329263411242)
 
@@ -500,17 +510,19 @@ class Tools(commands.Cog):
         desc = ""
         contact = ""
         for embed in msg.embeds:
+            title = embed.title
             author = embed.fields[0].value
             date = embed.fields[1].value
             desc = embed.fields[2].value
             contact = embed.fields[3].value
 
-        embed = discord.Embed(title=f"Request", colour=discord.Colour.green())
+        embed = discord.Embed(title=title, colour=discord.Colour.green())
         embed.set_thumbnail(url=ctx.author.avatar_url)
         embed.add_field(name="Posted by:", value=author, inline=False)
         embed.add_field(name="Date:", value=date, inline=False)
         embed.add_field(name="Job description:", value=desc, inline=False)
         embed.add_field(name="How to contact:", value=contact, inline=False)
         embed.add_field(name="Accepted by:", value=f"{ctx.author.mention} ({ctx.author.top_role})", inline=False)
+        embed.add_field(name="Comment by an executor:", value=comment, inline=False)
         await msg.edit(embed=embed)
 
