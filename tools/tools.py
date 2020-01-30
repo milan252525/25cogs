@@ -169,41 +169,6 @@ class Tools(commands.Cog):
 
         await self.config.countdowns.set_raw(countdownMessage.id, value={"finish" : int(time()) + seconds, "channel" : ctx.channel.id})
         await ctx.message.delete(delay=10)
-        
-    @commands.command()
-    async def postjob(self, ctx):
-        author = ctx.author
-        intro = await ctx.send("Please head over to a DM with me to answer some questions.")
-        await ctx.message.delete(delay=10)
-        await intro.delete(delay=10)
-        jobChannel = self.bot.get_channel(602906639217197085)
-        
-        def check(msg):
-            return msg.channel == author.dm_channel and msg.author == author
-        
-        await author.send("Is this job posting or position opening:")
-        job = (await self.bot.wait_for('message', check=check)).content
-        await author.send("Completion deadline:")
-        deadline = (await self.bot.wait_for('message', check=check)).content
-        await author.send("Availability (who can apply for this job?):")
-        availability = (await self.bot.wait_for('message', check=check)).content
-        await author.send("How should interested people contact you:")
-        contact = (await self.bot.wait_for('message', check=check)).content
-        await author.send("Description of the job:")
-        jobdesc = (await self.bot.wait_for('message', check=check)).content
-        await author.send(f"Done! Your offer was posted in {jobChannel.mention}")
-        
-        embed=discord.Embed(title=job)
-        embed.set_thumbnail(url=author.avatar_url)
-        embed.add_field(name="Posted by:", value=f"{author.mention} ({author.top_role})", inline=False)
-        embed.add_field(name="Date:", value=datetime.now().strftime('%d %b %Y'), inline=False)
-        embed.add_field(name="Completion deadline:", value=deadline, inline=False)
-        embed.add_field(name="Availability:", value=availability, inline=False)
-        embed.add_field(name="How to contact:", value=contact, inline=False)
-        embed.add_field(name="Job description:", value=jobdesc, inline=False)
-        
-        
-        await jobChannel.send(embed=randomize_colour(embed))
 
     @commands.command()
     async def members(self, ctx, *, rolename):
