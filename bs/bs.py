@@ -748,7 +748,6 @@ class BrawlStarsCog(commands.Cog):
     async def sortrolesasia(self):
         ch = self.bot.get_channel(672267298001911838)
         await ch.trigger_typing()
-        await ch.send("starting")
         lafamily = ch.guild.get_role(663795352666636305)
         guest = ch.guild.get_role(663798304194166854)
         newcomer = ch.guild.get_role(663799853889093652)
