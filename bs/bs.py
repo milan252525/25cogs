@@ -19,9 +19,11 @@ class BrawlStarsCog(commands.Cog):
         default_guild = {"clubs" : {}}
         self.config.register_guild(**default_guild)
         self.sortroles.start()
+        self.sortrolesasia.start()
         
     def cog_unload(self):
         self.sortroles.cancel()
+        self.sortrolesasia.cancel()
         
     async def initialize(self):
         bsapikey = await self.bot.get_shared_api_tokens("bsapi")
@@ -743,7 +745,7 @@ class BrawlStarsCog(commands.Cog):
         await asyncio.sleep(5)
 
     @tasks.loop(hours=4)
-    async def sortrolessia(self):
+    async def sortrolesasia(self):
         ch = self.bot.get_channel(672267298001911838)
         await ch.trigger_typing()
         lafamily = ctx.guild.get_role(663795352666636305)
@@ -841,7 +843,7 @@ class BrawlStarsCog(commands.Cog):
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
 
     @sortrolesasia.before_loop
-    async def before_sortroles(self):
+    async def before_sortrolesasia(self):
         await asyncio.sleep(5)
 
     @commands.command()
