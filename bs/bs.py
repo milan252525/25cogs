@@ -817,7 +817,7 @@ class BrawlStarsCog(commands.Cog):
                             member_role_expected = role
                             break
                     if member_role_expected is None:
-                        msg += await self.removeroleifpresent(member, guest, newcomer, vp, pres, leadership)
+                        msg += await self.removeroleifpresent(member, guest, newcomer, vp, pres, leadership, leadershipemb)
                         msg += await self.addroleifnotpresent(member, lafamily, community)
                         continue
                     msg += await self.removeroleifpresent(member, guest, newcomer)
