@@ -396,8 +396,16 @@ class Welcome(commands.Cog):
         await setupChannel.send(embed=discord.Embed(colour=discord.Colour.blue(), description="This channel will get deleted in 5 minutes!\n\nIf you have any questions or need help please send a personal message to LA Modmail.".upper()))
         await asyncio.sleep(300)
         await setupChannel.delete(reason="Welcoming process finished.")
-        
+
     async def do_setup_LAFC(self, member, new = False):
+        newcomer = member.guild.get_role(672233525013118986)
+        await member.add_roles(newcomer)
+        welcoming = self.bot.get_channel(672233228815564816)
+        await welcoming.send(f"{member.mention}, welcome to LA Fight Club! Type /registerLAFC in this chat to gain access to the rest of the server.")
+
+    @commands.command()
+    async def registerLAFC(self, ctx, new = False):
+        member = ctx.author
         welcomeCategory = discord.utils.get(member.guild.categories, id=602906519100719115)
         roleStaff = member.guild.get_role(593297117519413254)
         overwrites = {member.guild.default_role: discord.PermissionOverwrite(read_messages=False), member: discord.PermissionOverwrite(read_messages=True, send_messages=True, read_message_history=True, add_reactions=True), roleStaff: discord.PermissionOverwrite(read_messages=True, send_messages=True, read_message_history=True)}
