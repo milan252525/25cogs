@@ -817,6 +817,8 @@ class BrawlStarsCog(commands.Cog):
                 if member_role_expected is None:
                     msg += await self.removeroleifpresent(member, guest, newcomer, vp, pres, leadership, leadershipemb)
                     msg += await self.addroleifnotpresent(member, lafamily, community)
+                    if msg != "":
+                        await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
                     continue
                 msg += await self.removeroleifpresent(member, guest, newcomer)
                 msg += await self.addroleifnotpresent(member, lafamily, community)
