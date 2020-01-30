@@ -578,13 +578,6 @@ class Welcome(commands.Cog):
         await setupChannel.delete(reason="Welcoming process finished.")
 
     async def do_setup_LABSevent(self, member, new=False):
-        newcomer = member.guild.get_role(672233525013118986)
-        await member.add_roles(newcomer)
-        welcoming = self.bot.get_channel(672233228815564816)
-        await welcoming.send(
-            f"{member.mention}, welcome to LA Fight Club! Type /registerLAFC in this chat to gain access to the rest of the server.")
-
-    async def do_setup_LABSevent(self, member, new=False):
         welcomeCategory = discord.utils.get(member.guild.categories, id=654334199993466880)
         eventsStaff = member.guild.get_role(656072241808670730)
         overwrites = {member.guild.default_role: discord.PermissionOverwrite(read_messages=False),
