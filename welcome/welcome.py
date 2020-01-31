@@ -398,6 +398,7 @@ class Welcome(commands.Cog):
         await setupChannel.delete(reason="Welcoming process finished.")
 
     async def do_setup_LAFC(self, member, new = False):
+        starttime = time.time()
         newcomer = member.guild.get_role(672233525013118986)
         await member.add_roles(newcomer)
         welcomeCategory = discord.utils.get(member.guild.categories, id=602906519100719115)
@@ -410,13 +411,6 @@ class Welcome(commands.Cog):
         setupChannel = await member.guild.create_text_channel(member.name, category=welcomeCategory,
                                                               overwrites=overwrites, topic=f"{member.id}",
                                                               reason=f"Channel created for {member.display_name} role setup.")
-        await self.registerLAFC(member, setupChannel, new)
-        await asyncio.sleep(300)
-        await setupChannel.delete(reason="Person not responding.")
-        await member.message(f"It took you too long to register in {str(member.guild)} thus your welcome channel was deleted. Please, type /registerLAFC here to resume your registration.")
-
-    @commands.command()
-    async def registerLAFC(self, member, setupChannel, new = False):
         globalChat = self.bot.get_channel(593248015729295362)
         welcomeLog = self.bot.get_channel(655517081353322561)
         logMessages = []
@@ -450,6 +444,11 @@ class Welcome(commands.Cog):
             def check(reaction, user):
                 return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in ["<:ClashRoyale:595528714138288148>", "<:HelpIcon:598803665989402624>"]
             reaction, _ = await self.bot.wait_for('reaction_add', check=check)
+
+            await asyncio.sleep(10)
+            if time.time() - starttime > 10:
+                await setupChannel.delete(reason="No response.")
+                return
             
             if str(reaction.emoji) == "<:ClashRoyale:595528714138288148>":
                 await appendLog("Chosen game: Clash Royale")
