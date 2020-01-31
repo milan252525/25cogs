@@ -445,8 +445,8 @@ class Welcome(commands.Cog):
                 return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in ["<:ClashRoyale:595528714138288148>", "<:HelpIcon:598803665989402624>"]
             reaction, _ = await self.bot.wait_for('reaction_add', check=check)
 
-            await asyncio.sleep(10)
-            if time.time() - starttime > 10:
+            await asyncio.sleep(100)
+            if time.time() - starttime > 100:
                 await setupChannel.delete(reason="No response.")
                 return
             
