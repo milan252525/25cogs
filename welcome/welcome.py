@@ -399,7 +399,6 @@ class Welcome(commands.Cog):
         await setupChannel.delete(reason="Welcoming process finished.")
 
     async def do_setup_LAFC(self, member, new=False):
-        starttime = time.time()
         welcomeCategory = discord.utils.get(member.guild.categories, id=602906519100719115)
         roleStaff = member.guild.get_role(593297117519413254)
         overwrites = {member.guild.default_role: discord.PermissionOverwrite(read_messages=False),
@@ -446,10 +445,6 @@ class Welcome(commands.Cog):
             def check(reaction, user):
                 return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in [
                     "<:ClashRoyale:595528714138288148>", "<:HelpIcon:598803665989402624>"]
-
-            await asyncio.sleep(100)
-            if time.time() - starttime > 100:
-                await setupChannel.delete(reason="No response.")
 
             reaction, _ = await self.bot.wait_for('reaction_add', check=check)
 
