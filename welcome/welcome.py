@@ -400,16 +400,23 @@ class Welcome(commands.Cog):
     async def do_setup_LAFC(self, member, new = False):
         newcomer = member.guild.get_role(672233525013118986)
         await member.add_roles(newcomer)
-        welcoming = self.bot.get_channel(672233228815564816)
-        await welcoming.send(f"{member.mention}, welcome to LA Fight Club! Type /registerLAFC in this chat to gain access to the rest of the server.")
-
-    @commands.command()
-    async def registerLAFC(self, ctx, new = False):
-        member = ctx.author
         welcomeCategory = discord.utils.get(member.guild.categories, id=602906519100719115)
         roleStaff = member.guild.get_role(593297117519413254)
-        overwrites = {member.guild.default_role: discord.PermissionOverwrite(read_messages=False), member: discord.PermissionOverwrite(read_messages=True, send_messages=True, read_message_history=True, add_reactions=True), roleStaff: discord.PermissionOverwrite(read_messages=True, send_messages=True, read_message_history=True)}
-        setupChannel = await member.guild.create_text_channel(member.name, category=welcomeCategory, overwrites=overwrites, topic=f"{member.id}" , reason=f"Channel created for {member.display_name} role setup.")
+        overwrites = {member.guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                      member: discord.PermissionOverwrite(read_messages=True, send_messages=True,
+                                                          read_message_history=True, add_reactions=True),
+                      roleStaff: discord.PermissionOverwrite(read_messages=True, send_messages=True,
+                                                             read_message_history=True)}
+        setupChannel = await member.guild.create_text_channel(member.name, category=welcomeCategory,
+                                                              overwrites=overwrites, topic=f"{member.id}",
+                                                              reason=f"Channel created for {member.display_name} role setup.")
+        await self.registerLAFC(member, setupChannel, new)
+        await asyncio.sleep(300)
+        await setupChannel.delete(reason="Person not responding.")
+        await member.message(f"It took you too long to register in {str(member.guild)} thus your welcome channel was deleted. Please, type /registerLAFC here to resume your registration.")
+
+    @commands.command()
+    async def registerLAFC(self, member, setupChannel, new = False):
         globalChat = self.bot.get_channel(593248015729295362)
         welcomeLog = self.bot.get_channel(655517081353322561)
         logMessages = []
