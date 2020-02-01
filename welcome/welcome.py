@@ -408,6 +408,8 @@ class Welcome(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def setupLAFC(self, ctx, tag, member: discord.Member = None):
+        if ctx.channel.id != 673026631362805770:
+            await ctx.send(embed=discord.Embed(description="This command can't be used in this channel.", colour=discord.Colour.red()))
         globalChat = self.bot.get_channel(593248015729295362)
         if member == None:
             member = ctx.author
