@@ -397,6 +397,8 @@ class Welcome(commands.Cog):
         await setupChannel.delete(reason="Welcoming process finished.")
 
     async def do_setup_LAFC(self, member, new=False):
+        welcomingprocess = member.guild.get_role(673034397179445294)
+        await member.add_roles(welcomingprocess)
         welcome = self.bot.get_channel(673026631362805770)
         sendTagEmbed = discord.Embed(title="Welcome to LA Fight Club!", description="To gain access to the rest of the server, send /setupLAFC and your Clash Royale tag in this channel.", colour=discord.Colour.blue())
         sendTagEmbed.set_image(url="https://i.imgur.com/Fc8uAWH.png")
@@ -406,6 +408,7 @@ class Welcome(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def setupLAFC(self, ctx, tag):
+        welcomingprocess = member.guild.get_role(673034397179445294)
         globalChat = self.bot.get_channel(593248015729295362)
         member = ctx.author
         msg = ""
@@ -464,6 +467,7 @@ class Welcome(commands.Cog):
             msg += f"**Something went wrong, please send a personal message to LA Modmail or try again! ({str(e)})**\n"
         await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.blue()))
 
+        await member.remove_roles(welcomingprocess)
         wlcm = ["Are you ready to fight?", "Do you have what it takes to become a champion?",
                 "Ready to showcase your skill?", "Are you ready to prove yourself?"]
         await globalChat.send(
