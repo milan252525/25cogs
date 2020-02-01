@@ -389,6 +389,7 @@ class ClashRoyaleCog(commands.Cog):
         if member == None:
             member = ctx.author
         try:
+            tag = await self.config.user(member).tag()
             player = await self.crapi.get_player("#" + tag)
             nick = f"{player.name} | {player.clan.name}" if player.clan is not None else f"{player.name}"
             try:
