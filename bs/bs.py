@@ -758,6 +758,7 @@ class BrawlStarsCog(commands.Cog):
             error_counter = 0
 
             for member in ch.guild.members:
+                await ch.send(str(member))
                 if member.bot:
                     continue
                 tag = await self.config.user(member).tag()
@@ -845,7 +846,7 @@ class BrawlStarsCog(commands.Cog):
                 if msg != "":
                     await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
         except Exception as e:
-            ch.send(e)
+            await ch.send(e)
 
 
     @sortrolesasia.before_loop
