@@ -388,6 +388,7 @@ class ClashRoyaleCog(commands.Cog):
     async def refreshLAFC(self, ctx, member:discord.Member=None):
         if member == None:
             member = ctx.author
+        msg = ""
         try:
             tag = await self.config.user(member).tag()
             player = await self.crapi.get_player("#" + tag)
