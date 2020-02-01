@@ -22,8 +22,6 @@ class Welcome(commands.Cog):
             await self.do_setup_LAFC(member, new = True)
         if member.guild.id == 654334199494606848 and not member.bot:
             await self.do_setup_LABSevent(member, new = True)
-        #if member.guild.id == 401883208511389716 and not member.bot:
-            #await self.do_setup_LABS(member)
     
     @commands.Cog.listener()
     async def on_member_remove(self, member):
@@ -588,6 +586,64 @@ class Welcome(commands.Cog):
         await asyncio.sleep(300)
         await setupChannel.delete(reason="Welcoming process finished.")
 
+    @commands.command()
+    async def setupLAFC(self, ctx, tag):
+        msg = ""
+        tag = tag.lower().replace('O', '0').replace(' ', '')
+        if tag.startswith("#"):
+            tag = tag.strip('#')
+        try:
+            player = await self.crapi.get_player("#" + tag)
+            nick = f"{player.name} | {player.clan.name}" if player.clan is not None else f"{player.name}"
+            try:
+                await member.edit(nick=nick[:31])
+                msg += f"Nickname changed: {nick[:31]}\n"
+            except discord.Forbidden:
+                msg += f":exclamation:Couldn't change nickname of this user. ({nick[:31]})\n"
+            await self.crconfig.user(member).tag.set(tag)
+            try:
+                roleMember = member.guild.get_role(593299886167031809)
+                await member.add_roles(roleMember)
+                msg += f"Assigned roles: {roleMember.name}\n"
+            except discord.Forbidden:
+                msg += f":exclamation:Couldn't change roles of this user. ({roleMember.name})\n"
+            trophyRole = None
+            if player.trophies >= 8000:
+                trophyRole = member.guild.get_role(600325526007054346)
+            elif player.trophies >= 7000:
+                trophyRole = member.guild.get_role(594960052604108811)
+            elif player.trophies >= 6000:
+                trophyRole = member.guild.get_role(594960023088660491)
+            elif player.trophies >= 5000:
+                trophyRole = member.guild.get_role(594959970181709828)
+            elif player.trophies >= 4000:
+                trophyRole = member.guild.get_role(594959895904649257)
+            elif player.trophies >= 3000:
+                trophyRole = member.guild.get_role(598396866299953165)
+            if trophyRole is not None:
+                try:
+                    await member.add_roles(trophyRole)
+                    msg += f"Assigned roles: {trophyRole.name}\n"
+                except discord.Forbidden:
+                    msg += f":exclamation:Couldn't change roles of this user. ({trophyRole.name})\n"
+            if player.challengeMaxWins >= 20:
+                try:
+                    wins20Role = member.guild.get_role(593776990604230656)
+                    await member.add_roles(wins20Role)
+                    msg += f"Assigned roles: {wins20Role.name}\n"
+                except discord.Forbidden:
+                    msg += f":exclamation:Couldn't change roles of this user. ({wins20Role.name})\n"
+
+        except clashroyale.NotFoundError as e:
+            msg += "No player with this tag found, try again!\n"
+        except ValueError as e:
+            msg += f"**{str(e)}\nTry again or send a personal message to LA Modmail!**\n"
+        except clashroyale.RequestError as e:
+            msg += f"Clash Royale API is offline, please try again later! ({str(e)})\n"
+        except Exception as e:
+            msg += "**Something went wrong, please send a personal message to LA Modmail or try again!**\n"
+        await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.blue()))
+
     async def do_setup_LABSevent(self, member, new=False):
         welcomeCategory = discord.utils.get(member.guild.categories, id=654334199993466880)
         eventsStaff = member.guild.get_role(656072241808670730)
@@ -785,7 +841,3 @@ class Welcome(commands.Cog):
                                                     description="Process finished, this channel will get deleted in 5 minutes!"))
         await asyncio.sleep(300)
         await setupChannel.delete(reason="Welcoming process finished.")
-
-    async def do_setup_LABS(self, member):
-        roles = self.bot.get_channel(547087959015292929)
-
