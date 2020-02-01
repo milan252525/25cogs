@@ -637,11 +637,11 @@ class Welcome(commands.Cog):
         except clashroyale.NotFoundError as e:
             msg += "No player with this tag found, try again!\n"
         except ValueError as e:
-            msg += f"**{str(e)}\nTry again or send a personal message to LA Modmail!**\n"
+            msg += f"**{str(e)}\nTry again or send a personal message to LA Modmail! ({str(e)})**\n"
         except clashroyale.RequestError as e:
             msg += f"Clash Royale API is offline, please try again later! ({str(e)})\n"
         except Exception as e:
-            msg += "**Something went wrong, please send a personal message to LA Modmail or try again!**\n"
+            msg += f"**Something went wrong, please send a personal message to LA Modmail or try again! ({str(e)})**\n"
         await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.blue()))
 
     async def do_setup_LABSevent(self, member, new=False):
