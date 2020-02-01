@@ -408,9 +408,9 @@ class Welcome(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def setupLAFC(self, ctx, tag):
-        welcomingprocess = member.guild.get_role(673034397179445294)
         globalChat = self.bot.get_channel(593248015729295362)
         member = ctx.author
+        welcomingprocess = member.guild.get_role(673034397179445294)
         msg = ""
         tag = tag.lower().replace('O', '0').replace(' ', '')
         if tag.startswith("#"):
