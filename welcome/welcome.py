@@ -454,11 +454,6 @@ class Welcome(commands.Cog):
                 except discord.Forbidden:
                     msg += f":exclamation:Couldn't change roles of this user. ({wins20Role.name})\n"
 
-        wlcm = ["Are you ready to fight?", "Do you have what it takes to become a champion?",
-                "Ready to showcase your skill?", "Are you ready to prove yourself?"]
-        await globalChat.send(
-            f"<:lafclogo:603670041044582516> {member.mention} welcome to LA Fight Club! {choice(wlcm)}")
-
         except clashroyale.NotFoundError as e:
             msg += "No player with this tag found, try again!\n"
         except ValueError as e:
@@ -468,6 +463,11 @@ class Welcome(commands.Cog):
         except Exception as e:
             msg += f"**Something went wrong, please send a personal message to LA Modmail or try again! ({str(e)})**\n"
         await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.blue()))
+
+        wlcm = ["Are you ready to fight?", "Do you have what it takes to become a champion?",
+                "Ready to showcase your skill?", "Are you ready to prove yourself?"]
+        await globalChat.send(
+            f"<:lafclogo:603670041044582516> {member.mention} welcome to LA Fight Club! {choice(wlcm)}")
 
     async def do_setup_LABSevent(self, member, new=False):
         welcomeCategory = discord.utils.get(member.guild.categories, id=654334199993466880)
