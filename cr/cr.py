@@ -218,7 +218,7 @@ class ClashRoyaleCog(commands.Cog):
                 return await ctx.send(embed=randomize_colour(embed))            
                 
             except Exception as e:
-                return await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
+                return await ctx.send(e)#"**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
         
         if len((await self.config.guild(ctx.guild).clans()).keys()) < 1:
             return await ctx.send(embed = self.badEmbed(f"This server has no clans saved. Save a clan by using {ctx.prefix}clans add!"))
