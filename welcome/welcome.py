@@ -588,6 +588,7 @@ class Welcome(commands.Cog):
 
     @commands.command()
     async def setupLAFC(self, ctx, tag):
+        member = ctx.author
         msg = ""
         tag = tag.lower().replace('O', '0').replace(' ', '')
         if tag.startswith("#"):
