@@ -401,7 +401,7 @@ class Welcome(commands.Cog):
         sendTagEmbed = discord.Embed(title="Welcome to LA Fight Club!", description="To gain access to the rest of the server, send /setupLAFC and your Clash Royale tag in this channel.", colour=discord.Colour.blue())
         sendTagEmbed.set_image(url="https://i.imgur.com/Fc8uAWH.png")
         await welcome.send(member.mention)
-        await welcome.send(sendTagEmbed)
+        await welcome.send(embed=sendTagEmbed)
 
     @commands.command()
     @commands.guild_only()
