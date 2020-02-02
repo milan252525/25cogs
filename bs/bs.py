@@ -526,7 +526,7 @@ class BrawlStarsCog(commands.Cog):
             else:
                 offclubs = []
                 for k in (await self.config.guild(ctx.guild).clubs()).keys():
-                    offclubs.append([await self.config.guild(ctx.guild).clubs.get(k, "lastPosition"), k])
+                    offclubs.append([await self.config.guild(ctx.guild).clubs.get("lastPosition"), k])
                 offclubs= sorted(offclubs, key=lambda x: x[0])
                                 
                 for club in offclubs:
