@@ -496,7 +496,7 @@ class BrawlStarsCog(commands.Cog):
             try:
                 clubs = []
                 for key in (await self.config.guild(ctx.guild).clubs()).keys():
-                    club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs.get_raw(key, "tag"))
+                    club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs.get(key, "tag"))
                     clubs.append(club)
                     #await asyncio.sleep(1)
             except brawlstats.errors.RequestError as e:
@@ -510,7 +510,7 @@ class BrawlStarsCog(commands.Cog):
                 for i in range(len(clubs)):   
                     key = ""
                     for k in (await self.config.guild(ctx.guild).clubs()).keys():
-                        if clubs[i].tag.replace("#", "") == await self.config.guild(ctx.guild).clubs.get_raw(k, "tag"):
+                        if clubs[i].tag.replace("#", "") == await self.config.guild(ctx.guild).clubs.get(k, "tag"):
                             key = k
                     
                     await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastMemberCount', value=len(clubs[i].members))            
