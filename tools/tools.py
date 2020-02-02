@@ -486,7 +486,7 @@ class Tools(commands.Cog):
         request = await ch.send(embed=embed)
 
         embed.add_field(name="ID:", value=request.id, inline=False)
-        await msg.edit(embed=embed)
+        await request.edit(embed=embed)
 
 
     @commands.command()
