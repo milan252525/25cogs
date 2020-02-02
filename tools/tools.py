@@ -475,6 +475,7 @@ class Tools(commands.Cog):
         jobdesc = (await self.bot.wait_for('message', check=check)).content
         await author.send("How should interested people contact you:")
         contact = (await self.bot.wait_for('message', check=check)).content
+        await author.send("You're all set! Request sent.")
 
         embed = discord.Embed(title=f"{channel.capitalize()} request", colour=discord.Colour.red())
         embed.set_thumbnail(url=author.avatar_url)
@@ -483,6 +484,7 @@ class Tools(commands.Cog):
         embed.add_field(name="Job description:", value=jobdesc, inline=False)
         embed.add_field(name="How to contact:", value=contact, inline=False)
 
+        await ch.send("Please, don't forget to use /acceptrequest ID if you start working on the request.")
         request = await ch.send(embed=embed)
 
         embed.add_field(name="ID:", value=request.id, inline=False)
@@ -501,6 +503,7 @@ class Tools(commands.Cog):
 
         await author.send("Add a comment. It can be the time you need to do the task, immediate questions that arise, etc.")
         comment = (await self.bot.wait_for('message', check=check)).content
+        await author.send("You're all set! Request accepted.")
 
         programming = self.bot.get_channel(672139829361770496)
         graphics = self.bot.get_channel(672161329263411242)
