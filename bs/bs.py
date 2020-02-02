@@ -539,8 +539,8 @@ class BrawlStarsCog(commands.Cog):
                     creq = await self.config.guild(ctx.guild).clubs.get("lastRequirement")
                     #cemoji = discord.utils.get(self.bot.emojis, name = str(await self.config.guild(ctx.guild).clans.get_raw(ckey, "lastBadgeId")))
                     
-                    e_name = str(f"<:bsband:600741378497970177> {cname} [{ckey}] #{ctag} {cinfo}")
-                    e_value = str(f"<:bstrophy:552558722770141204>`{cscore}` {self.get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` ")
+                    e_name = f"<:bsband:600741378497970177> {cname} [{ckey}] #{ctag} {cinfo}"
+                    e_value = f"<:bstrophy:552558722770141204>`{str(cscore)}` {str(self.get_league_emoji(creq))}`{str(creq)}+` <:icon_gameroom:553299647729238016>`{str(cmembers)}` "
                     embedFields.append([e_name, e_value])
             
             colour = choice([discord.Colour.green(), discord.Colour.blue(), discord.Colour.purple(), discord.Colour.orange(), discord.Colour.red(), discord.Colour.teal()])
