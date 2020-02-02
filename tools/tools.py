@@ -483,7 +483,11 @@ class Tools(commands.Cog):
         embed.add_field(name="Job description:", value=jobdesc, inline=False)
         embed.add_field(name="How to contact:", value=contact, inline=False)
 
-        await ch.send(embed=embed)
+        request = await ch.send(embed=embed)
+
+        embed.add_field(name="ID:", value=request.id, inline=False)
+        await msg.edit(embed=embed)
+
 
     @commands.command()
     async def acceptrequest(self, ctx, *, messageid):
