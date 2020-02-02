@@ -510,7 +510,7 @@ class BrawlStarsCog(commands.Cog):
                 for i in range(len(clubs)):   
                     key = ""
                     for k in (await self.config.guild(ctx.guild).clubs()).keys():
-                        if clubs[i].tag.replace("#", "") == await self.config.guild(ctx.guild).clubs.get(k, "tag"):
+                        if clubs[i].tag.replace("#", "") == await self.config.guild(ctx.guild).clubs.get("tag"):
                             key = k
                     
                     await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastMemberCount', value=len(clubs[i].members))            
@@ -531,12 +531,12 @@ class BrawlStarsCog(commands.Cog):
                                 
                 for club in offclubs:
                     ckey = club[1]
-                    cscore = await self.config.guild(ctx.guild).clubs.get(ckey, "lastScore")
-                    cname = await self.config.guild(ctx.guild).clubs.get(ckey, "name")
-                    ctag = await self.config.guild(ctx.guild).clubs.get(ckey, "tag")
-                    cinfo = await self.config.guild(ctx.guild).clubs.get(ckey, "info")
-                    cmembers = await self.config.guild(ctx.guild).clubs.get(ckey, "lastMemberCount")
-                    creq = await self.config.guild(ctx.guild).clubs.get(ckey, "lastRequirement")
+                    cscore = await self.config.guild(ctx.guild).clubs.get("lastScore")
+                    cname = await self.config.guild(ctx.guild).clubs.get("name")
+                    ctag = await self.config.guild(ctx.guild).clubs.get("tag")
+                    cinfo = await self.config.guild(ctx.guild).clubs.get("info")
+                    cmembers = await self.config.guild(ctx.guild).clubs.get("lastMemberCount")
+                    creq = await self.config.guild(ctx.guild).clubs.get("lastRequirement")
                     #cemoji = discord.utils.get(self.bot.emojis, name = str(await self.config.guild(ctx.guild).clans.get_raw(ckey, "lastBadgeId")))
                     
                     e_name = f"<:bsband:600741378497970177> {cname} [{ckey}] #{ctag} {cinfo}"
