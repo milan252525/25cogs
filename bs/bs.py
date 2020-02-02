@@ -496,7 +496,7 @@ class BrawlStarsCog(commands.Cog):
             try:
                 clubs = []
                 for key in (await self.config.guild(ctx.guild).clubs()).keys():
-                    club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs.get(key, "tag"))
+                    club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs['tag'])
                     clubs.append(club)
                     #await asyncio.sleep(1)
             except brawlstats.errors.RequestError as e:
