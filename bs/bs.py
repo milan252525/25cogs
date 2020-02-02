@@ -496,7 +496,8 @@ class BrawlStarsCog(commands.Cog):
             try:
                 clubs = []
                 for key in (await self.config.guild(ctx.guild).clubs()).keys():
-                    club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs.get("tag"))
+                    clubjson = await self.config.guild(ctx.guild).clubs.get(key)
+                    club = await self.ofcbsapi.get_club(clubjson.get("tag"))
                     clubs.append(club)
                     #await asyncio.sleep(1)
             except brawlstats.errors.RequestError as e:
@@ -510,7 +511,8 @@ class BrawlStarsCog(commands.Cog):
                 for i in range(len(clubs)):   
                     key = ""
                     for k in (await self.config.guild(ctx.guild).clubs()).keys():
-                        if clubs[i].tag.replace("#", "") == await self.config.guild(ctx.guild).clubs.get("tag"):
+                        clubjson2 = self.config.guild(ctx.guild).clubs.get(k)
+                        if clubs[i].tag.replace("#", "") == clubjson2.get("tag"):
                             key = k
                     
                     await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastMemberCount', value=len(clubs[i].members))            
@@ -531,12 +533,13 @@ class BrawlStarsCog(commands.Cog):
                                 
                 for club in offclubs:
                     ckey = club[1]
-                    cscore = await self.config.guild(ctx.guild).clubs.get("lastScore")
-                    cname = await self.config.guild(ctx.guild).clubs.get("name")
-                    ctag = await self.config.guild(ctx.guild).clubs.get("tag")
-                    cinfo = await self.config.guild(ctx.guild).clubs.get("info")
-                    cmembers = await self.config.guild(ctx.guild).clubs.get("lastMemberCount")
-                    creq = await self.config.guild(ctx.guild).clubs.get("lastRequirement")
+                    clubjson3 = self.config.guild(ctx.guild).clubs.get(ckey)
+                    cscore = clubjson3.get("lastScore")
+                    cname = clubjson3.get("name")
+                    ctag = clubjson3.get("tag")
+                    cinfo = clubjson3.get("info")
+                    cmembers = clubjson3.get("lastMemberCount")
+                    creq = clubjson3.get(ckey, "lastRequirement")
                     #cemoji = discord.utils.get(self.bot.emojis, name = str(await self.config.guild(ctx.guild).clans.get_raw(ckey, "lastBadgeId")))
                     
                     e_name = f"<:bsband:600741378497970177> {cname} [{ckey}] #{ctag} {cinfo}"
