@@ -510,7 +510,7 @@ class BrawlStarsCog(commands.Cog):
                 for i in range(len(clubs)):   
                     key = ""
                     for k in (await self.config.guild(ctx.guild).clubs()).keys():
-                        if clubs[i].tag.replace("#", "") == await self.config.guild(ctx.guild).clubs.get("tag"):
+                        if clubs[i].tag.replace("#", "") == await self.config.guild(ctx.guild).clubs.get(k, "tag"):
                             key = k
                     
                     await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastMemberCount', value=len(clubs[i].members))            
@@ -526,17 +526,17 @@ class BrawlStarsCog(commands.Cog):
             else:
                 offclubs = []
                 for k in (await self.config.guild(ctx.guild).clubs()).keys():
-                    offclubs.append([await self.config.guild(ctx.guild).clubs.get("lastPosition"), k])
+                    offclubs.append([await self.config.guild(ctx.guild).clubs.get(k, "lastPosition"), k])
                 offclubs= sorted(offclubs, key=lambda x: x[0])
                                 
                 for club in offclubs:
                     ckey = club[1]
-                    cscore = await self.config.guild(ctx.guild).clubs.get("lastScore")
-                    cname = await self.config.guild(ctx.guild).clubs.get("name")
-                    ctag = await self.config.guild(ctx.guild).clubs.get("tag")
-                    cinfo = await self.config.guild(ctx.guild).clubs.get("info")
-                    cmembers = await self.config.guild(ctx.guild).clubs.get("lastMemberCount")
-                    creq = await self.config.guild(ctx.guild).clubs.get("lastRequirement")
+                    cscore = await self.config.guild(ctx.guild).clubs.get(ckey, "lastScore")
+                    cname = await self.config.guild(ctx.guild).clubs.get(ckey, "name")
+                    ctag = await self.config.guild(ctx.guild).clubs.get(ckey, "tag")
+                    cinfo = await self.config.guild(ctx.guild).clubs.get(ckey, "info")
+                    cmembers = await self.config.guild(ctx.guild).clubs.get(ckey, "lastMemberCount")
+                    creq = await self.config.guild(ctx.guild).clubs.get(ckey, "lastRequirement")
                     #cemoji = discord.utils.get(self.bot.emojis, name = str(await self.config.guild(ctx.guild).clans.get_raw(ckey, "lastBadgeId")))
                     
                     e_name = f"<:bsband:600741378497970177> {cname} [{ckey}] #{ctag} {cinfo}"
