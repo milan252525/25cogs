@@ -465,16 +465,28 @@ class Tools(commands.Cog):
             return msg.channel == author.dm_channel and msg.author == author
 
         ch = None
-        await author.send("Is it a graphics or programming request? (graphics/programming)")
+        await author.send("Is it a graphics or programming request? (graphics/programming) (or send \"cancel\" without quotes to cancel the request)")
         channel = (await self.bot.wait_for('message', check=check)).content
         if channel.lower() == "graphics":
             ch = graphics
         elif channel.lower() == "programming":
             ch = programming
-        await author.send("Description of the job:")
+        elif channel.lower() == "cancel":
+            await author.send("Request cancelled.")
+            return
+        else:
+            await author.send("Wrong argument! Try using /request command again.")
+            return
+        await author.send("Description of the job: (or send \"cancel\" without quotes to cancel the request)")
         jobdesc = (await self.bot.wait_for('message', check=check)).content
-        await author.send("How should interested people contact you:")
+        if jobdesc.lower() == "cancel":
+            await author.send("Request cancelled.")
+            return
+        await author.send("How should interested people contact you: (or send \"cancel\" without quotes to cancel the request)")
         contact = (await self.bot.wait_for('message', check=check)).content
+        if contact.lower() == "cancel":
+            await author.send("Request cancelled.")
+            return
         await author.send("You're all set! Request sent.")
 
         embed = discord.Embed(title=f"{channel.capitalize()} request", colour=discord.Colour.red())
