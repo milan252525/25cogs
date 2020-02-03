@@ -275,7 +275,7 @@ class Tools(commands.Cog):
     @commands.guild_only()
     @commands.command()
     async def launban(self, ctx, member: Union[discord.Member, str]):
-        if ctx.author.id != 294438945578811393 and ctx.author.id != 355514130737922048 and ctx.author.id != 359131399132807178 and ctx.author.id != 585275812429824041:
+        if ctx.author.id not in [294438945578811393, 355514130737922048, 359131399132807178, 585275812429824041, 230947675837562880]:
             return await ctx.send("You can't use this command.")
         guilds = [440960893916807188, 401883208511389716, 593248015729295360, 654334199494606848,
                   515962414190166041, 460550486257565697, 473169548301041674, 663716223258984496]
