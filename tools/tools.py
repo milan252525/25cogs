@@ -272,6 +272,30 @@ class Tools(commands.Cog):
                 msg += f"\n<:bad:450013438756782081> **{guild.name}** ({e})"
         await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.red()))
 
+    @commands.guild_only()
+    @commands.command()
+    async def launban(self, ctx, member: Union[discord.Member, str]):
+        if ctx.author.id != 294438945578811393 and ctx.author.id != 355514130737922048 and ctx.author.id != 359131399132807178 and ctx.author.id != 585275812429824041:
+            return await ctx.send("You can't use this command.")
+        guilds = [440960893916807188, 401883208511389716, 593248015729295360, 654334199494606848,
+                  515962414190166041, 460550486257565697, 473169548301041674, 663716223258984496]
+        msg = f"Attempting to unban **{member}** in all LA servers:"
+        for id in guilds:
+            try:
+                guild = self.bot.get_guild(id)
+                m = discord.Object(member.id if isinstance(member, discord.Member) else member)
+                await guild.unban(m, reason="Unbanned from all LA servers.")
+                msg += f"\n<:good:450013422717763609> **{guild.name}**"
+            except discord.Forbidden:
+                msg += f"\n<:bad:450013438756782081> **{guild.name}** (Forbidden to unban)"
+            except discord.HTTPException as he:
+                msg += f"\n<:bad:450013438756782081> **{guild.name}** ({he})"
+            except AttributeError as he:
+                msg += f"\n<:bad:450013438756782081> **{id}** ({he})"
+            except Exception as e:
+                msg += f"\n<:bad:450013438756782081> **{guild.name}** ({e})"
+        await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.green()))
+
     @commands.command()
     async def announcement(self, ctx, *, message):
         guilds = dict()
