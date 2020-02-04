@@ -127,6 +127,8 @@ class Welcome(commands.Cog):
                 except discord.Forbidden:
                     msg += f":exclamation:Couldn't change nickname of this user. ({nick[:31]})"
 
+                await self.bsconfig.user(member).tag.set(bstag)
+
                 try:
                     roleVerifiedMember = member.guild.get_role(597768235324145666)
                     roleBSMember = member.guild.get_role(524418759260241930)
@@ -218,7 +220,7 @@ class Welcome(commands.Cog):
                     msg += f":exclamation:Couldn't change nickname of this user. ({nick[:31]})"
 
                 await self.crconfig.user(member).tag.set(crtag)
-                await self.config.user(member).tag.set(bstag)
+                await self.bsconfig.user(member).tag.set(bstag)
 
                 try:
                     roleVerifiedMember = member.guild.get_role(597768235324145666)
