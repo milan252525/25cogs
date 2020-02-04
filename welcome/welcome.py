@@ -135,6 +135,12 @@ class Welcome(commands.Cog):
                 except discord.Forbidden:
                     msg += f":exclamation:Couldn't change roles of this user. ({roleVerifiedMember.name}, {roleBSMember.name})"
 
+            try:
+                await member.remove_roles(newcomer)
+                msg += f"Removed roles: {newcomer.name}"
+            except discord.Forbidden:
+                msg += f":exclamation:Couldn't remove roles of this user. ({newcomer.name})"
+
             except brawlstats.errors.NotFoundError as e:
                 await ctx.send("No player with this tag found, try again!")
                 msg += f":exclamation:Error occured: {str(e)}"
@@ -168,6 +174,12 @@ class Welcome(commands.Cog):
                     msg += f"Assigned roles: {roleVerifiedMember.name}, {roleCRMember.name}"
                 except discord.Forbidden:
                     msg += f":exclamation:Couldn't change roles of this user. ({roleVerifiedMember.name}, {roleCRMember.name})"
+
+            try:
+                await member.remove_roles(newcomer)
+                msg += f"Removed roles: {newcomer.name}"
+            except discord.Forbidden:
+                msg += f":exclamation:Couldn't remove roles of this user. ({newcomer.name})"
 
             except clashroyale.NotFoundError as e:
                 await ctx.send("No player with this tag found, try again!")
@@ -217,6 +229,12 @@ class Welcome(commands.Cog):
                 except discord.Forbidden:
                     msg += f":exclamation:Couldn't change roles of this user. ({roleVerifiedMember.name}, {roleCRMember.name}, {roleBSMember.name})"
 
+            try:
+                await member.remove_roles(newcomer)
+                msg += f"Removed roles: {newcomer.name}"
+            except discord.Forbidden:
+                msg += f":exclamation:Couldn't remove roles of this user. ({newcomer.name})"
+
             except clashroyale.NotFoundError as e:
                 await ctx.send("No player with this tag found, try again!")
                 msg += f":exclamation:Error occured: {str(e)}"
@@ -235,12 +253,6 @@ class Welcome(commands.Cog):
             except Exception as e:
                 await ctx.send("**Something went wrong, please send a personal message to LA Modmail or try again!**")
                 msg += f":exclamation:Error occured: {str(e)}"
-
-        try:
-            await member.remove_roles(newcomer)
-            msg += f"Removed roles: {newcomer.name}"
-        except discord.Forbidden:
-            msg += f":exclamation:Couldn't remove roles of this user. ({newcomer.name})"
 
         await ctx.send(embed=discord.Embed(description=msg, color=discord.Colour.blue()))
 
