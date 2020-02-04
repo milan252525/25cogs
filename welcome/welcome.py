@@ -231,7 +231,7 @@ class Welcome(commands.Cog):
                     roleCRMember = member.guild.get_role(440982993327357963)
                     roleBSMember = member.guild.get_role(524418759260241930)
                     await member.add_roles(roleVerifiedMember, roleCRMember, roleBSMember)
-                    msg += f"Assigned roles: {roleVerifiedMember.name}, {roleCRMember.name}\n"
+                    msg += f"Assigned roles: {roleVerifiedMember.name}, {roleCRMember.name}, {roleBSMember.name}\n"
                 except discord.Forbidden:
                     msg += f":exclamation:Couldn't change roles of this user. ({roleVerifiedMember.name}, {roleCRMember.name}, {roleBSMember.name})\n"
 
