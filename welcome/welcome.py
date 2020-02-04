@@ -112,6 +112,7 @@ class Welcome(commands.Cog):
         if member == None:
             member = ctx.author
         newcomer = member.guild.get_role(597767307397169173)
+        globalChat = self.bot.get_channel(556425378764423179)
         msg = ""
         if game.lower() == "bs":
             tag = tag.lower().replace('O', '0')
@@ -240,6 +241,8 @@ class Welcome(commands.Cog):
             msg += f"Removed roles: {newcomer.name}"
         except discord.Forbidden:
             msg += f":exclamation:Couldn't remove roles of this user. ({newcomer.name})"
+
+        await ctx.send(embed=discord.Embed(description=msg, color=discord.Colour.blue()))
 
         await globalChat.send(f"<:LA:602901892141547540> {member.mention} welcome to LA Gaming!")
 
