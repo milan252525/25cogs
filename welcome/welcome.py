@@ -123,9 +123,9 @@ class Welcome(commands.Cog):
                 nick = f"{player.name} | {player.club.name}" if player.club is not None else f"{player.name}"
                 try:
                     await member.edit(nick=nick[:31])
-                    msg += f"Nickname changed: {nick[:31]}"
+                    msg += f"Nickname changed: {nick[:31]}\n"
                 except discord.Forbidden:
-                    msg += f":exclamation:Couldn't change nickname of this user. ({nick[:31]})"
+                    msg += f":exclamation:Couldn't change nickname of this user. ({nick[:31]})\n"
 
                 await self.bsconfig.user(member).tag.set(bstag)
 
@@ -133,26 +133,28 @@ class Welcome(commands.Cog):
                     roleVerifiedMember = member.guild.get_role(597768235324145666)
                     roleBSMember = member.guild.get_role(524418759260241930)
                     await member.add_roles(roleVerifiedMember, roleBSMember)
-                    msg += f"Assigned roles: {roleVerifiedMember.name}, {roleBSMember.name}"
+                    msg += f"Assigned roles: {roleVerifiedMember.name}, {roleBSMember.name}\n"
                 except discord.Forbidden:
-                    msg += f":exclamation:Couldn't change roles of this user. ({roleVerifiedMember.name}, {roleBSMember.name})"
+                    msg += f":exclamation:Couldn't change roles of this user. ({roleVerifiedMember.name}, {roleBSMember.name})\n"
 
                 try:
                     await member.remove_roles(newcomer)
-                    msg += f"Removed roles: {newcomer.name}"
+                    msg += f"Removed roles: {newcomer.name}\n"
                 except discord.Forbidden:
-                    msg += f":exclamation:Couldn't remove roles of this user. ({newcomer.name})"
+                    msg += f":exclamation:Couldn't remove roles of this user. ({newcomer.name})\n"
+
+                await globalChat.send(f"<:LA:602901892141547540> {member.mention} welcome to LA Gaming!")
 
             except brawlstats.errors.NotFoundError as e:
                 await ctx.send("No player with this tag found, try again!")
-                msg += f":exclamation:Error occured: {str(e)}"
+                msg += f":exclamation:Error occured: {str(e)}\n"
             except brawlstats.errors.RequestError as e:
                 await ctx.send(f"Brawl Stars API is offline, please try again later! ({str(e)})")
-                msg += f":exclamation:Error occured: {str(e)}"
+                msg += f":exclamation:Error occured: {str(e)}\n"
             except Exception as e:
                 await ctx.send(
                     "**Something went wrong, please send a personal message to LA Modmail or try again!**")
-                msg += f":exclamation:Error occured: {str(e)}"
+                msg += f":exclamation:Error occured: {str(e)}\n"
         elif game.lower() == "cr":
             tag = tag.lower().replace('O', '0').replace(' ', '')
             if tag.startswith("#"):
@@ -163,9 +165,9 @@ class Welcome(commands.Cog):
                 nick = f"{player.name} | {player.clan.name}" if player.clan is not None else f"{player.name}"
                 try:
                     await member.edit(nick=nick[:31])
-                    msg += f"Nickname changed: {nick[:31]}"
+                    msg += f"Nickname changed: {nick[:31]}\n"
                 except discord.Forbidden:
-                    msg += f":exclamation:Couldn't change nickname of this user. ({nick[:31]})"
+                    msg += f":exclamation:Couldn't change nickname of this user. ({nick[:31]})\n"
 
                 await self.crconfig.user(member).tag.set(tag)
 
@@ -173,29 +175,31 @@ class Welcome(commands.Cog):
                     roleVerifiedMember = member.guild.get_role(597768235324145666)
                     roleCRMember = member.guild.get_role(440982993327357963)
                     await member.add_roles(roleVerifiedMember, roleCRMember)
-                    msg += f"Assigned roles: {roleVerifiedMember.name}, {roleCRMember.name}"
+                    msg += f"Assigned roles: {roleVerifiedMember.name}, {roleCRMember.name}\n"
                 except discord.Forbidden:
-                    msg += f":exclamation:Couldn't change roles of this user. ({roleVerifiedMember.name}, {roleCRMember.name})"
+                    msg += f":exclamation:Couldn't change roles of this user. ({roleVerifiedMember.name}, {roleCRMember.name})\n"
 
                 try:
                     await member.remove_roles(newcomer)
-                    msg += f"Removed roles: {newcomer.name}"
+                    msg += f"Removed roles: {newcomer.name}\n"
                 except discord.Forbidden:
-                    msg += f":exclamation:Couldn't remove roles of this user. ({newcomer.name})"
+                    msg += f":exclamation:Couldn't remove roles of this user. ({newcomer.name})\n"
+
+                await globalChat.send(f"<:LA:602901892141547540> {member.mention} welcome to LA Gaming!")
 
             except clashroyale.NotFoundError as e:
                 await ctx.send("No player with this tag found, try again!")
-                msg += f":exclamation:Error occured: {str(e)}"
+                msg += f":exclamation:Error occured: {str(e)}\n"
             except ValueError as e:
                 await ctx.send(f"**{str(e)}\nTry again or send a personal message to LA Modmail!**")
-                msg += f":exclamation:Error occured: {str(e)}"
+                msg += f":exclamation:Error occured: {str(e)}\n"
             except clashroyale.RequestError as e:
                 await ctx.send(f"Clash Royale API is offline, please try again later! ({str(e)})")
-                msg += f":exclamation:Error occured: {str(e)}"
+                msg += f":exclamation:Error occured: {str(e)}\n"
             except Exception as e:
                 await ctx.send(
                     "**Something went wrong, please send a personal message to LA Modmail or try again!**")
-                msg += f":exclamation:Error occured: {str(e)}"
+                msg += f":exclamation:Error occured: {str(e)}\n"
         elif game.lower() == "cr,bs":
             tags = tag.split(",")
             crtag = tags[0]
@@ -215,9 +219,9 @@ class Welcome(commands.Cog):
                 nick = f"{player.name} | {player.clan.name}" if player.clan is not None else f"{player.name}"
                 try:
                     await member.edit(nick=nick[:31])
-                    msg += f"Nickname changed: {nick[:31]}"
+                    msg += f"Nickname changed: {nick[:31]}\n"
                 except discord.Forbidden:
-                    msg += f":exclamation:Couldn't change nickname of this user. ({nick[:31]})"
+                    msg += f":exclamation:Couldn't change nickname of this user. ({nick[:31]})\n"
 
                 await self.crconfig.user(member).tag.set(crtag)
                 await self.bsconfig.user(member).tag.set(bstag)
@@ -227,38 +231,38 @@ class Welcome(commands.Cog):
                     roleCRMember = member.guild.get_role(440982993327357963)
                     roleBSMember = member.guild.get_role(524418759260241930)
                     await member.add_roles(roleVerifiedMember, roleCRMember, roleBSMember)
-                    msg += f"Assigned roles: {roleVerifiedMember.name}, {roleCRMember.name}"
+                    msg += f"Assigned roles: {roleVerifiedMember.name}, {roleCRMember.name}\n"
                 except discord.Forbidden:
-                    msg += f":exclamation:Couldn't change roles of this user. ({roleVerifiedMember.name}, {roleCRMember.name}, {roleBSMember.name})"
+                    msg += f":exclamation:Couldn't change roles of this user. ({roleVerifiedMember.name}, {roleCRMember.name}, {roleBSMember.name})\n"
 
                 try:
                     await member.remove_roles(newcomer)
-                    msg += f"Removed roles: {newcomer.name}"
+                    msg += f"Removed roles: {newcomer.name}\n"
                 except discord.Forbidden:
-                    msg += f":exclamation:Couldn't remove roles of this user. ({newcomer.name})"
+                    msg += f":exclamation:Couldn't remove roles of this user. ({newcomer.name})\n"
+
+                await globalChat.send(f"<:LA:602901892141547540> {member.mention} welcome to LA Gaming!")
 
             except clashroyale.NotFoundError as e:
                 await ctx.send("No player with this tag found, try again!")
-                msg += f":exclamation:Error occured: {str(e)}"
+                msg += f":exclamation:Error occured: {str(e)}\n"
             except ValueError as e:
                 await ctx.send(f"**{str(e)}\nTry again or send a personal message to LA Modmail!**")
-                msg += f":exclamation:Error occured: {str(e)}"
+                msg += f":exclamation:Error occured: {str(e)}\n"
             except clashroyale.RequestError as e:
                 await ctx.send(f"Clash Royale API is offline, please try again later! ({str(e)})")
-                msg += f":exclamation:Error occured: {str(e)}"
+                msg += f":exclamation:Error occured: {str(e)}\n"
             except brawlstats.errors.NotFoundError as e:
                 await ctx.send("No player with this tag found, try again!")
-                msg += f":exclamation:Error occured: {str(e)}"
+                msg += f":exclamation:Error occured: {str(e)}\n"
             except brawlstats.errors.RequestError as e:
                 await ctx.send(f"Brawl Stars API is offline, please try again later! ({str(e)})")
-                msg += f":exclamation:Error occured: {str(e)}"
+                msg += f":exclamation:Error occured: {str(e)}\n"
             except Exception as e:
                 await ctx.send("**Something went wrong, please send a personal message to LA Modmail or try again!**")
-                msg += f":exclamation:Error occured: {str(e)}"
+                msg += f":exclamation:Error occured: {str(e)}\n"
 
         await ctx.send(embed=discord.Embed(description=msg, color=discord.Colour.blue()))
-
-        await globalChat.send(f"<:LA:602901892141547540> {member.mention} welcome to LA Gaming!")
 
     async def do_setup_LAFC(self, member):
         welcomingprocess = member.guild.get_role(673034397179445294)
