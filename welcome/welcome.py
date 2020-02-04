@@ -106,14 +106,12 @@ class Welcome(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def setup(self, ctx, game, tag, member: discord.Member = None):
-        await ctx.send(tag)
-        await ctx.send(game)
-        newcomer = member.guild.get_role(597767307397169173)
         if ctx.channel.id != 674348799673499671:
             await ctx.send(embed=discord.Embed(description="This command can't be used in this channel.", colour=discord.Colour.red()))
             return
         if member == None:
             member = ctx.author
+        newcomer = member.guild.get_role(597767307397169173)
         msg = ""
         if game.lower() == "bs":
             tag = tag.lower().replace('O', '0')
