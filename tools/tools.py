@@ -488,10 +488,14 @@ class Tools(commands.Cog):
         def check(msg):
             return msg.channel == author.dm_channel and msg.author == author
 
+        gfx = False
+        gfxstaff = ctx.guild.get_role(663233286134431774)
         ch = None
-        await author.send("Is it a graphics or programming request? (graphics/programming) (or send \"cancel\" without quotes to cancel the request)")
+        await author.send(
+            "Is it a graphics or programming request? (graphics/programming) (or send \"cancel\" without quotes to cancel the request)")
         channel = (await self.bot.wait_for('message', check=check)).content
         if channel.lower() == "graphics":
+            gfx = True
             ch = graphics
         elif channel.lower() == "programming":
             ch = programming
@@ -506,7 +510,8 @@ class Tools(commands.Cog):
         if jobdesc.lower() == "cancel":
             await author.send("Request cancelled.")
             return
-        await author.send("How should interested people contact you: (or send \"cancel\" without quotes to cancel the request)")
+        await author.send(
+            "How should interested people contact you: (or send \"cancel\" without quotes to cancel the request)")
         contact = (await self.bot.wait_for('message', check=check)).content
         if contact.lower() == "cancel":
             await author.send("Request cancelled.")
@@ -520,7 +525,11 @@ class Tools(commands.Cog):
         embed.add_field(name="Job description:", value=jobdesc, inline=False)
         embed.add_field(name="How to contact:", value=contact, inline=False)
 
-        await ch.send("Please, don't forget to use /acceptrequest ID if you start working on the request.")
+        if gfx:
+            await ch.send(
+                f"{gfxstaff.mention} Please, don't forget to use /acceptrequest ID if you start working on the request.")
+        elif not gfx:
+            await ch.send("Please, don't forget to use /acceptrequest ID if you start working on the request.")
         request = await ch.send(embed=embed)
 
         embed.add_field(name="ID:", value=request.id, inline=False)
