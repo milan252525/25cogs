@@ -208,7 +208,7 @@ class Welcome(commands.Cog):
                 bstag = bstag.strip('#')
 
             try:
-                player = await self.crapi.get_player("#" + tag)
+                player = await self.crapi.get_player("#" + crtag)
 
                 nick = f"{player.name} | {player.clan.name}" if player.clan is not None else f"{player.name}"
                 try:
