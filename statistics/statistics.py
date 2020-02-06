@@ -66,7 +66,7 @@ class Statistics(commands.Cog):
             club = await self.ofcbsapi.get_club(tag)
             mainembed = discord.Embed(title=club.name)
             mainembed.add_field(name="Members:", value=f"{len(club.members)}/100")
-            ctx.send(mainembed)
+            await ctx.send(mainembed)
             i = 0
             for member in club.members:
                 membersembed = discord.Embed(title=member.name)
@@ -74,4 +74,4 @@ class Statistics(commands.Cog):
                 membersembed.add_field(name="Tag:", value=member.tag)
                 membersembed.add_field(name="Role:", value=member.role)
                 membersembed.add_field(name="Trophies:", value=member.trophies)
-                ctx.send(membersembed)
+                await ctx.send(membersembed)
