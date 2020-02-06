@@ -97,7 +97,7 @@ class Statistics(commands.Cog):
             members.sort(reverse=True)
             for i in range(len(members) - (len(members)//10), len(members)):
                 lower10 = lower10 + members[i]
-            averagetrophies = totaltrophies//totalmembers
+            averagetrophies = totaltrophies//len(members)
             embed = discord.Embed(color=discord.Colour.gold(), title="All clubs:")
             embed.add_field(name="Total trophies:", value=totaltrophies, inline=False)
             embed.add_field(name="Total members:", value=len(members), inline=False)
