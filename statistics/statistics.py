@@ -104,6 +104,7 @@ class Statistics(commands.Cog):
             embed.add_field(name="Total members:", value=totalmembers)
             embed.add_field(name="Average trophies:", value=averagetrophies)
             embed.add_field(name="Lower 10% average:", value=lower10//(len(mem) - len(mem)//10))
+            await ctx.send(embed=embed)
         elif key is not None:
             tag = await self.config.guild(ctx.guild).tags.get_raw(key, "tag")
             club = await self.ofcbsapi.get_club(tag)
@@ -114,3 +115,4 @@ class Statistics(commands.Cog):
             embed.add_field(name="Total members:", value=club.members)
             embed.add_field(name="Average trophies:", value=club.trophies//club.members)
             embed.add_field(name="Lower 10% average:", value=lower10 // (len(club.members) - len(club.members)//10))
+            await ctx.send(embed=embed)
