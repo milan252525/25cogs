@@ -1055,7 +1055,7 @@ class BrawlStarsCog(commands.Cog):
             person = self.bot.get_user(user)
             if person is not None:
                 if (await self.config.user(person).tag()) == tag:
-                    await ctx.send(f"This tag belongs to {str(person)}.")
+                    await ctx.send(f"This tag belongs to **{str(person)}**.")
                     return
 
         await ctx.send("This tag is either not saved or invalid.")
