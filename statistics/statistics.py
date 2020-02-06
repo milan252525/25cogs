@@ -50,8 +50,8 @@ class Statistics(commands.Cog):
             tag = tag.strip('#')
 
         try:
-            entry = await self.config.guild(ctx.guild).clubs.get(tag)
-            await self.config.guild(ctx.guild).tags.clear(entry)
+            entry = await self.config.guild(ctx.guild).clubs.get_raw(tag)
+            await self.config.guild(ctx.guild).tags.clear_raw(entry)
             await ctx.send(embed=discord.Embed(description=f"Club {club.name} successfully removed.", color=discord.Colour.blue()))
         except KeyError:
             await ctx.send(embed=discord.Embed(description=f"{tag} isn't saved in this server.", color=discord.Colour.red()))
@@ -60,6 +60,6 @@ class Statistics(commands.Cog):
     async def clubtags(self, ctx):
         await ctx.trigger_typing()
 
-        tags = await self.config.guild(ctx.guild).clubs.get(tag)
+        tags = await self.config.guild(ctx.guild).clubs.get_raw(tag)
 
         await ctx.send(tags)
