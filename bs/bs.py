@@ -1043,3 +1043,17 @@ class BrawlStarsCog(commands.Cog):
                     msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
             if msg != "":
                 await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
+
+    @commands.command()
+    @commands.guild_only()
+    async def userbytag(self, ctx, tag : str):
+        tag = tag.lower().replace('O', '0')
+        if tag.startswith("#"):
+            tag = tag.strip('#')
+
+        for user in (await self.config.user()):
+            if user.tag() == tag:
+                await ctx.send(f"This tag belongs to {str(user)}.")
+                return
+
+        await ctx.send(f"This tag is either not saved or invalid.")
