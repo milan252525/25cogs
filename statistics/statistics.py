@@ -81,7 +81,7 @@ class Statistics(commands.Cog):
 
     @commands.is_owner()
     @commands.command()
-    async def summary(self, ctx, key : None):
+    async def summary(self, ctx, key:str=None):
         if key is None:
             totaltrophies = 0
             totalmembers = 0
