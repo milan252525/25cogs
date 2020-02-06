@@ -1051,9 +1051,8 @@ class BrawlStarsCog(commands.Cog):
         if tag.startswith("#"):
             tag = tag.strip('#')
 
-        for user in self.config.user.values():
-            if user.tag == tag:
-                await ctx.send(f"This tag belongs to {str(user)}.")
-                return
+        for user in self.config.all_members():
+            await ctx.send(f"This tag belongs to {str(user)}.")
+            return
 
         await ctx.send(f"This tag is either not saved or invalid.")
