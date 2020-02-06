@@ -58,13 +58,20 @@ class Statistics(commands.Cog):
         except KeyError:
             await ctx.send(embed=discord.Embed(description=f"{tag} isn't saved in this server.", color=discord.Colour.red()))
 
+    @commands.is_owner()
     @commands.command()
-    async def clubtags(self, ctx):
-        await ctx.trigger_typing()
-
-        msg = ""
+    async def collectinfo(self, ctx):
         for key in (await self.config.guild(ctx.guild).tags()).keys():
-            msg += await self.config.guild(ctx.guild).tags.get_raw(key, "tag")
-            msg += "\n"
-
-        await ctx.send(embed=discord.Embed(description=msg, color=discord.Colour.blue()))
+            tag = await self.config.guild(ctx.guild).tags.get_raw(key, "tag")
+            club = await self.ofcbsapi.get_club(tag)
+            mainembed = discord.Embed(title=club.name)
+            mainembed.add_field(name="Members:", value=f"{len(club.members)}/100")
+            ctx.send(mainembed)
+            i = 0
+            for member in club.members:
+                membersembed = discord.Embed(title=member.name)
+                membersembed.add_field(name="Rank:", value=i+1)
+                membersembed.add_field(name="Tag:", value=member.tag)
+                membersembed.add_field(name="Role:", value=member.role)
+                membersembed.add_field(name="Trophies:", value=member.trophies)
+                ctx.send(membersembed)
