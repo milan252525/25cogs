@@ -104,7 +104,7 @@ class Statistics(commands.Cog):
             embed.add_field(name="Total trophies:", value=totaltrophies)
             embed.add_field(name="Total members:", value=totalmembers)
             embed.add_field(name="Average trophies:", value=averagetrophies)
-            embed.add_field(name="Lower 10% average:", value=lower10//(len(members) - (len(members)//10)))
+            embed.add_field(name="Lower 10% average:", value=lower10//(len(members)//10))
             await ctx.send(embed=embed)
         elif key is not None:
             lower10 = 0
@@ -116,5 +116,5 @@ class Statistics(commands.Cog):
             embed.add_field(name="Total trophies:", value=club.trophies)
             embed.add_field(name="Total members:", value=len(club.members))
             embed.add_field(name="Average trophies:", value=club.trophies//len(club.members))
-            embed.add_field(name="Lower 10% average:", value=lower10 // (len(club.members) - (len(club.members)//10)))
+            embed.add_field(name="Lower 10% average:", value=lower10 // (len(club.members)//10))
             await ctx.send(embed=embed)
