@@ -72,7 +72,7 @@ class Statistics(commands.Cog):
                 membersembed = discord.Embed(title=member.name, color=discord.Colour.gold())
                 membersembed.add_field(name="Rank:", value=i+1)
                 membersembed.add_field(name="Tag:", value=member.tag)
-                membersembed.add_field(name="Role:", value=member.role)
+                membersembed.add_field(name="Role:", value=member.role.capitalize())
                 membersembed.add_field(name="Trophies:", value=member.trophies)
                 i = i + 1
                 await ctx.send(embed=membersembed)
