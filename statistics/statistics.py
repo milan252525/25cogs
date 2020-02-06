@@ -1,5 +1,7 @@
 import discord
 from redbot.core import commands, Config, checks
+import asyncio
+import brawlstats
 
 class Statistics(commands.Cog):
 
