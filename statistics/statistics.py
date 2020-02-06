@@ -63,7 +63,7 @@ class Statistics(commands.Cog):
     async def membersinfo(self, ctx):
         f = open("members.txt", "w+")
         f.write("test")
-        await ctx.send(file=discord.File(f, "members.txt"))
+        await ctx.send(file=discord.File(f))
         f.close()
 
 
