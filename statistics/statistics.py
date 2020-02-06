@@ -78,3 +78,39 @@ class Statistics(commands.Cog):
                 i = i + 1
                 await ctx.send(msg)
         await ctx.send("Finished.")
+
+    @commands.is_owner()
+    @commands.command()
+    async def summary(self, ctx, key : None):
+        if key is None:
+            totaltrophies = 0
+            totalmembers = 0
+            averagetrophies = 0
+            lower10 = 0
+            members = []
+            for key in (await self.config.guild(ctx.guild).tags()).keys():
+                tag = await self.config.guild(ctx.guild).tags.get_raw(key, "tag")
+                club = await self.ofcbsapi.get_club(tag)
+                totalmembers = totalmembers + len(club.members)
+                for member in club.members:
+                    members.add(member)
+            for mem in members:
+                totaltrophies = totaltrophies + mem.trophies
+            for i in range(len(mem) - len(mem)//10, len(mem)):
+                lower10 = lower10 + mem[i].trophies
+            averagetrophies = totaltrophies//totalmembers
+            embed = discord.Embed(color=discord.Colour.gold())
+            embed.add_field(name="Total trophies:", value=totaltrophies)
+            embed.add_field(name="Total members:", value=totalmembers)
+            embed.add_field(name="Average trophies:", value=averagetrophies)
+            embed.add_field(name="Lower 10% average:", value=lower10//(len(mem) - len(mem)//10))
+        elif key is not None:
+            tag = await self.config.guild(ctx.guild).tags.get_raw(key, "tag")
+            club = await self.ofcbsapi.get_club(tag)
+            for i in range(len(club.members) - len(club.members)//10, len(club.members)):
+                lower10 = lower10 + club.members[i].trophies
+            embed = discord.Embed(color=discord.Colour.gold())
+            embed.add_field(name="Total trophies:", value=club.trophies)
+            embed.add_field(name="Total members:", value=club.members)
+            embed.add_field(name="Average trophies:", value=club.trophies//club.members)
+            embed.add_field(name="Lower 10% average:", value=lower10 // (len(club.members) - len(club.members)//10))
