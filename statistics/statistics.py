@@ -8,7 +8,7 @@ class Statistics(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=42424242)
-        default_guild = {"tags": []}
+        default_guild = {"tags": {}}
         self.config.register_guild(**default_guild)
 
     async def initialize(self):
@@ -28,7 +28,7 @@ class Statistics(commands.Cog):
 
         try:
             club = await self.ofcbsapi.get_club(tag)
-            await self.config.guild(ctx.guild).tags.set(tag)
+            await self.config.guild(ctx.guild).tags.set_raw(tag)
             await ctx.send(embed=discord.Embed(description=f"Club {club.name} successfully added.", color=discord.Colour.blue()))
 
         except brawlstats.errors.NotFoundError:
