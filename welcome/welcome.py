@@ -127,7 +127,7 @@ class Welcome(commands.Cog):
                 except discord.Forbidden:
                     msg += f":exclamation:Couldn't change nickname of this user. ({nick[:31]})\n"
 
-                await self.bsconfig.user(member).tag.set(bstag)
+                await self.bsconfig.user(member).tag.set(tag)
 
                 try:
                     roleVerifiedMember = member.guild.get_role(597768235324145666)
