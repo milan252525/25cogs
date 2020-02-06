@@ -60,5 +60,5 @@ class Statistics(commands.Cog):
     async def clubtags(self, ctx):
         await ctx.trigger_typing()
 
-        for tag in self.config.guild(ctx.guild).tags:
+        for tag in (await self.config.guild(ctx.guild).tags():
             await ctx.send(tag)
