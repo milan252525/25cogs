@@ -29,13 +29,13 @@ class Statistics(commands.Cog):
         try:
             club = await self.ofcbsapi.get_club(tag)
             await self.config.guild(ctx.guild).tags.set(tag)
-            await ctx.send(embed=discord.Embed(description=f"Club {club.name} successfully added."), color=discord.Colour.blue())
+            await ctx.send(embed=discord.Embed(description=f"Club {club.name} successfully added.", color=discord.Colour.blue()))
 
         except brawlstats.errors.NotFoundError:
-            await ctx.send(embed=discord.Embed(description="No club with this tag found."), color=discord.Colour.red())
+            await ctx.send(embed=discord.Embed(description="No club with this tag found.", color=discord.Colour.red()))
 
         except brawlstats.errors.RequestError as e:
-            await ctx.send(embed=discord.Embed(f"BS API is offline, please try again later! ({str(e)})"), color=discord.Colour.red())
+            await ctx.send(embed=discord.Embed(f"BS API is offline, please try again later! ({str(e)})", color=discord.Colour.red()))
 
         except Exception as e:
             await ctx.send(f"**Something went wrong, please send a personal message to LA Modmail bot or try again!**** ({str(e)})")
@@ -52,9 +52,9 @@ class Statistics(commands.Cog):
         try:
             entry = await self.config.guild(ctx.guild).clubs.get(tag)
             await self.config.guild(ctx.guild).tags.clear(entry)
-            await ctx.send(embed=discord.Embed(description=f"Club {club.name} successfully removed."), color=discord.Colour.blue())
+            await ctx.send(embed=discord.Embed(description=f"Club {club.name} successfully removed.", color=discord.Colour.blue()))
         except KeyError:
-            await ctx.send(embed=discord.Embed(description=f"{tag} isn't saved in this server."), color=discord.Colour.red())
+            await ctx.send(embed=discord.Embed(description=f"{tag} isn't saved in this server.", color=discord.Colour.red()))
 
     @commands.command()
     async def clubtags(self, ctx):
