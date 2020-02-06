@@ -7,7 +7,7 @@ class Statistics(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=42424242)
+        self.config = Config.get_conf(self, identifier=424242)
         default_guild = {"tags": {}}
         self.config.register_guild(**default_guild)
 
