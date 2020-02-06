@@ -63,7 +63,7 @@ class Statistics(commands.Cog):
         await ctx.trigger_typing()
 
         msg = ""
-        for key in (await self.config.guild(ctx.guild).clubs()).keys():
-            msg += await self.config.guild(ctx.guild).clubs.get_raw(key, "tag")
+        for key in (await self.config.guild(ctx.guild).tags()).keys():
+            msg += await self.config.guild(ctx.guild).tags.get_raw(key, "tag")
 
         await ctx.send(embed=discord.Embed(description=msg, color=discord.Colour.blue()))
