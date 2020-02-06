@@ -102,7 +102,7 @@ class Statistics(commands.Cog):
             averagetrophies = totaltrophies//totalmembers
             embed = discord.Embed(color=discord.Colour.gold(), title="All clubs:")
             embed.add_field(name="Total trophies:", value=totaltrophies, inline=False)
-            embed.add_field(name="Total members:", value=totalmembers, inline=False)
+            embed.add_field(name="Total members:", value=len(members), inline=False)
             embed.add_field(name="Average trophies:", value=averagetrophies, inline=False)
             embed.add_field(name="Lower 10% average:", value=lower10//(len(members)//10), inline=False)
             await ctx.send(embed=embed)
