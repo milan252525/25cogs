@@ -9,6 +9,12 @@ class Statistics(commands.Cog):
         default_guild = {"tags": []}
         self.config.register_guild(**default_guild)
 
+    async def initialize(self):
+        ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
+        if ofcbsapikey["api_key"] is None:
+            raise ValueError("The Official Brawl Stars API key has not been set.")
+        self.ofcbsapi = brawlstats.OfficialAPI(ofcbsapikey["api_key"], is_async=True)
+
     @commands.command()
     @commands.guild_only()
     async def addclub(self, ctx, tag : str):
@@ -47,3 +53,4 @@ class Statistics(commands.Cog):
             await ctx.send(embed=discord.Embed(description=f"Club {club.name} successfully removed."), colour=discord.Colour.blue())
         except KeyError:
             await ctx.send(embed=discord.Embed(description=f"{tag} isn't saved in this server."), colour=discord.Colour.red())
+
