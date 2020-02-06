@@ -19,7 +19,7 @@ class Statistics(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    async def addclub(self, ctx, tag : str):
+    async def addclub(self, ctx, key : str, tag : str):
         await ctx.trigger_typing()
 
         tag = tag.lower().replace('O', '0')
@@ -28,7 +28,11 @@ class Statistics(commands.Cog):
 
         try:
             club = await self.ofcbsapi.get_club(tag)
-            await self.config.guild(ctx.guild).tags.set_raw(tag)
+            result = {
+                "name": key,
+                "tag": tag
+            }
+            await self.config.guild(ctx.guild).tags.set_raw(key, result)
             await ctx.send(embed=discord.Embed(description=f"Club {club.name} successfully added.", color=discord.Colour.blue()))
 
         except brawlstats.errors.NotFoundError:
@@ -42,7 +46,7 @@ class Statistics(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    async def removeclub(self, ctx, tag : str):
+    async def removeclub(self, ctx, key : str):
         await ctx.trigger_typing()
 
         tag = tag.lower().replace('O', '0')
@@ -50,16 +54,16 @@ class Statistics(commands.Cog):
             tag = tag.strip('#')
 
         try:
-            entry = await self.config.guild(ctx.guild).tags.get_raw(tag)
+            entry = await self.config.guild(ctx.guild).tags.get_raw(key, "name")
             await self.config.guild(ctx.guild).tags.clear_raw(entry)
             await ctx.send(embed=discord.Embed(description=f"Club {club.name} successfully removed.", color=discord.Colour.blue()))
         except KeyError:
             await ctx.send(embed=discord.Embed(description=f"{tag} isn't saved in this server.", color=discord.Colour.red()))
 
     @commands.command()
-    async def clubtags(self, ctx):
+    async def clubtags(self, ctx, tag : str):
         await ctx.trigger_typing()
 
-        tags = await self.config.guild(ctx.guild).tags.get_raw(tag)
+        tags = await self.config.guild(ctx.guild).tags.get_raw(tag, "tag")
 
         await ctx.send(tags)
