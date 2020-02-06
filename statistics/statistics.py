@@ -38,7 +38,7 @@ class Statistics(commands.Cog):
             await ctx.send(embed=discord.Embed(f"BS API is offline, please try again later! ({str(e)})"), colour=discord.Colour.red())
 
         except Exception as e:
-            await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+            await ctx.send(f"**Something went wrong, please send a personal message to LA Modmail bot or try again!**** ({str(e)})")
 
     @commands.command()
     @commands.guild_only()
