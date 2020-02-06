@@ -106,6 +106,10 @@ class Statistics(commands.Cog):
             embed.add_field(name="Lower 10% average:", value=lower10//(len(mem) - len(mem)//10))
             await ctx.send(embed=embed)
         elif key is not None:
+            totaltrophies = 0
+            totalmembers = 0
+            averagetrophies = 0
+            lower10 = 0
             tag = await self.config.guild(ctx.guild).tags.get_raw(key, "tag")
             club = await self.ofcbsapi.get_club(tag)
             for i in range(len(club.members) - len(club.members)//10, len(club.members)):
