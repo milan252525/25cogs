@@ -93,7 +93,7 @@ class Statistics(commands.Cog):
                 club = await self.ofcbsapi.get_club(tag)
                 totalmembers = totalmembers + len(club.members)
                 for member in club.members:
-                    members.add(member)
+                    members.append(member)
             for mem in members:
                 totaltrophies = totaltrophies + mem.trophies
             for i in range(len(mem) - len(mem)//10, len(mem)):
