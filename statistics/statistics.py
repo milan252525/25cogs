@@ -64,14 +64,15 @@ class Statistics(commands.Cog):
         for key in (await self.config.guild(ctx.guild).tags()).keys():
             tag = await self.config.guild(ctx.guild).tags.get_raw(key, "tag")
             club = await self.ofcbsapi.get_club(tag)
-            mainembed = discord.Embed(title=club.name)
+            mainembed = discord.Embed(title=club.name, color=discord.Colour.gold())
             mainembed.add_field(name="Members:", value=f"{len(club.members)}/100")
             await ctx.send(embed=mainembed)
             i = 0
             for member in club.members:
-                membersembed = discord.Embed(title=member.name)
+                membersembed = discord.Embed(title=member.name, color=discord.Colour.gold())
                 membersembed.add_field(name="Rank:", value=i+1)
                 membersembed.add_field(name="Tag:", value=member.tag)
                 membersembed.add_field(name="Role:", value=member.role)
                 membersembed.add_field(name="Trophies:", value=member.trophies)
+                i = i + 1
                 await ctx.send(embed=membersembed)
