@@ -76,3 +76,4 @@ class Statistics(commands.Cog):
                 membersembed.add_field(name="Trophies:", value=member.trophies, inline=False)
                 i = i + 1
                 await ctx.send(embed=membersembed)
+        await ctx.send("Finished.")
