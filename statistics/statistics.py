@@ -96,11 +96,9 @@ class Statistics(commands.Cog):
                     members.append(member)
             for mem in members:
                 totaltrophies = totaltrophies + mem.trophies
-
+            members.sort(reverse=True)
             for i in range(len(members) - (len(members)//10), len(members)):
-                await ctx.send(len(members) - (len(members)//10))
                 lower10 = lower10 + members[i].trophies
-            await ctx.send(lower10)
             averagetrophies = totaltrophies//totalmembers
             embed = discord.Embed(color=discord.Colour.gold(), title="All clubs:")
             embed.add_field(name="Total trophies:", value=totaltrophies, inline=False)
