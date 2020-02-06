@@ -69,11 +69,11 @@ class Statistics(commands.Cog):
             await ctx.send(embed=mainembed)
             i = 0
             for member in club.members:
-                membersembed = discord.Embed(title=member.name, color=discord.Colour.gold())
-                membersembed.add_field(name="Rank:", value=i+1)
-                membersembed.add_field(name="Tag:", value=member.tag)
-                membersembed.add_field(name="Role:", value=member.role.capitalize())
-                membersembed.add_field(name="Trophies:", value=member.trophies)
+                membersembed = discord.Embed(title=member.name, color=discord.Colour.gold(), inline=True)
+                membersembed.add_field(name="Rank:", value=i+1, inline=True)
+                membersembed.add_field(name="Tag:", value=member.tag, inline=True)
+                membersembed.add_field(name="Role:", value=member.role.capitalize(), inline=True)
+                membersembed.add_field(name="Trophies:", value=member.trophies, inline=True)
                 i = i + 1
                 await ctx.send(embed=membersembed)
         await ctx.send("Finished.")
