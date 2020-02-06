@@ -84,14 +84,12 @@ class Statistics(commands.Cog):
     async def summary(self, ctx, key:str=None):
         if key is None:
             totaltrophies = 0
-            totalmembers = 0
             averagetrophies = 0
             lower10 = 0
             members = []
             for key in (await self.config.guild(ctx.guild).tags()).keys():
                 tag = await self.config.guild(ctx.guild).tags.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
-                totalmembers = totalmembers + len(club.members)
                 for member in club.members:
                     members.append(member.trophies)
             for mem in members:
@@ -112,7 +110,7 @@ class Statistics(commands.Cog):
             club = await self.ofcbsapi.get_club(tag)
             for i in range(len(club.members) - (len(club.members)//10), len(club.members)):
                 lower10 = lower10 + club.members[i].trophies
-            embed = discord.Embed(color=discord.Colour.gold(), title=f"club.name:")
+            embed = discord.Embed(color=discord.Colour.gold(), title=f"{club.name}:")
             embed.add_field(name="Total trophies:", value=club.trophies, inline=False)
             embed.add_field(name="Total members:", value=len(club.members), inline=False)
             embed.add_field(name="Average trophies:", value=club.trophies//len(club.members), inline=False)
