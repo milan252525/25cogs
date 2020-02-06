@@ -8,7 +8,7 @@ class Statistics(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=42424242)
-        default_guild = {"tags": []}
+        default_guild = {"tags": {}}
         self.config.register_guild(**default_guild)
 
     async def initialize(self):
@@ -19,7 +19,7 @@ class Statistics(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    async def addclub(self, ctx, tag : str):
+    async def addclub(self, ctx, key : str, tag : str):
         await ctx.trigger_typing()
 
         tag = tag.lower().replace('O', '0')
@@ -28,7 +28,12 @@ class Statistics(commands.Cog):
 
         try:
             club = await self.ofcbsapi.get_club(tag)
-            await self.config.guild(ctx.guild).tags.set(tag)
+            result = {
+                "name": key,
+                "tag": tag
+            }
+            key = key.lower()
+            await self.config.guild(ctx.guild).tags.set_raw(key, value=result)
             await ctx.send(embed=discord.Embed(description=f"Club {club.name} successfully added.", color=discord.Colour.blue()))
 
         except brawlstats.errors.NotFoundError:
@@ -42,17 +47,14 @@ class Statistics(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    async def removeclub(self, ctx, tag : str):
+    async def removeclub(self, ctx, key : str):
         await ctx.trigger_typing()
 
-        tag = tag.lower().replace('O', '0')
-        if tag.startswith("#"):
-            tag = tag.strip('#')
+        key = key.lower()
 
         try:
-            entry = await self.config.guild(ctx.guild).tags.get_raw(tag)
-            await self.config.guild(ctx.guild).tags.clear_raw(entry)
-            await ctx.send(embed=discord.Embed(description=f"Club {club.name} successfully removed.", color=discord.Colour.blue()))
+            await self.config.guild(ctx.guild).tags.clear_raw(key)
+            await ctx.send(embed=discord.Embed(description=f"Club was successfully removed.", color=discord.Colour.blue()))
         except KeyError:
             await ctx.send(embed=discord.Embed(description=f"{tag} isn't saved in this server.", color=discord.Colour.red()))
 
@@ -60,5 +62,8 @@ class Statistics(commands.Cog):
     async def clubtags(self, ctx):
         await ctx.trigger_typing()
 
-        for tag in (await self.config.guild(ctx.guild)):
-            await ctx.send(tag)
+        msg = ""
+        for key in (await self.config.guild(ctx.guild).clubs()).keys():
+            msg += await self.config.guild(ctx.guild).clubs.get_raw(key, "tag")
+
+        await ctx.send(embed=discord.Embed(description=msg, color=discord.Colour.blue()))
