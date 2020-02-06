@@ -60,24 +60,11 @@ class Statistics(commands.Cog):
 
     @commands.is_owner()
     @commands.command()
-    async def collectinfo(self, ctx):
-        for key in (await self.config.guild(ctx.guild).tags()).keys():
-            tag = await self.config.guild(ctx.guild).tags.get_raw(key, "tag")
-            club = await self.ofcbsapi.get_club(tag)
-            mainembed = discord.Embed(title=club.name, color=discord.Colour.gold())
-            mainembed.add_field(name="Members:", value=f"{len(club.members)}/100")
-            await ctx.send(embed=mainembed)
-            i = 0
-            for member in club.members:
-                msg = ""
-                msg += f"**{member.name}**: "
-                msg += f"Rank: {i+1}; "
-                msg += f"Tag: {member.tag}; "
-                msg += f"Role: {member.role.capitalize()}; "
-                msg += f"Trophies: {member.trophies}."
-                i = i + 1
-                await ctx.send(msg)
-        await ctx.send("Finished.")
+    async def membersinfo(self, ctx):
+        f = open("members.txt", "w+")
+        f.write("test")
+        f.close()
+        await ctx.send(f)
 
     @commands.is_owner()
     @commands.command()
@@ -116,3 +103,5 @@ class Statistics(commands.Cog):
             embed.add_field(name="Average trophies:", value=club.trophies//len(club.members), inline=False)
             embed.add_field(name="Lower 10% average:", value=lower10 // (len(club.members)//10), inline=False)
             await ctx.send(embed=embed)
+
+
