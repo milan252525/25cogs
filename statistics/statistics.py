@@ -96,15 +96,15 @@ class Statistics(commands.Cog):
                     members.append(member)
             for mem in members:
                 totaltrophies = totaltrophies + mem.trophies
-            for i in range(len(mem) - len(mem)//10, len(mem)):
-                lower10 = lower10 + mem[i].trophies
-            await ctx.send(lower10)
+
+            for i in range(len(members) - len(members)//10, len(members)):
+                lower10 = lower10 + members[i].trophies
             averagetrophies = totaltrophies//totalmembers
             embed = discord.Embed(color=discord.Colour.gold())
             embed.add_field(name="Total trophies:", value=totaltrophies)
             embed.add_field(name="Total members:", value=totalmembers)
             embed.add_field(name="Average trophies:", value=averagetrophies)
-            embed.add_field(name="Lower 10% average:", value=lower10//(len(mem) - len(mem)//10))
+            embed.add_field(name="Lower 10% average:", value=lower10//(len(members) - len(members)//10))
             await ctx.send(embed=embed)
         elif key is not None:
             lower10 = 0
@@ -114,7 +114,7 @@ class Statistics(commands.Cog):
                 lower10 = lower10 + club.members[i].trophies
             embed = discord.Embed(color=discord.Colour.gold())
             embed.add_field(name="Total trophies:", value=club.trophies)
-            embed.add_field(name="Total members:", value=club.members)
+            embed.add_field(name="Total members:", value=len(club.members))
             embed.add_field(name="Average trophies:", value=club.trophies//len(club.members))
             embed.add_field(name="Lower 10% average:", value=lower10 // (len(club.members) - len(club.members)//10))
             await ctx.send(embed=embed)
