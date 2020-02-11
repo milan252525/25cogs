@@ -1072,9 +1072,11 @@ class BrawlStarsCog(commands.Cog):
             person = self.bot.get_user(user)
             if person is not None:
                 persontag = await self.config.user(person).tag()
-                player = await self.ofcbsapi.get_player(persontag)
-                if player.club.tag == tag:
-                    msg += f"**{str(person)}**\n"
+                club = await self.ofcbsapi.get_club(tag)
+                for member in club.members:
+                    if member.tag == persontag:
+                        msg += f"**{str(person)}**\n"
+            await asyncio.sleep(0.1)
 
         if msg == "":
             await ctx.send("This tag is either invalid or no people from this club saved their tags.")
