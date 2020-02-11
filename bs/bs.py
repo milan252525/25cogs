@@ -1063,8 +1063,6 @@ class BrawlStarsCog(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def usersbyclub(self, ctx, tag: str):
-        await ctx.send(embed=discord.Embed(description="Warning! /usersbyclub can take a long time to process, so go chill and grab a tea, the bot will ping you once the list is ready.", colour=discord.Colour.red()))
-
         tag = tag.upper().replace('O', '0')
         if tag.startswith("#"):
             tag = tag.strip('#')
@@ -1083,8 +1081,6 @@ class BrawlStarsCog(commands.Cog):
                         count = count + 1
 
         if msg == "":
-            await ctx.send(ctx.author.mention)
             await ctx.send(embed=discord.Embed(description="This tag is either invalid or no people from this club saved their tags.", colour=discord.Colour.red()))
         else:
-            await ctx.send(ctx.author.mention)
             await ctx.send(embed=discord.Embed(title=f"Total: {count}",description=msg, colour=discord.Colour.blue()))
