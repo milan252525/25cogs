@@ -1084,3 +1084,57 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed=discord.Embed(description="This tag is either invalid or no people from this club saved their tags.", colour=discord.Colour.red()))
         else:
             await ctx.send(embed=discord.Embed(title=f"Total: {count}",description=msg, colour=discord.Colour.blue()))
+
+    @commands.command()
+    @commands.guild_only()
+    async def vpsbyclub(self, ctx, tag: str):
+        tag = tag.upper().replace('O', '0')
+        if tag.startswith("#"):
+            tag = tag.strip('#')
+
+        msg = ""
+        count = 0
+        club = await self.ofcbsapi.get_club(tag)
+        for user in (await self.config.all_users()):
+            person = self.bot.get_user(user)
+            if person is not None:
+                persontag = await self.config.user(person).tag()
+                persontag = "#" + persontag.upper()
+                for member in club.members:
+                    if member.tag == persontag and member.role.lower() == "vicepresident":
+                        msg += f"**{str(person)}**\n"
+                        count = count + 1
+
+        if msg == "":
+            await ctx.send(embed=discord.Embed(
+                description="This tag is either invalid or no people from this club saved their tags.",
+                colour=discord.Colour.red()))
+        else:
+            await ctx.send(embed=discord.Embed(title=f"Total: {count}", description=msg, colour=discord.Colour.blue()))
+
+    @commands.command()
+    @commands.guild_only()
+    async def presesbyclub(self, ctx, tag: str):
+        tag = tag.upper().replace('O', '0')
+        if tag.startswith("#"):
+            tag = tag.strip('#')
+
+        msg = ""
+        count = 0
+        club = await self.ofcbsapi.get_club(tag)
+        for user in (await self.config.all_users()):
+            person = self.bot.get_user(user)
+            if person is not None:
+                persontag = await self.config.user(person).tag()
+                persontag = "#" + persontag.upper()
+                for member in club.members:
+                    if member.tag == persontag and member.role.lower() == "president":
+                        msg += f"**{str(person)}**\n"
+                        count = count + 1
+
+        if msg == "":
+            await ctx.send(embed=discord.Embed(
+                description="This tag is either invalid or no people from this club saved their tags.",
+                colour=discord.Colour.red()))
+        else:
+            await ctx.send(embed=discord.Embed(title=f"Total: {count}", description=msg, colour=discord.Colour.blue()))
