@@ -1077,7 +1077,7 @@ class BrawlStarsCog(commands.Cog):
                 persontag = "#" + persontag.upper()
                 for member in club.members:
                     if member.tag == persontag:
-                        msg += f"**{str(person)}**\n"
+                        msg += f"Tag: **{str(person)}**; IGN: **{member.name}**\n"
                         count = count + 1
 
         if msg == "":
@@ -1102,7 +1102,7 @@ class BrawlStarsCog(commands.Cog):
                 persontag = "#" + persontag.upper()
                 for member in club.members:
                     if member.tag == persontag and member.role.lower() == "vicepresident":
-                        msg += f"**{str(person)}**\n"
+                        msg += f"Tag: **{str(person)}**; IGN: **{member.name}**\n"
                         count = count + 1
 
         if msg == "":
@@ -1129,7 +1129,7 @@ class BrawlStarsCog(commands.Cog):
                 persontag = "#" + persontag.upper()
                 for member in club.members:
                     if member.tag == persontag and member.role.lower() == "president":
-                        msg += f"**{str(person)}**\n"
+                        msg += f"Tag: **{str(person)}**; IGN: **{member.name}**\n"
                         count = count + 1
 
         if msg == "":
