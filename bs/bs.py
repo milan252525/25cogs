@@ -1063,23 +1063,28 @@ class BrawlStarsCog(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def usersbyclub(self, ctx, tag: str):
+        await ctx.send(embed=discord.Embed(description="Warning! /usersbyclub can take a long time to process, so go chill and grab a tea, the bot will ping you once the list is ready.", colour=discord.Colour.red()))
+
         tag = tag.upper().replace('O', '0')
         if tag.startswith("#"):
             tag = tag.strip('#')
 
         msg = ""
-        for user in (await self.config.all_users()):
-            person = self.bot.get_user(user)
-            await ctx.send(str(person))
-            if person is not None:
-                persontag = await self.config.user(person).tag()
-                club = await self.ofcbsapi.get_club(tag)
-                for member in club.members:
-                    if member.tag == persontag:
-                        msg += f"**{str(person)}**\n"
-            await asyncio.sleep(0.1)
+        #for user in (await self.config.all_users()):
+        person = self.bot.get_user(user)
+        if person is not None:
+            persontag = await self.config.user(359131399132807178).tag()
+            club = await self.ofcbsapi.get_club(tag)
+            for member in club.members:
+                if member.tag == persontag:
+                    await ctx.send(member.tag)
+                    await ctx.send(persontag)
+                    msg += f"**{str(person)}**\n"
+            #await asyncio.sleep(0.1)
 
         if msg == "":
-            await ctx.send("This tag is either invalid or no people from this club saved their tags.")
+            await ctx.send(ctx.author.mention)
+            await ctx.send(embed=discord.Embed(description="This tag is either invalid or no people from this club saved their tags.", colour=discord.Colour.red()))
         else:
+            await ctx.send(ctx.author.mention)
             await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.blue()))
