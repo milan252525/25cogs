@@ -1070,6 +1070,7 @@ class BrawlStarsCog(commands.Cog):
             tag = tag.strip('#')
 
         msg = ""
+        count = 0
         club = await self.ofcbsapi.get_club(tag)
         for user in (await self.config.all_users()):
             person = self.bot.get_user(user)
@@ -1079,11 +1080,11 @@ class BrawlStarsCog(commands.Cog):
                 for member in club.members:
                     if member.tag == persontag:
                         msg += f"**{str(person)}**\n"
-            await asyncio.sleep(0.1)
+                        count = count + 1
 
         if msg == "":
             await ctx.send(ctx.author.mention)
             await ctx.send(embed=discord.Embed(description="This tag is either invalid or no people from this club saved their tags.", colour=discord.Colour.red()))
         else:
             await ctx.send(ctx.author.mention)
-            await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.blue()))
+            await ctx.send(embed=discord.Embed(title=f"Total: {count}",description=msg, colour=discord.Colour.blue()))
