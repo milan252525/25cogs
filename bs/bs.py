@@ -1077,8 +1077,6 @@ class BrawlStarsCog(commands.Cog):
         persontag = "#" + persontag.upper()
         club = await self.ofcbsapi.get_club(tag)
         for member in club.members:
-            await ctx.send(member.tag)
-            await ctx.send(persontag)
             if member.tag == persontag:
                 msg += f"**{str(person)}**\n"
             #await asyncio.sleep(0.1)
