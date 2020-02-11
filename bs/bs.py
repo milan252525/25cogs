@@ -1059,3 +1059,24 @@ class BrawlStarsCog(commands.Cog):
                     return
 
         await ctx.send("This tag is either not saved or invalid.")
+
+    @commands.command()
+    @commands.guild_only()
+    async def usersbyclub(self, ctx, tag: str):
+        tag = tag.upper().replace('O', '0')
+        if tag.startswith("#"):
+            tag = tag.strip('#')
+
+        msg = ""
+        for user in (await self.config.all_users()):
+            person = self.bot.get_user(user)
+            if person is not None:
+                persontag = await self.config.user(person).tag()
+                player = await self.ofcbsapi.get_player(persontag)
+                if player.club.tag == tag:
+                    msg += f"**{str(person)}**\n"
+
+        if msg == "":
+            await ctx.send("This tag is either invalid or no people from this club saved their tags.")
+        else:
+            await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.blue()))
