@@ -1071,15 +1071,15 @@ class BrawlStarsCog(commands.Cog):
 
         msg = ""
         #for user in (await self.config.all_users()):
-        person = self.bot.get_user(user)
-        if person is not None:
-            persontag = await self.config.user(359131399132807178).tag()
-            club = await self.ofcbsapi.get_club(tag)
-            for member in club.members:
-                if member.tag == persontag:
-                    await ctx.send(member.tag)
-                    await ctx.send(persontag)
-                    msg += f"**{str(person)}**\n"
+        #person = self.bot.get_user(user)
+        #if person is not None:
+        persontag = await self.config.user(359131399132807178).tag()
+        club = await self.ofcbsapi.get_club(tag)
+        for member in club.members:
+            if member.tag == persontag:
+                await ctx.send(member.tag)
+                await ctx.send(persontag)
+                msg += f"**{str(person)}**\n"
             #await asyncio.sleep(0.1)
 
         if msg == "":
