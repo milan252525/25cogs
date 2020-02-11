@@ -1070,12 +1070,12 @@ class BrawlStarsCog(commands.Cog):
             tag = tag.strip('#')
 
         msg = ""
+        club = await self.ofcbsapi.get_club(tag)
         for user in (await self.config.all_users()):
             person = self.bot.get_user(user)
             if person is not None:
                 persontag = await self.config.user(person).tag()
                 persontag = "#" + persontag.upper()
-                club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     if member.tag == persontag:
                         msg += f"**{str(person)}**\n"
