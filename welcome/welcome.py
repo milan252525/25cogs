@@ -382,10 +382,11 @@ class Welcome(commands.Cog):
                 try:
                     LAMember = member.guild.get_role(654334569528688641)
                     guest = member.guild.get_role(656506416911351848)
-                    if player.club is None:
+                    player_in_club = "name" in player.raw_data["club"]
+                    if not player_in_club:
                         await member.add_roles(guest)
                         msg += f"Assigned roles: {guest.name}\n"
-                    elif player.club is not None and "LA " in player.club.name:
+                    elif player_in_club and "LA " in player.club.name:
                         await member.add_roles(LAMember)
                         msg += f"Assigned roles: {LAMember.name}\n"
                     else:
