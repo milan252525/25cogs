@@ -139,9 +139,7 @@ class BrawlStarsCog(commands.Cog):
             int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
         embed.set_author(
             name=f"{player.name} {player.raw_data['tag']}",
-            icon_url=member.avatar_url if isinstance(
-                member,
-                discord.Member) else "https://i.imgur.com/ZwIP41S.png")
+            icon_url=member.avatar_url if isinstance(member, discord.Member) else "https://i.imgur.com/ZwIP41S.png")
         embed.add_field(
             name="Trophies",
             value=f"{get_league_emoji(player.trophies)} {player.trophies}")
@@ -162,8 +160,7 @@ class BrawlStarsCog(commands.Cog):
                 club = await player.get_club()
                 for m in club.members:
                     if m.tag == player.raw_data['tag']:
-                        embed.add_field(
-                            name="Role", value=f"<:role:614520101621989435> {m.role.capitalize()}")
+                        embed.add_field(name="Role", value=f"<:role:614520101621989435> {m.role.capitalize()}")
                         break
             except brawlstats.errors.RequestError:
                 embed.add_field(
@@ -279,9 +276,7 @@ class BrawlStarsCog(commands.Cog):
                 int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
             embed.set_author(
                 name=f"{player.name} {player.raw_data['tag']}",
-                icon_url=member.avatar_url if isinstance(
-                    member,
-                    discord.Member) else "https://i.imgur.com/ZwIP41S.png")
+                icon_url=member.avatar_url if isinstance(member, discord.Member) else "https://i.imgur.com/ZwIP41S.png")
             embed.add_field(
                 name=f"**Brawlers({len(brawlers)}\\33):**", value=m)
             await ctx.send(embed=embed)
@@ -331,9 +326,7 @@ class BrawlStarsCog(commands.Cog):
             int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
         embed.set_author(
             name=f"{player.name} {player.raw_data['tag']}",
-            icon_url=member.avatar_url if isinstance(
-                member,
-                discord.Member) else "https://i.imgur.com/ZwIP41S.png")
+            icon_url=member.avatar_url if isinstance(member, discord.Member) else "https://i.imgur.com/ZwIP41S.png")
         embed.add_field(
             name="Brawler",
             value=f"{get_brawler_emoji(brawler.upper())} {brawler.lower().capitalize()}")
@@ -357,6 +350,7 @@ class BrawlStarsCog(commands.Cog):
 
     @commands.command()
     async def club(self, ctx, key: Union[discord.Member, str] = None):
+        """View players club or club saved in a server"""
         await ctx.trigger_typing()
         if key is None:
             mtag = await self.config.user(ctx.author).tag()
@@ -441,7 +435,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
     async def clubs(self, ctx, key: str = None):
-        """View all clubs saved in this server"""
+        """View all clubs saved in a server"""
         offline = False
         await ctx.trigger_typing()
         if key == "forceoffline":
@@ -474,10 +468,8 @@ class BrawlStarsCog(commands.Cog):
                         if clubs[i].tag.replace("#", "") == await self.config.guild(ctx.guild).clubs.get_raw(k, "tag"):
                             key = k
 
-                    await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastMemberCount',
-                                                                     value=len(clubs[i].members))
-                    await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastRequirement',
-                                                                     value=clubs[i].required_trophies)
+                    await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastMemberCount', value=len(clubs[i].members))
+                    await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastRequirement', value=clubs[i].required_trophies)
                     await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastScore', value=clubs[i].trophies)
                     await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastPosition', value=i)
 
@@ -500,11 +492,7 @@ class BrawlStarsCog(commands.Cog):
                     cinfo = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "info")
                     cmembers = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "lastMemberCount")
                     creq = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "lastRequirement")
-                    # cemoji = discord.utils.get(self.bot.emojis, name =
-                    # str(await
-                    # self.config.guild(ctx.guild).clans.get_raw(ckey,
-                    # "lastBadgeId")))
-
+                        
                     e_name = f"<:bsband:600741378497970177> {cname} [{ckey}] #{ctag} {cinfo}"
                     e_value = f"<:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` "
                     embedFields.append([e_name, e_value])
@@ -533,8 +521,7 @@ class BrawlStarsCog(commands.Cog):
                 await ctx.send(embed=embedsToSend[0])
 
         except ZeroDivisionError as e:
-            return await ctx.send(
-                "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
+            return await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
@@ -823,6 +810,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def newcomer(self, ctx, tag, member: discord.Member):
+        """Command to set up a new member"""
         if ctx.guild.id == 401883208511389716:
             mod = ctx.guild.get_role(520719415109746690)
             tmod = ctx.guild.get_role(533650638274297877)
@@ -1002,6 +990,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def userbytag(self, ctx, tag: str):
+        """Find user with a specific tag saved"""
         tag = tag.lower().replace('O', '0')
         if tag.startswith("#"):
             tag = tag.strip('#')
@@ -1016,6 +1005,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def usersbyclub(self, ctx, tag: str):
+        """Find users, who have tag saved, in a specified club"""
         tag = tag.upper().replace('O', '0')
         if tag.startswith("#"):
             tag = tag.strip('#')
@@ -1038,9 +1028,10 @@ class BrawlStarsCog(commands.Cog):
         else:
             await ctx.send(embed=discord.Embed(title=f"Total: {count}", description=msg, colour=discord.Colour.blue()))
 
-    @commands.command(aliases=['vpbyclub'])
+    @commands.command(aliases=['vpsbyclub'])
     @commands.guild_only()
-    async def vpsbyclub(self, ctx, tag: str):
+    async def vpbyclub(self, ctx, tag: str):
+        """Find vicepresidents, who have tag saved, in a specified club"""
         tag = tag.upper().replace('O', '0')
         if tag.startswith("#"):
             tag = tag.strip('#')
@@ -1064,9 +1055,10 @@ class BrawlStarsCog(commands.Cog):
         else:
             await ctx.send(embed=discord.Embed(title=f"Total: {count}", description=msg, colour=discord.Colour.blue()))
 
-    @commands.command(aliases=['presbyclub'])
+    @commands.command()
     @commands.guild_only()
-    async def presesbyclub(self, ctx, tag: str):
+    async def presbyclub(self, ctx, tag: str):
+        """Find a club president, who have tag saved, in a specified club"""
         tag = tag.upper().replace('O', '0')
         if tag.startswith("#"):
             tag = tag.strip('#')
