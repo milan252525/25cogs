@@ -11,6 +11,7 @@ import asyncio
 import brawlstats
 from typing import Union
 from re import sub
+import datetime
 
 
 class BrawlStarsCog(commands.Cog):
@@ -636,14 +637,14 @@ class BrawlStarsCog(commands.Cog):
                     msg += "Has President or VP role, no tag saved.\n"
                     msg += await self.removeroleifpresent(member, vp, pres)
                     try:
-                        await member.send(f"Hello {member.mention},\nyour (Vice)President role in LA Brawl Stars server has been removed.\nThe reason is you don't have your in-game tag saved at LA bot. You can fix this by saving your tag using `/save #YOURTAG`.\n")
+                        await member.send(f"Hello {member.mention},\nyour (Vice)President role in LA Brawl Stars server has been removed.\nThe reason is you don't have your in-game tag saved at LA bot. You can fix it by saving your tag using `/save #YOURTAG`.\n")
                     except (discord.HTTPException, discord.Forbidden) as e:
-                        msg += f"Couldn't send a DM with info. {str(e)}"
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=msg, title=str(member)))
+                        msg += f"Couldn't send a DM with info. {str(e)}\n"
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=msg, title=str(member), timestamp=datetime.datetime.now()))
                 continue
             try:
                 player = await self.ofcbsapi.get_player(tag)
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(0.2)
             except brawlstats.errors.RequestError as e:
                 error_counter += 1
                 if error_counter == 20:
@@ -665,9 +666,10 @@ class BrawlStarsCog(commands.Cog):
                     member_roles.append(role)
 
             if len(member_roles) > 1:
-                msg += f"Found more than one club role. (**{', '.join([str(r) for r in member_roles])}**)"
+                msg += f"Found more than one club role. (**{', '.join([str(r) for r in member_roles])}**)\n"
                 for role in member_roles:
-                    msg += await self.removeroleifpresent(member, role)
+                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() != sub(r'[^\x00-\x7f]', r'', player.club.name).strip():
+                        msg += await self.removeroleifpresent(member, role)
 
             if not player_in_club:
                 msg += await self.removeroleifpresent(member, labs, vp, pres, newcomer)
@@ -685,7 +687,7 @@ class BrawlStarsCog(commands.Cog):
                         member_role_expected = role
                         break
                 if member_role_expected is None:
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Role for the club {player.club.name} not found.", title=str(member)))
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Role for the club {player.club.name} not found.", title=str(member), timestamp=datetime.datetime.now()))
                     continue
                 msg += await self.removeroleifpresent(member, guest, newcomer)
                 msg += await self.addroleifnotpresent(member, labs, brawlstars)
@@ -695,7 +697,7 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.removeroleifpresent(member, member_role)
                     msg += await self.addroleifnotpresent(member, member_role_expected)
                 try:
-                    await asyncio.sleep(0.5)
+                    await asyncio.sleep(0.2)
                     player_club = await player.get_club()
                     for mem in player_club.members:
                         if mem.tag == player.raw_data['tag']:
@@ -711,7 +713,7 @@ class BrawlStarsCog(commands.Cog):
                 except brawlstats.errors.RequestError:
                     pass
             if msg != "":
-                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
+                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member), timestamp=datetime.datetime.now()))
 
     @sortroles.before_loop
     async def before_sortroles(self):
