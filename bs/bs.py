@@ -275,7 +275,7 @@ class BrawlStarsCog(commands.Cog):
         brawlers = sorted(brawlers, key=lambda x: x[1], reverse=True)
         brawlersmsg = ""
         for brawler in brawlers:
-            if len(brawlersmsg) > 900:
+            if len(brawlersmsg) > 1800:
                 messages.append(brawlersmsg)
                 brawlersmsg = ""
             brawlersmsg += (
@@ -292,7 +292,7 @@ class BrawlStarsCog(commands.Cog):
             embed.add_field(
                 name=f"**Brawlers({len(brawlers)}\\33):**", value=messages[i])
             if i == len(messages)-1:
-                embed.set_footer(text="Use \"/brawler brawler_name\" for even more stats!")
+                embed.set_footer(text="/brawler name for more stats")
             await ctx.send(embed=embed)
 
     @commands.command()
