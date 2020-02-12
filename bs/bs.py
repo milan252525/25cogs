@@ -3,166 +3,51 @@ from redbot.core import commands, Config, checks
 from redbot.core.utils.embed import randomize_colour
 from redbot.core.utils.menus import menu, prev_page, next_page
 from discord.ext import tasks
+
+from .utils import badEmbed, goodEmbed, get_league_emoji, get_rank_emoji, get_brawler_emoji, remove_codes
+
 from random import choice
 import asyncio
 import brawlstats
 from typing import Union
 from re import sub
 
+
 class BrawlStarsCog(commands.Cog):
-    
+
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=5245652)
-        default_user = {"tag" : None}
+        default_user = {"tag": None}
         self.config.register_user(**default_user)
-        default_guild = {"clubs" : {}}
+        default_guild = {"clubs": {}}
         self.config.register_guild(**default_guild)
         self.sortroles.start()
         self.sortrolesasia.start()
-        
+
     def cog_unload(self):
         self.sortroles.cancel()
         self.sortrolesasia.cancel()
-        
+
     async def initialize(self):
         bsapikey = await self.bot.get_shared_api_tokens("bsapi")
         if bsapikey["api_key"] is None:
             raise ValueError("The Brawl Stars API key has not been set.")
-        self.bsapi = brawlstats.BrawlAPI(bsapikey["api_key"], is_async=True, prevent_ratelimit=True)
+        self.bsapi = brawlstats.BrawlAPI(
+            bsapikey["api_key"], is_async=True, prevent_ratelimit=True)
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
         if ofcbsapikey["api_key"] is None:
-            raise ValueError("The Official Brawl Stars API key has not been set.")
-        self.ofcbsapi = brawlstats.OfficialAPI(ofcbsapikey["api_key"], is_async=True)
-        
-    def badEmbed(self, text):
-        bembed = discord.Embed(color=0xff0000)
-        bembed.set_author(name=text, icon_url="https://i.imgur.com/FcFoynt.png")
-        return bembed
-        
-    def goodEmbed(self, text):
-        gembed = discord.Embed(color=0x45cafc)
-        gembed.set_author(name=text, icon_url="https://i.imgur.com/qYmbGK6.png")
-        return gembed
-    
-    def get_league_emoji(self, trophies : int):
-        if trophies < 500:
-            return "<:league_icon_00:553294108802678787>"
-        elif trophies < 1000:
-            return "<:league_icon_01:553294108735569921>"
-        elif trophies < 2000:
-            return "<:league_icon_02:553294109167583296>"
-        elif trophies < 3000:
-            return "<:league_icon_03:553294109264052226>"
-        elif trophies < 4000:
-            return "<:league_icon_04:553294344413511682>"
-        elif trophies < 6000:
-            return "<:league_icon_05:553294344912764959>"
-        elif trophies < 8000:
-            return "<:league_icon_06:553294344841461775>"
-        elif trophies < 10000:
-            return "<:league_icon_07:553294109515972640>"
-        else:
-            return "<:league_icon_08:553294109217914910>"
-
-    def get_rank_emoji(self, rank : int):
-        if 1 <= rank < 5:
-            return "<:rank1:664262410265165824>"
-        elif 5 <= rank < 10:
-            return "<:rank5:664262466812772377>"
-        elif 10 <= rank < 15:
-            return "<:rank10:664262501344608257>"
-        elif 15 <= rank < 20:
-            return "<:rank15:664262551139254312>"
-        elif 20 <= rank < 25:
-            return "<:rank20:664262586266681371>"
-        elif 25 <= rank < 30:
-            return "<:rank25:664262630223118357> "
-        elif 30 <= rank < 35:
-            return "<:rank30:664262657557397536>"
-        elif 35 <= rank:
-            return "<:rank35:664262686028333056>"
-
-    def get_brawler_emoji(self, name : str):
-        if name == "SHELLY":
-            return "<:shelly:664235199076237323>"
-        elif name == "TICK":
-            return "<:tick:664235450889928744>"
-        elif name == "TARA":
-            return "<:tara:664236127015796764>"
-        elif name == "SPIKE":
-            return "<:spike:664235867748958249>"
-        elif name == "SANDY":
-            return "<:sandy:664235310573420544>"
-        elif name == "ROSA":
-            return "<:rosa:664235409722834954>"
-        elif name == "RICO":
-            return "<:rico:664235890171707393>"
-        elif name == "EL PRIMO":
-            return "<:primo:664235742758830135>"
-        elif name == "POCO":
-            return "<:poco:664235668393689099>"
-        elif name == "PIPER":
-            return "<:piper:664235622998867971>"
-        elif name == "PENNY":
-            return "<:penny:664235535094644737>"
-        elif name == "PAM":
-            return "<:pam:664235599804235786>"
-        elif name == "NITA":
-            return "<:nita:664235795959513088>"
-        elif name == "MORTIS":
-            return "<:mortis:664235717693800468>"
-        elif name == "MAX":
-            return "<:max:664235224762155073>"
-        elif name == "LEON":
-            return "<:leon:664235430530514964>"
-        elif name == "JESSIE":
-            return "<:jessie:664235816339636244>"
-        elif name == "GENE":
-            return "<:gene:664235476084981795>"
-        elif name == "FRANK":
-            return "<:frank:664235513242320922>"
-        elif name == "EMZ":
-            return "<:emz:664235245956235287>"
-        elif name == "DYNAMIKE":
-            return "<:dynamike:664235766620094464>"
-        elif name == "DARRYL":
-            return "<:darryl:664235555877290008>"
-        elif name == "CROW":
-            return "<:crow:664235693064716291>"
-        elif name == "COLT":
-            return "<:colt:664235956202766346>"
-        elif name == "CARL":
-            return "<:carl:664235388537274369>"
-        elif name == "BULL":
-            return "<:bull:664235934006378509>"
-        elif name == "BROCK":
-            return "<:brock:664235912150122499>"
-        elif name == "BO":
-            return "<:bo:664235645287530528>"
-        elif name == "BIBI":
-            return "<:bibi:664235367615954964>"
-        elif name == "BEA":
-            return "<:bea:664235276758941701>"
-        elif name == "BARLEY":
-            return "<:barley:664235839316033536>"
-        elif name == "8-BIT":
-            return "<:8bit:664235332522213418>"
-        elif name == "MR. P":
-            return "<:mrp:671379771585855508>"
-        
-    def remove_codes(self, text : str):
-        toremove = ["</c>", "<c1>", "<c2>", "<c3>", "<c4>", "<c5>", "<c6>", "<c7>", "<c8>", "<c9>", "<c0>"]
-        for code in toremove:
-            text = text.replace(code, "")
-        return text
+            raise ValueError(
+                "The Official Brawl Stars API key has not been set.")
+        self.ofcbsapi = brawlstats.OfficialAPI(
+            ofcbsapikey["api_key"], is_async=True)
 
     @commands.command(aliases=['bssave'])
     async def save(self, ctx, tag, member: discord.Member = None):
         """Save your Brawl Stars player tag"""
-        if member == None:
-            member = ctx.author        
-        
+        if member is None:
+            member = ctx.author
+
         tag = tag.lower().replace('O', '0')
         if tag.startswith("#"):
             tag = tag.strip('#')
@@ -170,27 +55,27 @@ class BrawlStarsCog(commands.Cog):
         try:
             player = await self.ofcbsapi.get_player(tag)
             await self.config.user(member).tag.set(tag.replace("#", ""))
-            await ctx.send(embed = self.goodEmbed("BS account {} was saved to {}".format(player.name, member.name)))
-            
+            await ctx.send(embed=goodEmbed(f"BS account {player.name} was saved to {member.name}"))
+
         except brawlstats.errors.NotFoundError:
-            await ctx.send(embed = self.badEmbed("No player with this tag found, try again!"))
+            await ctx.send(embed=badEmbed("No player with this tag found, try again!"))
 
         except brawlstats.errors.RequestError as e:
-            await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+            await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         except Exception as e:
             await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
-    
+
     @commands.command(aliases=['rbs'])
-    async def renamebs(self, ctx, member:discord.Member=None):
+    async def renamebs(self, ctx, member: discord.Member = None):
         await ctx.trigger_typing()
         prefix = ctx.prefix
         member = ctx.author if member is None else member
-        
+
         tag = await self.config.user(member).tag()
         if tag is None:
-            return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
-        
+            return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+
         player = await self.ofcbsapi.get_player(tag)
         nick = f"{player.name} | {player.club.name}" if player.club is not None else f"{player.name}"
         try:
@@ -200,9 +85,9 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(f"I dont have permission to change nickname of this user!")
         except Exception as e:
             await ctx.send(f"Something went wrong: {str(e)}")
-    
+
     @commands.command(aliases=['p', 'bsp'])
-    async def profile(self, ctx, *, member:Union[discord.Member, str]=None):
+    async def profile(self, ctx, *, member: Union[discord.Member, str] = None):
         """Brawl Stars profile"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
@@ -213,7 +98,7 @@ class BrawlStarsCog(commands.Cog):
         if isinstance(member, discord.Member):
             tag = await self.config.user(member).tag()
             if tag is None:
-                return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+                return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
         elif member.startswith("#"):
             tag = member.upper().replace('O', '0')
         else:
@@ -222,61 +107,101 @@ class BrawlStarsCog(commands.Cog):
                 if member is not None:
                     tag = await self.config.user(member).tag()
                     if tag is None:
-                        return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+                        return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
             except ValueError:
                 member = discord.utils.get(ctx.guild.members, name=member)
                 if member is not None:
                     tag = await self.config.user(member).tag()
                     if tag is None:
-                        return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+                        return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
 
         if tag is None or tag == "":
             desc = "/p\n/bsprofile @user\n/p discord_name\n/p discord_id\n/p #CRTAG"
-            embed = discord.Embed(title="Invalid argument!", colour=discord.Colour.red(), description=desc)
+            embed = discord.Embed(
+                title="Invalid argument!",
+                colour=discord.Colour.red(),
+                description=desc)
             return await ctx.send(embed=embed)
         try:
             player = await self.ofcbsapi.get_player(tag)
-            
+
         except brawlstats.errors.NotFoundError:
-            return await ctx.send(embed = self.badEmbed("No player with this tag found, try again!"))
+            return await ctx.send(embed=badEmbed("No player with this tag found, try again!"))
 
         except brawlstats.errors.RequestError as e:
-            return await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-        
+            return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+
         except Exception as e:
             return await ctx.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
         colour = player.name_color if player.name_color is not None else "0xffffffff"
-        embed=discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
-        embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=member.avatar_url if isinstance(member, discord.Member) else "https://i.imgur.com/ZwIP41S.png")
-        embed.add_field(name="Trophies", value=f"{self.get_league_emoji(player.trophies)} {player.trophies}")
-        embed.add_field(name="Highest Trophies", value=f"<:totaltrophies:614517396111097866> {player.highest_trophies}")
-        embed.add_field(name="Level", value=f"<:exp:614517287809974405> {player.exp_level}")
-        embed.add_field(name="Unlocked Brawlers", value=f"<:brawlers:614518101983232020> {len(player.brawlers)}")
+        embed = discord.Embed(color=discord.Colour.from_rgb(
+            int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
+        embed.set_author(
+            name=f"{player.name} {player.raw_data['tag']}",
+            icon_url=member.avatar_url if isinstance(
+                member,
+                discord.Member) else "https://i.imgur.com/ZwIP41S.png")
+        embed.add_field(
+            name="Trophies",
+            value=f"{get_league_emoji(player.trophies)} {player.trophies}")
+        embed.add_field(
+            name="Highest Trophies",
+            value=f"<:totaltrophies:614517396111097866> {player.highest_trophies}")
+        embed.add_field(
+            name="Level",
+            value=f"<:exp:614517287809974405> {player.exp_level}")
+        embed.add_field(
+            name="Unlocked Brawlers",
+            value=f"<:brawlers:614518101983232020> {len(player.brawlers)}")
         if "tag" in player.raw_data["club"]:
-            embed.add_field(name="Club", value=f"<:bsband:600741378497970177> {player.club.name}")
+            embed.add_field(
+                name="Club",
+                value=f"<:bsband:600741378497970177> {player.club.name}")
             try:
                 club = await player.get_club()
                 for m in club.members:
                     if m.tag == player.raw_data['tag']:
-                        embed.add_field(name="Role", value=f"<:role:614520101621989435> {m.role.capitalize()}")
+                        embed.add_field(
+                            name="Role", value=f"<:role:614520101621989435> {m.role.capitalize()}")
                         break
             except brawlstats.errors.RequestError:
-                embed.add_field(name="Role", value=f"<:offline:642094554019004416> Error while retrieving role")
+                embed.add_field(
+                    name="Role",
+                    value=f"<:offline:642094554019004416> Error while retrieving role")
         else:
-            embed.add_field(name="Club", value=f"<:noclub:661285120287834122> Not in a club")
-        embed.add_field(name="3v3 Wins", value=f"<:3v3:614519914815815693> {player.raw_data['3vs3Victories']}")
-        embed.add_field(name="Solo SD Wins", value=f"<:sd:614517124219666453> {player.solo_victories}")
-        embed.add_field(name="Duo SD Wins", value=f"<:duosd:614517166997372972> {player.duo_victories}")
-        embed.add_field(name="Best Time in Robo Rumble", value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time//60}:{str(player.best_robo_rumble_time%60).rjust(2, '0')}")
-        embed.add_field(name="Best Time as Big Brawler", value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler//60}:{str(player.best_time_as_big_brawler%60).rjust(2, '0')}")
-        if "powerPlayPoints" in player.raw_data:     
-            embed.add_field(name="Power Play Points", value=f"<:powertrophies:661266876235513867> {player.raw_data['powerPlayPoints']}")
+            embed.add_field(
+                name="Club",
+                value=f"<:noclub:661285120287834122> Not in a club")
+        embed.add_field(
+            name="3v3 Wins",
+            value=f"<:3v3:614519914815815693> {player.raw_data['3vs3Victories']}")
+        embed.add_field(
+            name="Solo SD Wins",
+            value=f"<:sd:614517124219666453> {player.solo_victories}")
+        embed.add_field(
+            name="Duo SD Wins",
+            value=f"<:duosd:614517166997372972> {player.duo_victories}")
+        embed.add_field(
+            name="Best Time in Robo Rumble",
+            value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time//60}:{str(player.best_robo_rumble_time%60).rjust(2, '0')}")
+        embed.add_field(
+            name="Best Time as Big Brawler",
+            value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler//60}:{str(player.best_time_as_big_brawler%60).rjust(2, '0')}")
+        if "powerPlayPoints" in player.raw_data:
+            embed.add_field(
+                name="Power Play Points",
+                value=f"<:powertrophies:661266876235513867> {player.raw_data['powerPlayPoints']}")
         else:
-            embed.add_field(name="Power Play Points", value=f"<:powertrophies:661266876235513867> 0")
-        if "highestPowerPlayPoints" in player.raw_data:          
-            embed.add_field(name="Highest PP Points", value=f"<:powertrophies:661266876235513867> {player.raw_data['highestPowerPlayPoints']}")
-        embed.add_field(name="Qualified For Championship", value=f"<:powertrophies:661266876235513867> {player.raw_data['isQualifiedFromChampionshipChallenge']}")
+            embed.add_field(name="Power Play Points",
+                            value=f"<:powertrophies:661266876235513867> 0")
+        if "highestPowerPlayPoints" in player.raw_data:
+            embed.add_field(
+                name="Highest PP Points",
+                value=f"<:powertrophies:661266876235513867> {player.raw_data['highestPowerPlayPoints']}")
+        embed.add_field(
+            name="Qualified For Championship",
+            value=f"<:powertrophies:661266876235513867> {player.raw_data['isQualifiedFromChampionshipChallenge']}")
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['b'])
@@ -291,7 +216,7 @@ class BrawlStarsCog(commands.Cog):
         if isinstance(member, discord.Member):
             tag = await self.config.user(member).tag()
             if tag is None:
-                return await ctx.send(embed=self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+                return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
         elif member.startswith("#"):
             tag = member.upper().replace('O', '0')
         else:
@@ -301,27 +226,30 @@ class BrawlStarsCog(commands.Cog):
                     tag = await self.config.user(member).tag()
                     if tag is None:
                         return await ctx.send(
-                            embed=self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+                            embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
             except ValueError:
                 member = discord.utils.get(ctx.guild.members, name=member)
                 if member is not None:
                     tag = await self.config.user(member).tag()
                     if tag is None:
                         return await ctx.send(
-                            embed=self.badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+                            embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
 
         if tag is None or tag == "":
             desc = "/p\n/bsprofile @user\n/p discord_name\n/p discord_id\n/p #CRTAG"
-            embed = discord.Embed(title="Invalid argument!", colour=discord.Colour.red(), description=desc)
+            embed = discord.Embed(
+                title="Invalid argument!",
+                colour=discord.Colour.red(),
+                description=desc)
             return await ctx.send(embed=embed)
         try:
             player = await self.ofcbsapi.get_player(tag)
 
         except brawlstats.errors.NotFoundError:
-            return await ctx.send(embed=self.badEmbed("No player with this tag found, try again!"))
+            return await ctx.send(embed=badEmbed("No player with this tag found, try again!"))
 
         except brawlstats.errors.RequestError as e:
-            return await ctx.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+            return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         except Exception as e:
             return await ctx.send(
@@ -342,41 +270,50 @@ class BrawlStarsCog(commands.Cog):
             if len(brawlersmsg) > 900:
                 messages.append(brawlersmsg)
                 brawlersmsg = ""
-            brawlersmsg += (f"{self.get_brawler_emoji(brawler[0])} **{brawler[0].lower().capitalize()}**: {brawler[1]} <:bstrophy:552558722770141204>\n")
+            brawlersmsg += (
+                f"{get_brawler_emoji(brawler[0])} **{brawler[0].lower().capitalize()}**: {brawler[1]} <:bstrophy:552558722770141204>\n")
         if len(brawlersmsg) > 0:
             messages.append(brawlersmsg)
         for m in messages:
-            embed = discord.Embed(
-                color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
-            embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=member.avatar_url if isinstance(member, discord.Member) else "https://i.imgur.com/ZwIP41S.png")
-            embed.add_field(name=f"**Brawlers({len(brawlers)}\\33):**", value=m)
+            embed = discord.Embed(color=discord.Colour.from_rgb(
+                int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
+            embed.set_author(
+                name=f"{player.name} {player.raw_data['tag']}",
+                icon_url=member.avatar_url if isinstance(
+                    member,
+                    discord.Member) else "https://i.imgur.com/ZwIP41S.png")
+            embed.add_field(
+                name=f"**Brawlers({len(brawlers)}\\33):**", value=m)
             await ctx.send(embed=embed)
 
     @commands.command()
-    async def brawler(self, ctx, brawler : str, member: discord.Member = None):
+    async def brawler(self, ctx, brawler: str, member: discord.Member = None):
         """Brawler specific info"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
 
-        if member == None:
+        if member is None:
             member = ctx.author
 
         tag = await self.config.user(member).tag()
         if tag is None:
-            return await ctx.send(embed=self.badEmbed(f"You have no tag saved! Use {prefix}bssave <tag>"))
+            return await ctx.send(embed=badEmbed(f"You have no tag saved! Use {prefix}bssave <tag>"))
 
         if tag is None or tag == "":
             desc = "/p\n/bsprofile @user\n/p discord_name\n/p discord_id\n/p #CRTAG"
-            embed = discord.Embed(title="Invalid argument!", colour=discord.Colour.red(), description=desc)
+            embed = discord.Embed(
+                title="Invalid argument!",
+                colour=discord.Colour.red(),
+                description=desc)
             return await ctx.send(embed=embed)
         try:
             player = await self.ofcbsapi.get_player(tag)
 
         except brawlstats.errors.NotFoundError:
-            return await ctx.send(embed=self.badEmbed("No player with this tag found, try again!"))
+            return await ctx.send(embed=badEmbed("No player with this tag found, try again!"))
 
         except brawlstats.errors.RequestError as e:
-            return await ctx.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+            return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         except Exception as e:
             return await ctx.send(
@@ -387,94 +324,118 @@ class BrawlStarsCog(commands.Cog):
             if b.get('name') == brawler.upper():
                 br = b
         if br is None:
-            return await ctx.send(embed=self.badEmbed(f"There's no such brawler!"))
+            return await ctx.send(embed=badEmbed(f"There's no such brawler!"))
 
         colour = player.name_color if player.name_color is not None else "0xffffffff"
-        embed = discord.Embed(
-            color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
-        embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=member.avatar_url if isinstance(member, discord.Member) else "https://i.imgur.com/ZwIP41S.png")
-        embed.add_field(name="Brawler", value=f"{self.get_brawler_emoji(brawler.upper())} {brawler.lower().capitalize()}")
-        embed.add_field(name="Trophies", value=f"<:bstrophy:552558722770141204> {br.get('trophies')}")
-        embed.add_field(name="Highest Trophies", value=f"{self.get_rank_emoji(br.get('rank'))} {br.get('highestTrophies')}")
-        embed.add_field(name="Power Level", value=f"<:pp:664267845336825906> {br.get('power')}")
+        embed = discord.Embed(color=discord.Colour.from_rgb(
+            int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
+        embed.set_author(
+            name=f"{player.name} {player.raw_data['tag']}",
+            icon_url=member.avatar_url if isinstance(
+                member,
+                discord.Member) else "https://i.imgur.com/ZwIP41S.png")
+        embed.add_field(
+            name="Brawler",
+            value=f"{get_brawler_emoji(brawler.upper())} {brawler.lower().capitalize()}")
+        embed.add_field(
+            name="Trophies",
+            value=f"<:bstrophy:552558722770141204> {br.get('trophies')}")
+        embed.add_field(
+            name="Highest Trophies",
+            value=f"{get_rank_emoji(br.get('rank'))} {br.get('highestTrophies')}")
+        embed.add_field(name="Power Level",
+                        value=f"<:pp:664267845336825906> {br.get('power')}")
         starpowers = ""
         for star in br.get('starPowers'):
             starpowers += f"<:starpower:664267686720700456> {star.get('name')}\n"
         if starpowers != "":
             embed.add_field(name="Star Powers", value=starpowers)
         else:
-            embed.add_field(name="Star Powers", value="<:starpower:664267686720700456> None")
+            embed.add_field(name="Star Powers",
+                            value="<:starpower:664267686720700456> None")
         await ctx.send(embed=embed)
 
-
     @commands.command()
-    async def club(self, ctx, key:Union[discord.Member, str]=None):
+    async def club(self, ctx, key: Union[discord.Member, str] = None):
         await ctx.trigger_typing()
-        if key == None:
+        if key is None:
             mtag = await self.config.user(ctx.author).tag()
             if mtag is None:
-                return await ctx.send(embed = self.badEmbed(f"You have no tag saved! Use {ctx.prefix}bssave <tag>"))
+                return await ctx.send(embed=badEmbed(f"You have no tag saved! Use {ctx.prefix}bssave <tag>"))
             try:
                 player = await self.ofcbsapi.get_player(mtag)
                 if not player.club.tag:
                     return await ctx.send("This user is not in a club!")
                 tag = player.club.tag
             except brawlstats.errors.RequestError as e:
-                await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+                await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         elif isinstance(key, discord.Member):
-            member=key
+            member = key
             mtag = await self.config.user(member).tag()
             if mtag is None:
-                return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {ctx.prefix}bssave <tag>"))
+                return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {ctx.prefix}bssave <tag>"))
             try:
                 player = await self.ofcbsapi.get_player(mtag)
                 if not player.club.tag:
                     return await ctx.send("This user is not in a club!")
                 tag = player.club.tag
             except brawlstats.errors.RequestError as e:
-                await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+                await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
         elif key.startswith("#"):
             tag = key.upper().replace('O', '0')
         else:
             tag = await self.config.guild(ctx.guild).clubs.get_raw(key.lower(), "tag", default=None)
             if tag is None:
-                return await ctx.send(embed = self.badEmbed(f"{key.title()} isn't saved club in this server!"))
+                return await ctx.send(embed=badEmbed(f"{key.title()} isn't saved club in this server!"))
         try:
             club = await self.ofcbsapi.get_club(tag)
-                        
+
         except brawlstats.errors.NotFoundError:
-            return await ctx.send(embed = self.badEmbed("No club with this tag found, try again!"))
-        
+            return await ctx.send(embed=badEmbed("No club with this tag found, try again!"))
+
         except brawlstats.errors.RequestError as e:
-            await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+            await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
             return
-        
-        embed=discord.Embed(description=f"```{self.remove_codes(club.description)}```")
+
+        embed = discord.Embed(
+            description=f"```{remove_codes(club.description)}```")
         embed.set_author(name=f"{club.name} {club.tag}")
-        embed.add_field(name="Total Trophies", value= f"<:bstrophy:552558722770141204> `{club.trophies}`")
-        embed.add_field(name="Required Trophies", value= f"{self.get_league_emoji(club.required_trophies)} `{club.required_trophies}`")
-        embed.add_field(name="Average Trophies", value= f"<:bstrophy:552558722770141204> `{club.trophies//len(club.members)}`")
+        embed.add_field(
+            name="Total Trophies",
+            value=f"<:bstrophy:552558722770141204> `{club.trophies}`")
+        embed.add_field(
+            name="Required Trophies",
+            value=f"{get_league_emoji(club.required_trophies)} `{club.required_trophies}`")
+        embed.add_field(
+            name="Average Trophies",
+            value=f"<:bstrophy:552558722770141204> `{club.trophies//len(club.members)}`")
         for m in club.members:
             if m.role == "president":
-                embed.add_field(name="President", value= f"{self.get_league_emoji(m.trophies)}`{m.trophies}` {m.name}")
+                embed.add_field(
+                    name="President",
+                    value=f"{get_league_emoji(m.trophies)}`{m.trophies}` {m.name}")
                 break
-        embed.add_field(name="Members", value=f"<:icon_gameroom:553299647729238016> {len(club.members)}/100")
-        embed.add_field(name="Status", value= f"<:bslock:552560387279814690> {club.type.title()}") 
+        embed.add_field(
+            name="Members",
+            value=f"<:icon_gameroom:553299647729238016> {len(club.members)}/100")
+        embed.add_field(
+            name="Status",
+            value=f"<:bslock:552560387279814690> {club.type.title()}")
         topm = ""
         for i in range(5):
             try:
-                topm += f"{self.get_league_emoji(club.members[i].trophies)}`{club.members[i].trophies}` {self.remove_codes(club.members[i].name)}\n"
+                topm += f"{get_league_emoji(club.members[i].trophies)}`{club.members[i].trophies}` {remove_codes(club.members[i].name)}\n"
             except IndexError:
                 pass
         worstm = ""
         for i in range(5):
             try:
-                worstm += f"{self.get_league_emoji(club.members[len(club.members)-5+i].trophies)}`{club.members[len(club.members)-5+i].trophies}` {self.remove_codes(club.members[len(club.members)-5+i].name)}\n"
+                worstm += f"{get_league_emoji(club.members[len(club.members)-5+i].trophies)}`{club.members[len(club.members)-5+i].trophies}` {remove_codes(club.members[len(club.members)-5+i].name)}\n"
             except IndexError:
                 pass
-        embed.add_field(name = "Top Members", value = topm, inline = True)
-        embed.add_field(name = "Lowest Members", value = worstm, inline = True)
+        embed.add_field(name="Top Members", value=topm, inline=True)
+        embed.add_field(name="Lowest Members", value=worstm, inline=True)
         return await ctx.send(embed=randomize_colour(embed))
 
     @commands.guild_only()
@@ -489,7 +450,7 @@ class BrawlStarsCog(commands.Cog):
 
         if len((await self.config.guild(ctx.guild).clubs()).keys()) < 1:
             return await ctx.send(
-                embed=self.badEmbed(f"This server has no clubs saved. Save a club by using {ctx.prefix}clubs add!"))
+                embed=badEmbed(f"This server has no clubs saved. Save a club by using {ctx.prefix}clubs add!"))
 
         try:
             try:
@@ -504,7 +465,8 @@ class BrawlStarsCog(commands.Cog):
             embedFields = []
 
             if not offline:
-                clubs = sorted(clubs, key=lambda sort: (sort.trophies), reverse=True)
+                clubs = sorted(clubs, key=lambda sort: (
+                    sort.trophies), reverse=True)
 
                 for i in range(len(clubs)):
                     key = ""
@@ -521,7 +483,7 @@ class BrawlStarsCog(commands.Cog):
 
                     info = await self.config.guild(ctx.guild).clubs.get_raw(key, "info", default="")
                     e_name = f"<:bsband:600741378497970177> {clubs[i].name} [{key}] {clubs[i].tag} {info}"
-                    e_value = f"<:bstrophy:552558722770141204>`{clubs[i].trophies}` {self.get_league_emoji(clubs[i].required_trophies)}`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
+                    e_value = f"<:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
                     embedFields.append([e_name, e_value])
 
             else:
@@ -538,19 +500,27 @@ class BrawlStarsCog(commands.Cog):
                     cinfo = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "info")
                     cmembers = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "lastMemberCount")
                     creq = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "lastRequirement")
-                    # cemoji = discord.utils.get(self.bot.emojis, name = str(await self.config.guild(ctx.guild).clans.get_raw(ckey, "lastBadgeId")))
+                    # cemoji = discord.utils.get(self.bot.emojis, name =
+                    # str(await
+                    # self.config.guild(ctx.guild).clans.get_raw(ckey,
+                    # "lastBadgeId")))
 
                     e_name = f"<:bsband:600741378497970177> {cname} [{ckey}] #{ctag} {cinfo}"
-                    e_value = f"<:bstrophy:552558722770141204>`{cscore}` {self.get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` "
+                    e_value = f"<:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` "
                     embedFields.append([e_name, e_value])
 
-            colour = choice(
-                [discord.Colour.green(), discord.Colour.blue(), discord.Colour.purple(), discord.Colour.orange(),
-                 discord.Colour.red(), discord.Colour.teal()])
+            colour = choice([discord.Colour.green(),
+                             discord.Colour.blue(),
+                             discord.Colour.purple(),
+                             discord.Colour.orange(),
+                             discord.Colour.red(),
+                             discord.Colour.teal()])
             embedsToSend = []
             for i in range(0, len(embedFields), 8):
                 embed = discord.Embed(colour=colour)
-                embed.set_author(name=f"{ctx.guild.name} clubs", icon_url=ctx.guild.icon_url)
+                embed.set_author(
+                    name=f"{ctx.guild.name} clubs",
+                    icon_url=ctx.guild.icon_url)
                 footer = "<:offline:642094554019004416> API is offline, showing last saved data." if offline else f"Do you need more info about a club? Use {ctx.prefix}club [key]"
                 embed.set_footer(text=footer)
                 for e in embedFields[i:i + 8]:
@@ -565,11 +535,11 @@ class BrawlStarsCog(commands.Cog):
         except ZeroDivisionError as e:
             return await ctx.send(
                 "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
-        
+
     @commands.guild_only()
-    @commands.has_permissions(administrator = True) 
+    @commands.has_permissions(administrator=True)
     @clubs.command(name="add")
-    async def clans_add(self, ctx, key : str, tag : str):
+    async def clans_add(self, ctx, key: str, tag: str):
         """
         Add a club to /clubs command
         key - key for the club to be used in other commands
@@ -578,63 +548,63 @@ class BrawlStarsCog(commands.Cog):
         await ctx.trigger_typing()
         if tag.startswith("#"):
             tag = tag.strip('#').upper().replace('O', '0')
-        
+
         if key in (await self.config.guild(ctx.guild).clubs()).keys():
-            return await ctx.send(embed = self.badEmbed("This club is already saved!"))
+            return await ctx.send(embed=badEmbed("This club is already saved!"))
 
         try:
             club = await self.ofcbsapi.get_club(tag)
             result = {
-                "name" : club.name,
-                "nick" : key.title(),
-                "tag" : club.tag.replace("#", ""),
-                "lastMemberCount" : club.members_count,
-                "lastRequirement" : club.required_trophies,
-                "lastScore" : club.trophies,
-                "info" : ""
-                }
+                "name": club.name,
+                "nick": key.title(),
+                "tag": club.tag.replace("#", ""),
+                "lastMemberCount": club.members_count,
+                "lastRequirement": club.required_trophies,
+                "lastScore": club.trophies,
+                "info": ""
+            }
             key = key.lower()
             await self.config.guild(ctx.guild).clubs.set_raw(key, value=result)
-            await ctx.send(embed = self.goodEmbed(f"{club.name} was successfully saved in this server!"))
+            await ctx.send(embed=goodEmbed(f"{club.name} was successfully saved in this server!"))
 
         except brawlstats.errors.NotFoundError as e:
-            await ctx.send(embed = self.badEmbed("No club with this tag found, try again!"))
+            await ctx.send(embed=badEmbed("No club with this tag found, try again!"))
 
         except brawlstats.errors.RequestError as e:
-            await ctx.send(embed = self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+            await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         except Exception as e:
             return await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
 
     @commands.guild_only()
-    @commands.has_permissions(administrator = True)
+    @commands.has_permissions(administrator=True)
     @clubs.command(name="remove")
-    async def clubs_remove(self, ctx, key : str):
+    async def clubs_remove(self, ctx, key: str):
         """
         Remove a club from /clubs command
         key - key for the club used in commands
         """
         await ctx.trigger_typing()
         key = key.lower()
-        
+
         try:
             name = await self.config.guild(ctx.guild).clubs.get_raw(key, "name")
             await self.config.guild(ctx.guild).clubs.clear_raw(key)
-            await ctx.send(embed = self.goodEmbed(f"{name} was successfully removed from this server!"))
+            await ctx.send(embed=goodEmbed(f"{name} was successfully removed from this server!"))
         except KeyError:
-            await ctx.send(embed = self.badEmbed(f"{key.title()} isn't saved club!"))
+            await ctx.send(embed=badEmbed(f"{key.title()} isn't saved club!"))
 
     @commands.guild_only()
-    @commands.has_permissions(administrator = True)
+    @commands.has_permissions(administrator=True)
     @clubs.command(name="info")
-    async def clubs_info(self, ctx, key : str, *, info : str = ""):
+    async def clubs_info(self, ctx, key: str, *, info: str = ""):
         """Edit club info"""
         await ctx.trigger_typing()
         try:
             await self.config.guild(ctx.guild).clubs.set_raw(key, "info", value=info)
-            await ctx.send(embed = self.goodEmbed("Club info successfully edited!"))
+            await ctx.send(embed=goodEmbed("Club info successfully edited!"))
         except KeyError:
-            await ctx.send(embed = self.badEmbed(f"{key.title()} isn't saved club in this server!"))
+            await ctx.send(embed=badEmbed(f"{key.title()} isn't saved club in this server!"))
 
     async def removeroleifpresent(self, member: discord.Member, *roles):
         msg = ""
@@ -651,7 +621,7 @@ class BrawlStarsCog(commands.Cog):
                 await member.add_roles(role)
                 msg += f"Added **{str(role)}** to **{str(member)}**\n"
         return msg
-            
+
     @tasks.loop(hours=4)
     async def sortroles(self):
         ch = self.bot.get_channel(653295573872672810)
@@ -682,7 +652,6 @@ class BrawlStarsCog(commands.Cog):
                 continue
             except Exception as e:
                 return await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
-                continue
 
             msg = ""
             player_in_club = "name" in player.raw_data["club"]
@@ -712,7 +681,8 @@ class BrawlStarsCog(commands.Cog):
 
             if player_in_club and "LA " in player.club.name:
                 for role in ch.guild.roles:
-                    if sub(r'[^\x00-\x7f]',r'', role.name).strip() == sub(r'[^\x00-\x7f]',r'', player.club.name).strip():
+                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(
+                            r'[^\x00-\x7f]', r'', player.club.name).strip():
                         member_role_expected = role
                         break
                 if member_role_expected is None:
@@ -773,15 +743,12 @@ class BrawlStarsCog(commands.Cog):
             except brawlstats.errors.RequestError as e:
                 error_counter += 1
                 if error_counter == 20:
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                      description=f"Stopping after 20 request errors! Displaying the last one:\n({str(e)})"))
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 20 request errors! Displaying the last one:\n({str(e)})"))
                     break
                 await asyncio.sleep(1)
                 continue
             except Exception as e:
-                return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                         description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
-                continue
+                return await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
 
             msg = ""
             player_in_club = "name" in player.raw_data["club"]
@@ -813,8 +780,8 @@ class BrawlStarsCog(commands.Cog):
 
             if player_in_club and "LA " in player.club.name:
                 for role in ch.guild.roles:
-                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(r'[^\x00-\x7f]', r'',
-                                                                           player.club.name).strip():
+                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(
+                            r'[^\x00-\x7f]', r'', player.club.name).strip():
                         member_role_expected = role
                         break
                 if member_role_expected is None:
@@ -849,14 +816,13 @@ class BrawlStarsCog(commands.Cog):
             if msg != "":
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
 
-
     @sortrolesasia.before_loop
     async def before_sortrolesasia(self):
         await asyncio.sleep(5)
 
     @commands.command()
     @commands.guild_only()
-    async def newcomer(self, ctx, tag, member : discord.Member):
+    async def newcomer(self, ctx, tag, member: discord.Member):
         if ctx.guild.id == 401883208511389716:
             mod = ctx.guild.get_role(520719415109746690)
             tmod = ctx.guild.get_role(533650638274297877)
@@ -887,20 +853,15 @@ class BrawlStarsCog(commands.Cog):
             try:
                 player = await self.ofcbsapi.get_player(tag)
                 await self.config.user(member).tag.set(tag.replace("#", ""))
-                msg += "BS account **{}** was saved to **{}**\n".format(player.name, member.name)
-
+                msg += f"BS account **{player.name}** was saved to **{member.name}**\n"
             except brawlstats.errors.NotFoundError:
-                await ctx.send(embed=self.badEmbed("No player with this tag found!"))
-                return
+                return await ctx.send(embed=badEmbed("No player with this tag found!"))
 
             except brawlstats.errors.RequestError as e:
-                await ctx.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-                return
+                return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
             except Exception as e:
-                await ctx.send(
-                    "**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
-                return
+                return await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
             nick = f"{player.name}"
             try:
@@ -909,8 +870,7 @@ class BrawlStarsCog(commands.Cog):
             except discord.Forbidden:
                 msg += f"I dont have permission to change nickname of this user!\n"
             except Exception as e:
-                await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Something went wrong: {str(e)}"))
-                return
+                return await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Something went wrong: {str(e)}"))
 
             player_in_club = "name" in player.raw_data["club"]
             member_role_expected = None
@@ -925,7 +885,8 @@ class BrawlStarsCog(commands.Cog):
 
             if player_in_club and "LA " in player.club.name:
                 for role in ctx.guild.roles:
-                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(r'[^\x00-\x7f]', r'', player.club.name).strip():
+                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(
+                            r'[^\x00-\x7f]', r'', player.club.name).strip():
                         member_role_expected = role
                         if "🇪🇸" in str(role):
                             msg += await self.addroleifnotpresent(member, es)
@@ -939,8 +900,7 @@ class BrawlStarsCog(commands.Cog):
                             msg += await self.addroleifnotpresent(member, pl)
                         break
                 if member_role_expected is None:
-                    await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Role for the club {player.club.name} not found. Input: {club_name}.\n"))
-                    return
+                    return await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Role for the club {player.club.name} not found. Input: {club_name}.\n"))
                 msg += await self.removeroleifpresent(member, newcomer)
                 msg += await self.addroleifnotpresent(member, labs, brawlstars)
                 msg += await self.addroleifnotpresent(member, member_role_expected)
@@ -982,20 +942,16 @@ class BrawlStarsCog(commands.Cog):
             try:
                 player = await self.ofcbsapi.get_player(tag)
                 await self.config.user(member).tag.set(tag.replace("#", ""))
-                msg += "BS account **{}** was saved to **{}**\n".format(player.name, member.name)
+                msg += "BS account **{player.name}** was saved to **{member.name}**\n"
 
             except brawlstats.errors.NotFoundError:
-                await ctx.send(embed=self.badEmbed("No player with this tag found!"))
-                return
+                return await ctx.send(embed=badEmbed("No player with this tag found!"))
 
             except brawlstats.errors.RequestError as e:
-                await ctx.send(embed=self.badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-                return
+                return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
             except Exception as e:
-                await ctx.send(
-                    "**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
-                return
+                return await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
             nick = f"{player.name}"
             try:
@@ -1004,9 +960,7 @@ class BrawlStarsCog(commands.Cog):
             except discord.Forbidden:
                 msg += f"I dont have permission to change nickname of this user!\n"
             except Exception as e:
-                await ctx.send(
-                    embed=discord.Embed(colour=discord.Colour.blue(), description=f"Something went wrong: {str(e)}"))
-                return
+                return await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Something went wrong: {str(e)}"))
 
             player_in_club = "name" in player.raw_data["club"]
             member_role_expected = None
@@ -1021,7 +975,8 @@ class BrawlStarsCog(commands.Cog):
 
             if player_in_club and "LA " in player.club.name:
                 for role in ctx.guild.roles:
-                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(r'[^\x00-\x7f]', r'', player.club.name).strip():
+                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(
+                            r'[^\x00-\x7f]', r'', player.club.name).strip():
                         member_role_expected = role
                         break
                 if member_role_expected is None:
@@ -1046,7 +1001,7 @@ class BrawlStarsCog(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    async def userbytag(self, ctx, tag : str):
+    async def userbytag(self, ctx, tag: str):
         tag = tag.lower().replace('O', '0')
         if tag.startswith("#"):
             tag = tag.strip('#')
@@ -1055,9 +1010,7 @@ class BrawlStarsCog(commands.Cog):
             person = self.bot.get_user(user)
             if person is not None:
                 if (await self.config.user(person).tag()) == tag:
-                    await ctx.send(f"This tag belongs to **{str(person)}**.")
-                    return
-
+                    return await ctx.send(f"This tag belongs to **{str(person)}**.")
         await ctx.send("This tag is either not saved or invalid.")
 
     @commands.command()
@@ -1083,7 +1036,7 @@ class BrawlStarsCog(commands.Cog):
         if msg == "":
             await ctx.send(embed=discord.Embed(description="This tag is either invalid or no people from this club saved their tags.", colour=discord.Colour.red()))
         else:
-            await ctx.send(embed=discord.Embed(title=f"Total: {count}",description=msg, colour=discord.Colour.blue()))
+            await ctx.send(embed=discord.Embed(title=f"Total: {count}", description=msg, colour=discord.Colour.blue()))
 
     @commands.command(aliases=['vpbyclub'])
     @commands.guild_only()
@@ -1107,8 +1060,7 @@ class BrawlStarsCog(commands.Cog):
 
         if msg == "":
             await ctx.send(embed=discord.Embed(
-                description="This tag is either invalid or no people from this club saved their tags.",
-                colour=discord.Colour.red()))
+                description="This tag is either invalid or no people from this club saved their tags.", colour=discord.Colour.red()))
         else:
             await ctx.send(embed=discord.Embed(title=f"Total: {count}", description=msg, colour=discord.Colour.blue()))
 
@@ -1134,7 +1086,6 @@ class BrawlStarsCog(commands.Cog):
 
         if msg == "":
             await ctx.send(embed=discord.Embed(
-                description="This tag is either invalid or no people from this club saved their tags.",
-                colour=discord.Colour.red()))
+                description="This tag is either invalid or no people from this club saved their tags.", colour=discord.Colour.red()))
         else:
             await ctx.send(embed=discord.Embed(title=f"Total: {count}", description=msg, colour=discord.Colour.blue()))
