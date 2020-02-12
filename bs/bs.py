@@ -68,6 +68,7 @@ class BrawlStarsCog(commands.Cog):
 
     @commands.command(aliases=['rbs'])
     async def renamebs(self, ctx, member: discord.Member = None):
+        """Change a name of a user to be nickname|club_name"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
         member = ctx.author if member is None else member
@@ -86,9 +87,9 @@ class BrawlStarsCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Something went wrong: {str(e)}")
 
-    @commands.command(aliases=['p', 'bsp'])
+    @commands.command(aliases=['p', 'bsp', 'stats'])
     async def profile(self, ctx, *, member: Union[discord.Member, str] = None):
-        """Brawl Stars profile"""
+        """View player's BS statistics"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
         tag = ""
