@@ -1,14 +1,14 @@
-def badEmbed(self, text):
+def badEmbed(text):
     bembed = discord.Embed(color=0xff0000)
     bembed.set_author(name=text, icon_url="https://i.imgur.com/dgE1VCm.png")
     return bembed
     
-def goodEmbed(self, text):
+def goodEmbed(text):
     gembed = discord.Embed(color=0x45cafc)
     gembed.set_author(name=text, icon_url="https://i.imgur.com/fSAGoHh.png")
     return gembed
 
-def get_league_emoji(self, trophies : int):
+def get_league_emoji(trophies : int):
     if trophies < 500:
         return "<:league_icon_00:553294108802678787>"
     elif trophies < 1000:
@@ -28,7 +28,7 @@ def get_league_emoji(self, trophies : int):
     else:
         return "<:league_icon_08:553294109217914910>"
 
-def get_rank_emoji(self, rank : int):
+def get_rank_emoji(rank : int):
     if 1 <= rank < 5:
         return "<:rank1:664262410265165824>"
     elif 5 <= rank < 10:
@@ -46,7 +46,7 @@ def get_rank_emoji(self, rank : int):
     elif 35 <= rank:
         return "<:rank35:664262686028333056>"
 
-def get_brawler_emoji(self, name : str):
+def get_brawler_emoji(name : str):
     if name == "SHELLY":
         return "<:shelly:664235199076237323>"
     elif name == "TICK":
@@ -114,7 +114,7 @@ def get_brawler_emoji(self, name : str):
     elif name == "MR. P":
         return "<:mrp:671379771585855508>"
     
-def remove_codes(self, text : str):
+def remove_codes(text : str):
     toremove = ["</c>", "<c1>", "<c2>", "<c3>", "<c4>", "<c5>", "<c6>", "<c7>", "<c8>", "<c9>", "<c0>"]
     for code in toremove:
         text = text.replace(code, "")
