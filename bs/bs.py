@@ -198,9 +198,18 @@ class BrawlStarsCog(commands.Cog):
             embed.add_field(
                 name="Highest PP Points",
                 value=f"<:powertrophies:661266876235513867> {player.raw_data['highestPowerPlayPoints']}")
-        embed.add_field(
-            name="Qualified For Championship",
-            value=f"<:powertrophies:661266876235513867> {player.raw_data['isQualifiedFromChampionshipChallenge']}")
+        #embed.add_field(
+        #    name="Qualified For Championship",
+        #    value=f"<:powertrophies:661266876235513867> {player.raw_data['isQualifiedFromChampionshipChallenge']}")
+        texts = [
+            "Check out all your brawlers using /brawlers!", 
+            "Want to see your club stats? Try /club!", 
+            "Have you seen all our clubs? No? Do /clubs!"
+            "You can see stats of other players by typing /p @user.",
+            "You can display player's stats by using his tag! /p #TAGHERE",
+            "Did you know LA Bot can display CR stats as well? /crp"
+        ]
+        embed.set_footer(text=choice(texts))
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['b'])
@@ -273,14 +282,17 @@ class BrawlStarsCog(commands.Cog):
                 f"{get_brawler_emoji(brawler[0])} **{brawler[0].lower().capitalize()}**: {brawler[1]} <:bstrophy:552558722770141204>\n")
         if len(brawlersmsg) > 0:
             messages.append(brawlersmsg)
-        for m in messages:
+        for i in range(len(messages)):
             embed = discord.Embed(color=discord.Colour.from_rgb(
                 int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
-            embed.set_author(
-                name=f"{player.name} {player.raw_data['tag']}",
-                icon_url=member.avatar_url if isinstance(member, discord.Member) else "https://i.imgur.com/ZwIP41S.png")
+            if i == 0:
+                embed.set_author(
+                    name=f"{player.name} {player.raw_data['tag']}",
+                    icon_url=member.avatar_url if isinstance(member, discord.Member) else "https://i.imgur.com/ZwIP41S.png")
             embed.add_field(
-                name=f"**Brawlers({len(brawlers)}\\33):**", value=m)
+                name=f"**Brawlers({len(brawlers)}\\33):**", value=messages[i])
+            if i == len(messages)-1:
+                embed.set_footer(text="Use \"/brawler brawler_name\" for even more stats!")
             await ctx.send(embed=embed)
 
     @commands.command()
@@ -511,7 +523,7 @@ class BrawlStarsCog(commands.Cog):
                 embed.set_author(
                     name=f"{ctx.guild.name} clubs",
                     icon_url=ctx.guild.icon_url)
-                footer = "<:offline:642094554019004416> API is offline, showing last saved data." if offline else f"Do you need more info about a club? Use {ctx.prefix}club [key]"
+                footer = "<:offline:642094554019004416> API is offline, showing last saved data." if offline else f"Need more info about a club? Use {ctx.prefix}club [key]"
                 embed.set_footer(text=footer)
                 for e in embedFields[i:i + 8]:
                     embed.add_field(name=e[0], value=e[1], inline=False)
