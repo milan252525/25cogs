@@ -630,7 +630,7 @@ class BrawlStarsCog(commands.Cog):
                 msg = ""
                 if pres in member.roles or vp in member.roles:
                     msg += "Has President or VP role, no tag saved."
-                    msg += await self.removeroleifpresent(vp, pres)
+                    msg += await self.removeroleifpresent(member, vp, pres)
                     try:
                         await member.send(f"Hello {member.mention},\nyour (Vice)President role in LA Brawl Stars server has been removed.\nThe reason is you don't have your in-game tag saved at LA bot. You can fix this by saving your tag using `/save #YOURTAG`.\n")
                     except (discord.HTTPException, discord.Forbidden) as e:
