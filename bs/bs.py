@@ -275,14 +275,14 @@ class BrawlStarsCog(commands.Cog):
         brawlers = sorted(brawlers, key=lambda x: x[1], reverse=True)
         brawlersmsg = ""
         for brawler in brawlers:
-            if len(brawlersmsg) > 1900:
+            if len(brawlersmsg) > 1800:
                 messages.append(brawlersmsg)
                 brawlersmsg = ""
             brawlersmsg += (
                 f"{get_brawler_emoji(brawler[0])} **{brawler[0].lower().capitalize()}**: {brawler[1]} <:bstrophy:552558722770141204>\n")
         if len(brawlersmsg) > 0:
             messages.append(brawlersmsg)
-        messages[0] = f"**Brawlers({len(brawlers)}\\33):**" + messages[0]
+        messages[0] = f"**Brawlers({len(brawlers)}\\33):**\n" + messages[0]
         for i in range(len(messages)):
             embed = discord.Embed(description=messages[i], color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
             if i == 0:
@@ -657,8 +657,8 @@ class BrawlStarsCog(commands.Cog):
                 await asyncio.sleep(0.2)
             except brawlstats.errors.RequestError as e:
                 error_counter += 1
-                if error_counter == 20:
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 20 request errors! Displaying the last one:\n({str(e)})"))
+                if error_counter == 5:
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 5 request errors! Displaying the last one:\n({str(e)})"))
                     break
                 await asyncio.sleep(1)
                 continue
@@ -687,11 +687,11 @@ class BrawlStarsCog(commands.Cog):
                 if member_role is not None:
                     msg += await self.removeroleifpresent(member, member_role)
 
-            if player_in_club and "LA " not in player.club.name:
+            if player_in_club and not player.club.name.startswith("LA "):
                 msg += await self.removeroleifpresent(member, labs, vp, pres, newcomer, member_role)
                 msg += await self.addroleifnotpresent(member, guest, brawlstars)
 
-            if player_in_club and "LA " in player.club.name:
+            if player_in_club and player.club.name.startswith("LA "):
                 for role in ch.guild.roles:
                     if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(r'[^\x00-\x7f]', r'', player.club.name).strip():
                         member_role_expected = role
