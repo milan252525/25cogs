@@ -414,5 +414,5 @@ class Welcome(commands.Cog):
                 msg += f"Assigned roles: {spectator}\n"
             except discord.Forbidden:
                 msg += f":exclamation:Couldn't change roles of this user.\n"
-
+        await member.remove_roles(newcomer)
         await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.blue()))
