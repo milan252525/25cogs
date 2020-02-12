@@ -1085,7 +1085,7 @@ class BrawlStarsCog(commands.Cog):
         else:
             await ctx.send(embed=discord.Embed(title=f"Total: {count}",description=msg, colour=discord.Colour.blue()))
 
-    @commands.command()
+    @commands.command(aliases=['vpbyclub'])
     @commands.guild_only()
     async def vpsbyclub(self, ctx, tag: str):
         tag = tag.upper().replace('O', '0')
@@ -1112,7 +1112,7 @@ class BrawlStarsCog(commands.Cog):
         else:
             await ctx.send(embed=discord.Embed(title=f"Total: {count}", description=msg, colour=discord.Colour.blue()))
 
-    @commands.command()
+    @commands.command(aliases=['presbyclub'])
     @commands.guild_only()
     async def presesbyclub(self, ctx, tag: str):
         tag = tag.upper().replace('O', '0')
