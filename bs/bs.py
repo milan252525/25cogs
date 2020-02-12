@@ -680,6 +680,8 @@ class BrawlStarsCog(commands.Cog):
                 for role in member_roles:
                     if sub(r'[^\x00-\x7f]', r'', role.name).strip() != sub(r'[^\x00-\x7f]', r'', player.club.name).strip():
                         msg += await self.removeroleifpresent(member, role)
+       
+            member_role = member_roles[0]
 
             if not player_in_club:
                 msg += await self.removeroleifpresent(member, labs, vp, pres, newcomer)
