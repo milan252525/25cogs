@@ -104,7 +104,7 @@ class BrawlStarsCog(commands.Cog):
             tag = member.upper().replace('O', '0')
         else:
             try:
-                member = discord.utils.get(ctx.guild.members, id=int(member))
+                member = self.bot.get_user(int(member))
                 if member is not None:
                     tag = await self.config.user(member).tag()
                     if tag is None:
