@@ -282,15 +282,13 @@ class BrawlStarsCog(commands.Cog):
                 f"{get_brawler_emoji(brawler[0])} **{brawler[0].lower().capitalize()}**: {brawler[1]} <:bstrophy:552558722770141204>\n")
         if len(brawlersmsg) > 0:
             messages.append(brawlersmsg)
+        messages[0] = f"**Brawlers({len(brawlers)}\\33):**"
         for i in range(len(messages)):
-            embed = discord.Embed(color=discord.Colour.from_rgb(
-                int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
+            embed = discord.Embed(description=messages[i], color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
             if i == 0:
                 embed.set_author(
                     name=f"{player.name} {player.raw_data['tag']}",
                     icon_url=member.avatar_url if isinstance(member, discord.Member) else "https://i.imgur.com/ZwIP41S.png")
-            embed.add_field(
-                name=f"**Brawlers({len(brawlers)}\\33):**", value=messages[i])
             if i == len(messages)-1:
                 embed.set_footer(text="/brawler name for more stats")
             await ctx.send(embed=embed)
