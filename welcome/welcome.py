@@ -404,8 +404,7 @@ class Welcome(commands.Cog):
                 await ctx.send(f"Brawl Stars API is offline, please try again later! ({str(e)})")
                 msg += f":exclamation:Error occured: {str(e)}\n"
             except Exception as e:
-                await ctx.send(
-                    "**Something went wrong, please send a personal message to LA Modmail or try again!**")
+                await ctx.send(f"**Something went wrong, please send a personal message to LA Modmail or try again!** ({e})")
                 msg += f":exclamation:Error occured: {str(e)}\n"
         elif tag == "spectator":
             try:
