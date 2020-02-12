@@ -597,17 +597,21 @@ class BrawlStarsCog(commands.Cog):
     async def removeroleifpresent(self, member: discord.Member, *roles):
         msg = ""
         for role in roles:
+            if role is None:
+                continue
             if role in member.roles:
                 await member.remove_roles(role)
-                msg += f"Removed **{str(role)}** from **{str(member)}**\n"
+                msg += f"Removed **{str(role)}**\n"
         return msg
 
     async def addroleifnotpresent(self, member: discord.Member, *roles):
         msg = ""
         for role in roles:
+            if role is None:
+                continue
             if role not in member.roles:
                 await member.add_roles(role)
-                msg += f"Added **{str(role)}** to **{str(member)}**\n"
+                msg += f"Added **{str(role)}**\n"
         return msg
 
     @tasks.loop(hours=4)
@@ -629,7 +633,7 @@ class BrawlStarsCog(commands.Cog):
             if tag is None:
                 msg = ""
                 if pres in member.roles or vp in member.roles:
-                    msg += "Has President or VP role, no tag saved."
+                    msg += "Has President or VP role, no tag saved.\n"
                     msg += await self.removeroleifpresent(member, vp, pres)
                     try:
                         await member.send(f"Hello {member.mention},\nyour (Vice)President role in LA Brawl Stars server has been removed.\nThe reason is you don't have your in-game tag saved at LA bot. You can fix this by saving your tag using `/save #YOURTAG`.\n")
@@ -661,9 +665,8 @@ class BrawlStarsCog(commands.Cog):
                     member_roles.append(role)
 
             if len(member_roles) > 1:
-                msg += f"**{str(member)}** has more than one club role. Removing **{', '.join([str(r) for r in member_roles])}**"
-                member_role = member_roles[0]
-                for role in member_roles[1:]:
+                msg += f"Found more than one club role. (**{', '.join([str(r) for r in member_roles])}**)"
+                for role in member_roles:
                     msg += await self.removeroleifpresent(member, role)
 
             if not player_in_club:
@@ -673,13 +676,12 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.removeroleifpresent(member, member_role)
 
             if player_in_club and "LA " not in player.club.name:
-                msg += await self.removeroleifpresent(member, labs, vp, pres, newcomer)
+                msg += await self.removeroleifpresent(member, labs, vp, pres, newcomer, member_role)
                 msg += await self.addroleifnotpresent(member, guest, brawlstars)
 
             if player_in_club and "LA " in player.club.name:
                 for role in ch.guild.roles:
-                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(
-                            r'[^\x00-\x7f]', r'', player.club.name).strip():
+                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(r'[^\x00-\x7f]', r'', player.club.name).strip():
                         member_role_expected = role
                         break
                 if member_role_expected is None:
