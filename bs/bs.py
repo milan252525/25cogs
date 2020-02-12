@@ -275,14 +275,14 @@ class BrawlStarsCog(commands.Cog):
         brawlers = sorted(brawlers, key=lambda x: x[1], reverse=True)
         brawlersmsg = ""
         for brawler in brawlers:
-            if len(brawlersmsg) > 1800:
+            if len(brawlersmsg) > 1900:
                 messages.append(brawlersmsg)
                 brawlersmsg = ""
             brawlersmsg += (
                 f"{get_brawler_emoji(brawler[0])} **{brawler[0].lower().capitalize()}**: {brawler[1]} <:bstrophy:552558722770141204>\n")
         if len(brawlersmsg) > 0:
             messages.append(brawlersmsg)
-        messages[0] = f"**Brawlers({len(brawlers)}\\33):**"
+        messages[0] = f"**Brawlers({len(brawlers)}\\33):**" + messages[0]
         for i in range(len(messages)):
             embed = discord.Embed(description=messages[i], color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
             if i == 0:
