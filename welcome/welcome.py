@@ -370,7 +370,11 @@ class Welcome(commands.Cog):
                 tag = tag.strip('#')
             try:
                 player = await self.ofcbsapi.get_player(tag)
-                nick = f"{player.name} | {player.club.name}" if player.club is not None else f"{player.name}"
+                player_in_club = "name" in player.raw_data["club"]
+                if player_in_club:
+                    nick = f"{player.name} | {player.club.name}"
+                elif not player_in_club:
+                    nick = f"{player.name}"
                 try:
                     await member.edit(nick=nick[:31])
                     msg += f"Nickname changed: {nick[:31]}\n"
@@ -382,7 +386,6 @@ class Welcome(commands.Cog):
                 try:
                     LAMember = member.guild.get_role(654334569528688641)
                     guest = member.guild.get_role(656506416911351848)
-                    player_in_club = "name" in player.raw_data["club"]
                     if not player_in_club:
                         await member.add_roles(guest)
                         msg += f"Assigned roles: {guest.name}\n"
@@ -409,9 +412,9 @@ class Welcome(commands.Cog):
             except brawlstats.errors.RequestError as e:
                 await ctx.send(f"Brawl Stars API is offline, please try again later! ({str(e)})")
                 msg += f":exclamation:Error occured: {str(e)}\n"
-            #except Exception as e:
-                #await ctx.send(f"**Something went wrong, please send a personal message to LA Modmail or try again!**")
-                #msg += f":exclamation:Error occured: {str(e)}\n"
+            except Exception as e:
+                await ctx.send(f"**Something went wrong, please send a personal message to LA Modmail or try again!**")
+                msg += f":exclamation:Error occured: {str(e)}\n"
         elif tag == "spectator":
             try:
                 spectator = member.guild.get_role(671381405695082507)
