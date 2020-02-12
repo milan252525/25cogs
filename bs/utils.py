@@ -1,10 +1,12 @@
+from discord import Embed
+
 def badEmbed(text):
-    bembed = discord.Embed(color=0xff0000)
+    bembed = Embed(color=0xff0000)
     bembed.set_author(name=text, icon_url="https://i.imgur.com/dgE1VCm.png")
     return bembed
     
 def goodEmbed(text):
-    gembed = discord.Embed(color=0x45cafc)
+    gembed = Embed(color=0x45cafc)
     gembed.set_author(name=text, icon_url="https://i.imgur.com/fSAGoHh.png")
     return gembed
 
