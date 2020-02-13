@@ -204,7 +204,7 @@ class BrawlStarsCog(commands.Cog):
         texts = [
             "Check out all your brawlers using /brawlers!", 
             "Want to see your club stats? Try /club!", 
-            "Have you seen all our clubs? No? Do /clubs!"
+            "Have you seen all our clubs? No? Do /clubs!",
             "You can see stats of other players by typing /p @user.",
             "You can display player's stats by using his tag! /p #TAGHERE",
             "Did you know LA Bot can display CR stats as well? /crp"
