@@ -1132,14 +1132,14 @@ class BrawlStarsCog(commands.Cog):
             tag = await self.config.user(member).tag()
             if tag is not None:
                 player = await self.ofcbsapi.get_player(tag)
-            player_in_club = "name" in player.raw_data["club"]
+                player_in_club = "name" in player.raw_data["club"]
             if len(msg) > 1999:
                 messages.append(msg)
                 msg = ""
             if tag is None:
                 msg += f"DC tag: {str(member)}; no BS account saved\n"
             elif player_in_club:
-                msg += f"DC tag: {str(member)}; IGN: {player.name}; Club: {player.club}; Role: {player.club.role}\n"
+                msg += f"DC tag: {str(member)}; IGN: {player.name}; Club: {player.club.name}; Role: {player.club.role}\n"
             elif not player_in_club:
                 msg += f"DC tag: {str(member)}; IGN: {player.name}; Club: None\n"
         if len(msg) > 0:
