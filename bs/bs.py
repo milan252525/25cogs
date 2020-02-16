@@ -1128,7 +1128,7 @@ class BrawlStarsCog(commands.Cog):
             return
         discord = ""
         ign = ""
-        club = ""
+        clubn = ""
         discords = []
         igns = []
         clubs = []
@@ -1137,32 +1137,32 @@ class BrawlStarsCog(commands.Cog):
             if tag is not None:
                 player = await self.ofcbsapi.get_player(tag)
                 player_in_club = "name" in player.raw_data["club"]
-            if len(discord) > 1700 or len(ign) > 1700 or len(club) > 1700:
+            if len(discord) > 1700 or len(ign) > 1700 or len(clubn) > 1700:
                 discords.append(discord)
                 discord = ""
                 igns.append(ign)
                 ign = ""
-                clubs.append(club)
-                club = ""
+                clubs.append(clubn)
+                clubn = ""
             if tag is None:
                 discord += f"{str(member)}\n"
                 ign += "None\n"
-                club += "None\n"
+                clubn += "None\n"
             elif player_in_club:
                 club = await player.get_club()
                 for mem in club.members:
                     if mem.tag == player.tag:
                         discord += f"{str(member)}\n"
                         ign += f"{player.name}\n"
-                        club += f"{player.club.name}({mem.role.capitalize()})\n"
+                        clubn += f"{player.club.name}({mem.role.capitalize()})\n"
             elif not player_in_club:
                 discord += f"{str(member)}\n"
                 ign += f"{player.name}\n"
-                club += "None\n"
-        if len(discord) > 0 or len(ign) > 0 or len(club) > 0:
+                clubn += "None\n"
+        if len(discord) > 0 or len(ign) > 0 or len(clubn) > 0:
             discords.append(discord)
             igns.append(ign)
-            clubs.append(club)
+            clubs.append(clubn)
         i = 0
         while i < len(discords):
             embed = discord.Embed(color=discord.Colour.green(), title=f"Members: {str(len(result))}\n")
