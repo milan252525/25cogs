@@ -1133,7 +1133,7 @@ class BrawlStarsCog(commands.Cog):
             if tag is not None:
                 player = await self.ofcbsapi.get_player(tag)
                 player_in_club = "name" in player.raw_data["club"]
-            if len(msg) > 1999:
+            if len(msg) > 1700:
                 messages.append(msg)
                 msg = ""
             if tag is None:
