@@ -1107,3 +1107,46 @@ class BrawlStarsCog(commands.Cog):
                 description="This tag is either invalid or no people from this club saved their tags.", colour=discord.Colour.red()))
         else:
             await ctx.send(embed=discord.Embed(title=f"Total: {count}", description=msg, colour=discord.Colour.blue()))
+
+    @commands.command()
+    @commands.guild_only()
+    async def membersBS(self, ctx, *, rolename):
+        role = None
+        for r in ctx.guild.roles:
+            if r.name.lower() == rolename.lower():
+                role = r
+                continue
+            elif r.name.lower().startswith(rolename.lower()):
+                role = r
+                continue
+        if role is None:
+            await ctx.send("No such role in the server.")
+            return
+        result = role.members
+        if not result:
+            await ctx.send("No members with such role in the server.")
+            return
+        msg = f"Members: {str(len(result))}\n"
+        messages = []
+        for member in result:
+            tag = await self.config.user(member).tag()
+            if tag is not None:
+                player = await self.ofcbsapi.get_player(tag)
+            player_in_club = "name" in player.raw_data["club"]
+            if len(msg) > 1999:
+                messages.append(msg)
+                msg = ""
+            if tag is None:
+                msg += f"DC tag: {str(member)}; no BS account saved\n"
+            elif player_in_club:
+                msg += f"DC tag: {str(member)}; IGN: {player.name}; Club: {player.club}; Role: {player.club.role}\n"
+            elif not player_in_club:
+                msg += f"DC tag: {str(member)}; IGN: {player.name}; Club: None\n"
+        if len(msg) > 0:
+            messages.append(msg)
+        for m in messages:
+            if not mentions:
+                m = m.replace('_', '\_')
+                m = m.replace('*', '\*')
+                m = m.replace('~', '\~')
+            await ctx.send(embed=discord.Embed(description=m, colour=discord.Colour.green()))
