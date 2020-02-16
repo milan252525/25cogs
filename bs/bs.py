@@ -1126,29 +1126,47 @@ class BrawlStarsCog(commands.Cog):
         if not result:
             await ctx.send("No members with such role in the server.")
             return
-        msg = f"Members: {str(len(result))}\n"
-        messages = []
+        discord = ""
+        ign = ""
+        club = ""
+        discords = []
+        igns = []
+        clubs = []
         for member in result:
             tag = await self.config.user(member).tag()
             if tag is not None:
                 player = await self.ofcbsapi.get_player(tag)
                 player_in_club = "name" in player.raw_data["club"]
-            if len(msg) > 1700:
-                messages.append(msg)
-                msg = ""
+            if len(discord) > 1700 or len(ign) > 1700 or len(club) > 1700:
+                discords.append(discord)
+                discord = ""
+                igns.append(ign)
+                ign = ""
+                clubs.append(club)
+                club = ""
             if tag is None:
-                msg += f"{str(member)}; no BS account saved\n"
+                discord += f"{str(member)}\n"
+                ign += "None\n"
+                club += "None\n"
             elif player_in_club:
                 club = await player.get_club()
                 for mem in club.members:
                     if mem.tag == player.tag:
-                        msg += f"{str(member)}; IGN: {player.name}; Club: {player.club.name}; Role: {mem.role.capitalize()}\n"
+                        discord += f"{str(member)}\n"
+                        ign += f"{player.name}\n"
+                        club += f"{player.club.name}({mem.role.capitalize()})\n"
             elif not player_in_club:
-                msg += f"{str(member)}; IGN: {player.name}; Club: None\n"
-        if len(msg) > 0:
-            messages.append(msg)
-        for m in messages:
-            m = m.replace('_', '\_')
-            m = m.replace('*', '\*')
-            m = m.replace('~', '\~')
-            await ctx.send(embed=discord.Embed(description=m, colour=discord.Colour.green()))
+                discord += f"{str(member)}\n"
+                ign += f"{player.name}\n"
+                club += "None\n"
+        if len(discord) > 0 or len(ign) > 0 or len(club) > 0:
+            discords.append(discord)
+            igns.append(ign)
+            clubs.append(club)
+        i = 0
+        while i < len(discords):
+            embed = discord.Embed(color=discord.Colour.green(), title=f"Members: {str(len(result))}\n")
+            embed.add_field(name="Discord", value=discords[i], inline=True)
+            embed.add_field(name="IGN", value=igns[i], inline=True)
+            embed.add_field(name="Club(Role)", value=clubs[i], inline=True)
+            await ctx.send(embed=embed)
