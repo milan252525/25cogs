@@ -31,9 +31,9 @@ class Tools(commands.Cog):
             self.leave_counter[member.guild.id] = [int(time())]
         else:
             self.leave_counter[member.guild.id].append(int(time()))
-        if len(self.leave_counter[member.guild.id]) > 2:
-            if self.leave_counter[member.guild.id][-1] - self.leave_counter[member.guild.id][-3] < 300:
-                await self.bot.get_user(230947675837562880).send(f"Members in {member.guild.name} disappearing too fast!")
+        if len(self.leave_counter[member.guild.id]) > 4:
+            if self.leave_counter[member.guild.id][-1] - self.leave_counter[member.guild.id][-4] < 300:
+                await self.bot.get_user(230947675837562880).send(f"Members in **{member.guild.name}** are disappearing too fast!")
         
     @commands.Cog.listener()
     async def on_message(self, msg):
