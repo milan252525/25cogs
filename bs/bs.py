@@ -1139,7 +1139,7 @@ class BrawlStarsCog(commands.Cog):
             if tag is None:
                 msg += f"DC tag: {str(member)}; no BS account saved\n"
             elif player_in_club:
-                for mem in club.members:
+                for mem in player.club.members:
                     if mem.tag == player.tag:
                         msg += f"DC tag: {str(member)}; IGN: {player.name}; Club: {player.club.name}; Role: {mem.role}\n"
             elif not player_in_club:
