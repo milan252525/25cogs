@@ -1126,7 +1126,7 @@ class BrawlStarsCog(commands.Cog):
         if not result:
             await ctx.send("No members with such role in the server.")
             return
-        discord = ""
+        discordn = ""
         ign = ""
         clubn = ""
         discords = []
@@ -1137,30 +1137,30 @@ class BrawlStarsCog(commands.Cog):
             if tag is not None:
                 player = await self.ofcbsapi.get_player(tag)
                 player_in_club = "name" in player.raw_data["club"]
-            if len(discord) > 1700 or len(ign) > 1700 or len(clubn) > 1700:
+            if len(discordn) > 1700 or len(ign) > 1700 or len(clubn) > 1700:
                 discords.append(discord)
-                discord = ""
+                discordn = ""
                 igns.append(ign)
                 ign = ""
                 clubs.append(clubn)
                 clubn = ""
             if tag is None:
-                discord += f"{str(member)}\n"
+                discordn += f"{str(member)}\n"
                 ign += "None\n"
                 clubn += "None\n"
             elif player_in_club:
                 club = await player.get_club()
                 for mem in club.members:
                     if mem.tag == player.tag:
-                        discord += f"{str(member)}\n"
+                        discordn += f"{str(member)}\n"
                         ign += f"{player.name}\n"
                         clubn += f"{player.club.name}({mem.role.capitalize()})\n"
             elif not player_in_club:
-                discord += f"{str(member)}\n"
+                discordn += f"{str(member)}\n"
                 ign += f"{player.name}\n"
                 clubn += "None\n"
-        if len(discord) > 0 or len(ign) > 0 or len(clubn) > 0:
-            discords.append(discord)
+        if len(discordn) > 0 or len(ign) > 0 or len(clubn) > 0:
+            discords.append(discordn)
             igns.append(ign)
             clubs.append(clubn)
         i = 0
