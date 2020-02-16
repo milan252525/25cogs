@@ -1170,3 +1170,4 @@ class BrawlStarsCog(commands.Cog):
             embed.add_field(name="IGN", value=igns[i], inline=True)
             embed.add_field(name="Club(Role)", value=clubs[i], inline=True)
             await ctx.send(embed=embed)
+            i = i + 1
