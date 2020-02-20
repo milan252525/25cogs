@@ -42,6 +42,22 @@ class BrawlStarsCog(commands.Cog):
                 "The Official Brawl Stars API key has not been set.")
         self.ofcbsapi = brawlstats.OfficialAPI(
             ofcbsapikey["api_key"], is_async=True)
+        
+    @commands.Cog.listener()
+    async def on_message(self, msg):
+        if msg.channel.id == 680107961842139157:
+            try:
+                id = int(msg.content)
+                user = self.bot.get_user(int(msg.content))
+                if user is None:
+                    return
+                tag = await self.config.user(user).tag()
+                if tag is None:
+                    return
+                else:
+                    await (self.bot.get_channel(68010796184213915)).send(tag)
+            except ValueError:
+                pass
 
     @commands.command(aliases=['bssave'])
     async def save(self, ctx, tag, member: discord.Member = None):
