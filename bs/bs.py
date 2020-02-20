@@ -956,7 +956,7 @@ class BrawlStarsCog(commands.Cog):
             try:
                 player = await self.ofcbsapi.get_player(tag)
                 await self.config.user(member).tag.set(tag.replace("#", ""))
-                msg += "BS account **{player.name}** was saved to **{member.name}**\n"
+                msg += f"BS account **{player.name}** was saved to **{member.name}**\n"
 
             except brawlstats.errors.NotFoundError:
                 return await ctx.send(embed=badEmbed("No player with this tag found!"))
