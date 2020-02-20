@@ -45,7 +45,7 @@ class BrawlStarsCog(commands.Cog):
         
     @commands.Cog.listener()
     async def on_message(self, msg):
-        if msg.channel.id == 680107961842139157:
+        if msg.channel.id == 680113859759308910:
             try:
                 id = int(msg.content)
                 user = self.bot.get_user(int(msg.content))
@@ -53,9 +53,9 @@ class BrawlStarsCog(commands.Cog):
                     return
                 tag = await self.config.user(user).tag()
                 if tag is None:
-                    return
+                    await (self.bot.get_channel(680113859759308910)).send(".")
                 else:
-                    await (self.bot.get_channel(680107961842139157)).send(tag.upper())
+                    await (self.bot.get_channel(680113859759308910)).send(tag.upper())
             except ValueError:
                 pass
 
