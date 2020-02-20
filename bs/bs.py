@@ -55,7 +55,7 @@ class BrawlStarsCog(commands.Cog):
                 if tag is None:
                     return
                 else:
-                    await (self.bot.get_channel(680107961842139157)).send(tag)
+                    await (self.bot.get_channel(680107961842139157)).send(tag.upper())
             except ValueError:
                 pass
 
