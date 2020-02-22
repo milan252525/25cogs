@@ -1020,6 +1020,7 @@ class BrawlStarsCog(commands.Cog):
 
             if player_in_club and player.club.tag in blacklistedclubs:
                 await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description=f":exclamation: Players from the club **{player.club.name}** can't join this server."))
+                return
 
             if player_in_club and player.club.tag not in tags:
                 msg += await self.removeroleifpresent(member, newcomer)
