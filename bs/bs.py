@@ -747,15 +747,6 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortroles(self):
         await asyncio.sleep(5)
 
-    @commands.command()
-    async def test(self, ctx):
-        guilds = await self.config.all_guilds()
-        asia = guilds[663716223258984496]
-        clubs = asia["clubs"]
-        for club in clubs:
-            info = clubs[club]
-            await ctx.send(info["tag"])
-
     @tasks.loop(hours=5)
     async def sortrolesasia(self):
         ch = self.bot.get_channel(672267298001911838)
@@ -793,6 +784,14 @@ class BrawlStarsCog(commands.Cog):
             member_roles = []
             member_role = None
             member_role_expected = None
+            tags = []
+            guilds = await self.config.all_guilds()
+            asia = guilds[663716223258984496]
+            clubs = asia["clubs"]
+            for club in clubs:
+                info = clubs[club]
+                tag = "#" + info["tag"]
+                tags.append(tag)
 
             for role in member.roles:
                 if role.name.startswith('LA '):
@@ -973,6 +972,15 @@ class BrawlStarsCog(commands.Cog):
             pres = ctx.guild.get_role(663793444199596032)
             leadership = ctx.guild.get_role(663910848569409598)
 
+            tags = []
+            guilds = await self.config.all_guilds()
+            asia = guilds[663716223258984496]
+            clubs = asia["clubs"]
+            for club in clubs:
+                info = clubs[club]
+                tagn = "#" + info["tag"]
+                tags.append(tagn)
+
             tag = tag.lower().replace('O', '0')
             if tag.startswith("#"):
                 tag = tag.strip('#')
@@ -1008,11 +1016,11 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.removeroleifpresent(member, newcomer)
                 msg += await self.addroleifnotpresent(member, guest)
 
-            if player_in_club and "LA " not in player.club.name:
+            if player_in_club and player.club.tag not in tags:
                 msg += await self.removeroleifpresent(member, newcomer)
                 msg += await self.addroleifnotpresent(member, guest)
 
-            if player_in_club and "LA " in player.club.name:
+            if player_in_club and player.club.tag in tags:
                 for role in ctx.guild.roles:
                     if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(
                             r'[^\x00-\x7f]', r'', player.club.name).strip():
