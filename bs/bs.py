@@ -797,6 +797,8 @@ class BrawlStarsCog(commands.Cog):
                 if role.name.startswith('LA '):
                     member_roles.append(role)
 
+            member_role = None if len(member_roles) < 1 else member_roles[0]
+
             if len(member_roles) > 1:
                 msg += f"**{str(member)}** has more than one club role. Removing **{', '.join([str(r) for r in member_roles])}**"
                 member_role = member_roles[0]
@@ -810,7 +812,7 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.removeroleifpresent(member, member_role)
 
             if player_in_club and player.club.tag not in tags:
-                msg += await self.removeroleifpresent(member, lafamily, vp, pres, newcomer)
+                msg += await self.removeroleifpresent(member, lafamily, vp, pres, newcomer, leadership, leadershipemb)
                 msg += await self.addroleifnotpresent(member, guest)
                 if member_role is not None:
                     msg += await self.removeroleifpresent(member, member_role)
