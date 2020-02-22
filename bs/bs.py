@@ -749,8 +749,11 @@ class BrawlStarsCog(commands.Cog):
 
     @commands.command()
     async def test(self, ctx):
-        for guild in (await self.config.all_guilds()):
-            await ctx.send(guild)
+        guilds = await self.config.all_guilds()
+        asia = guilds[663716223258984496]
+        clubs = asia["clubs"]
+        for club in clubs:
+            await ctx.send(club["tag"])
 
     @tasks.loop(hours=5)
     async def sortrolesasia(self):
