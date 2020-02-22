@@ -809,13 +809,13 @@ class BrawlStarsCog(commands.Cog):
                 if member_role is not None:
                     msg += await self.removeroleifpresent(member, member_role)
 
-            if player_in_club and "LA " not in player.club.name:
+            if player_in_club and player.club.tag not in tags:
                 msg += await self.removeroleifpresent(member, lafamily, vp, pres, newcomer)
                 msg += await self.addroleifnotpresent(member, guest)
                 if member_role is not None:
                     msg += await self.removeroleifpresent(member, member_role)
 
-            if player_in_club and "LA " in player.club.name:
+            if player_in_club and player.club.tag in tags:
                 for role in ch.guild.roles:
                     if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(
                             r'[^\x00-\x7f]', r'', player.club.name).strip():
@@ -943,6 +943,7 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.addroleifnotpresent(member, labs, brawlstars)
                 msg += await self.addroleifnotpresent(member, member_role_expected)
                 try:
+                    await asyncio.sleep(0.5)
                     player_club = await player.get_club()
                     for mem in player_club.members:
                         if mem.tag == player.raw_data['tag']:
@@ -1033,6 +1034,7 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.removeroleifpresent(member, newcomer)
                 msg += await self.addroleifnotpresent(member, lafamily, member_role_expected)
                 try:
+                    await asyncio.sleep(0.5)
                     player_club = await player.get_club()
                     for mem in player_club.members:
                         if mem.tag == player.raw_data['tag']:
