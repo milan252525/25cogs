@@ -750,7 +750,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.command()
     async def test(self, ctx):
         guilds = await self.config.all_guilds()
-        asia = guilds["663716223258984496"]
+        asia = guilds["440960893916807188"]
         clubs = asia["clubs"]
         for club in clubs:
             await ctx.send(club["tag"])
