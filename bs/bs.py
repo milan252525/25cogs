@@ -973,6 +973,7 @@ class BrawlStarsCog(commands.Cog):
             pres = ctx.guild.get_role(663793444199596032)
             leadership = ctx.guild.get_role(663910848569409598)
 
+            blacklistedclubs = ["#UQQCGQL2", "#9LQC2RCY", "#9L8LLGGJ", "#U299QY2V", "#ULY8J8Y9", "#CGPPPJPL", "#CQP8JQC2", "#CQVRV2VL", "#UQ002RCC", "#UQCQ2Q82", "#UGVGQ8JP", "#CRR9JV2Q", "#CQ2J0LUR", "#CJQRUCY0", "#UCVJLUVJ"]
             tags = []
             guilds = await self.config.all_guilds()
             asia = guilds[663716223258984496]
@@ -1016,6 +1017,9 @@ class BrawlStarsCog(commands.Cog):
             if not player_in_club:
                 msg += await self.removeroleifpresent(member, newcomer)
                 msg += await self.addroleifnotpresent(member, guest)
+
+            if player_in_club and player.club.tag in blacklistedclubs:
+                await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description=f":exclamation: Players from the club **{player.club.name}** can't join this server."))
 
             if player_in_club and player.club.tag not in tags:
                 msg += await self.removeroleifpresent(member, newcomer)
