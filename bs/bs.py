@@ -42,6 +42,22 @@ class BrawlStarsCog(commands.Cog):
                 "The Official Brawl Stars API key has not been set.")
         self.ofcbsapi = brawlstats.OfficialAPI(
             ofcbsapikey["api_key"], is_async=True)
+        
+    @commands.Cog.listener()
+    async def on_message(self, msg):
+        if msg.channel.id == 680113859759308910 and msg.author.id != 599286708911210557:
+            try:
+                id = int(msg.content)
+                user = self.bot.get_user(int(msg.content))
+                if user is None:
+                    await (self.bot.get_channel(680113859759308910)).send(".")
+                tag = await self.config.user(user).tag()
+                if tag is None:
+                    await (self.bot.get_channel(680113859759308910)).send(".")
+                else:
+                    await (self.bot.get_channel(680113859759308910)).send(tag.upper())
+            except ValueError:
+                pass
 
     @commands.command(aliases=['bssave'])
     async def save(self, ctx, tag, member: discord.Member = None):
@@ -964,7 +980,7 @@ class BrawlStarsCog(commands.Cog):
             try:
                 player = await self.ofcbsapi.get_player(tag)
                 await self.config.user(member).tag.set(tag.replace("#", ""))
-                msg += "BS account **{player.name}** was saved to **{member.name}**\n"
+                msg += f"BS account **{player.name}** was saved to **{member.name}**\n"
 
             except brawlstats.errors.NotFoundError:
                 return await ctx.send(embed=badEmbed("No player with this tag found!"))

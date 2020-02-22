@@ -18,11 +18,22 @@ class Tools(commands.Cog):
         default_member = {"messages" : 0, "name" : None}
         self.config.register_global(**default_global)
         self.config.register_member(**default_member)
+        self.leave_counter = {}
         #self.pf = ProfanityFilter()
         self.updater.start()
         
     def cog_unload(self):
         self.updater.stop()
+        
+    @commands.Cog.listener()
+    async def on_member_remove(self, member):
+        if member.guild.id not in self.leave_counter:
+            self.leave_counter[member.guild.id] = [int(time())]
+        else:
+            self.leave_counter[member.guild.id].append(int(time()))
+        if len(self.leave_counter[member.guild.id]) > 4:
+            if self.leave_counter[member.guild.id][-1] - self.leave_counter[member.guild.id][-4] < 300:
+                await self.bot.get_user(230947675837562880).send(f"Members in **{member.guild.name}** are disappearing too fast!")
         
     @commands.Cog.listener()
     async def on_message(self, msg):
