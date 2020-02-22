@@ -731,6 +731,14 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortroles(self):
         await asyncio.sleep(5)
 
+    @commands.command()
+    async def test(self, ctx):
+        guilds = await self.config.all_guilds()
+        asia = guilds["663716223258984496"]
+        clubs = asia["clubs"]
+        for club in clubs:
+            await ctx.send(club["tag"])
+
     @tasks.loop(hours=5)
     async def sortrolesasia(self):
         ch = self.bot.get_channel(672267298001911838)
