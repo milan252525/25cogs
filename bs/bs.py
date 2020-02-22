@@ -753,7 +753,8 @@ class BrawlStarsCog(commands.Cog):
         asia = guilds[663716223258984496]
         clubs = asia["clubs"]
         for club in clubs:
-            await ctx.send(club)
+            info = clubs[club]
+            await ctx.send(info["tag"])
 
     @tasks.loop(hours=5)
     async def sortrolesasia(self):
