@@ -747,6 +747,20 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortroles(self):
         await asyncio.sleep(5)
 
+    @commands.command()
+    async def listblacklisted(self, ctx):
+        blacklistedclubs = ["#UQQCGQL2", "#9LQC2RCY", "#9L8LLGGJ", "#U299QY2V", "#ULY8J8Y9", "#CGPPPJPL",
+                            "#CQP8JQC2", "#CQVRV2VL", "#UQ002RCC", "#UQCQ2Q82", "#UGVGQ8JP", "#CRR9JV2Q",
+                            "#CQ2J0LUR", "#CJQRUCY0", "#UCVJLUVJ"]
+        for member in ctx.guild.members:
+            tag = await self.config.user(member).tag()
+            if tag is None:
+                continue
+            player = await self.ofcbsapi.get_player(tag)
+            player_in_club = "name" in player.raw_data["club"]
+            if player_in_club and player.club.tag in blacklistedclubs:
+                await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"{str(member)}"))
+
     @tasks.loop(hours=5)
     async def sortrolesasia(self):
         ch = self.bot.get_channel(672267298001911838)
