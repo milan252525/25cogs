@@ -818,8 +818,8 @@ class BrawlStarsCog(commands.Cog):
                 for role in member.roles:
                     msg += await self.removeroleifpresent(member, role)
                 msg += await self.addroleifnotpresent(member, newcomer)
-                await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description=f":exclamation: Players from the club **{player.club.name}** can't be in this server.\n{msg}"))
-                return
+                await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f":exclamation: Players from the club **{player.club.name}** can't be in this server.\n{msg}"))
+                continue
 
             if player_in_club and player.club.tag not in tags:
                 msg += await self.removeroleifpresent(member, lafamily, vp, pres, newcomer, leadership, leadershipemb)
