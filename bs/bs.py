@@ -784,6 +784,9 @@ class BrawlStarsCog(commands.Cog):
             member_roles = []
             member_role = None
             member_role_expected = None
+            blacklistedclubs = ["#UQQCGQL2", "#9LQC2RCY", "#9L8LLGGJ", "#U299QY2V", "#ULY8J8Y9", "#CGPPPJPL",
+                                "#CQP8JQC2", "#CQVRV2VL", "#UQ002RCC", "#UQCQ2Q82", "#UGVGQ8JP", "#CRR9JV2Q",
+                                "#CQ2J0LUR", "#CJQRUCY0", "#UCVJLUVJ"]
             tags = []
             guilds = await self.config.all_guilds()
             asia = guilds[663716223258984496]
@@ -810,6 +813,13 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.addroleifnotpresent(member, guest)
                 if member_role is not None:
                     msg += await self.removeroleifpresent(member, member_role)
+
+            if player_in_club and player.club.tag in blacklistedclubs:
+                for role in member.roles:
+                    msg += await self.removeroleifpresent(member, role)
+                msg += await self.addroleifnotpresent(member, newcomer)
+                await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description=f":exclamation: Players from the club **{player.club.name}** can't be in this server.\n{msg}"))
+                return
 
             if player_in_club and player.club.tag not in tags:
                 msg += await self.removeroleifpresent(member, lafamily, vp, pres, newcomer, leadership, leadershipemb)
