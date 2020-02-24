@@ -824,6 +824,13 @@ class BrawlStarsCog(commands.Cog):
 
             member_role = None if len(member_roles) < 1 else member_roles[0]
 
+            if player_in_club and player.club.tag in blacklistedclubs:
+                msg += await self.removeroleifpresent(member, lafamily, vp, pres, leadership, leadershipemb, guest)
+                if member_role is not None:
+                    msg += await self.removeroleifpresent(member, member_role)
+                msg += await self.addroleifnotpresent(member, newcomer)
+                continue
+
             if not player_in_club:
                 msg += await self.removeroleifpresent(member, lafamily, vp, pres, newcomer)
                 msg += await self.addroleifnotpresent(member, guest)
@@ -835,12 +842,6 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.addroleifnotpresent(member, guest)
                 if member_role is not None:
                     msg += await self.removeroleifpresent(member, member_role)
-
-            if player_in_club and player.club.tag in blacklistedclubs:
-                msg += await self.removeroleifpresent(member, lafamily, vp, pres, leadership, leadershipemb, guest)
-                if member_role is not None:
-                    msg += await self.removeroleifpresent(member, member_role)
-                msg += await self.addroleifnotpresent(member, newcomer)
 
             if player_in_club and player.club.tag in tags:
                 for role in ch.guild.roles:
