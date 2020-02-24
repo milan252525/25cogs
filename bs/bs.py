@@ -836,8 +836,10 @@ class BrawlStarsCog(commands.Cog):
                         msg += await self.removeroleifpresent(member, member_role)
 
                 if player_in_club and player.club.tag in blacklistedclubs:
-                    for role in member.roles:
-                        msg += await self.removeroleifpresent(member, role)
+                    todelete = []
+                    for ro in member.roles:
+                        todelete.append(ro)
+                    msg += await self.removeroleifpresent(member, todelete)
                     msg += await self.addroleifnotpresent(member, newcomer)
 
                 if player_in_club and player.club.tag in tags:
