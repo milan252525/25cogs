@@ -875,8 +875,8 @@ class BrawlStarsCog(commands.Cog):
                                 break
                     except brawlstats.errors.RequestError:
                         pass
-                if msg != "":
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
+                #if msg != "":
+                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
         except e:
             await ch.send(e)
 
