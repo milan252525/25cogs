@@ -829,18 +829,16 @@ class BrawlStarsCog(commands.Cog):
                     if member_role is not None:
                         msg += await self.removeroleifpresent(member, member_role)
 
-                if player_in_club and player.club.tag in blacklistedclubs:
-                    for role in member.roles:
-                        msg += await self.removeroleifpresent(member, role)
-                    msg += await self.addroleifnotpresent(member, newcomer)
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f":exclamation: Players from the club **{player.club.name}** can't be in this server.\n{msg}"))
-                    continue
-
                 if player_in_club and player.club.tag not in tags:
                     msg += await self.removeroleifpresent(member, lafamily, vp, pres, newcomer, leadership, leadershipemb)
                     msg += await self.addroleifnotpresent(member, guest)
                     if member_role is not None:
                         msg += await self.removeroleifpresent(member, member_role)
+
+                if player_in_club and player.club.tag in blacklistedclubs:
+                    for role in member.roles:
+                        msg += await self.removeroleifpresent(member, role)
+                    msg += await self.addroleifnotpresent(member, newcomer)
 
                 if player_in_club and player.club.tag in tags:
                     for role in ch.guild.roles:
@@ -877,8 +875,8 @@ class BrawlStarsCog(commands.Cog):
                                 break
                     except brawlstats.errors.RequestError:
                         pass
-                #if msg != "":
-                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
+                if msg != "":
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
         except e:
             await ch.send(e)
 
