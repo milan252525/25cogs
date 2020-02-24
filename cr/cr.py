@@ -434,3 +434,18 @@ class ClashRoyaleCog(commands.Cog):
         except Exception as e:
             msg += f"**Something went wrong, please send a personal message to LA Modmail or try again! ({str(e)})**\n"
         await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.blue()))
+
+    @commands.command()
+    @commands.guild_only()
+    async def userbytagcr(self, ctx, tag: str):
+        """Find user with a specific tag saved"""
+        tag = tag.lower().replace('O', '0')
+        if tag.startswith("#"):
+            tag = tag.strip('#')
+
+        for user in (await self.config.all_users()):
+            person = self.bot.get_user(user)
+            if person is not None:
+                if (await self.config.user(person).tag()) == tag:
+                    return await ctx.send(f"This tag belongs to **{str(person)}**.")
+        await ctx.send("This tag is either not saved or invalid.")
