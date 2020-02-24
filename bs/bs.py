@@ -420,8 +420,10 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
             return
 
-        embed = discord.Embed(
-            description=f"```{remove_codes(club.description)}```")
+        if club.description is not None:
+            embed = discord.Embed(description=f"```{remove_codes(club.description)}```")
+        else:
+            embed = discord.Embed(description="None")
         embed.set_author(name=f"{club.name} {club.tag}")
         embed.add_field(
             name="Total Trophies",
