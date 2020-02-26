@@ -813,7 +813,7 @@ class BrawlStarsCog(commands.Cog):
                 tags.append(tag)
 
             for role in member.roles:
-                if role.name.startswith('LA '):
+                if role.name.startswith('LA ') and role.id != 682056906222993446:
                     member_roles.append(role)
 
             if len(member_roles) > 1:
