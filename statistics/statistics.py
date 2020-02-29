@@ -74,7 +74,7 @@ class Statistics(commands.Cog):
                     break
                 msg += f"{i}: {trophy[0]} {trophy[1]}\n"
                 i = i + 1
-            await ctx.send(embed=discord.Embed(color=discord.Colour.gold(), title=f"{club.name} leaderboard:", description=msg))
+            await ctx.send(embed=discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:", description=msg))
         elif key is not None:
             msg = ""
             tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
