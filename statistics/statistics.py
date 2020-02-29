@@ -100,6 +100,6 @@ class Statistics(commands.Cog):
                 i = i + 1
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{club.name} leaderboard:")
             embed.add_field(name="Position:", value=positionmsg, inline=True)
-            embed.add_field(name="Tag(Club):", value=tagmsg, inline=True)
+            embed.add_field(name="Tag:", value=tagmsg, inline=True)
             embed.add_field(name="Trophies:", value=trophiesmsg, inline=True)
             await ctx.send(embed=embed)
