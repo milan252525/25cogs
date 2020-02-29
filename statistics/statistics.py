@@ -85,13 +85,21 @@ class Statistics(commands.Cog):
             embed.add_field(name="Trophies:", value=trophiesmsg, inline=True)
             await ctx.send(embed=embed)
         elif key is not None:
-            msg = ""
+            positionmsg = ""
+            tagmsg = ""
+            trophiesmsg = ""
             tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
             club = await self.ofcbsapi.get_club(tag)
             i = 1
             for member in club.members:
                 if member == club.members[20]:
                     break
-                msg += f"{i}\u2006{member.name}\u2006**{member.trophies}**\n"
+                positionmsg += f"{i}\n"
+                tagmsg += f"{member.name}\n"
+                trophiesmsg += f"{member.trophies}\n"
                 i = i + 1
-            await ctx.send(embed=discord.Embed(color=discord.Colour.gold(), title=f"{club.name} leaderboard:", description=msg))
+            embed = discord.Embed(color=discord.Colour.gold(), title=f"{club.name} leaderboard:")
+            embed.add_field(name="Position:", value=positionmsg, inline=True)
+            embed.add_field(name="Tag(Club):", value=tagmsg, inline=True)
+            embed.add_field(name="Trophies:", value=trophiesmsg, inline=True)
+            await ctx.send(embed=embed)
