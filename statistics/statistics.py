@@ -65,6 +65,7 @@ class Statistics(commands.Cog):
                     pair = []
                     pair.append(member.name)
                     pair.append(member.trophies)
+                    pair.append(club.name)
                     trophies.append(pair)
             trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
             msg = ""
@@ -72,7 +73,7 @@ class Statistics(commands.Cog):
             for trophy in trophies:
                 if trophy == trophies[20]:
                     break
-                msg += f"{i}-----{trophy[0]}-----**{trophy[1]}**-----{club.name}\n"
+                msg += f"{i}\u2006{trophy[0]}\u2006**{trophy[1]}**\u2006{trophy[2]}\n"
                 i = i + 1
             await ctx.send(embed=discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:", description=msg))
         elif key is not None:
@@ -83,6 +84,6 @@ class Statistics(commands.Cog):
             for member in club.members:
                 if member == club.members[20]:
                     break
-                msg += f"{i}-----{member.name}-----**{member.trophies}**\n"
+                msg += f"{i}\u2006{member.name}\u2006**{member.trophies}**\n"
                 i = i + 1
             await ctx.send(embed=discord.Embed(color=discord.Colour.gold(), title=f"{club.name} leaderboard:", description=msg))
