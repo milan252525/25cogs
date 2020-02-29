@@ -72,20 +72,17 @@ class Statistics(commands.Cog):
             positionmsg = ""
             tagmsg = ""
             trophiesmsg = ""
-            clubmsg = ""
             for trophy in trophies:
                 if trophy == trophies[20]:
                     break
                 positionmsg += f"{i}\n"
-                tagmsg += f"{trophy[0]}\n"
+                tagmsg += f"{trophy[0]}({trophy[2]})\n"
                 trophiesmsg += f"{trophy[1]}\n"
-                clubmsg += f"{trophy[2]}\n"
                 i = i + 1
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:")
             embed.add_field(name="Position:", value=positionmsg, inline=True)
-            embed.add_field(name="Tag:", value=tagmsg, inline=True)
+            embed.add_field(name="Tag(Club):", value=tagmsg, inline=True)
             embed.add_field(name="Trophies:", value=trophiesmsg, inline=True)
-            embed.add_field(name="Club:", value=clubmsg, inline=True)
             await ctx.send(embed=embed)
         elif key is not None:
             msg = ""
