@@ -82,10 +82,10 @@ class Statistics(commands.Cog):
                 clubmsg += f"{trophy[2]}\n"
                 i = i + 1
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:")
-            embed.add_field(name="Position:", value=positionmsg, inline=False)
-            embed.add_field(name="Tag:", value=tagmsg, inline=False)
-            embed.add_field(name="Trophies:", value=trophiesmsg, inline=False)
-            embed.add_field(name="Club:", value=clubmsg, inline=False)
+            embed.add_field(name="Position:", value=positionmsg, inline=True)
+            embed.add_field(name="Tag:", value=tagmsg, inline=True)
+            embed.add_field(name="Trophies:", value=trophiesmsg, inline=True)
+            embed.add_field(name="Club:", value=clubmsg, inline=True)
             await ctx.send(embed=embed)
         elif key is not None:
             msg = ""
