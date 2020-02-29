@@ -57,8 +57,8 @@ class Statistics(commands.Cog):
     async def trophylb(self, ctx, key:str=None):
         if key is None:
             trophies = []
-            for key in (await self.config.guild(ctx.guild).tags()).keys():
-                tag = await self.config.guild(ctx.guild).tags.get_raw(key, "tag")
+            for key in (await self.bsconfig.guild(ctx.guild).clubs()).keys():
+                tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     pair = []
@@ -76,7 +76,7 @@ class Statistics(commands.Cog):
             await ctx.send(embed=discord.Embed(color=discord.Colour.gold(), title=f"{club.name} leaderboard:", description=msg))
         elif key is not None:
             msg = ""
-            tag = await self.config.guild(ctx.guild).tags.get_raw(key, "tag")
+            tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
             club = await self.ofcbsapi.get_club(tag)
             i = 1
             for member in club.members:
