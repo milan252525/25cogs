@@ -68,14 +68,25 @@ class Statistics(commands.Cog):
                     pair.append(club.name)
                     trophies.append(pair)
             trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
-            msg = ""
             i = 1
+            positionmsg = ""
+            tagmsg = ""
+            trophiesmsg = ""
+            clubmsg = ""
             for trophy in trophies:
                 if trophy == trophies[20]:
                     break
-                msg += f"{i}\u2006{trophy[0]}\u2006**{trophy[1]}**\u2006{trophy[2]}\n"
+                positionmsg += f"{i}\n"
+                tagmsg += f"{trophy[0]}\n"
+                trophiesmsg += f"{trophy[1]}\n"
+                clubmsg += f"{trophy[2]}\n"
                 i = i + 1
-            await ctx.send(embed=discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:", description=msg))
+            embed = discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:")
+            embed.add_field(name="Position:", value=positionmsg, inline=False)
+            embed.add_field(name="Tag:", value=tagmsg, inline=False)
+            embed.add_field(name="Trophies:", value=trophiesmsg, inline=False)
+            embed.add_field(name="Club:", value=clubmsg, inline=False)
+            await ctx.send(embed=embed)
         elif key is not None:
             msg = ""
             tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
