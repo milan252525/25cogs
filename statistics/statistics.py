@@ -53,7 +53,8 @@ class Statistics(commands.Cog):
             embed.add_field(name="Lower 10% average:", value=lower10 // (len(club.members)//10), inline=False)
             await ctx.send(embed=embed)
 
-    @command.commands()
+    @commands.command()
+    @commands.guild_only()
     async def trophylb(self, ctx, key:str=None):
         if key is None:
             trophies = []
