@@ -180,7 +180,7 @@ class BrawlStarsCog(commands.Cog):
                     if m.tag == player.raw_data['tag']:
                         embed.add_field(name="Role", value=f"<:role:614520101621989435> {m.role.capitalize()}")
                         break
-            except brawlstats.errors.RequestError:
+            except ZeroDivisionError:
                 embed.add_field(
                     name="Role",
                     value=f"<:offline:642094554019004416> Error while retrieving role")
