@@ -71,10 +71,11 @@ class Events(commands.Cog):
             
     async def math_chall(self):
         limit = 10
+        start = time()
         num1 = randint(1, 50)
         num2 = randint(1, 50)
         result = num1 + num2
-        embed = discord.Embed(description=f"<:sd:614517124219666453>You have {limit} seconds to write a result of:\n\"{num1}+{num2}\"", colour=discord.Color.blue())
+        embed = discord.Embed(description=f"You have {limit} seconds to write a result of:\n`{num1} + {num2}`", colour=discord.Color.blue())
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
             return not m.author.bot and str(result) in m.content.lower() and m.channel == self.bf_data["channel"]
@@ -93,7 +94,7 @@ class Events(commands.Cog):
         limit = 10
         start = time()
         word = choice(["duo showdown", "brawl stars", "brawl ball", "legendary alliance"])
-        embed = discord.Embed(description=f"<:sd:614517124219666453>You have {limit} seconds to type:\n\"{word}\"", colour=discord.Color.blue())
+        embed = discord.Embed(description=f"You have {limit} seconds to type:\n`{word}`", colour=discord.Color.blue())
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
             return not m.author.bot and word in m.content.lower() and m.channel == self.bf_data["channel"]
