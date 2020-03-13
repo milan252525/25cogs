@@ -27,7 +27,7 @@ class Events(commands.Cog):
                 res = await self.math_chall()
             #process results
             damage = 0
-            log = ""
+            log = "BOOM!:\n"
             for m in res:
                 damage += {self.DAMAGE_PER_CHALL}
                 log += f"{self.DAMAGE_EMOJI}{m.display_name}"
