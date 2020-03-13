@@ -22,9 +22,9 @@ class Events(commands.Cog):
             chall = choice(("word", "math"))
             #start random challenge
             if chall == "word":
-                res = self.word_chall()
+                res = await self.word_chall()
             elif chall == "math":
-                res = self.math_chall()
+                res = await self.math_chall()
             #process results
             damage = 0
             log = ""
