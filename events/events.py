@@ -22,7 +22,7 @@ class Events(commands.Cog):
 
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
-            chall = choice(("word", "math"))
+            chall = choice(("word", "math", "math"))
             #start random challenge
             if chall == "word":
                 res = await self.word_chall()
@@ -34,11 +34,11 @@ class Events(commands.Cog):
             dealt = self.DAMAGE_PER_CHALL
             for m in res:
                 damage += dealt
-                log += f"{self.DAMAGE_EMOJI}{m.display_name} `{self.DAMAGE_PER_CHALL}`"
+                log += f"{self.DAMAGE_EMOJI}{m.display_name} `{damage}`\n"
                 if m.id not in self.bf_data["players"]:
-                    self.bf_data["players"][m.id] = self.DAMAGE_PER_CHALL
+                    self.bf_data["players"][m.id] = damage
                 else:
-                    self.bf_data["players"][m.id] += self.DAMAGE_PER_CHALL
+                    self.bf_data["players"][m.id] += damage
                 dealt = (dealt - 20) if dealt > 20 else dealt
             log = "Noone was successful!" if log == "" else log
             self.bf_data['hp_left'] -= damage
@@ -115,10 +115,11 @@ class Events(commands.Cog):
         return success
         
     async def word_chall(self):
-        word = choice(["duo showdown", "brawl stars", "brawl ball", "boss fight", "supercell", "goblin gang", "championship challenge"])
-        limit = int(len(word)*0.8)
+        word = choice(("duo showdown", "brawl stars", "brawl ball", "boss fight", "supercell", "goblin gang", "championship challenge", "robo rumble", "star power", "bull in a bush"))
+        limit = 10 if len(word) < 10 else 15
         start = time()
         embed = discord.Embed(title="CURRENT CHALLENGE", description=f"You have {limit} seconds to type:\n\n`{word.upper()}`", colour=discord.Color.blue())
+        embed.set_footer(text="Letter case doesn't matter. NO COPY PASTING!")
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
             return not m.author.bot and word in m.content.lower() and m.channel == self.bf_data["channel"]
@@ -141,14 +142,14 @@ class Events(commands.Cog):
     @commands.guild_only()
     @commands.is_owner()   
     @commands.command()
-    async def bossfight(self, ctx, channel:discord.TextChannel):
+    async def bossfight(self, ctx, channel:discord.TextChannel, hp:int=self.BOSS_HP):
         if self.bf_active:
             return await ctx.send("Boss Fight is already running!")
-        self. bf_data = {
+        self.bf_data = {
                 "channel" : None,
                 "message" : None,
                 "embed" : None,
-                "hp_left" : self.BOSS_HP,
+                "hp_left" : hp,
                 "players" : {}
                 }
         self.bf_active = True                            
