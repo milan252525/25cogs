@@ -39,14 +39,14 @@ class Events(commands.Cog):
                 else:
                     self.bf_data["players"][m.id] += self.DAMAGE_PER_CHALL
                 dealt = (dealt - 20) if dealt > 20 else dealt
-            log = "Noone was successful!"
+            log = "Noone was successful!" if log == "" else log
             self.bf_data['hp_left'] -= damage
             #update action log
             embed = self.bf_data["embed"]
             embed.set_field_at(0, name=f"{self.HP_EMOJI} HP Left", value=f"{self.bf_data['hp_left']}/{self.BOSS_HP}", inline=False)
             embed.set_field_at(1, name=f"{self.LOG_EMOJI} Action log:", value=log)
             await self.bf_data["message"].edit(embed=embed)
-            await sleep(5)
+            await sleep(10)
 
         #finish
         embed = self.bf_data["embed"]
@@ -80,21 +80,21 @@ class Events(commands.Cog):
         start = time()
         op = choice(("+", "-", "*", "/"))
         if op == "+":
-            num1, num2 = randint(1, 500), randint(1, 500)
+            num1, num2 = randint(10, 500), randint(10, 500)
             result = num1 + num2
         elif op == "-":
-            num1, num2 = randint(1, 500), randint(1, 200)
+            num1, num2 = randint(20, 500), randint(20, 500)
             if num2 > num1:
                 num1, num2 = num2, num1
             result = num1 - num2
         elif op == "*":
-            num1, num2 = randint(1, 100), randint(1, 20)
+            num1, num2 = randint(1, 100), randint(2, 20)
             if num2 > num1:
                 num1, num2 = num2, num1
             result = num1 * num2
         elif op == "/":
-            num2 = randint(1, 20)
-            num1 = randint(1, 30) * num2
+            num2 = randint(1, 30)
+            num1 = randint(1, 50) * num2
             result = num1 // num2
                                
         embed = discord.Embed(title="CURRENT CHALLENGE", description=f"You have {limit} seconds to write a result of:\n\n`{num1} {op} {num2}`", colour=discord.Color.magenta())
@@ -109,7 +109,7 @@ class Events(commands.Cog):
                     success.append(msg.author)
             except TimeoutError:
                 pass
-        await message.delete(delay=1)
+        await message.delete()
         return success
         
     async def word_chall(self):
@@ -128,13 +128,13 @@ class Events(commands.Cog):
                     success.append(msg.author)
             except TimeoutError:
                 pass
-        await message.delete(delay=1) 
+        await message.delete() 
         return success
     
     @commands.Cog.listener()
     async def on_message(self, message):
         if not message.author.bot and self.bf_active and message.channel == self.bf_data["channel"]:
-            await message.delete(delay=1)
+            await message.delete()
         
     @commands.guild_only()
     @commands.is_owner()   
