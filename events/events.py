@@ -12,9 +12,10 @@ class Events(commands.Cog):
         self.bot = bot
         self.BOSS_HP = 1000
         self.DAMAGE_PER_CHALL = 200
-        self.START_WAIT_TIME = 5
+        self.START_WAIT_TIME = 15
         self.DAMAGE_EMOJI = "<:damage:643539221428174849>"
         self.HP_EMOJI = "<:health:688109898508009611>"
+        self.LOG_EMOJI = "<:log:688112584368586779>"
         self.bf_data = None
         self.bf_active = False
 
@@ -28,7 +29,7 @@ class Events(commands.Cog):
                 res = await self.math_chall()
             #process results
             damage = 0
-            log = "BOOM!:\n"
+            log = ""
             dealt = self.DAMAGE_PER_CHALL
             for m in res:
                 damage += dealt
@@ -38,20 +39,21 @@ class Events(commands.Cog):
                 else:
                     self.bf_data["players"][m.id] += self.DAMAGE_PER_CHALL
                 dealt = (dealt - 20) if dealt > 20 else dealt
+            log = "Noone was successful!"
             self.bf_data['hp_left'] -= damage
             #update action log
             embed = self.bf_data["embed"]
             embed.set_field_at(0, name=f"{self.HP_EMOJI} HP Left", value=f"{self.bf_data['hp_left']}/{self.BOSS_HP}", inline=False)
-            embed.set_field_at(1, name="Action log:", value=log)
+            embed.set_field_at(1, name=f"{self.LOG_EMOJI} Action log:", value=log)
             await self.bf_data["message"].edit(embed=embed)
-            sleep(5)
+            await sleep(5)
 
         #finish
         embed = self.bf_data["embed"]
         embed.set_thumbnail(url="https://i.imgur.com/fo3Tqfd.png")
         embed.set_field_at(0, name=f"{self.HP_EMOJI} HP Left", value=f"0/{self.BOSS_HP}", inline=False)
-        embed.set_field_at(1, name="Action log:", value="Boss has been defeated!")
-        embed.set_footer(text="Let's party!")
+        embed.set_field_at(1, name=f"{self.LOG_EMOJI} Action log:", value="Boss has been defeated!")
+        embed.set_footer(text="Good job!")
         await self.bf_data["message"].edit(embed=embed)
         
         final = []
@@ -150,7 +152,7 @@ class Events(commands.Cog):
         self.bf_active = True                            
         self.bf_data["channel"] = channel
 
-        embed = discord.Embed(title="LA BOSS FIGHT", colour=discord.Colour.red())
+        embed = discord.Embed(title="BOSS FIGHT", colour=discord.Colour.red())
         embed.set_thumbnail(url="https://i.imgur.com/HWjZtEP.png")
         embed.add_field(name=f"{self.HP_EMOJI} HP Left", value=f"{self.bf_data['hp_left']}/{self.BOSS_HP}", inline=False)
         embed.add_field(name="Starting in:", value=f"{self.START_WAIT_TIME} seconds")
