@@ -72,7 +72,7 @@ class Events(commands.Cog):
     async def math_chall(self):
         limit = 15
         start = time()
-        op = choice("+", "-", "*", "/")
+        op = choice(("+", "-", "*", "/"))
         if op == "+":
             num1, num2 = randint(1, 500), randint(1, 500)
             result = num1 + num2
@@ -87,7 +87,7 @@ class Events(commands.Cog):
             num1 = randint(1, 30) * num2
             result = num1 // num2
                                
-        embed = discord.Embed(title="CURRENT CHALLANGE", description=f"You have {limit} seconds to write a result of:\n\n`{num1} {op} {num2}`", colour=discord.Color.magenta())
+        embed = discord.Embed(title="CURRENT CHALLENGE", description=f"You have {limit} seconds to write a result of:\n\n`{num1} {op} {num2}`", colour=discord.Color.magenta())
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
             return not m.author.bot and str(result) in m.content.lower() and m.channel == self.bf_data["channel"]
@@ -106,7 +106,7 @@ class Events(commands.Cog):
         limit = 15
         start = time()
         word = choice(["duo showdown", "brawl stars", "brawl ball", "legendary alliance"])
-        embed = discord.Embed(title="CURRENT CHALLANGE", description=f"You have {limit} seconds to type:\n\n`{word.upper()}`", colour=discord.Color.blue())
+        embed = discord.Embed(title="CURRENT CHALLENGE", description=f"You have {limit} seconds to type:\n\n`{word.upper()}`", colour=discord.Color.blue())
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
             return not m.author.bot and word in m.content.lower() and m.channel == self.bf_data["channel"]
