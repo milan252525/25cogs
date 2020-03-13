@@ -71,8 +71,8 @@ class Events(commands.Cog):
             
     async def math_chall(self):
         limit = 10
-        num1 = randit(1, 50)
-        num2 = randit(1, 50)
+        num1 = randint(1, 50)
+        num2 = randint(1, 50)
         result = num1 + num2
         embed = discord.Embed(description=f"<:sd:614517124219666453>You have {limit} seconds to write a result of:\n\"{num1}+{num2}\"", colour=discord.Color.blue())
         message = await self.bf_data["channel"].send(embed=embed)
