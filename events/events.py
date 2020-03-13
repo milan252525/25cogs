@@ -29,7 +29,7 @@ class Events(commands.Cog):
             damage = 0
             log = "BOOM!:\n"
             for m in res:
-                damage += {self.DAMAGE_PER_CHALL}
+                damage += self.DAMAGE_PER_CHALL
                 log += f"{self.DAMAGE_EMOJI}{m.display_name}"
                 if m.id not in self.bf_data["players"]:
                     self.bf_data["players"][m.id] = self.DAMAGE_PER_CHALL
