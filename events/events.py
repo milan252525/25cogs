@@ -82,7 +82,7 @@ class Events(commands.Cog):
         while time() - start < limit:
             try:
                 msg = await self.bot.wait_for('message', check=check, timeout=3)
-                if msg.author not in sucess:
+                if msg.author not in success:
                     success.append(msg.author)
             except TimeoutError:
                 pass
@@ -101,7 +101,7 @@ class Events(commands.Cog):
         while time() - start < limit:
             try:
                 msg = await self.bot.wait_for('message', check=check, timeout=3)
-                if msg.author not in sucess:
+                if msg.author not in success:
                     success.append(msg.author)
             except TimeoutError:
                 pass
