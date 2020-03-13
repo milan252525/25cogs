@@ -30,7 +30,7 @@ class Events(commands.Cog):
             log = "BOOM!:\n"
             for m in res:
                 damage += self.DAMAGE_PER_CHALL
-                log += f"{self.DAMAGE_EMOJI}{m.display_name}"
+                log += f"{self.DAMAGE_EMOJI}{m.display_name}`{self.DAMAGE_PER_CHALL}`"
                 if m.id not in self.bf_data["players"]:
                     self.bf_data["players"][m.id] = self.DAMAGE_PER_CHALL
                 else:
@@ -66,16 +66,28 @@ class Events(commands.Cog):
         if len(msg) > 0:
             messages.append(msg)
         for m in messages:
-            await self.bf_data["channel"].send(embed=discord.Embed(description=m, colour=discord.Colour.gold()))
+            await self.bf_data["channel"].send(embed=discord.Embed(title="Damage leaderboard", description=m, colour=discord.Colour.gold()))
         self.bf_active = False
             
     async def math_chall(self):
-        limit = 10
+        limit = 15
         start = time()
-        num1 = randint(1, 50)
-        num2 = randint(1, 50)
-        result = num1 + num2
-        embed = discord.Embed(description=f"You have {limit} seconds to write a result of:\n`{num1} + {num2}`", colour=discord.Color.blue())
+        op = choice("+", "-", "*", "/")
+        if op == "+":
+            num1, num2 = randint(1, 500), randint(1, 500)
+            result = num1 + num2
+        elif op == "-":
+            num1, num2 = randint(1, 500), randint(1, 200)
+            result = num1 - num2
+        elif op == "*":
+            num1, num2 = randint(1, 100), randint(1, 20)
+            result = num1 * num2
+        elif op == "/":
+            num2 = randint(1, 20)
+            num1 = randint(1, 30) * num2
+            result = num1 // num2
+                               
+        embed = discord.Embed(title="CURRENT CHALLANGE", description=f"You have {limit} seconds to write a result of:\n\n`{num1} {op} {num2}`", colour=discord.Color.magenta())
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
             return not m.author.bot and str(result) in m.content.lower() and m.channel == self.bf_data["channel"]
@@ -91,10 +103,10 @@ class Events(commands.Cog):
         return success
         
     async def word_chall(self):
-        limit = 10
+        limit = 15
         start = time()
         word = choice(["duo showdown", "brawl stars", "brawl ball", "legendary alliance"])
-        embed = discord.Embed(description=f"You have {limit} seconds to type:\n`{word}`", colour=discord.Color.blue())
+        embed = discord.Embed(title="CURRENT CHALLANGE", description=f"You have {limit} seconds to type:\n\n`{word.upper()}`", colour=discord.Color.blue())
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
             return not m.author.bot and word in m.content.lower() and m.channel == self.bf_data["channel"]
