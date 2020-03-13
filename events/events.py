@@ -10,12 +10,13 @@ class Events(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
-        self.BOSS_HP = 1000
+        self.BOSS_HP = 5000
         self.DAMAGE_PER_CHALL = 200
-        self.START_WAIT_TIME = 15
+        self.START_WAIT_TIME = 20
         self.DAMAGE_EMOJI = "<:damage:643539221428174849>"
         self.HP_EMOJI = "<:health:688109898508009611>"
         self.LOG_EMOJI = "<:log:688112584368586779>"
+        self.WAITING_EMOJI = "<:dyna:688120749323845637>"
         self.bf_data = None
         self.bf_active = False
 
@@ -46,7 +47,8 @@ class Events(commands.Cog):
             embed.set_field_at(0, name=f"{self.HP_EMOJI} HP Left", value=f"{self.bf_data['hp_left']}/{self.BOSS_HP}", inline=False)
             embed.set_field_at(1, name=f"{self.LOG_EMOJI} Action log:", value=log)
             await self.bf_data["message"].edit(embed=embed)
-            await sleep(10)
+            if self.bf_data['hp_left'] > 0:
+                await sleep(randint(10, 20))
 
         #finish
         embed = self.bf_data["embed"]
@@ -113,9 +115,9 @@ class Events(commands.Cog):
         return success
         
     async def word_chall(self):
-        limit = 15
+        word = choice(["duo showdown", "brawl stars", "brawl ball", "boss fight", "supercell", "goblin gang", "championship challenge"])
+        limit = int(len(word)*0.8)
         start = time()
-        word = choice(["duo showdown", "brawl stars", "brawl ball", "legendary alliance"])
         embed = discord.Embed(title="CURRENT CHALLENGE", description=f"You have {limit} seconds to type:\n\n`{word.upper()}`", colour=discord.Color.blue())
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
@@ -155,7 +157,7 @@ class Events(commands.Cog):
         embed = discord.Embed(title="BOSS FIGHT", colour=discord.Colour.red())
         embed.set_thumbnail(url="https://i.imgur.com/HWjZtEP.png")
         embed.add_field(name=f"{self.HP_EMOJI} HP Left", value=f"{self.bf_data['hp_left']}/{self.BOSS_HP}", inline=False)
-        embed.add_field(name="Starting in:", value=f"{self.START_WAIT_TIME} seconds")
+        embed.add_field(name=f"{self.WAITING_EMOJI} Starting in:", value=f"{self.START_WAIT_TIME} seconds!")
         
         main_message = await channel.send(embed=embed)
         self.bf_data["message"] = main_message           
