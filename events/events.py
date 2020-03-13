@@ -142,19 +142,17 @@ class Events(commands.Cog):
     @commands.guild_only()
     @commands.is_owner()   
     @commands.command()
-    async def bossfight(self, ctx, channel:discord.TextChannel, hp:int=self.BOSS_HP):
+    async def bossfight(self, ctx, channel:discord.TextChannel):
         if self.bf_active:
             return await ctx.send("Boss Fight is already running!")
         self.bf_data = {
-                "channel" : None,
+                "channel" : channel,
                 "message" : None,
                 "embed" : None,
-                "hp_left" : hp,
+                "hp_left" : self.BOSS_HP,
                 "players" : {}
                 }
-        self.bf_active = True                            
-        self.bf_data["channel"] = channel
-
+        self.bf_active = True 
         embed = discord.Embed(title="BOSS FIGHT", colour=discord.Colour.red())
         embed.set_thumbnail(url="https://i.imgur.com/HWjZtEP.png")
         embed.add_field(name=f"{self.HP_EMOJI} HP Left", value=f"{self.bf_data['hp_left']}/{self.BOSS_HP}", inline=False)
