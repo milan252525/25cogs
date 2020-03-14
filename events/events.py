@@ -10,7 +10,10 @@ class Events(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
-        self.BOSS_HP = 100
+        self.config = Config.get_conf(self, identifier=2567124825)
+        self.config.register_global(
+            boss_hp=5000
+        )
         self.DAMAGE_PER_CHALL = 200
         self.START_WAIT_TIME = 20
         self.DAMAGE_EMOJI = "<:damage:643539221428174849>"
@@ -44,7 +47,7 @@ class Events(commands.Cog):
             self.bf_data['hp_left'] -= damage
             #update action log
             embed = self.bf_data["embed"]
-            embed.set_field_at(0, name=f"{self.HP_EMOJI} HP Left", value=f"{self.bf_data['hp_left']}/{self.BOSS_HP}", inline=False)
+            embed.set_field_at(0, name=f"{self.HP_EMOJI} HP Left", value=f"{self.bf_data['hp_left']}/{await self.config.boss_hp()}", inline=False)
             embed.set_field_at(1, name=f"{self.LOG_EMOJI} Action log:", value=log)
             await self.bf_data["message"].edit(embed=embed)
             if self.bf_data['hp_left'] > 0:
@@ -53,7 +56,7 @@ class Events(commands.Cog):
         #finish
         embed = self.bf_data["embed"]
         embed.set_thumbnail(url="https://i.imgur.com/fo3Tqfd.png")
-        embed.set_field_at(0, name=f"{self.HP_EMOJI} HP Left", value=f"0/{self.BOSS_HP}", inline=False)
+        embed.set_field_at(0, name=f"{self.HP_EMOJI} HP Left", value=f"0/{await self.config.boss_hp()}", inline=False)
         embed.set_field_at(1, name=f"{self.LOG_EMOJI} Action log:", value="Boss has been defeated!")
         embed.set_footer(text="Good job!")
         await self.bf_data["message"].edit(embed=embed)
@@ -142,6 +145,12 @@ class Events(commands.Cog):
     @commands.guild_only()
     @commands.is_owner()   
     @commands.command()
+    async def bosshp(self, ctx, hp:int):
+        await self.config.boss_hp.set(hp)
+        await ctx.send(f"Boss HP set to {hp}")
+    
+    @commands.is_owner()   
+    @commands.command()
     async def bossfight(self, ctx, channel:discord.TextChannel):
         if self.bf_active:
             return await ctx.send("Boss Fight is already running!")
@@ -149,13 +158,13 @@ class Events(commands.Cog):
                 "channel" : channel,
                 "message" : None,
                 "embed" : None,
-                "hp_left" : self.BOSS_HP,
+                "hp_left" : await self.config.boss_hp(),
                 "players" : {}
                 }
         self.bf_active = True 
         embed = discord.Embed(title="BOSS FIGHT", colour=discord.Colour.red())
         embed.set_thumbnail(url="https://i.imgur.com/HWjZtEP.png")
-        embed.add_field(name=f"{self.HP_EMOJI} HP Left", value=f"{self.bf_data['hp_left']}/{self.BOSS_HP}", inline=False)
+        embed.add_field(name=f"{self.HP_EMOJI} HP Left", value=f"{self.bf_data['hp_left']}/{await self.config.boss_hp()}", inline=False)
         embed.add_field(name=f"{self.WAITING_EMOJI} Starting in:", value=f"{self.START_WAIT_TIME} seconds!")
         
         main_message = await channel.send(embed=embed)
