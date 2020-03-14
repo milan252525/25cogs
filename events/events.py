@@ -10,7 +10,7 @@ class Events(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
-        self.BOSS_HP = 5000
+        self.BOSS_HP = 100
         self.DAMAGE_PER_CHALL = 200
         self.START_WAIT_TIME = 20
         self.DAMAGE_EMOJI = "<:damage:643539221428174849>"
@@ -34,11 +34,11 @@ class Events(commands.Cog):
             dealt = self.DAMAGE_PER_CHALL
             for m in res:
                 damage += dealt
-                log += f"{self.DAMAGE_EMOJI}{m.display_name} `{damage}`\n"
+                log += f"{self.DAMAGE_EMOJI}{m.display_name} `{dealt}`\n"
                 if m.id not in self.bf_data["players"]:
-                    self.bf_data["players"][m.id] = damage
+                    self.bf_data["players"][m.id] = dealt
                 else:
-                    self.bf_data["players"][m.id] += damage
+                    self.bf_data["players"][m.id] += dealt
                 dealt = (dealt - 20) if dealt > 20 else dealt
             log = "Noone was successful!" if log == "" else log
             self.bf_data['hp_left'] -= damage
