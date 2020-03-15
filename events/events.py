@@ -5,6 +5,7 @@ from asyncio import sleep, TimeoutError
 from random import choice, randint
 from copy import copy
 from time import time
+import yaml
 
 class Events(commands.Cog):
     
@@ -22,15 +23,19 @@ class Events(commands.Cog):
         self.WAITING_EMOJI = "<:dyna:688120749323845637>"
         self.bf_data = None
         self.bf_active = False
+        with open("geo.yaml") as file:
+            geo_questions = yaml.load(file, Loader=yaml.FullLoader)
 
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
-            chall = choice(("word", "math", "math"))
+            chall = choice(("word", "math", "geo"))
             #start random challenge
             if chall == "word":
                 res = await self.word_chall()
             elif chall == "math":
                 res = await self.math_chall()
+            elif chall == "geo":
+                res = await self.geo_chall()
             #process results
             damage = 0
             log = ""
@@ -88,7 +93,7 @@ class Events(commands.Cog):
             num1, num2 = randint(10, 500), randint(10, 500)
             result = num1 + num2
         elif op == "-":
-            num1, num2 = randint(20, 500), randint(20, 500)
+            num1, num2 = randint(20, 500), randint(20, 300)
             if num2 > num1:
                 num1, num2 = num2, num1
             result = num1 - num2
@@ -119,13 +124,33 @@ class Events(commands.Cog):
         
     async def word_chall(self):
         word = choice(("duo showdown", "brawl stars", "brawl ball", "boss fight", "supercell", "goblin gang", "championship challenge", "robo rumble", "star power", "bull in a bush"))
-        limit = 10 if len(word) < 10 else 15
+        limit = 10
         start = time()
         embed = discord.Embed(title="CURRENT CHALLENGE", description=f"You have {limit} seconds to type:\n\n`{word.upper()}`", colour=discord.Color.blue())
         embed.set_footer(text="Letter case doesn't matter. NO COPY PASTING!")
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
             return not m.author.bot and word in m.content.lower() and m.channel == self.bf_data["channel"]
+        success = []
+        while time() - start < limit:
+            try:
+                msg = await self.bot.wait_for('message', check=check, timeout=3)
+                if msg.author not in success:
+                    success.append(msg.author)
+            except TimeoutError:
+                pass
+        await message.delete() 
+        return success
+ 
+    async def geo_chall(self):
+        limit = 15
+        start = time()
+        question = choice(geo_questions)
+        answers = [x.lower() for x in geo_questions[question]]
+        embed = discord.Embed(title="GEOGRAPHY CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`{question}`", colour=discord.Color.teal())
+        message = await self.bf_data["channel"].send(embed=embed)
+        def check(m):
+            return not m.author.bot and m.content.lower() in answers and m.channel == self.bf_data["channel"]
         success = []
         while time() - start < limit:
             try:
