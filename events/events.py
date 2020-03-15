@@ -28,10 +28,12 @@ class Events(commands.Cog):
         self.bf_active = False
         with open(str(cog_data_path(self)).replace("Events", r"CogManager/cogs/events/geo.yaml")) as file:
             self.geo_questions = yaml.load(file, Loader=yaml.FullLoader)
+        with open(str(cog_data_path(self)).replace("Events", r"CogManager/cogs/events/trivia.yaml")) as file:
+            self.trivia_questions = yaml.load(file, Loader=yaml.FullLoader)
 
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
-            chall = "geo"#choice(("word", "math", "geo")) 
+            chall = choice(("word", "math", "geo", "trivia")) 
             #start random challenge
             if chall == "word":
                 res = await self.word_chall()
@@ -39,6 +41,8 @@ class Events(commands.Cog):
                 res = await self.math_chall()
             elif chall == "geo":
                 res = await self.geo_chall()
+            elif chall == "trivia":
+                res = await self.trivia_chall()
             #process results
             damage = 0
             log = ""
@@ -122,7 +126,8 @@ class Events(commands.Cog):
                     success.append(msg.author)
             except TimeoutError:
                 pass
-        await message.delete()
+        await message.edit(embed=discord.Embed(title="MATH CHALLENGE", description=f"The right answer was `{result}`", colour=discord.Color.dark_magenta()))
+        await message.delete(delay=5)
         return success
         
     async def word_chall(self):
@@ -165,7 +170,29 @@ class Events(commands.Cog):
                     success.append(msg.author)
             except TimeoutError:
                 pass
-        await message.delete() 
+        await message.edit(embed=discord.Embed(title="GEOGRAPHY CHALLENGE", description=f"The right answer was `{answers[0]}`", colour=discord.Color.dark_teal()))
+        await message.delete(delay=5) 
+        return success
+                            
+    async def trivia_chall(self):
+        limit = 15
+        start = time()
+        question = choice(list(self.trivia_questions.keys()))
+        answers = [x.lower() for x in self.trivia_questions[question]]
+        embed = discord.Embed(title="TRIVIA CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`{question}`", colour=discord.Color.orange())
+        message = await self.bf_data["channel"].send(embed=embed)
+        def check(m):
+            return not m.author.bot and m.content.lower() in answers and m.channel == self.bf_data["channel"]
+        success = []
+        while time() - start < limit:
+            try:
+                msg = await self.bot.wait_for('message', check=check, timeout=3)
+                if msg.author not in success:
+                    success.append(msg.author)
+            except TimeoutError:
+                pass
+        await message.edit(embed=discord.Embed(title="TRIVIA CHALLENGE", description=f"The right answer was `{answers[0]}`", colour=discord.Color.dark_orange()))
+        await message.delete(delay=5) 
         return success
     
     @commands.Cog.listener()
