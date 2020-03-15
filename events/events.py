@@ -146,7 +146,7 @@ class Events(commands.Cog):
     async def geo_chall(self):
         limit = 15
         start = time()
-        question = choice(self.geo_questions.keys())
+        question = choice(list(self.geo_questions.keys()))
         answers = [x.lower() for x in self.geo_questions[question]]
         embed = discord.Embed(title="GEOGRAPHY CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`{question}`", colour=discord.Color.teal())
         message = await self.bf_data["channel"].send(embed=embed)
