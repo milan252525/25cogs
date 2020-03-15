@@ -24,9 +24,9 @@ class Events(commands.Cog):
         self.WAITING_EMOJI = "<:dyna:688120749323845637>"
         self.bf_data = None
         self.bf_active = False
+        print(os.getcwd())
+        print(os.listdir())
         with open(r"geo.yaml") as file:
-            print(os.getcwd())
-            print(os.listdir())
             geo_questions = yaml.load(file, Loader=yaml.FullLoader)
 
     async def main_loop(self):
