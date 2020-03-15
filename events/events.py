@@ -108,7 +108,7 @@ class Events(commands.Cog):
             num1 = randint(1, 50) * num2
             result = num1 // num2
                                
-        embed = discord.Embed(title="CURRENT CHALLENGE", description=f"You have {limit} seconds to write a result of:\n\n`{num1} {op} {num2}`", colour=discord.Color.magenta())
+        embed = discord.Embed(title="MATH CHALLENGE", description=f"You have {limit} seconds to write a result of:\n\n`{num1} {op} {num2}`", colour=discord.Color.magenta())
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
             return not m.author.bot and str(result) in m.content.lower() and m.channel == self.bf_data["channel"]
@@ -127,7 +127,7 @@ class Events(commands.Cog):
         word = choice(("duo showdown", "brawl stars", "brawl ball", "boss fight", "supercell", "goblin gang", "championship challenge", "robo rumble", "star power", "bull in a bush"))
         limit = 10
         start = time()
-        embed = discord.Embed(title="CURRENT CHALLENGE", description=f"You have {limit} seconds to type:\n\n`{word.upper()}`", colour=discord.Color.blue())
+        embed = discord.Embed(title="TYPING CHALLENGE", description=f"You have {limit} seconds to type:\n\n`{word.upper()}`", colour=discord.Color.blue())
         embed.set_footer(text="Letter case doesn't matter. NO COPY PASTING!")
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
@@ -146,7 +146,7 @@ class Events(commands.Cog):
     async def geo_chall(self):
         limit = 15
         start = time()
-        question = choice(geo_questions)
+        question = choice(self.geo_questions)
         answers = [x.lower() for x in geo_questions[question]]
         embed = discord.Embed(title="GEOGRAPHY CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`{question}`", colour=discord.Color.teal())
         message = await self.bf_data["channel"].send(embed=embed)
