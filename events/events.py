@@ -1,12 +1,14 @@
 import discord
 from redbot.core import commands, Config, checks
+from redbot.core.data_manager import cog_data_path
 from discord.ext import tasks
 from asyncio import sleep, TimeoutError
 from random import choice, randint
 from copy import copy
 from time import time
 import yaml
-from redbot.core.data_manager import cog_data_path
+import re
+
 
 class Events(commands.Cog):
     
@@ -147,8 +149,11 @@ class Events(commands.Cog):
         limit = 15
         start = time()
         question = choice(list(self.geo_questions.keys()))
+        imgreg = re.search("https.*png", question)
         answers = [x.lower() for x in self.geo_questions[question]]
-        embed = discord.Embed(title="GEOGRAPHY CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`{question}`", colour=discord.Color.teal())
+        embed = discord.Embed(title="GEOGRAPHY CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`{question.replace(imgreg.group(), '') if imgreg else question}`", colour=discord.Color.teal())
+        if imgreg:
+            embed.set_image(url=imgreg.group())
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
             return not m.author.bot and m.content.lower() in answers and m.channel == self.bf_data["channel"]
