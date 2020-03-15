@@ -24,9 +24,7 @@ class Events(commands.Cog):
         self.WAITING_EMOJI = "<:dyna:688120749323845637>"
         self.bf_data = None
         self.bf_active = False
-        path = cog_data_path(self)
-        print(str(path))
-        with open(r"geo.yaml") as file:
+        with open(str(cog_data_path(self)).replace("Events", r"CogManager/cogs/events/geo.yaml")) as file:
             geo_questions = yaml.load(file, Loader=yaml.FullLoader)
 
     async def main_loop(self):
