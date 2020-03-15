@@ -121,6 +121,7 @@ class Events(commands.Cog):
             result = num1 // num2
                                
         embed = discord.Embed(title="MATH CHALLENGE", description=f"You have {limit} seconds to write a result of:\n\n`{num1} {op} {num2}`", colour=discord.Color.magenta())
+        embed.set_footer(text="Do not use calculator!")
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
             return not m.author.bot and str(result) in m.content.lower() and m.channel == self.bf_data["channel"]
@@ -163,6 +164,7 @@ class Events(commands.Cog):
         imgreg = re.search("https.*png", question)
         answers = [x.lower() for x in self.geo_questions[question]]
         embed = discord.Embed(title="GEOGRAPHY CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`{question.replace(imgreg.group(), '') if imgreg else question}`", colour=discord.Color.teal())
+        embed.set_footer(text="Letter case doesn't matter.")
         if imgreg:
             embed.set_image(url=imgreg.group())
         message = await self.bf_data["channel"].send(embed=embed)
@@ -176,7 +178,7 @@ class Events(commands.Cog):
                     success.append(msg.author)
             except TimeoutError:
                 pass
-        await message.edit(embed=discord.Embed(title="GEOGRAPHY CHALLENGE", description=f"The right answer was `{answers[0]}`", colour=discord.Color.dark_teal()))
+        await message.edit(embed=discord.Embed(title="GEOGRAPHY CHALLENGE", description=f"The right answer was `{answers[0].upper()}`", colour=discord.Color.dark_teal()))
         await message.delete(delay=5) 
         return success
                             
@@ -186,6 +188,7 @@ class Events(commands.Cog):
         question = choice(list(self.trivia_questions.keys()))
         answers = [x.lower() for x in self.trivia_questions[question]]
         embed = discord.Embed(title="TRIVIA CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`{question}`", colour=discord.Color.orange())
+        embed.set_footer(text="Letter case doesn't matter.")
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
             return not m.author.bot and m.content.lower() in answers and m.channel == self.bf_data["channel"]
@@ -197,7 +200,7 @@ class Events(commands.Cog):
                     success.append(msg.author)
             except TimeoutError:
                 pass
-        await message.edit(embed=discord.Embed(title="TRIVIA CHALLENGE", description=f"The right answer was `{answers[0]}`", colour=discord.Color.dark_orange()))
+        await message.edit(embed=discord.Embed(title="TRIVIA CHALLENGE", description=f"The right answer was `{answers[0].upper()}`", colour=discord.Color.dark_orange()))
         await message.delete(delay=5) 
         return success
     
