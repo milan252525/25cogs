@@ -29,7 +29,7 @@ class Events(commands.Cog):
 
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
-            chall = choice(("word", "math", "geo"))
+            chall = choice(("geo"))#"word", "math", 
             #start random challenge
             if chall == "word":
                 res = await self.word_chall()
@@ -147,7 +147,7 @@ class Events(commands.Cog):
         limit = 15
         start = time()
         question = choice(self.geo_questions)
-        answers = [x.lower() for x in geo_questions[question]]
+        answers = [x.lower() for x in self.geo_questions[question]]
         embed = discord.Embed(title="GEOGRAPHY CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`{question}`", colour=discord.Color.teal())
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
