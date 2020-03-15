@@ -6,6 +6,7 @@ from random import choice, randint
 from copy import copy
 from time import time
 import yaml
+import os
 
 class Events(commands.Cog):
     
@@ -24,6 +25,8 @@ class Events(commands.Cog):
         self.bf_data = None
         self.bf_active = False
         with open(r"geo.yaml") as file:
+            print(os.getcwd())
+            print(os.listdir())
             geo_questions = yaml.load(file, Loader=yaml.FullLoader)
 
     async def main_loop(self):
