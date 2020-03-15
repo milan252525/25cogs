@@ -25,7 +25,7 @@ class Events(commands.Cog):
         self.bf_data = None
         self.bf_active = False
         with open(str(cog_data_path(self)).replace("Events", r"CogManager/cogs/events/geo.yaml")) as file:
-            geo_questions = yaml.load(file, Loader=yaml.FullLoader)
+            self.geo_questions = yaml.load(file, Loader=yaml.FullLoader)
 
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
