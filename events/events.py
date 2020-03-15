@@ -30,6 +30,12 @@ class Events(commands.Cog):
             self.geo_questions = yaml.load(file, Loader=yaml.FullLoader)
         with open(str(cog_data_path(self)).replace("Events", r"CogManager/cogs/events/trivia.yaml")) as file:
             self.trivia_questions = yaml.load(file, Loader=yaml.FullLoader)
+        with open(str(cog_data_path(self)).replace("Events", r"CogManager/cogs/events/longwords.txt")) as file:
+            self.longwords = []
+            line = file.readline()
+            while line != "":
+                self.longwords.append(line.replace("\n", ""))
+                line = file.readline()
 
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
@@ -131,7 +137,7 @@ class Events(commands.Cog):
         return success
         
     async def word_chall(self):
-        word = choice(("duo showdown", "brawl stars", "brawl ball", "boss fight", "supercell", "goblin gang", "championship challenge", "robo rumble", "star power", "bull in a bush"))
+        word = choice(self.longwords)
         limit = 10
         start = time()
         embed = discord.Embed(title="TYPING CHALLENGE", description=f"You have {limit} seconds to type:\n\n`{word.upper()}`", colour=discord.Color.blue())
