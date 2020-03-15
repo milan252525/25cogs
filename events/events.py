@@ -6,7 +6,6 @@ from random import choice, randint
 from copy import copy
 from time import time
 import yaml
-import os
 
 class Events(commands.Cog):
     
@@ -24,8 +23,9 @@ class Events(commands.Cog):
         self.WAITING_EMOJI = "<:dyna:688120749323845637>"
         self.bf_data = None
         self.bf_active = False
-        print(os.getcwd())
-        print(os.listdir())
+        f = open("bossfighthere.txt", "w")
+        f.write("abc")
+        f.close()
         with open(r"geo.yaml") as file:
             geo_questions = yaml.load(file, Loader=yaml.FullLoader)
 
