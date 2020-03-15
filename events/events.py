@@ -25,7 +25,7 @@ class Events(commands.Cog):
         self.bf_data = None
         self.bf_active = False
         path = cog_data_path(self)
-        print(path.cwd())
+        print(str(path))
         with open(r"geo.yaml") as file:
             geo_questions = yaml.load(file, Loader=yaml.FullLoader)
 
