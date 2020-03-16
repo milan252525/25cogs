@@ -162,7 +162,7 @@ class Events(commands.Cog):
         start = time()
         question = choice(list(self.geo_questions.keys()))
         imgreg = re.search("https.*png", question)
-        answers = [x.lower() for x in self.geo_questions[question]]
+        answers = [str(x).lower() for x in self.geo_questions[question]]
         embed = discord.Embed(title="GEOGRAPHY CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`{question.replace(imgreg.group(), '') if imgreg else question}`", colour=discord.Color.teal())
         embed.set_footer(text="Letter case doesn't matter.")
         if imgreg:
@@ -186,7 +186,7 @@ class Events(commands.Cog):
         limit = 15
         start = time()
         question = choice(list(self.trivia_questions.keys()))
-        answers = [x.lower() for x in self.trivia_questions[question]]
+        answers = [str(x).lower() for x in self.trivia_questions[question]]
         embed = discord.Embed(title="TRIVIA CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`{question}`", colour=discord.Color.orange())
         embed.set_footer(text="Letter case doesn't matter.")
         message = await self.bf_data["channel"].send(embed=embed)
