@@ -1223,7 +1223,7 @@ class BrawlStarsCog(commands.Cog):
                 player = await self.ofcbsapi.get_player(tag)
                 player_in_club = "name" in player.raw_data["club"]
             if len(discordn) > 666 or len(ign) > 666 or len(clubn) > 666:
-                discords.append(discord)
+                discords.append(discordn)
                 discordn = ""
                 igns.append(ign)
                 ign = ""
