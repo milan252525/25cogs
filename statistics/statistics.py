@@ -67,6 +67,7 @@ class Statistics(commands.Cog):
                     pair.append(member.trophies)
                     pair.append(club.name)
                     trophies.append(pair)
+            trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
             msg = ""
             for trophy in trophies:
                 if trophy == trophies[20]:
