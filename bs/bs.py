@@ -175,7 +175,7 @@ class BrawlStarsCog(commands.Cog):
                 name="Club",
                 value=f"<:bsband:600741378497970177> {player.club.name}")
             try:
-                club = await player.get_club()
+                club = await self.ofcbsapi.get_club(player.club.tag)
                 for m in club.members:
                     if m.tag == player.raw_data['tag']:
                         embed.add_field(name="Role", value=f"<:role:614520101621989435> {m.role.capitalize()}")
@@ -728,7 +728,7 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.addroleifnotpresent(member, member_role_expected)
                 try:
                     await asyncio.sleep(0.2)
-                    player_club = await player.get_club()
+                    player_club = await self.ofcbsapi.get_club(player.club.tag)
                     for mem in player_club.members:
                         if mem.tag == player.raw_data['tag']:
                             if mem.role.lower() == 'vicepresident':
@@ -774,6 +774,8 @@ class BrawlStarsCog(commands.Cog):
         pres = ch.guild.get_role(663793444199596032)
         leadership = ch.guild.get_role(663910848569409598)
         leadershipemb = ch.guild.get_role(673177525396176927)
+        fusionguest = ch.guild.get_role(682332565688025163)
+        fusionleadership = ch.guild.get_role(682332565688025163)
         error_counter = 0
 
         for member in ch.guild.members:
@@ -828,7 +830,7 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.addroleifnotpresent(member, fusionguest)
                 try:
                     await asyncio.sleep(0.5)
-                    player_club = await player.get_club()
+                    player_club = await self.ofcbsapi.get_club(player.club.tag)
                     for mem in player_club.members:
                         if mem.tag == player.raw_data['tag']:
                             if mem.role.lower() == 'vicepresident' or mem.role.lower() == 'president':
@@ -870,7 +872,7 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.addroleifnotpresent(member, member_role_expected)
                 try:
                     await asyncio.sleep(0.5)
-                    player_club = await player.get_club()
+                    player_club = await self.ofcbsapi.get_club(player.club.tag)
                     for mem in player_club.members:
                         if mem.tag == player.raw_data['tag']:
                             if mem.role.lower() == 'vicepresident':
@@ -977,8 +979,7 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.addroleifnotpresent(member, labs, brawlstars)
                 msg += await self.addroleifnotpresent(member, member_role_expected)
                 try:
-                    await asyncio.sleep(0.5)
-                    player_club = await player.get_club()
+                    player_club = await self.ofcbsapi.get_club(player.club.tag)
                     for mem in player_club.members:
                         if mem.tag == player.raw_data['tag']:
                             if mem.role.lower() == 'vicepresident':
@@ -1058,7 +1059,7 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.addroleifnotpresent(member, fusionguest)
                 try:
                     await asyncio.sleep(0.5)
-                    player_club = await player.get_club()
+                    player_club = await self.ofcbsapi.get_club(player.club.tag)
                     for mem in player_club.members:
                         if mem.tag == player.raw_data['tag']:
                             if mem.role.lower() == 'vicepresident' or mem.role.lower() == 'president':
@@ -1084,8 +1085,7 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.removeroleifpresent(member, newcomer)
                 msg += await self.addroleifnotpresent(member, lafamily, member_role_expected)
                 try:
-                    await asyncio.sleep(0.5)
-                    player_club = await player.get_club()
+                    player_club = await self.ofcbsapi.get_club(player.club.tag)
                     for mem in player_club.members:
                         if mem.tag == player.raw_data['tag']:
                             if mem.role.lower() == 'vicepresident':
@@ -1234,7 +1234,7 @@ class BrawlStarsCog(commands.Cog):
                 ign += "None\n"
                 clubn += "None\n"
             elif player_in_club:
-                club = await player.get_club()
+                club = await self.ofcbsapi.get_club(player.club.tag)
                 for mem in club.members:
                     if mem.tag == player.tag:
                         discordn += f"{str(member)}\n"

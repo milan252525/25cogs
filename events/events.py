@@ -1,167 +1,245 @@
 import discord
 from redbot.core import commands, Config, checks
+from redbot.core.data_manager import cog_data_path
 from discord.ext import tasks
-from asyncio import sleep
+from asyncio import sleep, TimeoutError
 from random import choice, randint
-from copy import deepcopy
+from copy import copy
+from time import time
+import yaml
+import re
+
 
 class Events(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
-        #self.config = Config.get_conf(self, identifier=25993325)
-        #default_member = {"bossfight" : {"damage_dealt" : 0, "powercubes" : 0}}
-        #self.config.register_member(**default_member)
-        self.BOSS_HP = 5000
-        self.DAMAGE_PER_CUBE = 100
-        self.DEFAULT_DATA = {
-            "bossfight" : {
-                "active" : False,
-                "channel" : None,
-                "message" : None,
-                "embed" : None,
-                "hp_left" : self.BOSS_HP
-                }
-            }
-        self.data = deepcopy(self.DEFAULT_DATA)
-        self.actions = []
-        self.players = {}
+        self.config = Config.get_conf(self, identifier=2567124825)
+        self.config.register_global(
+            boss_hp=5000
+        )
+        self.DAMAGE_PER_CHALL = 200
+        self.START_WAIT_TIME = 20
+        self.DAMAGE_EMOJI = "<:damage:643539221428174849>"
+        self.HP_EMOJI = "<:health:688109898508009611>"
+        self.LOG_EMOJI = "<:log:688112584368586779>"
+        self.WAITING_EMOJI = "<:dyna:688120749323845637>"
+        self.bf_data = None
+        self.bf_active = False
+        with open(str(cog_data_path(self)).replace("Events", r"CogManager/cogs/events/geo.yaml")) as file:
+            self.geo_questions = yaml.load(file, Loader=yaml.FullLoader)
+        with open(str(cog_data_path(self)).replace("Events", r"CogManager/cogs/events/trivia.yaml")) as file:
+            self.trivia_questions = yaml.load(file, Loader=yaml.FullLoader)
+        with open(str(cog_data_path(self)).replace("Events", r"CogManager/cogs/events/longwords.txt")) as file:
+            self.longwords = []
+            line = file.readline()
+            while line != "":
+                self.longwords.append(line.replace("\n", ""))
+                line = file.readline()
+
+    async def main_loop(self):
+        while self.bf_data['hp_left'] > 0:
+            chall = choice(("word", "math", "geo", "trivia")) 
+            #start random challenge
+            if chall == "word":
+                res = await self.word_chall()
+            elif chall == "math":
+                res = await self.math_chall()
+            elif chall == "geo":
+                res = await self.geo_chall()
+            elif chall == "trivia":
+                res = await self.trivia_chall()
+            #process results
+            damage = 0
+            log = ""
+            dealt = self.DAMAGE_PER_CHALL
+            for m in res:
+                damage += dealt
+                log += f"{self.DAMAGE_EMOJI}{m.display_name} `{dealt}`\n"
+                if m.id not in self.bf_data["players"]:
+                    self.bf_data["players"][m.id] = dealt
+                else:
+                    self.bf_data["players"][m.id] += dealt
+                dealt = (dealt - 20) if dealt > 20 else dealt
+            log = "Noone was successful!" if log == "" else log
+            self.bf_data['hp_left'] -= damage
+            #update action log
+            embed = self.bf_data["embed"]
+            embed.set_field_at(0, name=f"{self.HP_EMOJI} HP Left", value=f"{self.bf_data['hp_left']}/{await self.config.boss_hp()}", inline=False)
+            embed.set_field_at(1, name=f"{self.LOG_EMOJI} Action log:", value=log)
+            await self.bf_data["message"].edit(embed=embed)
+            if self.bf_data['hp_left'] > 0:
+                await sleep(randint(10, 20))
+
+        #finish
+        embed = self.bf_data["embed"]
+        embed.set_thumbnail(url="https://i.imgur.com/fo3Tqfd.png")
+        embed.set_field_at(0, name=f"{self.HP_EMOJI} HP Left", value=f"0/{await self.config.boss_hp()}", inline=False)
+        embed.set_field_at(1, name=f"{self.LOG_EMOJI} Action log:", value="Boss has been defeated!")
+        embed.set_footer(text="Good job!")
+        await self.bf_data["message"].edit(embed=embed)
         
-
-    def cog_unload(self):
-        self.messageupdateloop.cancel()
-        self.randomspawnloop.cancel()
-
-    @tasks.loop(seconds=15)
-    async def messageupdateloop(self):
-        new_actions_str = ""
-        for action in self.actions:
-            if action[0] == "D":
-                new_actions_str += f"{action[1]} -{action[2]} HP\n"
-                self.data["bossfight"]["hp_left"] -= action[2]
-            elif action[0] == "P":
-                new_actions_str += f"{action[1]} collected a power cube ({action[2]})\n"
-            if action[0] == "3D":
-                new_actions_str += f"{action[1]} -{action[2]} HP **(x3)**\n"
-                self.data["bossfight"]["hp_left"] -= action[2]
-        self.actions = []
-        if len(new_actions_str) == 0:
-            new_actions_str = "Deal damage by sending messages!"
-        if self.data["bossfight"]["hp_left"] <= 0:
-            await self.finish()
-        else:
-            embed = self.data["bossfight"]["embed"]
-            embed.set_field_at(0, name="HP Left", value=f"{self.data['bossfight']['hp_left']}/{self.BOSS_HP}", inline=False)
-            embed.set_field_at(1, name="Action log:", value=new_actions_str)
-            await self.data["bossfight"]["message"].edit(embed=embed)
-
-
-    @tasks.loop(seconds=15)
-    async def randomspawnloop(self):
-        rand = randint(1,10)
-        if rand < 4:
-            await self.spawn_cube()
-        elif rand < 8:
-            await self.spawn_challenge()
-
-    # @tasks.loop(seconds=20)
-    # async def randomkillloop(self):
-    #     print()
-
-    async def finish(self):
-        self.messageupdateloop.stop()
-        self.randomspawnloop.cancel()
-        self.data["bossfight"]["active"] = False
-        embed = self.data["bossfight"]["embed"]
-        embed.set_field_at(0, name="HP Left", value=f"0/{self.BOSS_HP}", inline=False)
-        embed.set_field_at(1, name="Action log:", value="Boss has been defeated!")
-        embed.set_footer(text=discord.Embed.Empty)
-        await self.data["bossfight"]["message"].edit(embed=embed)
         final = []
-        for k in self.players.keys():
-            final.append([k, self.players[k]["damage"], self.players[k]["power_cubes"]])
+        for pid, pdmg in self.bf_data["players"].items():
+            final.append([pid, pdmg])
         final.sort(key=lambda x: x[1], reverse=True)
+        
         msg = ""
         messages = []
         for p in final:
-            if len(msg) > 1500:
+            if len(msg) > 1800:
                 messages.append(msg)
                 msg = ""
             u = self.bot.get_user(p[0])
-            msg += f"{u.mention} <:damage:643539221428174849> `{p[1]}` <:powercube:643517745199054855> `{p[2]}`\n"
+            msg += f"{u.mention} <:damage:643539221428174849> `{p[1]}`\n"
         if len(msg) > 0:
             messages.append(msg)
         for m in messages:
-            await self.data["bossfight"]["channel"].send(embed=discord.Embed(description=m, colour=discord.Colour.gold()))
-        self.data = deepcopy(self.DEFAULT_DATA)
-        self.actions = []
-        self.players = {}
-        
-    async def spawn_cube(self):
-        embed = discord.Embed(description="<:powercube:643517745199054855> Power cube spawned!\nPick it up by reacting!", colour=discord.Color.green())
-        message = await self.data["bossfight"]["channel"].send(embed=embed)
-        await message.add_reaction("<:powercube:643517745199054855>")
-        def check(reaction, user):
-                return str(reaction.emoji) == "<:powercube:643517745199054855>" and not user.bot
-        _, user = await self.bot.wait_for('reaction_add', check=check)
-        if user.id not in self.players.keys():
-                self.players[user.id] = {"damage" : 0, "power_cubes" : 0}
-        self.players[user.id]["power_cubes"] += 1
-        await message.edit(embed=discord.Embed(description=f"<:powercube:643517745199054855> {user.mention} collected the power cube!\nCurrent amount: {self.players[user.id]['power_cubes']}", colour=discord.Color.green()))
-        self.actions.append(["P", user.mention, self.players[user.id]["power_cubes"]])
-        await message.delete(delay=3)
-
-    async def spawn_challenge(self):
-        word = choice(["shelly", "nita", "colt", "mortis", "bull", "bounty", "showdown"])
-        embed = discord.Embed(description=f"<:sd:614517124219666453> Deal triple damage to the bot!\nType \"{word}\"!", colour=discord.Color.blue())
-        message = await self.data["bossfight"]["channel"].send(embed=embed)
+            await self.bf_data["channel"].send(embed=discord.Embed(title="Damage leaderboard", description=m, colour=discord.Colour.gold()))
+        self.bf_active = False
+            
+    async def math_chall(self):
+        limit = 15
+        start = time()
+        op = choice(("+", "-", "*", "/"))
+        if op == "+":
+            num1, num2 = randint(10, 500), randint(10, 500)
+            result = num1 + num2
+        elif op == "-":
+            num1, num2 = randint(20, 500), randint(20, 300)
+            if num2 > num1:
+                num1, num2 = num2, num1
+            result = num1 - num2
+        elif op == "*":
+            num1, num2 = randint(1, 100), randint(2, 20)
+            if num2 > num1:
+                num1, num2 = num2, num1
+            result = num1 * num2
+        elif op == "/":
+            num2 = randint(1, 30)
+            num1 = randint(1, 50) * num2
+            result = num1 // num2
+                               
+        embed = discord.Embed(title="MATH CHALLENGE", description=f"You have {limit} seconds to write a result of:\n\n`{num1} {op} {num2}`", colour=discord.Color.magenta())
+        embed.set_footer(text="Do not use calculator!")
+        message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
-            return not m.author.bot and word in m.content.lower() and m.channel == self.data["bossfight"]["channel"]
-        msg = await self.bot.wait_for('message', check=check)
-        if msg.author.id not in self.players.keys():
-            self.players[msg.author.id] = {"damage" : 0, "power_cubes" : 0}
-        damage = (self.players[msg.author.id]["power_cubes"] + 1) * self.DAMAGE_PER_CUBE * 3
-        await message.edit(embed=discord.Embed(description=f"<:sd:614517124219666453> {msg.author.mention} dealt triple damage ({damage}) to the bot", colour=discord.Color.blue()))
-        self.players[msg.author.id]["damage"] += damage
-        self.actions.append(["3D", msg.author.mention, damage])
-        await message.delete(delay=3)
-
+            return not m.author.bot and str(result) in m.content.lower() and m.channel == self.bf_data["channel"]
+        success = []
+        while time() - start < limit:
+            try:
+                msg = await self.bot.wait_for('message', check=check, timeout=3)
+                if msg.author not in success:
+                    success.append(msg.author)
+            except TimeoutError:
+                pass
+        await message.edit(embed=discord.Embed(title="MATH CHALLENGE", description=f"The right answer was `{result}`", colour=discord.Color.dark_magenta()))
+        await message.delete(delay=5)
+        return success
+        
+    async def word_chall(self):
+        word = choice(self.longwords)
+        limit = 10
+        start = time()
+        embed = discord.Embed(title="TYPING CHALLENGE", description=f"You have {limit} seconds to type:\n\n`{word.upper()}`", colour=discord.Color.blue())
+        embed.set_footer(text="Letter case doesn't matter. NO COPY PASTING!")
+        message = await self.bf_data["channel"].send(embed=embed)
+        def check(m):
+            return not m.author.bot and word in m.content.lower() and m.channel == self.bf_data["channel"]
+        success = []
+        while time() - start < limit:
+            try:
+                msg = await self.bot.wait_for('message', check=check, timeout=3)
+                if msg.author not in success:
+                    success.append(msg.author)
+            except TimeoutError:
+                pass
+        await message.delete() 
+        return success
+ 
+    async def geo_chall(self):
+        limit = 15
+        start = time()
+        question = choice(list(self.geo_questions.keys()))
+        imgreg = re.search("https.*png", question)
+        answers = [str(x).lower() for x in self.geo_questions[question]]
+        embed = discord.Embed(title="GEOGRAPHY CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`{question.replace(imgreg.group(), '') if imgreg else question}`", colour=discord.Color.teal())
+        embed.set_footer(text="Letter case doesn't matter.")
+        if imgreg:
+            embed.set_image(url=imgreg.group())
+        message = await self.bf_data["channel"].send(embed=embed)
+        def check(m):
+            return not m.author.bot and m.content.lower() in answers and m.channel == self.bf_data["channel"]
+        success = []
+        while time() - start < limit:
+            try:
+                msg = await self.bot.wait_for('message', check=check, timeout=3)
+                if msg.author not in success:
+                    success.append(msg.author)
+            except TimeoutError:
+                pass
+        await message.edit(embed=discord.Embed(title="GEOGRAPHY CHALLENGE", description=f"The right answer was `{answers[0].upper()}`", colour=discord.Color.dark_teal()))
+        await message.delete(delay=5) 
+        return success
+                            
+    async def trivia_chall(self):
+        limit = 15
+        start = time()
+        question = choice(list(self.trivia_questions.keys()))
+        answers = [str(x).lower() for x in self.trivia_questions[question]]
+        embed = discord.Embed(title="TRIVIA CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`{question}`", colour=discord.Color.orange())
+        embed.set_footer(text="Letter case doesn't matter.")
+        message = await self.bf_data["channel"].send(embed=embed)
+        def check(m):
+            return not m.author.bot and m.content.lower() in answers and m.channel == self.bf_data["channel"]
+        success = []
+        while time() - start < limit:
+            try:
+                msg = await self.bot.wait_for('message', check=check, timeout=3)
+                if msg.author not in success:
+                    success.append(msg.author)
+            except TimeoutError:
+                pass
+        await message.edit(embed=discord.Embed(title="TRIVIA CHALLENGE", description=f"The right answer was `{answers[0].upper()}`", colour=discord.Color.dark_orange()))
+        await message.delete(delay=5) 
+        return success
+    
     @commands.Cog.listener()
     async def on_message(self, message):
-        if not message.author.bot and self.data["bossfight"]["active"] and message.channel == self.data["bossfight"]["channel"]:
-            if message.author.id not in self.players.keys():
-                self.players[message.author.id] = {"damage" : 0, "power_cubes" : 0}
-            damage = (self.players[message.author.id]["power_cubes"] + 1) * self.DAMAGE_PER_CUBE
-            self.players[message.author.id]["damage"] += damage
-            self.actions.append(["D", message.author.mention, damage])
-            await message.delete(delay=1)
-            
+        if not message.author.bot and self.bf_active and message.channel == self.bf_data["channel"]:
+            await message.delete()
         
     @commands.guild_only()
     @commands.is_owner()   
     @commands.command()
+    async def bosshp(self, ctx, hp:int):
+        await self.config.boss_hp.set(hp)
+        await ctx.send(f"Boss HP set to {hp}")
+    
+    @commands.is_owner()   
+    @commands.command()
     async def bossfight(self, ctx, channel:discord.TextChannel):
-        self.data["bossfight"]["channel"] = channel
-
+        if self.bf_active:
+            return await ctx.send("Boss Fight is already running!")
+        self.bf_data = {
+                "channel" : channel,
+                "message" : None,
+                "embed" : None,
+                "hp_left" : await self.config.boss_hp(),
+                "players" : {}
+                }
+        self.bf_active = True 
         embed = discord.Embed(title="BOSS FIGHT", colour=discord.Colour.red())
-        embed.set_thumbnail(url="https://i.imgur.com/fo3Tqfd.png")
-        embed.add_field(name="HP Left", value=f"{self.data['bossfight']['hp_left']}/{self.BOSS_HP}", inline=False)
-        embed.add_field(name="Starting in:", value="5 seconds")
+        embed.set_thumbnail(url="https://i.imgur.com/HWjZtEP.png")
+        embed.add_field(name=f"{self.HP_EMOJI} HP Left", value=f"{self.bf_data['hp_left']}/{await self.config.boss_hp()}", inline=False)
+        embed.add_field(name=f"{self.WAITING_EMOJI} Starting in:", value=f"{self.START_WAIT_TIME} seconds!")
         
         main_message = await channel.send(embed=embed)
-        self.data["bossfight"]["message"] = main_message
-        
-
-        await sleep(5)
+        self.bf_data["message"] = main_message           
+        await sleep(self.START_WAIT_TIME)
 
         embed.set_field_at(1, name="Action log:", value="Boss Fight started!")
-        embed.set_footer(text="Damage boss by sending messages!")
-        await self.data["bossfight"]["message"].edit(embed=embed)
-
-        self.data["bossfight"]["embed"] = embed
-
-        self.data["bossfight"]["active"] = True
-
-        self.messageupdateloop.start()
-        await sleep(5)
-        self.randomspawnloop.start()
+        #embed.set_footer(text="")
+        await self.bf_data["message"].edit(embed=embed)
+        self.bf_data["embed"] = embed
+        await self.main_loop()
