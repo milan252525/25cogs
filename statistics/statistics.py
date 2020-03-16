@@ -67,39 +67,18 @@ class Statistics(commands.Cog):
                     pair.append(member.trophies)
                     pair.append(club.name)
                     trophies.append(pair)
-            trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
-            i = 1
-            positionmsg = ""
-            tagmsg = ""
-            trophiesmsg = ""
             for trophy in trophies:
                 if trophy == trophies[20]:
                     break
-                positionmsg += f"{i}\n"
-                tagmsg += f"{trophy[0]}({trophy[2]})\n"
-                trophiesmsg += f"{trophy[1]}\n"
-                i = i + 1
-            embed = discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:")
-            embed.add_field(name="Position:", value=positionmsg, inline=True)
-            embed.add_field(name="Tag(Club):", value=tagmsg, inline=True)
-            embed.add_field(name="Trophies:", value=trophiesmsg, inline=True)
+                msg += f"{trophy[1]} {trophy[0]}({trophy[2]})\n"
+            embed = discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
         elif key is not None:
-            positionmsg = ""
-            tagmsg = ""
-            trophiesmsg = ""
             tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
             club = await self.ofcbsapi.get_club(tag)
-            i = 1
             for member in club.members:
                 if member == club.members[20]:
                     break
-                positionmsg += f"{i}\n"
-                tagmsg += f"{member.name}\n"
-                trophiesmsg += f"{member.trophies}\n"
-                i = i + 1
-            embed = discord.Embed(color=discord.Colour.gold(), title=f"{club.name} leaderboard:")
-            embed.add_field(name="Position:", value=positionmsg, inline=True)
-            embed.add_field(name="Tag:", value=tagmsg, inline=True)
-            embed.add_field(name="Trophies:", value=trophiesmsg, inline=True)
+                msg += f"{member.trophies} {member.name}\n"
+            embed = discord.Embed(color=discord.Colour.gold(), title=f"{club.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
