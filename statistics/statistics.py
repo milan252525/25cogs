@@ -67,6 +67,7 @@ class Statistics(commands.Cog):
                     pair.append(member.trophies)
                     pair.append(club.name)
                     trophies.append(pair)
+            msg = ""
             for trophy in trophies:
                 if trophy == trophies[20]:
                     break
@@ -76,6 +77,7 @@ class Statistics(commands.Cog):
         elif key is not None:
             tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
             club = await self.ofcbsapi.get_club(tag)
+            msg = ""
             for member in club.members:
                 if member == club.members[20]:
                     break
