@@ -72,7 +72,7 @@ class Statistics(commands.Cog):
             for trophy in trophies:
                 if trophy == trophies[20]:
                     break
-                msg += f"{trophy[1]} {trophy[0]}({trophy[2]})\n"
+                msg += f"{trophy[1]} **{trophy[0]}**({trophy[2]})\n"
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
         elif key is not None:
@@ -82,6 +82,6 @@ class Statistics(commands.Cog):
             for member in club.members:
                 if member == club.members[20]:
                     break
-                msg += f"{member.trophies} {member.name}\n"
+                msg += f"{member.trophies} **{member.name}**\n"
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{club.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
