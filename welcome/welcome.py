@@ -365,6 +365,15 @@ class Welcome(commands.Cog):
         newcomer = member.guild.get_role(677272975938027540)
         msg = ""
         if tag != "spectator":
+            tags = []
+            guilds = await self.bsconfig.all_guilds()
+            events = guilds[654334199494606848]
+            clubs = events["clubs"]
+            for club in clubs:
+                info = clubs[club]
+                tagn = "#" + info["tag"]
+                tags.append(tagn)
+
             tag = tag.lower().replace('O', '0')
             if tag.startswith("#"):
                 tag = tag.strip('#')
@@ -389,7 +398,7 @@ class Welcome(commands.Cog):
                     if not player_in_club:
                         await member.add_roles(guest)
                         msg += f"Assigned roles: {guest.name}\n"
-                    elif player_in_club and "LA " in player.club.name:
+                    elif player_in_club and ("LA " in player.club.name or player.club.tag in tags):
                         await member.add_roles(LAMember)
                         msg += f"Assigned roles: {LAMember.name}\n"
                     else:
