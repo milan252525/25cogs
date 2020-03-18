@@ -9,10 +9,10 @@ class Statistics(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
-        self.lbrenewallabs.start()
+        #self.lbrenewallabs.start()
 
-    def cog_unload(self):
-        self.lbrenewallabs.cancel()
+    #def cog_unload(self):
+        #self.lbrenewallabs.cancel()
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
@@ -91,7 +91,8 @@ class Statistics(commands.Cog):
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{club.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
 
-    @tasks.loop(minutes=60)
+    @commads.command()
+    #@tasks.loop(minutes=60)
     async def lbrenewallabs(self):
         message = bot.get_message(689892587271749683)
         trophies = []
