@@ -92,8 +92,7 @@ class Statistics(commands.Cog):
             await ctx.send(embed=embed)
 
     @tasks.loop(minutes=60)
-    async def lbrenewallabs(self, ctx):
-        await ctx.send("Starting...")
+    async def lbrenewallabs(self):
         channel = self.bot.get_channel(689889206230974473)
         message = await channel.fetch_message(689892587271749683)
         trophies = []
@@ -112,7 +111,5 @@ class Statistics(commands.Cog):
             if trophy == trophies[20]:
                 break
             msg += f"<:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
-        await ctx.send(msg)
         embed = discord.Embed(color=discord.Colour.gold(), title=f"{message.guild.name} leaderboard:", description=msg)
         await message.edit(embed=embed)
-        await ctx.send("Finished.")
