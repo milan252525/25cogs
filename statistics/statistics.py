@@ -8,6 +8,10 @@ class Statistics(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
+        self.lbrenewallabs.start()
+
+    def cog_unload(self):
+        self.lbrenewallabs.cancel()
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
@@ -85,3 +89,25 @@ class Statistics(commands.Cog):
                 msg += f"<:bstrophy:552558722770141204> {member.trophies} **{member.name}**\n"
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{club.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
+
+    @tasks.loop(minutes=60)
+    async def lbrenewallabs(self):
+        message = bot.get_message(689892587271749683)
+        trophies = []
+        for key in (await self.bsconfig.guild(ctx.guild).clubs()).keys():
+            tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
+            club = await self.ofcbsapi.get_club(tag)
+            for member in club.members:
+                pair = []
+                pair.append(member.name)
+                pair.append(member.trophies)
+                pair.append(club.name)
+                trophies.append(pair)
+        trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
+        msg = ""
+        for trophy in trophies:
+            if trophy == trophies[20]:
+                break
+            msg += f"<:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
+        embed = discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:", description=msg)
+        await message.edit(embed=embed)
