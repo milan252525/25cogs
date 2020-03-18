@@ -94,7 +94,7 @@ class Statistics(commands.Cog):
     @commands.command()
     #@tasks.loop(minutes=60)
     async def lbrenewallabs(self, ctx):
-        await ctx.sent("Starting...")
+        await ctx.send("Starting...")
         message = bot.get_message(689892587271749683)
         trophies = []
         for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
@@ -115,4 +115,4 @@ class Statistics(commands.Cog):
         await ctx.send(msg)
         embed = discord.Embed(color=discord.Colour.gold(), title=f"{message.guild.name} leaderboard:", description=msg)
         await message.edit(embed=embed)
-        await ctx.sent("Finished.")
+        await ctx.send("Finished.")
