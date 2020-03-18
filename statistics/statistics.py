@@ -95,7 +95,7 @@ class Statistics(commands.Cog):
     #@tasks.loop(minutes=60)
     async def lbrenewallabs(self, ctx):
         await ctx.send("Starting...")
-        channel = await self.bot.get_channel(689889206230974473)
+        channel = self.bot.get_channel(689889206230974473)
         message = await channel.fetch_message(689892587271749683)
         trophies = []
         for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
