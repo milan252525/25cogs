@@ -20,7 +20,7 @@ class Statistics(commands.Cog):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
         if ofcbsapikey["api_key"] is None:
             raise ValueError("The Official Brawl Stars API key has not been set.")
-        self.ofcbsapi = brawlstats.OfficialAPI(ofcbsapikey["api_key"], is_async=True)
+        self.ofcbsapi = brawlstats.Client(ofcbsapikey["api_key"], is_async=True)
 
     @commands.is_owner()
     @commands.command()
