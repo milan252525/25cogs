@@ -5,6 +5,7 @@ from discord.ext import tasks
 from datetime import datetime
 from time import time
 from random import choice
+import random
 from typing import Union
 #from profanity_check import predict, predict_prob
 #from profanityfilter import ProfanityFilter
