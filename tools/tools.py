@@ -598,6 +598,6 @@ class Tools(commands.Cog):
         for reaction in message.reactions:
             users = await reaction.users().flatten()
             winner = random.choice(users)
-            await ctx.send(f"Looks like {str(winner)} is the winner.")
+            await ctx.send(f"Looks like {winner.mention} is the winner.")
             break
 
