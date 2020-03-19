@@ -590,3 +590,12 @@ class Tools(commands.Cog):
         embed.add_field(name="Comment by an executor:", value=comment, inline=False)
         await msg.edit(embed=embed)
 
+    @commands.command()
+    async def choosewinner(self, ctx, messageid):
+        channel = self.bot.get_channel(ctx.channel)
+        message = await channel.fetch_message(messageid)
+        reactions = message.reactions
+        users = await reactions.users().flatten()
+        winner = random.choice(users)
+        await ctx.send(f"Looks like {str(winner)} is the winner.")
+
