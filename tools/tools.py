@@ -592,8 +592,7 @@ class Tools(commands.Cog):
 
     @commands.command()
     async def choosewinner(self, ctx, messageid):
-        channel = self.bot.get_channel(ctx.channel)
-        message = await channel.fetch_message(messageid)
+        message = await ctx.channel.fetch_message(messageid)
         reactions = message.reactions
         users = await reactions.users().flatten()
         winner = random.choice(users)
