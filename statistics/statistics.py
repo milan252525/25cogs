@@ -30,8 +30,8 @@ class Statistics(commands.Cog):
             averagetrophies = 0
             lower10 = 0
             members = []
-            for key in (await self.config.guild(ctx.guild).tags()).keys():
-                tag = await self.config.guild(ctx.guild).tags.get_raw(key, "tag")
+            for key in (await self.bsconfig.guild(ctx.guild).tags()).keys():
+                tag = await self.bsconfig.guild(ctx.guild).tags.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     members.append(member.trophies)
@@ -49,7 +49,7 @@ class Statistics(commands.Cog):
             await ctx.send(embed=embed)
         elif key is not None:
             lower10 = 0
-            tag = await self.config.guild(ctx.guild).tags.get_raw(key, "tag")
+            tag = await self.bsconfig.guild(ctx.guild).tags.get_raw(key, "tag")
             club = await self.ofcbsapi.get_club(tag)
             for i in range(len(club.members) - (len(club.members)//10), len(club.members)):
                 lower10 = lower10 + club.members[i].trophies
