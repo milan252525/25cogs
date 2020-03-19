@@ -48,15 +48,10 @@ class Welcome(commands.Cog):
             raise ValueError("The Clash Royale API key has not been set.")
         self.crapi = clashroyale.OfficialAPI(crapikey["api_key"], is_async=True)
         
-        bsapikey = await self.bot.get_shared_api_tokens("bsapi")
-        if bsapikey["api_key"] is None:
-            raise ValueError("The Brawl Stars API key has not been set.")
-        self.bsapi = brawlstats.BrawlAPI(bsapikey["api_key"], is_async=True, prevent_ratelimit=True)
-        
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
         if ofcbsapikey["api_key"] is None:
             raise ValueError("The Official Brawl Stars API key has not been set.")
-        self.ofcbsapi = brawlstats.OfficialAPI(ofcbsapikey["api_key"], is_async=True)
+        self.ofcbsapi = brawlstats.Client(ofcbsapikey["api_key"], is_async=True)
 
     # @commands.command(hidden=True)
     # async def detect(self, ctx):
