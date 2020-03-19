@@ -591,10 +591,12 @@ class Tools(commands.Cog):
         await msg.edit(embed=embed)
 
     @commands.command()
-    async def choosewinner(self, ctx, messageid):
-        message = await ctx.channel.fetch_message(messageid)
-        reactions = message.reactions
-        users = await reactions.users().flatten()
-        winner = random.choice(users)
-        await ctx.send(f"Looks like {str(winner)} is the winner.")
+    async def choosewinner(self, ctx):
+        channel = self.bot.get_channel(402131630497464340)
+        message = await channel.fetch_message(688856356173774857)
+        for reaction in message.reactions:
+            users = await reaction.users().flatten()
+            winner = random.choice(users)
+            await ctx.send(f"Looks like {str(winner)} is the winner.")
+            break
 
