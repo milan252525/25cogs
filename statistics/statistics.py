@@ -10,9 +10,11 @@ class Statistics(commands.Cog):
         self.bot = bot
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
         self.lbrenewallabs.start()
+        self.lbrenewalasia.start()
 
     def cog_unload(self):
         self.lbrenewallabs.cancel()
+        self.lbrenewalasia.cancel()
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
@@ -95,6 +97,29 @@ class Statistics(commands.Cog):
     async def lbrenewallabs(self):
         channel = self.bot.get_channel(689889206230974473)
         message = await channel.fetch_message(689892587271749683)
+        trophies = []
+        for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
+            tag = await self.bsconfig.guild(message.guild).clubs.get_raw(key, "tag")
+            club = await self.ofcbsapi.get_club(tag)
+            for member in club.members:
+                pair = []
+                pair.append(member.name)
+                pair.append(member.trophies)
+                pair.append(club.name)
+                trophies.append(pair)
+        trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
+        msg = ""
+        for trophy in trophies:
+            if trophy == trophies[20]:
+                break
+            msg += f"<:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
+        embed = discord.Embed(color=discord.Colour.gold(), title=f"{message.guild.name} leaderboard:", description=msg)
+        await message.edit(embed=embed)
+
+    @tasks.loop(minutes=70)
+    async def lbrenewalasia(self):
+        channel = self.bot.get_channel(690133321245917204)
+        message = await channel.fetch_message(690133472366428160)
         trophies = []
         for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
             tag = await self.bsconfig.guild(message.guild).clubs.get_raw(key, "tag")
