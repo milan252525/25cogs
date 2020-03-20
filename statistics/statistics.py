@@ -110,7 +110,7 @@ class Statistics(commands.Cog):
         trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
         msg = ""
         for trophy in trophies:
-            if trophy == trophies[50]:
+            if trophy == trophies[20]:
                 break
             msg += f"<:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
         embed = discord.Embed(color=discord.Colour.gold(), title=f"{message.guild.name} leaderboard:", description=msg)
@@ -133,7 +133,7 @@ class Statistics(commands.Cog):
         trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
         msg = ""
         for trophy in trophies:
-            if trophy == trophies[50]:
+            if trophy == trophies[20]:
                 break
             msg += f"<:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
         embed = discord.Embed(color=discord.Colour.gold(), title=f"{message.guild.name} leaderboard:", description=msg)
