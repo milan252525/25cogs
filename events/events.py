@@ -18,6 +18,8 @@ class Events(commands.Cog):
         self.config.register_global(
             boss_hp=5000
         )
+        default_user = {"boss_fight": {"damage" : 0, "participated" : 0}}
+        self.config.register_user(**default_user)
         self.DAMAGE_PER_CHALL = 200
         self.START_WAIT_TIME = 20
         self.DAMAGE_EMOJI = "<:damage:643539221428174849>"
@@ -91,6 +93,8 @@ class Events(commands.Cog):
                 messages.append(msg)
                 msg = ""
             u = self.bot.get_user(p[0])
+            await self.config.user(u).boss_fight.damage.set(await self.config.user(u).boss_fight.damage()+p[1])
+            await self.config.user(u).boss_fight.participated.set(await self.config.user(u).boss_fight.participated()+1)
             msg += f"{u.mention} <:damage:643539221428174849> `{p[1]}`\n"
         if len(msg) > 0:
             messages.append(msg)
