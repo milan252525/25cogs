@@ -94,8 +94,8 @@ class Events(commands.Cog):
                 msg = ""
             u = self.bf_data["channel"].guild.get_member(p[0])
             if u is not None:
-                await self.config.user(u).boss_fight.damage.set(await self.config.user(u).boss_fight.damage()+p[1])
-                await self.config.user(u).boss_fight.participated.set(await self.config.user(u).boss_fight.participated()+1)
+                await self.config.member(u).boss_fight.damage.set(await self.config.member(u).boss_fight.damage()+p[1])
+                await self.config.member(u).boss_fight.participated.set(await self.config.member(u).boss_fight.participated()+1)
                 msg += f"{u.mention} <:damage:643539221428174849> `{p[1]}`\n"
         if len(msg) > 0:
             messages.append(msg)
