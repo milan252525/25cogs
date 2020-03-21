@@ -913,11 +913,6 @@ class BrawlStarsCog(commands.Cog):
             brawlstars = ctx.guild.get_role(576002604740378629)
             vp = ctx.guild.get_role(536993652648574976)
             pres = ctx.guild.get_role(536993632918568991)
-            es = ctx.guild.get_role(548557736120418313)
-            hr = ctx.guild.get_role(564213036257247234)
-            fi = ctx.guild.get_role(608436019469090817)
-            hi = ctx.guild.get_role(610351625113960469)
-            pl = ctx.guild.get_role(576148906602397717)
 
             tag = tag.lower().replace('O', '0')
             if tag.startswith("#"):
@@ -962,16 +957,6 @@ class BrawlStarsCog(commands.Cog):
                     if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(
                             r'[^\x00-\x7f]', r'', player.club.name).strip():
                         member_role_expected = role
-                        if "🇪🇸" in str(role):
-                            msg += await self.addroleifnotpresent(member, es)
-                        elif "🇭🇷" in str(role):
-                            msg += await self.addroleifnotpresent(member, hr)
-                        elif "🇫🇮" in str(role):
-                            msg += await self.addroleifnotpresent(member, fi)
-                        elif "🇮🇳" in str(role):
-                            msg += await self.addroleifnotpresent(member, hi)
-                        elif "🇵🇱" in str(role):
-                            msg += await self.addroleifnotpresent(member, pl)
                         break
                 if member_role_expected is None:
                     return await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Role for the club {player.club.name} not found. Input: {club_name}.\n"))
