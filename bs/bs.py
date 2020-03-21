@@ -31,16 +31,11 @@ class BrawlStarsCog(commands.Cog):
         self.sortrolesasia.cancel()
 
     async def initialize(self):
-        bsapikey = await self.bot.get_shared_api_tokens("bsapi")
-        if bsapikey["api_key"] is None:
-            raise ValueError("The Brawl Stars API key has not been set.")
-        self.bsapi = brawlstats.BrawlAPI(
-            bsapikey["api_key"], is_async=True, prevent_ratelimit=True)
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
         if ofcbsapikey["api_key"] is None:
             raise ValueError(
                 "The Official Brawl Stars API key has not been set.")
-        self.ofcbsapi = brawlstats.OfficialAPI(
+        self.ofcbsapi = brawlstats.Client(
             ofcbsapikey["api_key"], is_async=True)
         
     @commands.Cog.listener()
