@@ -894,13 +894,13 @@ class BrawlStarsCog(commands.Cog):
     async def sortrolesbd(self):
         ch = self.bot.get_channel(690881058756886599)
         await ch.trigger_typing()
-        bs = ctx.guild.get_role(678062773938159627)
-        lamember = ctx.guild.get_role(678062771069517825)
-        newcomer = ctx.guild.get_role(678623072143540225)
-        guest = ctx.guild.get_role(678062759711211546)
-        pres = ctx.guild.get_role(678062737338793984)
-        vp = ctx.guild.get_role(678062737963614211)
-        leadership = ctx.guild.get_role(690872028474900550)
+        bs = ch.guild.get_role(678062773938159627)
+        lamember = ch.guild.get_role(678062771069517825)
+        newcomer = ch.guild.get_role(678623072143540225)
+        guest = ch.guild.get_role(678062759711211546)
+        pres = ch.guild.get_role(678062737338793984)
+        vp = ch.guild.get_role(678062737963614211)
+        leadership = ch.guild.get_role(690872028474900550)
         error_counter = 0
 
         for member in ch.guild.members:
@@ -989,8 +989,8 @@ class BrawlStarsCog(commands.Cog):
                             break
                 except brawlstats.errors.RequestError:
                     pass
-            #if msg != "":
-            await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
+            if msg != "":
+                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
                                                   timestamp=datetime.datetime.now()))
 
     @sortrolesbd.before_loop
