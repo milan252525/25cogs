@@ -968,22 +968,23 @@ class BrawlStarsCog(commands.Cog):
                 elif member_role != member_role_expected:
                     msg += await self.removeroleifpresent(member, member_role)
                     msg += await self.addroleifnotpresent(member, member_role_expected)
-                try:
-                    await asyncio.sleep(0.2)
-                    player_club = await self.ofcbsapi.get_club(player.club.tag)
-                    for mem in player_club.members:
-                        if mem.tag == player.raw_data['tag']:
-                            if mem.role.lower() == 'vicepresident':
-                                msg += await self.addroleifnotpresent(member, vp, leadership)
-                                msg += await self.removeroleifpresent(member, pres)
-                            elif mem.role.lower() == 'president':
-                                msg += await self.addroleifnotpresent(member, pres, leadership)
-                                msg += await self.removeroleifpresent(member, vp)
-                            elif mem.role.lower() == 'member':
-                                msg += await self.removeroleifpresent(member, vp, pres, leadership)
-                            break
-                except brawlstats.errors.RequestError:
-                    pass
+                if member_role_expected is not None:
+                    try:
+                        await asyncio.sleep(0.2)
+                        player_club = await self.ofcbsapi.get_club(player.club.tag)
+                        for mem in player_club.members:
+                            if mem.tag == player.raw_data['tag']:
+                                if mem.role.lower() == 'vicepresident':
+                                    msg += await self.addroleifnotpresent(member, vp, leadership)
+                                    msg += await self.removeroleifpresent(member, pres)
+                                elif mem.role.lower() == 'president':
+                                    msg += await self.addroleifnotpresent(member, pres, leadership)
+                                    msg += await self.removeroleifpresent(member, vp)
+                                elif mem.role.lower() == 'member':
+                                    msg += await self.removeroleifpresent(member, vp, pres, leadership)
+                                break
+                    except brawlstats.errors.RequestError:
+                        pass
             if msg != "":
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
                                                   timestamp=datetime.datetime.now()))
