@@ -138,3 +138,26 @@ class Statistics(commands.Cog):
             msg += f"<:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
         embed = discord.Embed(color=discord.Colour.gold(), title=f"{message.guild.name} leaderboard:", description=msg)
         await message.edit(embed=embed)
+
+    @tasks.loop(minutes=80)
+    async def lbrenewalbd(self):
+        channel = self.bot.get_channel(691278145185251328)
+        message = await channel.fetch_message(691296279157801050)
+        trophies = []
+        for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
+            tag = await self.bsconfig.guild(message.guild).clubs.get_raw(key, "tag")
+            club = await self.ofcbsapi.get_club(tag)
+            for member in club.members:
+                pair = []
+                pair.append(member.name)
+                pair.append(member.trophies)
+                pair.append(club.name)
+                trophies.append(pair)
+        trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
+        msg = ""
+        for trophy in trophies:
+            if trophy == trophies[20]:
+                break
+            msg += f"<:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
+        embed = discord.Embed(color=discord.Colour.gold(), title=f"{message.guild.name} leaderboard:", description=msg)
+        await message.edit(embed=embed)
