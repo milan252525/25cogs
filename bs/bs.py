@@ -933,6 +933,7 @@ class BrawlStarsCog(commands.Cog):
                 return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                          description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
 
+            msg = ""
             nick = f"{player.name}"
             try:
                 await member.edit(nick=nick[:31])
@@ -940,7 +941,6 @@ class BrawlStarsCog(commands.Cog):
             except discord.Forbidden:
                 msg += f"I dont have permission to change nickname of this user!\n"
 
-            msg = ""
             player_in_club = "name" in player.raw_data["club"]
             member_roles = []
             member_role = None
