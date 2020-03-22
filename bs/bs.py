@@ -934,6 +934,7 @@ class BrawlStarsCog(commands.Cog):
                     return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                              description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
 
+                await ch.send(str(member))
                 msg = ""
                 player_in_club = "name" in player.raw_data["club"]
                 member_roles = []
