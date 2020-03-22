@@ -217,9 +217,9 @@ class Tools(commands.Cog):
             messages.append(msg)
         for m in messages:
             if not mentions:
-                m = m.replace('_', '\_')
-                m = m.replace('*', '\*')
-                m = m.replace('~', '\~')
+                m = m.replace('_', '\\_')
+                m = m.replace('*', '\\*')
+                m = m.replace('~', '\\~')
             await ctx.send(embed=discord.Embed(description=m, colour=discord.Colour.green()))
 
     @commands.command()
@@ -256,9 +256,9 @@ class Tools(commands.Cog):
         if len(msg) > 0:
             messages.append(msg)
         for m in messages:
-            m = m.replace('_', '\_')
-            m = m.replace('*', '\*')
-            m = m.replace('~', '\~')
+            m = m.replace('_', '\\_')
+            m = m.replace('*', '\\*')
+            m = m.replace('~', '\\~')
             await ctx.send(embed=discord.Embed(description=m, colour=discord.Colour.green()))
 
     @commands.guild_only()
