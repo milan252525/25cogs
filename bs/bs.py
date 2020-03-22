@@ -1143,7 +1143,7 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.addroleifnotpresent(member, lamember, bs)
                     return await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
                 msg += await self.removeroleifpresent(member, newcomer)
-                msg += await self.addroleifnotpresent(member, bs)
+                msg += await self.addroleifnotpresent(member, lamemeber, bs)
                 msg += await self.addroleifnotpresent(member, member_role_expected)
                 try:
                     player_club = await self.ofcbsapi.get_club(player.club.tag)
