@@ -961,11 +961,6 @@ class BrawlStarsCog(commands.Cog):
                                                                            player.club.name).strip():
                         member_role_expected = role
                         break
-                if member_role_expected is None:
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(),
-                                                      description=f"Role for the club {player.club.name} not found.",
-                                                      title=str(member), timestamp=datetime.datetime.now()))
-                    continue
                 msg += await self.removeroleifpresent(member, guest, newcomer)
                 msg += await self.addroleifnotpresent(member, lamember, bs)
                 if member_role is None:
@@ -1266,6 +1261,7 @@ class BrawlStarsCog(commands.Cog):
                             break
                 except brawlstats.errors.RequestError:
                     msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
+            if player.
             if msg != "":
                 await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
 
