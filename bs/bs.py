@@ -1254,6 +1254,11 @@ class BrawlStarsCog(commands.Cog):
             thirteensixteen = ctx.guild.get_role(678062787267788801)
             sixteentwenty = ctx.guild.get_role(678062787867443211)
             twenty = ctx.guild.get_role(691297775626879007)
+            ootw = ctx.guild.get_role(678062761154183168)
+            ptw = ctx.guild.get_role(678062765381779496)
+            pt = ctx.guild.get_role(678062764673073152)
+            pbc = ctx.guild.get_role(678062765729906720)
+            alls = ctx.guild.get_role(678062763267850280)
 
             tag = tag.lower().replace('O', '0')
             if tag.startswith("#"):
@@ -1304,6 +1309,25 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.addroleifnotpresent(member, sixteentwenty)
             elif 20000 <= player.trophies:
                 msg += await self.addroleifnotpresent(member, twenty)
+
+            if player.trophies > 14500:
+                msg += await self.addroleifnotpresent(member, ootw)
+
+            if player.raw_data['3vs3Victories'] >= 10000:
+                msg += await self.addroleifnotpresent(member, ptw)
+
+            if player.solo_victories >= 3000:
+                msg += await self.addroleifnotpresent(member, pt)
+
+            if player.duo_victories >= 1500:
+                msg += await self.addroleifnotpresent(member, pbc)
+
+            valid = True
+            for brawler in player.raw_data['brawlers']:
+                if len(brawler.get('starPowers')) != 2:
+                    valid = False
+            if valid:
+                msg += await self.addroleifnotpresent(member, alls)
 
             if not player_in_club:
                 msg += await self.removeroleifpresent(member, newcomer)
