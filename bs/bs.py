@@ -1197,6 +1197,13 @@ class BrawlStarsCog(commands.Cog):
             pres = ctx.guild.get_role(678062737338793984)
             vp = ctx.guild.get_role(678062737963614211)
             leadership = ctx.guild.get_role(690872028474900550)
+            twofour = ctx.guild.get_role(678062784834961436)
+            foursix = ctx.guild.get_role(678062785049133129)
+            sixeight = ctx.guild.get_role(678062785917354035)
+            eightten = ctx.guild.get_role(678062786508750859)
+            tenthirteen = ctx.guild.get_role(678062788480073739)
+            thirteensixteen = ctx.guild.get_role(678062787267788801)
+            sixteen = ctx.guild.get_role(678062787867443211)
 
             tag = tag.lower().replace('O', '0')
             if tag.startswith("#"):
@@ -1261,7 +1268,20 @@ class BrawlStarsCog(commands.Cog):
                             break
                 except brawlstats.errors.RequestError:
                     msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
-            if player.
+            if 2000 <= player.trophies < 4000:
+                msg += await self.addroleifnotpresent(member, twofour)
+            elif 4000 <= player.trophies < 6000:
+                msg += await self.addroleifnotpresent(member, foursix)
+            elif 6000 <= player.trophies < 8000:
+                msg += await self.addroleifnotpresent(member, sixeight)
+            elif 8000 <= player.trophies < 10000:
+                msg += await self.addroleifnotpresent(member, eightten)
+            elif 10000 <= player.trophies < 13000:
+                msg += await self.addroleifnotpresent(member, tenthirteen)
+            elif 13000 <= player.trophies < 16000:
+                msg += await self.addroleifnotpresent(member, thirteensixteen)
+            elif 16000 <= player.trophies:
+                msg += await self.addroleifnotpresent(member, sixteen)
             if msg != "":
                 await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
 
