@@ -985,6 +985,8 @@ class BrawlStarsCog(commands.Cog):
                                 break
                     except brawlstats.errors.RequestError:
                         pass
+                elif member_role_expected is None:
+                    msg += await self.removeroleifpresent(member, vp, pres, leadership)
             if msg != "":
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
                                                   timestamp=datetime.datetime.now()))
