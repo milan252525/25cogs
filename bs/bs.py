@@ -1239,6 +1239,21 @@ class BrawlStarsCog(commands.Cog):
             player_in_club = "name" in player.raw_data["club"]
             member_role_expected = None
 
+            if 2000 <= player.trophies < 4000:
+                msg += await self.addroleifnotpresent(member, twofour)
+            elif 4000 <= player.trophies < 6000:
+                msg += await self.addroleifnotpresent(member, foursix)
+            elif 6000 <= player.trophies < 8000:
+                msg += await self.addroleifnotpresent(member, sixeight)
+            elif 8000 <= player.trophies < 10000:
+                msg += await self.addroleifnotpresent(member, eightten)
+            elif 10000 <= player.trophies < 13000:
+                msg += await self.addroleifnotpresent(member, tenthirteen)
+            elif 13000 <= player.trophies < 16000:
+                msg += await self.addroleifnotpresent(member, thirteensixteen)
+            elif 16000 <= player.trophies:
+                msg += await self.addroleifnotpresent(member, sixteen)
+
             if not player_in_club:
                 msg += await self.removeroleifpresent(member, newcomer)
                 msg += await self.addroleifnotpresent(member, guest, bs)
@@ -1271,20 +1286,7 @@ class BrawlStarsCog(commands.Cog):
                             break
                 except brawlstats.errors.RequestError:
                     msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
-            if 2000 <= player.trophies < 4000:
-                msg += await self.addroleifnotpresent(member, twofour)
-            elif 4000 <= player.trophies < 6000:
-                msg += await self.addroleifnotpresent(member, foursix)
-            elif 6000 <= player.trophies < 8000:
-                msg += await self.addroleifnotpresent(member, sixeight)
-            elif 8000 <= player.trophies < 10000:
-                msg += await self.addroleifnotpresent(member, eightten)
-            elif 10000 <= player.trophies < 13000:
-                msg += await self.addroleifnotpresent(member, tenthirteen)
-            elif 13000 <= player.trophies < 16000:
-                msg += await self.addroleifnotpresent(member, thirteensixteen)
-            elif 16000 <= player.trophies:
-                msg += await self.addroleifnotpresent(member, sixteen)
+
             if msg != "":
                 await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
 
