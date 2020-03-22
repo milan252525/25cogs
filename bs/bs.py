@@ -940,41 +940,42 @@ class BrawlStarsCog(commands.Cog):
                 member_role = None
                 member_role_expected = None
 
-                if player.trophies < 2000:
-                    msg += await self.addroleifnotpresent(member, zerotwo)
-                    msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen, thirteensixteen, sixteentwenty, twenty)
-                elif 2000 <= player.trophies < 4000:
-                    msg += await self.addroleifnotpresent(member, twofour)
-                    msg += await self.removeroleifpresent(member, zerotwo, foursix, sixeight, eightten, tenthirteen,
-                                                          thirteensixteen, sixteentwenty, twenty)
-                elif 4000 <= player.trophies < 6000:
-                    msg += await self.addroleifnotpresent(member, foursix)
-                    msg += await self.removeroleifpresent(member, twofour, zerotwo, sixeight, eightten, tenthirteen,
-                                                          thirteensixteen, sixteentwenty, twenty)
-                elif 6000 <= player.trophies < 8000:
-                    msg += await self.addroleifnotpresent(member, sixeight)
-                    msg += await self.removeroleifpresent(member, twofour, foursix, zerotwo, eightten, tenthirteen,
-                                                          thirteensixteen, sixteentwenty, twenty)
-                elif 8000 <= player.trophies < 10000:
-                    msg += await self.addroleifnotpresent(member, eightten)
-                    msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, zerotwo, tenthirteen,
-                                                          thirteensixteen, sixteentwenty, twenty)
-                elif 10000 <= player.trophies < 13000:
-                    msg += await self.addroleifnotpresent(member, tenthirteen)
-                    msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, zerotwo,
-                                                          thirteensixteen, sixteentwenty, twenty)
-                elif 13000 <= player.trophies < 16000:
-                    msg += await self.addroleifnotpresent(member, thirteensixteen)
-                    msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen,
-                                                          zerotwo, sixteentwenty, twenty)
-                elif 16000 <= player.trophies < 20000:
-                    msg += await self.addroleifnotpresent(member, sixteentwenty)
-                    msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen,
-                                                          thirteensixteen, zerotwo, twenty)
-                elif 20000 <= player.prophies:
-                    msg += await self.addroleifnotpresent(member, twenty)
-                    msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen,
-                                                          thirteensixteen, sixteentwenty, zerotwo)
+                if player.trophies is not None:
+                    if player.trophies < 2000:
+                        msg += await self.addroleifnotpresent(member, zerotwo)
+                        msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen, thirteensixteen, sixteentwenty, twenty)
+                    elif 2000 <= player.trophies < 4000:
+                        msg += await self.addroleifnotpresent(member, twofour)
+                        msg += await self.removeroleifpresent(member, zerotwo, foursix, sixeight, eightten, tenthirteen,
+                                                              thirteensixteen, sixteentwenty, twenty)
+                    elif 4000 <= player.trophies < 6000:
+                        msg += await self.addroleifnotpresent(member, foursix)
+                        msg += await self.removeroleifpresent(member, twofour, zerotwo, sixeight, eightten, tenthirteen,
+                                                              thirteensixteen, sixteentwenty, twenty)
+                    elif 6000 <= player.trophies < 8000:
+                        msg += await self.addroleifnotpresent(member, sixeight)
+                        msg += await self.removeroleifpresent(member, twofour, foursix, zerotwo, eightten, tenthirteen,
+                                                              thirteensixteen, sixteentwenty, twenty)
+                    elif 8000 <= player.trophies < 10000:
+                        msg += await self.addroleifnotpresent(member, eightten)
+                        msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, zerotwo, tenthirteen,
+                                                              thirteensixteen, sixteentwenty, twenty)
+                    elif 10000 <= player.trophies < 13000:
+                        msg += await self.addroleifnotpresent(member, tenthirteen)
+                        msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, zerotwo,
+                                                              thirteensixteen, sixteentwenty, twenty)
+                    elif 13000 <= player.trophies < 16000:
+                        msg += await self.addroleifnotpresent(member, thirteensixteen)
+                        msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen,
+                                                              zerotwo, sixteentwenty, twenty)
+                    elif 16000 <= player.trophies < 20000:
+                        msg += await self.addroleifnotpresent(member, sixteentwenty)
+                        msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen,
+                                                              thirteensixteen, zerotwo, twenty)
+                    elif 20000 <= player.prophies:
+                        msg += await self.addroleifnotpresent(member, twenty)
+                        msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen,
+                                                              thirteensixteen, sixteentwenty, zerotwo)
 
                 for role in member.roles:
                     if role.name.startswith('LA '):
