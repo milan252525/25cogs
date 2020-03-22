@@ -901,6 +901,15 @@ class BrawlStarsCog(commands.Cog):
         pres = ch.guild.get_role(678062737338793984)
         vp = ch.guild.get_role(678062737963614211)
         leadership = ch.guild.get_role(690872028474900550)
+        zerotwo = ch.guild.get_role(691297688297406596)
+        twofour = ch.guild.get_role(678062784834961436)
+        foursix = ch.guild.get_role(678062785049133129)
+        sixeight = ch.guild.get_role(678062785917354035)
+        eightten = ch.guild.get_role(678062786508750859)
+        tenthirteen = ch.guild.get_role(678062788480073739)
+        thirteensixteen = ch.guild.get_role(678062787267788801)
+        sixteentwenty = ch.guild.get_role(678062787867443211)
+        twenty = ch.guild.get_role(691297775626879007)
         error_counter = 0
 
         for member in ch.guild.members:
@@ -929,6 +938,42 @@ class BrawlStarsCog(commands.Cog):
             member_roles = []
             member_role = None
             member_role_expected = None
+
+            if player.trophies < 2000:
+                msg += await self.addroleifnotpresent(member, zerotwo)
+                msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen, thirteensixteen, sixteentwenty, twenty)
+            elif 2000 <= player.trophies < 4000:
+                msg += await self.addroleifnotpresent(member, twofour)
+                msg += await self.removeroleifpresent(member, zerotwo, foursix, sixeight, eightten, tenthirteen,
+                                                      thirteensixteen, sixteentwenty, twenty)
+            elif 4000 <= player.trophies < 6000:
+                msg += await self.addroleifnotpresent(member, foursix)
+                msg += await self.removeroleifpresent(member, twofour, zerotwo, sixeight, eightten, tenthirteen,
+                                                      thirteensixteen, sixteentwenty, twenty)
+            elif 6000 <= player.trophies < 8000:
+                msg += await self.addroleifnotpresent(member, sixeight)
+                msg += await self.removeroleifpresent(member, twofour, foursix, zerotwo, eightten, tenthirteen,
+                                                      thirteensixteen, sixteentwenty, twenty)
+            elif 8000 <= player.trophies < 10000:
+                msg += await self.addroleifnotpresent(member, eightten)
+                msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, zerotwo, tenthirteen,
+                                                      thirteensixteen, sixteentwenty, twenty)
+            elif 10000 <= player.trophies < 13000:
+                msg += await self.addroleifnotpresent(member, tenthirteen)
+                msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, zerotwo,
+                                                      thirteensixteen, sixteentwenty, twenty)
+            elif 13000 <= player.trophies < 16000:
+                msg += await self.addroleifnotpresent(member, thirteensixteen)
+                msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen,
+                                                      zerotwo, sixteentwenty, twenty)
+            elif 16000 <= player.trophies < 20000:
+                msg += await self.addroleifnotpresent(member, sixteentwenty)
+                msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen,
+                                                      thirteensixteen, zerotwo, twenty)
+            elif 20000 <= player.prophies:
+                msg += await self.addroleifnotpresent(member, twenty)
+                msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen,
+                                                      thirteensixteen, sixteentwenty, zerotwo)
 
             for role in member.roles:
                 if role.name.startswith('LA '):
@@ -1200,13 +1245,15 @@ class BrawlStarsCog(commands.Cog):
             pres = ctx.guild.get_role(678062737338793984)
             vp = ctx.guild.get_role(678062737963614211)
             leadership = ctx.guild.get_role(690872028474900550)
+            zerotwo = ctx.guild.get_role(691297688297406596)
             twofour = ctx.guild.get_role(678062784834961436)
             foursix = ctx.guild.get_role(678062785049133129)
             sixeight = ctx.guild.get_role(678062785917354035)
             eightten = ctx.guild.get_role(678062786508750859)
             tenthirteen = ctx.guild.get_role(678062788480073739)
             thirteensixteen = ctx.guild.get_role(678062787267788801)
-            sixteen = ctx.guild.get_role(678062787867443211)
+            sixteentwenty = ctx.guild.get_role(678062787867443211)
+            twenty = ctx.guild.get_role(691297775626879007)
 
             tag = tag.lower().replace('O', '0')
             if tag.startswith("#"):
@@ -1239,7 +1286,9 @@ class BrawlStarsCog(commands.Cog):
             player_in_club = "name" in player.raw_data["club"]
             member_role_expected = None
 
-            if 2000 <= player.trophies < 4000:
+            if player.trophies < 2000:
+                msg += await self.addroleifnotpresent(member, zerotwo)
+            elif 2000 <= player.trophies < 4000:
                 msg += await self.addroleifnotpresent(member, twofour)
             elif 4000 <= player.trophies < 6000:
                 msg += await self.addroleifnotpresent(member, foursix)
@@ -1251,8 +1300,10 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.addroleifnotpresent(member, tenthirteen)
             elif 13000 <= player.trophies < 16000:
                 msg += await self.addroleifnotpresent(member, thirteensixteen)
-            elif 16000 <= player.trophies:
-                msg += await self.addroleifnotpresent(member, sixteen)
+            elif 16000 <= player.trophies < 20000:
+                msg += await self.addroleifnotpresent(member, sixteentwenty)
+            elif 20000 <= player.prophies:
+                msg += await self.addroleifnotpresent(member, twenty)
 
             if not player_in_club:
                 msg += await self.removeroleifpresent(member, newcomer)
