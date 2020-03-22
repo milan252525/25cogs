@@ -11,10 +11,12 @@ class Statistics(commands.Cog):
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
         self.lbrenewallabs.start()
         self.lbrenewalasia.start()
+        self.lbrenewalbd.start()
 
     def cog_unload(self):
         self.lbrenewallabs.cancel()
         self.lbrenewalasia.cancel()
+        self.lbrenewalbd.cancel()
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")

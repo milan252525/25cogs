@@ -30,7 +30,7 @@ class BrawlStarsCog(commands.Cog):
     def cog_unload(self):
         self.sortroles.cancel()
         self.sortrolesasia.cancel()
-        self.sortrolesbd.start()
+        self.sortrolesbd.cancel()
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
