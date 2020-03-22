@@ -589,4 +589,3 @@ class Tools(commands.Cog):
         embed.add_field(name="Accepted by:", value=f"{ctx.author.mention} ({ctx.author.top_role})", inline=False)
         embed.add_field(name="Comment by an executor:", value=comment, inline=False)
         await msg.edit(embed=embed)
-

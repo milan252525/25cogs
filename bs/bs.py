@@ -934,13 +934,6 @@ class BrawlStarsCog(commands.Cog):
                                                          description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
 
             msg = ""
-            nick = f"{player.name}"
-            try:
-                await member.edit(nick=nick[:31])
-                msg += f"New nickname: **{nick[:31]}**\n"
-            except discord.Forbidden:
-                msg += f"I dont have permission to change nickname of this user!\n"
-
             player_in_club = "name" in player.raw_data["club"]
             member_roles = []
             member_role = None
@@ -1330,6 +1323,8 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.addroleifnotpresent(member, pbc)
 
             valid = True
+            if len(player.raw_data['brawlers']) != 34:
+                valid = False
             for brawler in player.raw_data['brawlers']:
                 if len(brawler.get('starPowers')) != 2:
                     valid = False
