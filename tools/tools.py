@@ -317,7 +317,6 @@ class Tools(commands.Cog):
         guilds[440960893916807188] = 538380432748838912 #LA Gaming
         guilds[460550486257565697] = 590976482319269928 #LA Spain
         guilds[473169548301041674] = 596191959559700491 #LA Knights
-        guilds[515962414190166041] = 515965947207614465 #LA Quantum
         guilds[593248015729295360] = 593310903055941634 #LA Fight Club
         guilds[609481228562857985] = 609484084095352842 #LA Gaming - Competitive
         guilds[609857211208040450] = 648967703142596608 #LA eSports
@@ -590,14 +589,4 @@ class Tools(commands.Cog):
         embed.add_field(name="Accepted by:", value=f"{ctx.author.mention} ({ctx.author.top_role})", inline=False)
         embed.add_field(name="Comment by an executor:", value=comment, inline=False)
         await msg.edit(embed=embed)
-
-    @commands.command()
-    async def choosewinner(self, ctx):
-        channel = self.bot.get_channel(402131630497464340)
-        message = await channel.fetch_message(688856356173774857)
-        for reaction in message.reactions:
-            users = await reaction.users().flatten()
-            winner = random.choice(users)
-            await ctx.send(f"Looks like **{str(winner)}** is the winner.")
-            break
 
