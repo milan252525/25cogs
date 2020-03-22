@@ -892,154 +892,149 @@ class BrawlStarsCog(commands.Cog):
 
     @tasks.loop(hours=6)
     async def sortrolesbd(self):
-        try:
-            ch = self.bot.get_channel(690881058756886599)
-            await ch.trigger_typing()
-            bs = ch.guild.get_role(678062773938159627)
-            lamember = ch.guild.get_role(678062771069517825)
-            newcomer = ch.guild.get_role(678623072143540225)
-            guest = ch.guild.get_role(678062759711211546)
-            pres = ch.guild.get_role(678062737338793984)
-            vp = ch.guild.get_role(678062737963614211)
-            leadership = ch.guild.get_role(690872028474900550)
-            zerotwo = ch.guild.get_role(691297688297406596)
-            twofour = ch.guild.get_role(678062784834961436)
-            foursix = ch.guild.get_role(678062785049133129)
-            sixeight = ch.guild.get_role(678062785917354035)
-            eightten = ch.guild.get_role(678062786508750859)
-            tenthirteen = ch.guild.get_role(678062788480073739)
-            thirteensixteen = ch.guild.get_role(678062787267788801)
-            sixteentwenty = ch.guild.get_role(678062787867443211)
-            twenty = ch.guild.get_role(691297775626879007)
-            error_counter = 0
+        ch = self.bot.get_channel(690881058756886599)
+        await ch.trigger_typing()
+        bs = ch.guild.get_role(678062773938159627)
+        lamember = ch.guild.get_role(678062771069517825)
+        newcomer = ch.guild.get_role(678623072143540225)
+        guest = ch.guild.get_role(678062759711211546)
+        pres = ch.guild.get_role(678062737338793984)
+        vp = ch.guild.get_role(678062737963614211)
+        leadership = ch.guild.get_role(690872028474900550)
+        zerotwo = ch.guild.get_role(691297688297406596)
+        twofour = ch.guild.get_role(678062784834961436)
+        foursix = ch.guild.get_role(678062785049133129)
+        sixeight = ch.guild.get_role(678062785917354035)
+        eightten = ch.guild.get_role(678062786508750859)
+        tenthirteen = ch.guild.get_role(678062788480073739)
+        thirteensixteen = ch.guild.get_role(678062787267788801)
+        sixteentwenty = ch.guild.get_role(678062787867443211)
+        twenty = ch.guild.get_role(691297775626879007)
+        error_counter = 0
 
-            for member in ch.guild.members:
-                if member.bot:
-                    continue
-                tag = await self.config.user(member).tag()
-                if tag is None:
-                    continue
-                try:
-                    player = await self.ofcbsapi.get_player(tag)
-                    await asyncio.sleep(0.2)
-                except brawlstats.errors.RequestError as e:
-                    error_counter += 1
-                    if error_counter == 5:
-                        await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                          description=f"Stopping after 5 request errors! Displaying the last one:\n({str(e)})"))
+        for member in ch.guild.members:
+            if member.bot:
+                continue
+            tag = await self.config.user(member).tag()
+            if tag is None:
+                continue
+            try:
+                player = await self.ofcbsapi.get_player(tag)
+                await asyncio.sleep(0.2)
+            except brawlstats.errors.RequestError as e:
+                error_counter += 1
+                if error_counter == 5:
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                      description=f"Stopping after 5 request errors! Displaying the last one:\n({str(e)})"))
+                    break
+                await asyncio.sleep(1)
+                continue
+            except Exception as e:
+                return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                         description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
+
+            msg = ""
+            player_in_club = "name" in player.raw_data["club"]
+            member_roles = []
+            member_role = None
+            member_role_expected = None
+
+            if player.trophies < 2000:
+                msg += await self.addroleifnotpresent(member, zerotwo)
+                msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen, thirteensixteen, sixteentwenty, twenty)
+            elif 2000 <= player.trophies < 4000:
+                msg += await self.addroleifnotpresent(member, twofour)
+                msg += await self.removeroleifpresent(member, zerotwo, foursix, sixeight, eightten, tenthirteen,
+                                                      thirteensixteen, sixteentwenty, twenty)
+            elif 4000 <= player.trophies < 6000:
+                msg += await self.addroleifnotpresent(member, foursix)
+                msg += await self.removeroleifpresent(member, twofour, zerotwo, sixeight, eightten, tenthirteen,
+                                                      thirteensixteen, sixteentwenty, twenty)
+            elif 6000 <= player.trophies < 8000:
+                msg += await self.addroleifnotpresent(member, sixeight)
+                msg += await self.removeroleifpresent(member, twofour, foursix, zerotwo, eightten, tenthirteen,
+                                                      thirteensixteen, sixteentwenty, twenty)
+            elif 8000 <= player.trophies < 10000:
+                msg += await self.addroleifnotpresent(member, eightten)
+                msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, zerotwo, tenthirteen,
+                                                      thirteensixteen, sixteentwenty, twenty)
+            elif 10000 <= player.trophies < 13000:
+                msg += await self.addroleifnotpresent(member, tenthirteen)
+                msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, zerotwo,
+                                                      thirteensixteen, sixteentwenty, twenty)
+            elif 13000 <= player.trophies < 16000:
+                msg += await self.addroleifnotpresent(member, thirteensixteen)
+                msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen,
+                                                      zerotwo, sixteentwenty, twenty)
+            elif 16000 <= player.trophies < 20000:
+                msg += await self.addroleifnotpresent(member, sixteentwenty)
+                msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen,
+                                                      thirteensixteen, zerotwo, twenty)
+            elif 20000 <= player.trophies:
+                msg += await self.addroleifnotpresent(member, twenty)
+                msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen,
+                                                      thirteensixteen, sixteentwenty, zerotwo)
+
+            for role in member.roles:
+                if role.name.startswith('LA '):
+                    member_roles.append(role)
+
+            if len(member_roles) > 1:
+                msg += f"Found more than one club role. (**{', '.join([str(r) for r in member_roles])}**)\n"
+                for role in member_roles:
+                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() != sub(r'[^\x00-\x7f]', r'',
+                                                                           player.club.name).strip():
+                        msg += await self.removeroleifpresent(member, role)
+
+            member_role = None if len(member_roles) < 1 else member_roles[0]
+
+            if not player_in_club:
+                msg += await self.removeroleifpresent(member, lamember, vp, pres, leadership, newcomer)
+                msg += await self.addroleifnotpresent(member, guest)
+                if member_role is not None:
+                    msg += await self.removeroleifpresent(member, member_role)
+
+            if player_in_club and not player.club.name.startswith("LA "):
+                msg += await self.removeroleifpresent(member, lamember, vp, pres, leadership, newcomer)
+                msg += await self.addroleifnotpresent(member, guest, bs)
+                if member_role is not None:
+                    msg += await self.removeroleifpresent(member, member_role)
+
+            if player_in_club and player.club.name.startswith("LA "):
+                for role in ch.guild.roles:
+                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(r'[^\x00-\x7f]', r'',
+                                                                           player.club.name).strip():
+                        member_role_expected = role
                         break
-                    await asyncio.sleep(1)
-                    continue
-                except Exception as e:
-                    return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                             description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
-
-                await ch.send(str(member))
-                msg = ""
-                player_in_club = "name" in player.raw_data["club"]
-                member_roles = []
-                member_role = None
-                member_role_expected = None
-
-                if player.trophies is not None:
-                    if player.trophies < 2000:
-                        msg += await self.addroleifnotpresent(member, zerotwo)
-                        msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen, thirteensixteen, sixteentwenty, twenty)
-                    elif 2000 <= player.trophies < 4000:
-                        msg += await self.addroleifnotpresent(member, twofour)
-                        msg += await self.removeroleifpresent(member, zerotwo, foursix, sixeight, eightten, tenthirteen,
-                                                              thirteensixteen, sixteentwenty, twenty)
-                    elif 4000 <= player.trophies < 6000:
-                        msg += await self.addroleifnotpresent(member, foursix)
-                        msg += await self.removeroleifpresent(member, twofour, zerotwo, sixeight, eightten, tenthirteen,
-                                                              thirteensixteen, sixteentwenty, twenty)
-                    elif 6000 <= player.trophies < 8000:
-                        msg += await self.addroleifnotpresent(member, sixeight)
-                        msg += await self.removeroleifpresent(member, twofour, foursix, zerotwo, eightten, tenthirteen,
-                                                              thirteensixteen, sixteentwenty, twenty)
-                    elif 8000 <= player.trophies < 10000:
-                        msg += await self.addroleifnotpresent(member, eightten)
-                        msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, zerotwo, tenthirteen,
-                                                              thirteensixteen, sixteentwenty, twenty)
-                    elif 10000 <= player.trophies < 13000:
-                        msg += await self.addroleifnotpresent(member, tenthirteen)
-                        msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, zerotwo,
-                                                              thirteensixteen, sixteentwenty, twenty)
-                    elif 13000 <= player.trophies < 16000:
-                        msg += await self.addroleifnotpresent(member, thirteensixteen)
-                        msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen,
-                                                              zerotwo, sixteentwenty, twenty)
-                    elif 16000 <= player.trophies < 20000:
-                        msg += await self.addroleifnotpresent(member, sixteentwenty)
-                        msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen,
-                                                              thirteensixteen, zerotwo, twenty)
-                    elif 20000 <= player.prophies:
-                        msg += await self.addroleifnotpresent(member, twenty)
-                        msg += await self.removeroleifpresent(member, twofour, foursix, sixeight, eightten, tenthirteen,
-                                                              thirteensixteen, sixteentwenty, zerotwo)
-
-                for role in member.roles:
-                    if role.name.startswith('LA '):
-                        member_roles.append(role)
-
-                if len(member_roles) > 1:
-                    msg += f"Found more than one club role. (**{', '.join([str(r) for r in member_roles])}**)\n"
-                    for role in member_roles:
-                        if sub(r'[^\x00-\x7f]', r'', role.name).strip() != sub(r'[^\x00-\x7f]', r'',
-                                                                               player.club.name).strip():
-                            msg += await self.removeroleifpresent(member, role)
-
-                member_role = None if len(member_roles) < 1 else member_roles[0]
-
-                if not player_in_club:
-                    msg += await self.removeroleifpresent(member, lamember, vp, pres, leadership, newcomer)
-                    msg += await self.addroleifnotpresent(member, guest)
-                    if member_role is not None:
-                        msg += await self.removeroleifpresent(member, member_role)
-
-                if player_in_club and not player.club.name.startswith("LA "):
-                    msg += await self.removeroleifpresent(member, lamember, vp, pres, leadership, newcomer)
-                    msg += await self.addroleifnotpresent(member, guest, bs)
-                    if member_role is not None:
-                        msg += await self.removeroleifpresent(member, member_role)
-
-                if player_in_club and player.club.name.startswith("LA "):
-                    for role in ch.guild.roles:
-                        if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(r'[^\x00-\x7f]', r'',
-                                                                               player.club.name).strip():
-                            member_role_expected = role
-                            break
-                    msg += await self.removeroleifpresent(member, guest, newcomer)
-                    msg += await self.addroleifnotpresent(member, lamember, bs)
-                    if member_role is None:
-                        msg += await self.addroleifnotpresent(member, member_role_expected)
-                    elif member_role != member_role_expected:
-                        msg += await self.removeroleifpresent(member, member_role)
-                        msg += await self.addroleifnotpresent(member, member_role_expected)
-                    if member_role_expected is not None:
-                        try:
-                            await asyncio.sleep(0.2)
-                            player_club = await self.ofcbsapi.get_club(player.club.tag)
-                            for mem in player_club.members:
-                                if mem.tag == player.raw_data['tag']:
-                                    if mem.role.lower() == 'vicepresident':
-                                        msg += await self.addroleifnotpresent(member, vp, leadership)
-                                        msg += await self.removeroleifpresent(member, pres)
-                                    elif mem.role.lower() == 'president':
-                                        msg += await self.addroleifnotpresent(member, pres, leadership)
-                                        msg += await self.removeroleifpresent(member, vp)
-                                    elif mem.role.lower() == 'member':
-                                        msg += await self.removeroleifpresent(member, vp, pres, leadership)
-                                    break
-                        except brawlstats.errors.RequestError:
-                            pass
-                    elif member_role_expected is None:
-                        msg += await self.removeroleifpresent(member, vp, pres, leadership)
-                if msg != "":
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
-                                                      timestamp=datetime.datetime.now()))
-        except Exception as e:
-            await ch.send(e)
+                msg += await self.removeroleifpresent(member, guest, newcomer)
+                msg += await self.addroleifnotpresent(member, lamember, bs)
+                if member_role is None:
+                    msg += await self.addroleifnotpresent(member, member_role_expected)
+                elif member_role != member_role_expected:
+                    msg += await self.removeroleifpresent(member, member_role)
+                    msg += await self.addroleifnotpresent(member, member_role_expected)
+                if member_role_expected is not None:
+                    try:
+                        await asyncio.sleep(0.2)
+                        player_club = await self.ofcbsapi.get_club(player.club.tag)
+                        for mem in player_club.members:
+                            if mem.tag == player.raw_data['tag']:
+                                if mem.role.lower() == 'vicepresident':
+                                    msg += await self.addroleifnotpresent(member, vp, leadership)
+                                    msg += await self.removeroleifpresent(member, pres)
+                                elif mem.role.lower() == 'president':
+                                    msg += await self.addroleifnotpresent(member, pres, leadership)
+                                    msg += await self.removeroleifpresent(member, vp)
+                                elif mem.role.lower() == 'member':
+                                    msg += await self.removeroleifpresent(member, vp, pres, leadership)
+                                break
+                    except brawlstats.errors.RequestError:
+                        pass
+                elif member_role_expected is None:
+                    msg += await self.removeroleifpresent(member, vp, pres, leadership)
+            if msg != "":
+                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
+                                                  timestamp=datetime.datetime.now()))
 
     @sortrolesbd.before_loop
     async def before_sortrolesbd(self):
@@ -1307,7 +1302,7 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.addroleifnotpresent(member, thirteensixteen)
             elif 16000 <= player.trophies < 20000:
                 msg += await self.addroleifnotpresent(member, sixteentwenty)
-            elif 20000 <= player.prophies:
+            elif 20000 <= player.trophies:
                 msg += await self.addroleifnotpresent(member, twenty)
 
             if not player_in_club:
