@@ -219,7 +219,7 @@ class Statistics(commands.Cog):
             for trophy in trophies:
                 if trophy == trophies[20]:
                     break
-                msg += f"{i}. <:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
+                msg += f"{i}. <:trophycr:587316903001718789> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
                 i = i + 1
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
@@ -230,7 +230,7 @@ class Statistics(commands.Cog):
             for member in clan.memberList:
                 if member == clan.memberList[20]:
                     break
-                msg += f"{i}. <:bstrophy:552558722770141204> {member.trophies} **{member.name}**\n"
+                msg += f"{i}. <:trophycr:587316903001718789> {member.trophies} **{member.name}**\n"
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{clan.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
 
