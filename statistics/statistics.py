@@ -207,7 +207,6 @@ class Statistics(commands.Cog):
             for key in (await self.crconfig.guild(ctx.guild).clans()).keys():
                 tag = await self.crconfig.guild(ctx.guild).clans.get_raw(key, "tag")
                 clan = await self.crapi.get_clan(tag)
-                clan = clan.raw_data
                 for member in clan.memberList:
                     pair = []
                     pair.append(member.name)
@@ -229,7 +228,7 @@ class Statistics(commands.Cog):
             clan = await self.crapi.get_clan(tag)
             msg = ""
             for member in clan.memberList:
-                if member == clan.members[20]:
+                if member == clan.memberList[20]:
                     break
                 msg += f"{i}. <:bstrophy:552558722770141204> {member.trophies} **{member.name}**\n"
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{clan.name} leaderboard:", description=msg)
