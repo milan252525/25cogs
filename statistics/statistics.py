@@ -126,7 +126,7 @@ class Statistics(commands.Cog):
                 embed = discord.Embed(color=discord.Colour.gold(), title=f"{message.guild.name} leaderboard:", description=m)
             else:
                 embed = discord.Embed(color=discord.Colour.gold(), description=m)
-            await ch.send(embed=embed)
+            await channel.send(embed=embed)
 
     @tasks.loop(minutes=70)
     async def lbrenewalasia(self):
