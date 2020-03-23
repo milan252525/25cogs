@@ -97,10 +97,12 @@ class Statistics(commands.Cog):
             tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
             club = await self.ofcbsapi.get_club(tag)
             msg = ""
+            i = 1
             for member in club.members:
                 if member == club.members[20]:
                     break
                 msg += f"{i}. <:bstrophy:552558722770141204> {member.trophies} **{member.name}**\n"
+                i = i + 1
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{club.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
 
@@ -227,10 +229,12 @@ class Statistics(commands.Cog):
             tag = await self.crconfig.guild(ctx.guild).clans.get_raw(key, "tag")
             clan = await self.crapi.get_clan(tag)
             msg = ""
+            i = 1
             for member in clan.memberList:
                 if member == clan.memberList[20]:
                     break
                 msg += f"{i}. <:trophycr:587316903001718789> {member.trophies} **{member.name}**\n"
+                i = i + 1
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{clan.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
 
