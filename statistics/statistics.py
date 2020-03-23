@@ -100,7 +100,11 @@ class Statistics(commands.Cog):
     @tasks.loop(minutes=60)
     async def lbrenewallabs(self):
         channel = self.bot.get_channel(689889206230974473)
-        message = await channel.fetch_message(691747013477400658)
+        message = await channel.fetch_message(691747287814373428)
+        message2 = await channel.fetch_message(691747288988647534)
+        message3 = await channel.fetch_message(691747290398064741)
+        message4 = await channel.fetch_message(691747291119222875)
+        message5 = await channel.fetch_message(691747292511993866)
         trophies = []
         for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
             tag = await self.bsconfig.guild(message.guild).clubs.get_raw(key, "tag")
@@ -124,9 +128,22 @@ class Statistics(commands.Cog):
         for m in messages:
             if m == messages[0]:
                 embed = discord.Embed(color=discord.Colour.gold(), title=f"{message.guild.name} leaderboard:", description=m)
-            else:
+                await message.edit(embed=embed)
+            elif m == message[1]:
                 embed = discord.Embed(color=discord.Colour.gold(), description=m)
-            await channel.send(embed=embed)
+                await message1.edit(embed=embed)
+            elif m == message[2]:
+                embed = discord.Embed(color=discord.Colour.gold(), description=m)
+                await message2.edit(embed=embed)
+            elif m == message[3]:
+                embed = discord.Embed(color=discord.Colour.gold(), description=m)
+                await message3.edit(embed=embed)
+            elif m == message[4]:
+                embed = discord.Embed(color=discord.Colour.gold(), description=m)
+                await message4.edit(embed=embed)
+            elif m == message[5]:
+                embed = discord.Embed(color=discord.Colour.gold(), description=m)
+                await message5.edit(embed=embed)
 
     @tasks.loop(minutes=70)
     async def lbrenewalasia(self):
