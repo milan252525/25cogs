@@ -2,6 +2,7 @@ import discord
 from redbot.core import commands, Config, checks
 import asyncio
 import brawlstats
+import clashroyale
 from discord.ext import tasks
 
 class Statistics(commands.Cog):
