@@ -208,7 +208,7 @@ class Statistics(commands.Cog):
                 tag = await self.crconfig.guild(ctx.guild).clans.get_raw(key, "tag")
                 clan = await self.crapi.get_clan(tag)
                 clan = clan.raw_data
-                for member in clan['members']:
+                for member in clan.memberList:
                     pair = []
                     pair.append(member.name)
                     pair.append(member.trophies)
@@ -228,7 +228,7 @@ class Statistics(commands.Cog):
             tag = await self.crconfig.guild(ctx.guild).clans.get_raw(key, "tag")
             clan = await self.crapi.get_clan(tag)
             msg = ""
-            for member in clan.members:
+            for member in clan.memberList:
                 if member == clan.members[20]:
                     break
                 msg += f"{i}. <:bstrophy:552558722770141204> {member.trophies} **{member.name}**\n"
