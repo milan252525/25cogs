@@ -78,10 +78,12 @@ class Statistics(commands.Cog):
                     trophies.append(pair)
             trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
             msg = ""
+            i = 1
             for trophy in trophies:
                 if trophy == trophies[20]:
                     break
-                msg += f"<:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
+                msg += f"{i}. <:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
+                i = i + 1
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
         elif key is not None:
@@ -91,7 +93,7 @@ class Statistics(commands.Cog):
             for member in club.members:
                 if member == club.members[20]:
                     break
-                msg += f"<:bstrophy:552558722770141204> {member.trophies} **{member.name}**\n"
+                msg += f"{i}. <:bstrophy:552558722770141204> {member.trophies} **{member.name}**\n"
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{club.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
 
@@ -111,10 +113,12 @@ class Statistics(commands.Cog):
                 trophies.append(pair)
         trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
         msg = ""
+        i = 1
         for trophy in trophies:
             if trophy == trophies[20]:
                 break
-            msg += f"<:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
+            msg += f"{i}. <:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
+            i = i + 1
         embed = discord.Embed(color=discord.Colour.gold(), title=f"{message.guild.name} leaderboard:", description=msg)
         await message.edit(embed=embed)
 
@@ -134,10 +138,12 @@ class Statistics(commands.Cog):
                 trophies.append(pair)
         trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
         msg = ""
+        i = 1
         for trophy in trophies:
             if trophy == trophies[20]:
                 break
-            msg += f"<:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
+            msg += f"{i}. <:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
+            i = i + 1
         embed = discord.Embed(color=discord.Colour.gold(), title=f"{message.guild.name} leaderboard:", description=msg)
         await message.edit(embed=embed)
 
@@ -157,9 +163,11 @@ class Statistics(commands.Cog):
                 trophies.append(pair)
         trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
         msg = ""
+        i = 1
         for trophy in trophies:
             if trophy == trophies[20]:
                 break
-            msg += f"<:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
+            msg += f"{i}. <:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
+            i = i + 1
         embed = discord.Embed(color=discord.Colour.gold(), title=f"{message.guild.name} leaderboard:", description=msg)
         await message.edit(embed=embed)
