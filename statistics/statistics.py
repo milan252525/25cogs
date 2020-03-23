@@ -131,17 +131,14 @@ class Statistics(commands.Cog):
                 await message.edit(embed=embed)
             elif m == messages[1]:
                 embed = discord.Embed(color=discord.Colour.gold(), description=m)
-                await message1.edit(embed=embed)
+                await message2.edit(embed=embed)
             elif m == messages[2]:
                 embed = discord.Embed(color=discord.Colour.gold(), description=m)
-                await message2.edit(embed=embed)
+                await message3.edit(embed=embed)
             elif m == messages[3]:
                 embed = discord.Embed(color=discord.Colour.gold(), description=m)
-                await message3.edit(embed=embed)
-            elif m == messages[4]:
-                embed = discord.Embed(color=discord.Colour.gold(), description=m)
                 await message4.edit(embed=embed)
-            elif m == messages[5]:
+            elif m == messages[4]:
                 embed = discord.Embed(color=discord.Colour.gold(), description=m)
                 await message5.edit(embed=embed)
 
