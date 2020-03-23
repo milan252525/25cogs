@@ -112,15 +112,21 @@ class Statistics(commands.Cog):
                 pair.append(club.name)
                 trophies.append(pair)
         trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
+        messages = []
         msg = ""
         i = 1
         for trophy in trophies:
-            if trophy == trophies[20]:
-                break
+            if trophy == trophies[20] or trophy == trophies[40] or trophy == trophies[60] or trophy == trophies[80]:
+                messages.append(msg)
+                msg = ""
             msg += f"{i}. <:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
             i = i + 1
-        embed = discord.Embed(color=discord.Colour.gold(), title=f"{message.guild.name} leaderboard:", description=msg)
-        await message.edit(embed=embed)
+        for m in messages:
+            if m == messages[0]:
+                embed = discord.Embed(color=discord.Colour.gold(), title=f"{message.guild.name} leaderboard:", description=m)
+            else:
+                embed = discord.Embed(color=discord.Colour.gold(), description=m)
+            await ch.send(embed=embed)
 
     @tasks.loop(minutes=70)
     async def lbrenewalasia(self):
