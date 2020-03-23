@@ -9,6 +9,7 @@ class Statistics(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
+        self.crconfig = Config.get_conf(None, identifier=2512325, cog_name="ClashRoyaleCog")
         self.lbrenewallabs.start()
         self.lbrenewalasia.start()
         self.lbrenewalbd.start()
@@ -19,6 +20,11 @@ class Statistics(commands.Cog):
         self.lbrenewalbd.cancel()
 
     async def initialize(self):
+        crapikey = await self.bot.get_shared_api_tokens("crapi")
+        if crapikey["api_key"] is None:
+            raise ValueError("The Clash Royale API key has not been set.")
+        self.crapi = clashroyale.OfficialAPI(crapikey["api_key"], is_async=True)
+
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
         if ofcbsapikey["api_key"] is None:
             raise ValueError("The Official Brawl Stars API key has not been set.")
@@ -191,3 +197,41 @@ class Statistics(commands.Cog):
             i = i + 1
         embed = discord.Embed(color=discord.Colour.gold(), title=f"{message.guild.name} leaderboard:", description=msg)
         await message.edit(embed=embed)
+
+    @commands.command()
+    @commands.guild_only()
+    async def crtrophylb(self, ctx, key: str = None):
+        if key is None:
+            trophies = []
+            for key in (await self.crconfig.guild(ctx.guild).clans()).keys():
+                tag = await self.crconfig.guild(ctx.guild).clans.get_raw(key, "tag")
+                clan = await self.crapi.get_clan(tag)
+                clan = clan.raw_data
+                for member in clan['members']:
+                    pair = []
+                    pair.append(member.name)
+                    pair.append(member.trophies)
+                    pair.append(clan.name)
+                    trophies.append(pair)
+            trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
+            msg = ""
+            i = 1
+            for trophy in trophies:
+                if trophy == trophies[20]:
+                    break
+                msg += f"{i}. <:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
+                i = i + 1
+            embed = discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:", description=msg)
+            await ctx.send(embed=embed)
+        elif key is not None:
+            tag = await self.bsconfig.guild(ctx.guild).clans.get_raw(key, "tag")
+            clan = await self.ofcbsapi.get_clan(tag)
+            msg = ""
+            for member in clan.members:
+                if member == clan.members[20]:
+                    break
+                msg += f"{i}. <:bstrophy:552558722770141204> {member.trophies} **{member.name}**\n"
+            embed = discord.Embed(color=discord.Colour.gold(), title=f"{clan.name} leaderboard:", description=msg)
+            await ctx.send(embed=embed)
+
+
