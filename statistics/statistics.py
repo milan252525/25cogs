@@ -129,19 +129,19 @@ class Statistics(commands.Cog):
             if m == messages[0]:
                 embed = discord.Embed(color=discord.Colour.gold(), title=f"{message.guild.name} leaderboard:", description=m)
                 await message.edit(embed=embed)
-            elif m == message[1]:
+            elif m == messages[1]:
                 embed = discord.Embed(color=discord.Colour.gold(), description=m)
                 await message1.edit(embed=embed)
-            elif m == message[2]:
+            elif m == messages[2]:
                 embed = discord.Embed(color=discord.Colour.gold(), description=m)
                 await message2.edit(embed=embed)
-            elif m == message[3]:
+            elif m == messages[3]:
                 embed = discord.Embed(color=discord.Colour.gold(), description=m)
                 await message3.edit(embed=embed)
-            elif m == message[4]:
+            elif m == messages[4]:
                 embed = discord.Embed(color=discord.Colour.gold(), description=m)
                 await message4.edit(embed=embed)
-            elif m == message[5]:
+            elif m == messages[5]:
                 embed = discord.Embed(color=discord.Colour.gold(), description=m)
                 await message5.edit(embed=embed)
 
