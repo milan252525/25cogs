@@ -116,7 +116,7 @@ class Statistics(commands.Cog):
         msg = ""
         i = 1
         for trophy in trophies:
-            if trophy == trophies[20] or trophy == trophies[40] or trophy == trophies[60] or trophy == trophies[80] or trophy == trophies[100]:
+            if trophy == trophies[20] or trophy == trophies[40] or trophy == trophies[60] or trophy == trophies[80] or trophy == trophies[99]:
                 messages.append(msg)
                 msg = ""
             msg += f"{i}. <:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
