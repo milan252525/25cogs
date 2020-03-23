@@ -224,8 +224,8 @@ class Statistics(commands.Cog):
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
         elif key is not None:
-            tag = await self.bsconfig.guild(ctx.guild).clans.get_raw(key, "tag")
-            clan = await self.ofcbsapi.get_clan(tag)
+            tag = await self.crconfig.guild(ctx.guild).clans.get_raw(key, "tag")
+            clan = await self.crapi.get_clan(tag)
             msg = ""
             for member in clan.members:
                 if member == clan.members[20]:
