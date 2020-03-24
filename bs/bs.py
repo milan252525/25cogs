@@ -1232,8 +1232,9 @@ class BrawlStarsCog(commands.Cog):
 
         elif ctx.guild.id == 593732431551660063:
             staff = ctx.guild.get_role(678623063344021504)
+            hub = ctx.guild.get_role(678062772679868459)
 
-            if staff not in ctx.author.roles and not ctx.author.guild_permissions.administrator:
+            if staff not in ctx.author.roles and hub not in ctx.author.roles and not ctx.author.guild_permissions.administrator:
                 return await ctx.send("You can't use this command.")
 
             await ctx.trigger_typing()
