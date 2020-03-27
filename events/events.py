@@ -62,7 +62,7 @@ class Events(commands.Cog):
                     self.bf_data["players"][m.id] = dealt
                 else:
                     self.bf_data["players"][m.id] += dealt
-                dealt = (dealt - 20) if dealt > 20 else dealt
+                dealt = (dealt - 10) if dealt > 10 else dealt
             log = "Noone was successful!" if log == "" else log
             self.bf_data['hp_left'] -= damage
             #update action log
