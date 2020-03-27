@@ -41,7 +41,7 @@ class Events(commands.Cog):
 
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
-            chall = choice(("word", "math", "geo", "trivia")) 
+            chall = choice(("word", "math", "geo", "trivia", "math")) 
             #start random challenge
             if chall == "word":
                 res = await self.word_chall()
@@ -62,7 +62,7 @@ class Events(commands.Cog):
                     self.bf_data["players"][m.id] = dealt
                 else:
                     self.bf_data["players"][m.id] += dealt
-                dealt = (dealt - 10) if dealt > 10 else dealt
+                dealt = (dealt - 5) if dealt > 100 else dealt
             log = "Noone was successful!" if log == "" else log
             self.bf_data['hp_left'] -= damage
             #update action log
