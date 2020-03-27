@@ -21,7 +21,7 @@ class Events(commands.Cog):
         default_user = {"boss_fight": {"damage" : 0, "participated" : 0}}
         self.config.register_member(**default_user)
         self.DAMAGE_PER_CHALL = 200
-        self.START_WAIT_TIME = 20
+        self.START_WAIT_TIME = 60
         self.DAMAGE_EMOJI = "<:damage:643539221428174849>"
         self.HP_EMOJI = "<:health:688109898508009611>"
         self.LOG_EMOJI = "<:log:688112584368586779>"
