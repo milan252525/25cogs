@@ -41,7 +41,7 @@ class Events(commands.Cog):
 
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
-            chall = choice(("word", "math", "geo", "trivia", "math")) 
+            chall = choice(("word", "math", "geo", "trivia")) 
             #start random challenge
             if chall == "word":
                 res = await self.word_chall()
@@ -116,7 +116,7 @@ class Events(commands.Cog):
                 num1, num2 = num2, num1
             result = num1 - num2
         elif op == "*":
-            num1, num2 = randint(1, 100), randint(2, 20)
+            num1, num2 = randint(1, 50), randint(2, 15)
             if num2 > num1:
                 num1, num2 = num2, num1
             result = num1 * num2
