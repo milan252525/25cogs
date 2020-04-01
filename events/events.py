@@ -330,4 +330,4 @@ class Events(commands.Cog):
         embed.set_footer(text="Happy April Fools!")
         await self.bf_data["message"].edit(embed=embed)
         await self.bf_data["channel"].send(embed=discord.Embed(title="Damage leaderboard", description="THANOS <:damage:643539221428174849> `426925252525`\n", colour=discord.Colour.gold()))
-        self.bf_active = True
+        self.bf_active = False
