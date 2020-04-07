@@ -746,20 +746,6 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortroles(self):
         await asyncio.sleep(5)
 
-    @commands.command()
-    async def listblacklisted(self, ctx):
-        blacklistedclubs = ["#UQQCGQL2", "#9LQC2RCY", "#9L8LLGGJ", "#U299QY2V", "#ULY8J8Y9", "#CGPPPJPL",
-                            "#CQP8JQC2", "#CQVRV2VL", "#UQ002RCC", "#UQCQ2Q82", "#UGVGQ8JP", "#CRR9JV2Q",
-                            "#CQ2J0LUR", "#CJQRUCY0", "#UCVJLUVJ"]
-        for member in ctx.guild.members:
-            tag = await self.config.user(member).tag()
-            if tag is None:
-                continue
-            player = await self.ofcbsapi.get_player(tag)
-            player_in_club = "name" in player.raw_data["club"]
-            if player_in_club and player.club.tag in blacklistedclubs:
-                await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"{str(member)}"))
-
     @tasks.loop(hours=5)
     async def sortrolesasia(self):
         ch = self.bot.get_channel(672267298001911838)
@@ -771,8 +757,6 @@ class BrawlStarsCog(commands.Cog):
         pres = ch.guild.get_role(663793444199596032)
         leadership = ch.guild.get_role(663910848569409598)
         leadershipemb = ch.guild.get_role(673177525396176927)
-        fusionguest = ch.guild.get_role(682332565688025163)
-        fusionleadership = ch.guild.get_role(682332565688025163)
         error_counter = 0
 
         for member in ch.guild.members:
@@ -799,9 +783,6 @@ class BrawlStarsCog(commands.Cog):
             member_roles = []
             member_role = None
             member_role_expected = None
-            blacklistedclubs = ["#UQQCGQL2", "#9LQC2RCY", "#9L8LLGGJ", "#U299QY2V", "#ULY8J8Y9", "#CGPPPJPL",
-                                "#CQP8JQC2", "#CQVRV2VL", "#UQ002RCC", "#UQCQ2Q82", "#UGVGQ8JP", "#CRR9JV2Q",
-                                "#CQ2J0LUR", "#CJQRUCY0", "#UCVJLUVJ"]
             tags = []
             guilds = await self.config.all_guilds()
             asia = guilds[663716223258984496]
@@ -822,19 +803,6 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.removeroleifpresent(member, role)
 
             member_role = None if len(member_roles) < 1 else member_roles[0]
-
-            if player_in_club and player.club.tag in blacklistedclubs:
-                msg += await self.addroleifnotpresent(member, fusionguest)
-                try:
-                    await asyncio.sleep(0.5)
-                    player_club = await self.ofcbsapi.get_club(player.club.tag)
-                    for mem in player_club.members:
-                        if mem.tag == player.raw_data['tag']:
-                            if mem.role.lower() == 'vicepresident' or mem.role.lower() == 'president':
-                                msg += await self.addroleifnotpresent(member, fusionleadership)
-                            break
-                except brawlstats.errors.RequestError:
-                    msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
 
             if not player_in_club:
                 msg += await self.removeroleifpresent(member, lafamily, vp, pres, newcomer)
@@ -1139,10 +1107,7 @@ class BrawlStarsCog(commands.Cog):
             vp = ctx.guild.get_role(663793699972579329)
             pres = ctx.guild.get_role(663793444199596032)
             leadership = ctx.guild.get_role(663910848569409598)
-            fusionguest = ctx.guild.get_role(682332565688025163)
-            fusionleadership = ctx.guild.get_role(682332898992455720)
 
-            blacklistedclubs = ["#UQQCGQL2", "#9LQC2RCY", "#9L8LLGGJ", "#U299QY2V", "#ULY8J8Y9", "#CGPPPJPL", "#CQP8JQC2", "#CQVRV2VL", "#UQ002RCC", "#UQCQ2Q82", "#UGVGQ8JP", "#CRR9JV2Q", "#CQ2J0LUR", "#CJQRUCY0", "#UCVJLUVJ"]
             tags = []
             guilds = await self.config.all_guilds()
             asia = guilds[663716223258984496]
@@ -1186,19 +1151,6 @@ class BrawlStarsCog(commands.Cog):
             if not player_in_club:
                 msg += await self.removeroleifpresent(member, newcomer)
                 msg += await self.addroleifnotpresent(member, guest)
-
-            if player_in_club and player.club.tag in blacklistedclubs:
-                msg += await self.addroleifnotpresent(member, fusionguest)
-                try:
-                    await asyncio.sleep(0.5)
-                    player_club = await self.ofcbsapi.get_club(player.club.tag)
-                    for mem in player_club.members:
-                        if mem.tag == player.raw_data['tag']:
-                            if mem.role.lower() == 'vicepresident' or mem.role.lower() == 'president':
-                                msg += await self.addroleifnotpresent(member, fusionleadership)
-                            break
-                except brawlstats.errors.RequestError:
-                    msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
 
             if player_in_club and player.club.tag not in tags:
                 msg += await self.removeroleifpresent(member, newcomer)
