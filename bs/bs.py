@@ -1012,97 +1012,95 @@ class BrawlStarsCog(commands.Cog):
 
     @tasks.loop(hours=6)
     async def sortrolesspain(self):
-        try:
-            ch = self.bot.get_channel(693781513363390475)
-            await ch.trigger_typing()
-            memberrole = ch.guild.get_role(526805067165073408)
-            guest = ch.guild.get_role(574176894627479583)
-            newcomer = ch.guild.get_role(569473123942924308)
-            otherclubs = ch.guild.get_role(601518751472549918)
-            error_counter = 0
+        ch = self.bot.get_channel(693781513363390475)
+        await ch.trigger_typing()
+        memberrole = ch.guild.get_role(526805067165073408)
+        guest = ch.guild.get_role(574176894627479583)
+        newcomer = ch.guild.get_role(569473123942924308)
+        otherclubs = ch.guild.get_role(601518751472549918)
+        error_counter = 0
 
-            for member in ch.guild.members:
-                if member.bot:
-                    continue
-                tag = await self.config.user(member).tag()
-                if tag is None:
-                    continue
-                try:
-                    player = await self.ofcbsapi.get_player(tag)
-                    await asyncio.sleep(0.5)
-                except brawlstats.errors.RequestError as e:
-                    error_counter += 1
-                    if error_counter == 20:
-                        await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                          description=f"¡Deteniéndose después de 5 errores de solicitud! Mostrando el último: \n({str(e)})"))
+        for member in ch.guild.members:
+            if member.bot:
+                continue
+            tag = await self.config.user(member).tag()
+            if tag is None:
+                continue
+            try:
+                player = await self.ofcbsapi.get_player(tag)
+                await asyncio.sleep(0.5)
+            except brawlstats.errors.RequestError as e:
+                error_counter += 1
+                if error_counter == 20:
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                      description=f"¡Deteniéndose después de 5 errores de solicitud! Mostrando el último: \n({str(e)})"))
+                    break
+                await asyncio.sleep(1)
+                continue
+            except Exception as e:
+                return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                         description=f"**Algo ha ido mal solicitando {tag}!**\n({str(e)})"))
+
+            msg = ""
+            player_in_club = "name" in player.raw_data["club"]
+            member_roles = []
+            member_role = None
+            member_role_expected = None
+            tags = []
+            guilds = await self.config.all_guilds()
+            spain = guilds[460550486257565697]
+            clubs = spain["clubs"]
+            for club in clubs:
+                info = clubs[club]
+                tagn = "#" + info["tag"]
+                tags.append(tagn)
+
+            for role in member.roles:
+                if role.name.startswith('LA '):
+                    member_roles.append(role)
+
+            if len(member_roles) > 1:
+                msg += f"Se ha encontrado más de un rol de club. **{', '.join([str(r) for r in member_roles])}**"
+                member_role = member_roles[0]
+                for role in member_roles[1:]:
+                    msg += await self.removeroleifpresent(member, role)
+
+            member_role = None if len(member_roles) < 1 else member_roles[0]
+
+            if not player_in_club:
+                msg += await self.removeroleifpresent(member, memberrole, otherclubs, newcomer)
+                msg += await self.addroleifnotpresent(member, guest)
+                if member_role is not None:
+                    msg += await self.removeroleifpresent(member, member_role)
+
+            if player_in_club and "LA " not in player.club.name and player.club.tag not in tags:
+                msg += await self.removeroleifpresent(member, memberrole, otherclubs, newcomer)
+                msg += await self.addroleifnotpresent(member, guest)
+                if member_role is not None:
+                    msg += await self.removeroleifpresent(member, member_role)
+
+            if player_in_club and "LA " in player.club.name and player.club.tag not in tags:
+                msg += await self.removeroleifpresent(member,  newcomer)
+                msg += await self.addroleifnotpresent(member, memberrole, otherclubs)
+                if member_role is not None:
+                    msg += await self.removeroleifpresent(member, member_role)
+
+            if player_in_club and player.club.tag in tags:
+                for role in ch.guild.roles:
+                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(
+                            r'[^\x00-\x7f]', r'', player.club.name).strip():
+                        member_role_expected = role
                         break
-                    await asyncio.sleep(1)
-                    continue
-                except Exception as e:
-                    return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                             description=f"**Algo ha ido mal solicitando {tag}!**\n({str(e)})"))
+                msg += await self.removeroleifpresent(member, guest, newcomer)
+                msg += await self.addroleifnotpresent(member, memberrole)
+                if member_role is None:
+                    msg += await self.addroleifnotpresent(member, member_role_expected)
+                elif member_role != member_role_expected:
+                    msg += await self.removeroleifpresent(member, member_role)
+                    msg += await self.addroleifnotpresent(member, member_role_expected)
+            if msg != "":
+                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
 
-                msg = ""
-                player_in_club = "name" in player.raw_data["club"]
-                member_roles = []
-                member_role = None
-                member_role_expected = None
-                tags = []
-                guilds = await self.config.all_guilds()
-                spain = guilds[460550486257565697]
-                clubs = spain["clubs"]
-                for club in clubs:
-                    info = clubs[club]
-                    tagn = "#" + info["tag"]
-                    tags.append(tagn)
-
-                for role in member.roles:
-                    if role.name.startswith('LA '):
-                        member_roles.append(role)
-
-                if len(member_roles) > 1:
-                    msg += f"Se ha encontrado más de un rol de club. **{', '.join([str(r) for r in member_roles])}**"
-                    member_role = member_roles[0]
-                    for role in member_roles[1:]:
-                        msg += await self.removeroleifpresent(member, role)
-
-                member_role = None if len(member_roles) < 1 else member_roles[0]
-
-                if not player_in_club:
-                    msg += await self.removeroleifpresent(member, memberrole, otherclubs, newcomer)
-                    msg += await self.addroleifnotpresent(member, guest)
-                    if member_role is not None:
-                        msg += await self.removeroleifpresent(member, member_role)
-
-                if player_in_club and "LA " not in player.club.name and player.club.tag not in tags:
-                    msg += await self.removeroleifpresent(member, memberrole, otherclubs, newcomer)
-                    msg += await self.addroleifnotpresent(member, guest)
-                    if member_role is not None:
-                        msg += await self.removeroleifpresent(member, member_role)
-
-                if player_in_club and "LA " in player.club.name and player.club.tag not in tags:
-                    msg += await self.removeroleifpresent(member,  newcomer)
-                    msg += await self.addroleifnotpresent(member, memberrole, otherclubs)
-                    if member_role is not None:
-                        msg += await self.removeroleifpresent(member, member_role)
-
-                if player_in_club and player.club.tag in tags:
-                    for role in ch.guild.roles:
-                        if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(
-                                r'[^\x00-\x7f]', r'', player.club.name).strip():
-                            member_role_expected = role
-                            break
-                    msg += await self.removeroleifpresent(member, guest, newcomer)
-                    msg += await self.addroleifnotpresent(member, memberrole)
-                    if member_role is None:
-                        msg += await self.addroleifnotpresent(member, member_role_expected)
-                    elif member_role != member_role_expected:
-                        msg += await self.removeroleifpresent(member, member_role)
-                        msg += await self.addroleifnotpresent(member, member_role_expected)
-                if msg != "":
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
-        except Exception as e:
-            await ch.send(e)
 
     @sortrolesspain.before_loop
     async def before_sortrolesspain(self):
