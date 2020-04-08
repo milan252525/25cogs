@@ -1691,6 +1691,7 @@ class BrawlStarsCog(commands.Cog):
                             found = True
                 if not found:
                     count += 1
-                    msg += f"{member.name}\n"
+                    msg += f"{member.name}({club.name})\n"
+                found = False
 
         await ctx.send(embed=discord.Embed(title=f"Total: {count}", description=msg, colour=discord.Colour.blue()))
