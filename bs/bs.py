@@ -1687,10 +1687,10 @@ class BrawlStarsCog(commands.Cog):
                 for user in users:
                     person = self.bot.get_user(user)
                     if person is not None:
-                        if (await self.config.user(person).tag()) == member.tag:
+                        if (await self.config.user(person).tag()) in member.tag:
                             found = True
                 if not found:
                     count += 1
-                    msg += f"{member.name}"
+                    msg += f"{member.name}\n"
 
         await ctx.send(embed=discord.Embed(title=f"Total: {count}", description=msg, colour=discord.Colour.blue()))
