@@ -1687,7 +1687,7 @@ class BrawlStarsCog(commands.Cog):
                 for user in users:
                     person = self.bot.get_user(user)
                     if person is not None:
-                        if (await self.config.user(person).tag()) in member.tag:
+                        if (await self.config.user(person).tag()) in member.tag.lower():
                             found = True
                 if not found:
                     count += 1
