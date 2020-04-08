@@ -1075,13 +1075,13 @@ class BrawlStarsCog(commands.Cog):
                 if member_role is not None:
                     msg += await self.removeroleifpresent(member, member_role)
 
-            if player_in_club and "LA " not in player.club.name and player.club.name not in tags:
+            if player_in_club and "LA " not in player.club.name and player.club.tag not in tags:
                 msg += await self.removeroleifpresent(member, memberrole, otherclubs, vp, pres, newcomer)
                 msg += await self.addroleifnotpresent(member, guest)
                 if member_role is not None:
                     msg += await self.removeroleifpresent(member, member_role)
 
-            if player_in_club and "LA " in player.club.name and player.club.name not in tags:
+            if player_in_club and "LA " in player.club.name and player.club.tag not in tags:
                 msg += await self.removeroleifpresent(member, vp, pres, newcomer)
                 msg += await self.addroleifnotpresent(member, memberrole, otherclubs)
                 if member_role is not None:
@@ -1481,15 +1481,15 @@ class BrawlStarsCog(commands.Cog):
             msg += await self.removeroleifpresent(member, newcomer)
             msg += await self.addroleifnotpresent(member, guest)
 
-        if player_in_club and "LA " not in player.club.name and player.club.name not in tags:
+        if player_in_club and "LA " not in player.club.name and player.club.tag not in tags:
             msg += await self.removeroleifpresent(member, newcomer)
             msg += await self.addroleifnotpresent(member, guest)
 
-        if player_in_club and "LA" in player.club.name and player.club.name not in tags:
+        if player_in_club and "LA" in player.club.name and player.club.tag not in tags:
             msg += await self.removeroleifpresent(member, newcomer)
             msg += await self.addroleifnotpresent(member, memberrole, otherclubs)
 
-        if player_in_club and player.club.name in tags:
+        if player_in_club and player.club.tag in tags:
             for role in ctx.guild.roles:
                 if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(
                         r'[^\x00-\x7f]', r'', player.club.name).strip():
