@@ -1663,3 +1663,33 @@ class BrawlStarsCog(commands.Cog):
             embed.add_field(name="Club(Role)", value=clubs[i], inline=True)
             await ctx.send(embed=embed)
             i = i + 1
+
+    @commands.command()
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    async def unsavedprofiles(self, ctx):
+        tags = []
+        guilds = await self.config.all_guilds()
+        users = await self.config.all_users()
+        server = guilds[ctx.guild.id]
+        clubs = server["clubs"]
+        for club in clubs:
+            info = clubs[club]
+            tagn = "#" + info["tag"]
+            tags.append(tagn)
+
+        count = 0
+        found = False
+        for tagg in tags:
+            club = await self.ofcbsapi.get_club(tagg)
+            for member in club.members:
+                for user in users:
+                    person = self.bot.get_user(user)
+                    if person is not None:
+                        if (await self.config.user(person).tag()) == member.tag:
+                            found = True
+                if not found:
+                    count += 1
+                    msg += f"{member.name}({member.club})"
+
+        await ctx.send(embed=discord.Embed(title=f"Total: {count}", description=msg, colour=discord.Colour.blue()))
