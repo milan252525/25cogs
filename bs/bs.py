@@ -1681,7 +1681,6 @@ class BrawlStarsCog(commands.Cog):
         count = 0
         found = False
         msg = ""
-        player_in_club = "name" in player.raw_data["club"]
         for tagg in tags:
             club = await self.ofcbsapi.get_club(tagg)
             for member in club.members:
@@ -1692,9 +1691,6 @@ class BrawlStarsCog(commands.Cog):
                             found = True
                 if not found and player_in_club:
                     count += 1
-                    msg += f"{member.name}({member.club})"
-                elif not found and not player_in_club:
-                    count += 1
-                    msg += f"{member.name}(None)"
+                    msg += f"{member.name}"
 
         await ctx.send(embed=discord.Embed(title=f"Total: {count}", description=msg, colour=discord.Colour.blue()))
