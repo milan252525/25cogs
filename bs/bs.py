@@ -1327,7 +1327,9 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description="You can't use this command in this server."))
         await ctx.trigger_typing()
 
-        member = ctx.guild.get_role(526805067165073408)
+        member = ctx.author
+
+        memberrole = ctx.guild.get_role(526805067165073408)
         guest = ctx.guild.get_role(574176894627479583)
         newcomer = ctx.guild.get_role(569473123942924308)
         vp = ctx.guild.get_role(462066723789471744)
@@ -1385,7 +1387,7 @@ class BrawlStarsCog(commands.Cog):
 
         if player_in_club and "LA" in player.club.name and player.club.name not in tags:
             msg += await self.removeroleifpresent(member, newcomer)
-            msg += await self.addroleifnotpresent(member, member, otherclubs)
+            msg += await self.addroleifnotpresent(member, memberrole, otherclubs)
 
         if player_in_club and player.club.name in tags:
             for role in ctx.guild.roles:
@@ -1397,7 +1399,7 @@ class BrawlStarsCog(commands.Cog):
                 return await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
                                                           description=f"Role for the club {player.club.name} not found. Input: {club_name}.\n"))
             msg += await self.removeroleifpresent(member, newcomer)
-            msg += await self.addroleifnotpresent(member, member)
+            msg += await self.addroleifnotpresent(member, memberrole)
             msg += await self.addroleifnotpresent(member, member_role_expected)
             try:
                 player_club = await self.ofcbsapi.get_club(player.club.tag)
