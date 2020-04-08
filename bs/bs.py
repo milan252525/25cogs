@@ -1680,6 +1680,7 @@ class BrawlStarsCog(commands.Cog):
 
         count = 0
         found = False
+        msg = ""
         for tagg in tags:
             club = await self.ofcbsapi.get_club(tagg)
             for member in club.members:
