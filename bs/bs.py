@@ -1035,13 +1035,13 @@ class BrawlStarsCog(commands.Cog):
                 error_counter += 1
                 if error_counter == 20:
                     await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                      description=f"Stopping after 20 request errors! Displaying the last one:\n({str(e)})"))
+                                                      description=f"¡Deteniéndose después de 5 errores de solicitud! Mostrando el último:\n({str(e)})"))
                     break
                 await asyncio.sleep(1)
                 continue
             except Exception as e:
                 return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                         description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
+                                                         description=f"**Algo ha ido mal solicitando {tag}!**\n({str(e)})"))
 
             msg = ""
             player_in_club = "name" in player.raw_data["club"]
@@ -1062,7 +1062,7 @@ class BrawlStarsCog(commands.Cog):
                     member_roles.append(role)
 
             if len(member_roles) > 1:
-                msg += f"**{str(member)}** has more than one club role. Removing **{', '.join([str(r) for r in member_roles])}**"
+                msg += f"Se ha encontrado más de un rol de club. **{', '.join([str(r) for r in member_roles])}**"
                 member_role = member_roles[0]
                 for role in member_roles[1:]:
                     msg += await self.removeroleifpresent(member, role)
@@ -1423,7 +1423,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.guild_only()
     async def vincular(self, ctx, tag):
         if ctx.guild.id != 460550486257565697:
-            await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description="You can't use this command in this server."))
+            await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description="No puedes usar este comando en este servidor."))
         await ctx.trigger_typing()
 
         member = ctx.author
@@ -1434,7 +1434,7 @@ class BrawlStarsCog(commands.Cog):
         otherclubs = ctx.guild.get_role(601518751472549918)
 
         if newcomer not in member.roles:
-            await ctx.send("You aren't a newcomer, can't use the command.")
+            await ctx.send("No eres nuevo, no puedes usar ese comando.")
 
         tag = tag.lower().replace('O', '0')
         if tag.startswith("#"):
@@ -1453,26 +1453,26 @@ class BrawlStarsCog(commands.Cog):
         try:
             player = await self.ofcbsapi.get_player(tag)
             await self.config.user(member).tag.set(tag.replace("#", ""))
-            msg += f"BS account **{player.name}** was saved to **{member.name}**\n"
+            msg += f"Cuenta de BS **{player.name}** guardada para **{member.name}**\n"
         except brawlstats.errors.NotFoundError:
-            return await ctx.send(embed=badEmbed("No player with this tag found!"))
+            return await ctx.send(embed=badEmbed("¡No se ha encontrado ningún jugador con este tag!"))
 
         except brawlstats.errors.RequestError as e:
             return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         except Exception as e:
             return await ctx.send(
-                "**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+                "**¡Algo ha ido mal, por favor envía un mensaje personal al bot LA Modmail o inténtalo de nuevo!**")
 
         nick = f"{player.name}"
         try:
             await member.edit(nick=nick[:31])
-            msg += f"New nickname: **{nick[:31]}**\n"
+            msg += f"Nuevo apodo: **{nick[:31]}**\n"
         except discord.Forbidden:
-            msg += f"I dont have permission to change nickname of this user!\n"
+            msg += f"¡No tengo permisos para cambiar el apodo de este usuario!\n"
         except Exception as e:
             return await ctx.send(
-                embed=discord.Embed(colour=discord.Colour.blue(), description=f"Something went wrong: {str(e)}"))
+                embed=discord.Embed(colour=discord.Colour.blue(), description=f"¡Algo ha ido mal: {str(e)}"))
 
         player_in_club = "name" in player.raw_data["club"]
         member_role_expected = None
@@ -1497,7 +1497,7 @@ class BrawlStarsCog(commands.Cog):
                     break
             if member_role_expected is None:
                 return await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
-                                                          description=f"Role for the club {player.club.name} not found. Input: {club_name}.\n"))
+                                                          description=f"No se ha encontrado un rol para el club {player.club.name}. Input: {club_name}.\n"))
             msg += await self.removeroleifpresent(member, newcomer)
             msg += await self.addroleifnotpresent(member, memberrole)
             msg += await self.addroleifnotpresent(member, member_role_expected)
