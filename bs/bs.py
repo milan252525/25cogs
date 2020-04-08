@@ -1423,7 +1423,8 @@ class BrawlStarsCog(commands.Cog):
     @commands.guild_only()
     async def vincular(self, ctx, tag):
         if ctx.guild.id != 460550486257565697:
-            await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description="No puedes usar este comando en este servidor."))
+            return await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description="No puedes usar este comando en este servidor."))
+
         await ctx.trigger_typing()
 
         member = ctx.author
@@ -1434,7 +1435,7 @@ class BrawlStarsCog(commands.Cog):
         otherclubs = ctx.guild.get_role(601518751472549918)
 
         if newcomer not in member.roles:
-            await ctx.send("No eres nuevo, no puedes usar ese comando.")
+            return await ctx.send("No eres nuevo, no puedes usar ese comando.")
 
         tag = tag.lower().replace('O', '0')
         if tag.startswith("#"):
