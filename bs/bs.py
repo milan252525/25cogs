@@ -1689,7 +1689,7 @@ class BrawlStarsCog(commands.Cog):
                     if person is not None:
                         if (await self.config.user(person).tag()) == member.tag:
                             found = True
-                if not found and player_in_club:
+                if not found:
                     count += 1
                     msg += f"{member.name}"
 
