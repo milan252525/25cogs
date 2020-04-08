@@ -1100,22 +1100,6 @@ class BrawlStarsCog(commands.Cog):
                 elif member_role != member_role_expected:
                     msg += await self.removeroleifpresent(member, member_role)
                     msg += await self.addroleifnotpresent(member, member_role_expected)
-                try:
-                    await asyncio.sleep(0.5)
-                    player_club = await self.ofcbsapi.get_club(player.club.tag)
-                    for mem in player_club.members:
-                        if mem.tag == player.raw_data['tag']:
-                            if mem.role.lower() == 'vicepresident':
-                                msg += await self.addroleifnotpresent(member, vp)
-                                msg += await self.removeroleifpresent(member, pres)
-                            elif mem.role.lower() == 'president':
-                                msg += await self.addroleifnotpresent(member, pres)
-                                msg += await self.removeroleifpresent(member, vp)
-                            elif mem.role.lower() == 'member':
-                                msg += await self.removeroleifpresent(member, vp, pres)
-                            break
-                except brawlstats.errors.RequestError:
-                    pass
             if msg != "":
                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
 
@@ -1447,8 +1431,6 @@ class BrawlStarsCog(commands.Cog):
         memberrole = ctx.guild.get_role(526805067165073408)
         guest = ctx.guild.get_role(574176894627479583)
         newcomer = ctx.guild.get_role(569473123942924308)
-        vp = ctx.guild.get_role(462066723789471744)
-        pres = ctx.guild.get_role(462066668907266078)
         otherclubs = ctx.guild.get_role(601518751472549918)
 
         if newcomer not in member.roles:
@@ -1519,17 +1501,6 @@ class BrawlStarsCog(commands.Cog):
             msg += await self.removeroleifpresent(member, newcomer)
             msg += await self.addroleifnotpresent(member, memberrole)
             msg += await self.addroleifnotpresent(member, member_role_expected)
-            try:
-                player_club = await self.ofcbsapi.get_club(player.club.tag)
-                for mem in player_club.members:
-                    if mem.tag == player.raw_data['tag']:
-                        if mem.role.lower() == 'vicepresident':
-                            msg += await self.addroleifnotpresent(member, vp)
-                        elif mem.role.lower() == 'president':
-                            msg += await self.addroleifnotpresent(member, pres)
-                        break
-            except brawlstats.errors.RequestError:
-                msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
         if msg != "":
             await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
 
