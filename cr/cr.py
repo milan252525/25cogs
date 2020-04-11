@@ -39,12 +39,12 @@ class ClashRoyaleCog(commands.Cog):
                 id = int(msg.content)
                 user = self.bot.get_user(int(msg.content))
                 if user is None:
-                    await (self.bot.get_channel(680113859759308910)).send(".")
+                    await (self.bot.get_channel(698556920830754939)).send(".")
                 tag = await self.config.user(user).tag()
                 if tag is None:
-                    await (self.bot.get_channel(680113859759308910)).send(".")
+                    await (self.bot.get_channel(698556920830754939)).send(".")
                 else:
-                    await (self.bot.get_channel(680113859759308910)).send(tag.upper())
+                    await (self.bot.get_channel(698556920830754939)).send(tag.upper())
             except ValueError:
                 pass
 
