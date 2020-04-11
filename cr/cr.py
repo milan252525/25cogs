@@ -30,7 +30,23 @@ class ClashRoyaleCog(commands.Cog):
     def goodEmbed(self, text):
         gembed = discord.Embed(color=0x45cafc)
         gembed.set_author(name=text, icon_url="https://i.imgur.com/qYmbGK6.png")
-        return gembed        
+        return gembed
+    
+    @commands.Cog.listener()
+    async def on_message(self, msg):
+        if msg.channel.id == 698556920830754939 and msg.author.id != 599286708911210557:
+            try:
+                id = int(msg.content)
+                user = self.bot.get_user(int(msg.content))
+                if user is None:
+                    await (self.bot.get_channel(680113859759308910)).send(".")
+                tag = await self.config.user(user).tag()
+                if tag is None:
+                    await (self.bot.get_channel(680113859759308910)).send(".")
+                else:
+                    await (self.bot.get_channel(680113859759308910)).send(tag.upper())
+            except ValueError:
+                pass
 
     @commands.command()
     async def crsave(self, ctx, tag, member: discord.Member = None):
