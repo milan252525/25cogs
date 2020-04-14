@@ -20,8 +20,8 @@ class Events(commands.Cog):
         )
         default_user = {"boss_fight": {"damage" : 0, "participated" : 0}}
         self.config.register_member(**default_user)
-        self.DAMAGE_PER_CHALL = 200
-        self.START_WAIT_TIME = 60
+        self.DAMAGE_PER_CHALL = 300
+        self.START_WAIT_TIME = 120
         self.DAMAGE_EMOJI = "<:damage:643539221428174849>"
         self.HP_EMOJI = "<:health:688109898508009611>"
         self.LOG_EMOJI = "<:log:688112584368586779>"
@@ -61,8 +61,8 @@ class Events(commands.Cog):
                 if m.id not in self.bf_data["players"]:
                     self.bf_data["players"][m.id] = dealt
                 else:
-                    self.bf_data["players"][m.id] += dealt
-                dealt = (dealt - 5) if dealt > 100 else dealt
+                    self.bf_data["players"][m.id]  += dealt
+                dealt = (dealt - 30) if dealt > 150 else dealt
             log = "Noone was successful!" if log == "" else log
             self.bf_data['hp_left'] -= damage
             #update action log
@@ -108,9 +108,11 @@ class Events(commands.Cog):
         start = time()
         op = choice(("+", "-", "*", "/"))
         if op == "+":
-            num1, num2 = randint(10, 500), randint(10, 500)
+            limit = 10
+            num1, num2 = randint(10, 500), randint(30, 500)
             result = num1 + num2
         elif op == "-":
+            limit = 10
             num1, num2 = randint(20, 500), randint(20, 300)
             if num2 > num1:
                 num1, num2 = num2, num1
@@ -122,7 +124,7 @@ class Events(commands.Cog):
             result = num1 * num2
         elif op == "/":
             num2 = randint(1, 30)
-            num1 = randint(1, 50) * num2
+            num1 = randint(1, 30) * num2
             result = num1 // num2
                                
         embed = discord.Embed(title="MATH CHALLENGE", description=f"You have {limit} seconds to write a result of:\n\n`{num1} {op} {num2}`", colour=discord.Color.magenta())
@@ -163,7 +165,7 @@ class Events(commands.Cog):
         return success
  
     async def geo_chall(self):
-        limit = 15
+        limit = 10
         start = time()
         question = choice(list(self.geo_questions.keys()))
         imgreg = re.search("https.*png", question)
@@ -248,86 +250,3 @@ class Events(commands.Cog):
         await self.bf_data["message"].edit(embed=embed)
         self.bf_data["embed"] = embed
         await self.main_loop()
-                        
-    @commands.command()
-    async def bosfight(self, ctx, channel:discord.TextChannel):
-        self.bf_active = True
-        embed = discord.Embed(title="BOSS FIGHT", colour=discord.Colour.red())
-        embed.set_thumbnail(url="https://i.imgur.com/HWjZtEP.png")
-        embed.add_field(name=f"{self.HP_EMOJI} HP Left", value=f"10000/10000", inline=False)
-        embed.add_field(name=f"{self.WAITING_EMOJI} Starting in:", value=f"60 seconds!")
-        message = await channel.send(embed=embed)
-        self.bf_data = {"channel" : channel, "message" : message}
-        await sleep(60)
-                        
-        embed.set_field_at(1, name="Action log:", value="Boss Fight started!")
-        await self.bf_data["message"].edit(embed=embed)
-        self.bf_data["embed"] = embed
-        await sleep(5)
-                        
-        membed = discord.Embed(title="MATH CHALLENGE", description=f"You have 15 seconds to write a result of:\n\n`2 + 2 - 1`", colour=discord.Color.magenta())
-        membed.set_footer(text="Do not use calculator!")
-        math = await self.bf_data["channel"].send(embed=membed)
-        await sleep(15)
-        await math.delete()
-        rembed = discord.Embed(title="RIGHT ANSWER", colour=discord.Colour.green())
-        rembed.set_image(url="https://i.imgflip.com/1wg0hg.jpg")
-        msg = await self.bf_data["channel"].send(embed=rembed)
-        
-                        
-        embed = self.bf_data["embed"]
-        embed.set_field_at(0, name=f"{self.HP_EMOJI} HP Left", value=f"100069/100000", inline=False)
-        embed.set_field_at(1, name=f"{self.LOG_EMOJI} Action log:", value="You all got it wrong!")
-        await self.bf_data["message"].edit(embed=embed)
-        await sleep(10)
-        await msg.delete()
-                        
-        gembed = discord.Embed(title="GEOGRAPHY CHALLENGE", description=f"You have 15 seconds to answer the following question:\n\n`Where is LA?`", colour=discord.Color.teal())
-        geo = await self.bf_data["channel"].send(embed=gembed)
-        await sleep(15)
-        await geo.delete()
-        rembed = discord.Embed(title="RIGHT ANSWER", colour=discord.Colour.green())
-        rembed.set_image(url="https://i.imgur.com/ABCrXwE.jpg")
-        msg = await self.bf_data["channel"].send(embed=rembed)
-                        
-        embed = self.bf_data["embed"]
-        embed.set_field_at(0, name=f"{self.HP_EMOJI} HP Left", value=f"42/100000", inline=False)
-        embed.set_field_at(1, name=f"{self.LOG_EMOJI} Action log:", value="You all have no brains!")
-        await self.bf_data["message"].edit(embed=embed)
-        await sleep(10)
-        await msg.delete()
-                        
-        tembed = discord.Embed(title="TYPING CHALLENGE", description=f"You have 2 seconds to type the following word(s):\n\n`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`", colour=discord.Color.orange())
-        ty = await self.bf_data["channel"].send(embed=tembed)
-        await sleep(15)
-        await ty.delete()
-                        
-        embed = self.bf_data["embed"]
-        embed.set_field_at(0, name=f"{self.HP_EMOJI} HP Left", value=f"1000000000000/100000", inline=False)
-        embed.set_field_at(1, name=f"{self.LOG_EMOJI} Action log:", value="Can you not write? You all are so lame hahahahaha")
-        await self.bf_data["message"].edit(embed=embed)
-        await sleep(10)
-                        
-        than = discord.Embed(colour=discord.Colour.red())
-        than.set_image(url="https://media.giphy.com/media/3oxHQqHQ5zzkrQ4VfW/giphy.gif")
-        tha = await self.bf_data["channel"].send(embed=than)
-        await sleep(15)
-        await tha.delete()
-        than2 = discord.Embed(colour=discord.Colour.red())
-        than2.set_image(url="https://media.tenor.com/images/4ce724176ca3f2f85076db5dc342781c/tenor.gif")
-        tha2 = await self.bf_data["channel"].send(embed=than2)
-        await sleep(15)
-        await tha2.delete()
-        than3 = discord.Embed(colour=discord.Colour.red())
-        than3.set_image(url="https://media.tenor.com/images/c9e8c807b43a11b530d551ff36376ffe/tenor.gif")
-        tha3 = await self.bf_data["channel"].send(embed=than3)
-        await sleep(15)
-        await tha3.delete()
-        embed = self.bf_data["embed"]
-        embed.set_thumbnail(url="https://i.imgur.com/fo3Tqfd.png")
-        embed.set_field_at(0, name=f"{self.HP_EMOJI} HP Left", value=f"-426925252525/0", inline=False)
-        embed.set_field_at(1, name=f"{self.LOG_EMOJI} Action log:", value="Boss has been defeated!")
-        embed.set_footer(text="Happy April Fools!")
-        await self.bf_data["message"].edit(embed=embed)
-        await self.bf_data["channel"].send(embed=discord.Embed(title="Damage leaderboard", description="THANOS <:damage:643539221428174849> `426925252525`\n", colour=discord.Colour.gold()))
-        self.bf_active = False
