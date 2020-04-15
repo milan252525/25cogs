@@ -94,7 +94,7 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
 
         player = await self.ofcbsapi.get_player(tag)
-        if player.club is not None:
+        if "name" in player.raw_data["club"]:
             nick = f"{player.name} | {player.club.name}"
         else:
             nick = f"{player.name}"
