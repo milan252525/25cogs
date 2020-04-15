@@ -94,7 +94,10 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
 
         player = await self.ofcbsapi.get_player(tag)
-        nick = f"{player.name} | {player.club.name}" if player.club is not None else f"{player.name}"
+        if player.club is not None:
+            nick = f"{player.name} | {player.club.name}"
+        else:
+            nick = f"{player.name}"
         try:
             await member.edit(nick=nick[:31])
             await ctx.send(f"Done! New nickname: `{nick[:31]}`")
