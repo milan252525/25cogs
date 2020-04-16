@@ -61,8 +61,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.command(aliases=['bssave'])
     async def save(self, ctx, tag, member: discord.Member = None):
         """Save your Brawl Stars player tag"""
-        if member is None:
-            member = ctx.author
+        member = ctx.author if member is None else member
 
         tag = tag.lower().replace('O', '0')
         if tag.startswith("#"):
@@ -82,6 +81,12 @@ class BrawlStarsCog(commands.Cog):
         except Exception as e:
             await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
+    @commands.is_owner()
+    @commands.command(aliases=['bssave'])
+    async def unsave(self, ctx, tag, member: discord.Member):
+        await self.config.user(member).clear()
+        await ctx.send("Done.")
+            
     @commands.command(aliases=['rbs'])
     async def renamebs(self, ctx, member: discord.Member = None):
         """Change a name of a user to be nickname|club_name"""
@@ -676,8 +681,8 @@ class BrawlStarsCog(commands.Cog):
                 player = await self.ofcbsapi.get_player(tag)
                 await asyncio.sleep(0.2)
             except brawlstats.errors.RequestError as e:
-                print(str(member) + " " + tag)
-                error_counter += 1
+                print(str(member) + " " + tag + " " + member.id)
+                error_counter += 1 
                 if error_counter == 5:
                     await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 5 request errors! Displaying the last one:\n({str(e)})"))
                     break
