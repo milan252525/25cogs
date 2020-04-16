@@ -681,7 +681,7 @@ class BrawlStarsCog(commands.Cog):
                 player = await self.ofcbsapi.get_player(tag)
                 await asyncio.sleep(0.2)
             except brawlstats.errors.RequestError as e:
-                print(str(member) + " " + tag + " " + str(member.id))
+                await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"{str(member)} ({member.id}) #{tag}"))
                 error_counter += 1 
                 if error_counter == 5:
                     await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 5 request errors! Displaying the last one:\n({str(e)})"))
