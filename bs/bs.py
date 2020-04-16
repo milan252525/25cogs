@@ -83,7 +83,7 @@ class BrawlStarsCog(commands.Cog):
 
     @commands.is_owner()
     @commands.command()
-    async def unsave(self, ctx, tag, member: discord.Member):
+    async def unsave(self, ctx, member: discord.Member):
         await self.config.user(member).clear()
         await ctx.send("Done.")
             
