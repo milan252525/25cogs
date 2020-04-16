@@ -675,14 +675,14 @@ class BrawlStarsCog(commands.Cog):
             try:
                 player = await self.ofcbsapi.get_player(tag)
                 await asyncio.sleep(0.2)
-            except brawlstats.errors.RequestError as e:
+            except ZeroDivisionError as e:#brawlstats.errors.RequestError as e:
                 error_counter += 1
                 if error_counter == 5:
                     await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 5 request errors! Displaying the last one:\n({str(e)})"))
                     break
                 await asyncio.sleep(1)
                 continue
-            except Exception as e:
+            except ZeroDivisionError as e:
                 return await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
 
             msg = ""
