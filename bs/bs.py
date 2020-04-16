@@ -82,7 +82,7 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
     @commands.is_owner()
-    @commands.command(aliases=['bssave'])
+    @commands.command()
     async def unsave(self, ctx, tag, member: discord.Member):
         await self.config.user(member).clear()
         await ctx.send("Done.")
