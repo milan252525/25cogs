@@ -20,7 +20,7 @@ class Events(commands.Cog):
         )
         default_user = {"boss_fight": {"damage" : 0, "participated" : 0}}
         self.config.register_member(**default_user)
-        self.DAMAGE_PER_CHALL = 300
+        self.DAMAGE_PER_CHALL = 200
         self.START_WAIT_TIME = 120
         self.DAMAGE_EMOJI = "<:damage:643539221428174849>"
         self.HP_EMOJI = "<:health:688109898508009611>"
@@ -62,10 +62,12 @@ class Events(commands.Cog):
                     self.bf_data["players"][m.id] = dealt
                 else:
                     self.bf_data["players"][m.id]  += dealt
-                dealt = (dealt - 30) if dealt > 150 else dealt
+                dealt = (dealt - 5) if dealt > 100 else dealt
             log = "Noone was successful!" if log == "" else log
             self.bf_data['hp_left'] -= damage
             #update action log
+            if len(log) > 1000:
+                log = log[:1000] + "\n... (ommited)"
             embed = self.bf_data["embed"]
             embed.set_field_at(0, name=f"{self.HP_EMOJI} HP Left", value=f"{self.bf_data['hp_left']}/{await self.config.boss_hp()}", inline=False)
             embed.set_field_at(1, name=f"{self.LOG_EMOJI} Action log:", value=log)
