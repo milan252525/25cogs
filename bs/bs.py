@@ -81,8 +81,8 @@ class BrawlStarsCog(commands.Cog):
         except Exception as e:
             await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
-    @commands.is_owner()
-    @commands.command()
+    @commands.has_permissions(administrator = True)
+    @commands.command(aliases=['bsunsave'])
     async def unsave(self, ctx, member: discord.Member):
         await self.config.user(member).clear()
         await ctx.send("Done.")
