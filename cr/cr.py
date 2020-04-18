@@ -72,7 +72,13 @@ class ClashRoyaleCog(commands.Cog):
         
         except Exception as e:
             await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
-
+            
+    @commands.has_permissions(administrator = True) 
+    @commands.command()
+    async def crunsave(self, ctx, member: discord.Member):
+        await self.config.user(member).clear()
+        await ctx.send("Done.")
+           
     @commands.command(aliases=['rcr'])
     async def renamecr(self, ctx, member:discord.Member=None):
         await ctx.trigger_typing()
