@@ -81,7 +81,7 @@ class ClashRoyaleCog(commands.Cog):
         
         tag = await self.config.user(member).tag()
         if tag is None:
-            return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}save <tag>"))
+            return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}crsave <tag>"))
         
         player = await self.crapi.get_player(tag)
         nick = f"{player.name} | {player.clan.name}" if player.clan is not None else f"{player.name}"
@@ -105,7 +105,7 @@ class ClashRoyaleCog(commands.Cog):
         if isinstance(member, discord.Member):
             tag = await self.config.user(member).tag()
             if tag is None:
-                return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}save <tag>"))
+                return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}crsave <tag>"))
         elif isinstance(member, str) and member.startswith("<"):
             id = member.replace("<", "").replace(">", "").replace("@", "").replace("!", "")
             try:
@@ -113,7 +113,7 @@ class ClashRoyaleCog(commands.Cog):
                 if member is not None:
                     tag = await self.config.user(member).tag()
                     if tag is None:
-                        return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}save <tag>"))
+                        return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}crsave <tag>"))
             except ValueError:
                 pass
         elif isinstance(member, str) and member.startswith("#"):
@@ -124,13 +124,13 @@ class ClashRoyaleCog(commands.Cog):
                 if member is not None:
                     tag = await self.config.user(member).tag()
                     if tag is None:
-                        return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}save <tag>"))
+                        return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}crsave <tag>"))
             except ValueError:
                 member = discord.utils.get(ctx.guild.members, name=member)
                 if member is not None:
                     tag = await self.config.user(member).tag()
                     if tag is None:
-                        return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}save <tag>"))
+                        return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}crsave <tag>"))
 
         if tag is None or tag == "":
             desc = "/profile\n/profile @user\n/profile discord_name\n/profile discord_id\n/profile #CRTAG"
@@ -203,7 +203,7 @@ class ClashRoyaleCog(commands.Cog):
                     if member is not None:
                         mtag = await self.config.user(member).tag()
                         if mtag is None:
-                            return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}save <tag>"))
+                            return await ctx.send(embed = self.badEmbed(f"This user has no tag saved! Use {prefix}crsave <tag>"))
 
                         try:
                             player = await self.crapi.get_player(mtag)
@@ -213,7 +213,7 @@ class ClashRoyaleCog(commands.Cog):
                 else:
                     tag = await self.config.guild(ctx.guild).clans.get_raw(key.lower(), "tag", default=None)
                     if tag is None:
-                        return await ctx.send(embed = self.badEmbed(f"{key.title()} isn't saved clan in this server!"))
+                        return await ctx.send(embed = self.badEmbed(f"{key.title()} isn't crsaved clan in this server!"))
                 try:
                     clan = await self.crapi.get_clan(tag)
                     clan = clan.raw_data
