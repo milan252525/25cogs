@@ -11,12 +11,12 @@ class Statistics(commands.Cog):
         self.bot = bot
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
         self.crconfig = Config.get_conf(None, identifier=2512325, cog_name="ClashRoyaleCog")
-        self.lbrenewallabs.start()
+        #self.lbrenewallabs.start()
         self.lbrenewalasia.start()
         self.lbrenewalbd.start()
 
     def cog_unload(self):
-        self.lbrenewallabs.cancel()
+        #self.lbrenewallabs.cancel()
         self.lbrenewalasia.cancel()
         self.lbrenewalbd.cancel()
 
