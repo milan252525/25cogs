@@ -11,12 +11,12 @@ class Statistics(commands.Cog):
         self.bot = bot
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
         self.crconfig = Config.get_conf(None, identifier=2512325, cog_name="ClashRoyaleCog")
-        #self.lbrenewallabs.start()
+        self.lbrenewallabs.start()
         self.lbrenewalasia.start()
         self.lbrenewalbd.start()
 
     def cog_unload(self):
-        #self.lbrenewallabs.cancel()
+        self.lbrenewallabs.cancel()
         self.lbrenewalasia.cancel()
         self.lbrenewalbd.cancel()
 
@@ -106,7 +106,7 @@ class Statistics(commands.Cog):
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{club.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
 
-    @commands.command()
+    @tasks.loop(minutes=60)
     async def lbrenewallabs(self):
         channel = self.bot.get_channel(689889206230974473)
         message = await channel.fetch_message(691747287814373428)
