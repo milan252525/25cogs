@@ -106,7 +106,7 @@ class Statistics(commands.Cog):
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{club.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
 
-    @tasks.loop(minutes=60)
+    @commands.command()
     async def lbrenewallabs(self):
         channel = self.bot.get_channel(689889206230974473)
         message = await channel.fetch_message(691747287814373428)
