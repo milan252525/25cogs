@@ -48,10 +48,8 @@ class Tools(commands.Cog):
                 except:
                     numberPrev = int(history[2].content.split(" ")[0])
                 if number != numberPrev + 1:
-                    await msg.channel.send(f"Wrong number! (Hint: {numberPrev} + 1)", delete_after=2)
                     return await msg.delete()
                 if msg.author == history[1].author:
-                    await msg.channel.send(f"Slow down! Let other people count as well!", delete_after=2)
                     return await msg.delete()
             except ValueError:
                 await msg.delete()
