@@ -389,7 +389,7 @@ class Welcome(commands.Cog):
 
                 try:
                     LAMember = member.guild.get_role(654334569528688641)
-                    guest = member.guild.get_role(656506416911351848)
+                    guest = member.guild.get_role(701822453021802596)
                     if not player_in_club:
                         await member.add_roles(guest)
                         msg += f"Assigned roles: {guest.name}\n"
@@ -416,7 +416,7 @@ class Welcome(commands.Cog):
             except brawlstats.errors.RequestError as e:
                 await ctx.send(f"Brawl Stars API is offline, please try again later! ({str(e)})")
                 msg += f":exclamation:Error occured: {str(e)}\n"
-            except ZeroDivisionError as e:
+            except Exception as e:
                 await ctx.send(f"**Something went wrong, please send a personal message to LA Modmail or try again!**")
                 msg += f":exclamation:Error occured: {str(e)}\n"
         elif tag == "spectator":
