@@ -13,12 +13,12 @@ class Statistics(commands.Cog):
         self.crconfig = Config.get_conf(None, identifier=2512325, cog_name="ClashRoyaleCog")
         self.lbrenewallabs.start()
         self.lbrenewalasia.start()
-        self.lbrenewalbd.start()
+        #self.lbrenewalbd.start()
 
     def cog_unload(self):
         self.lbrenewallabs.cancel()
         self.lbrenewalasia.cancel()
-        self.lbrenewalbd.cancel()
+        #self.lbrenewalbd.cancel()
 
     async def initialize(self):
         crapikey = await self.bot.get_shared_api_tokens("crapi")
@@ -237,5 +237,3 @@ class Statistics(commands.Cog):
                 i = i + 1
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{clan.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
-
-
