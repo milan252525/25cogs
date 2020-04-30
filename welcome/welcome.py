@@ -267,9 +267,9 @@ class Welcome(commands.Cog):
         sendTagEmbed.set_image(url="https://i.imgur.com/Fc8uAWH.png")
         await welcome.send(member.mention)
         await welcome.send(embed=sendTagEmbed)
-
-    @commands.command()
+        
     @commands.guild_only()
+    @commands.command(aliases=["setuplafc"])
     async def setupLAFC(self, ctx, tag, member: discord.Member = None):
         if ctx.channel.id != 673026631362805770:
             await ctx.send(embed=discord.Embed(description="This command can't be used in this channel.", colour=discord.Colour.red()))
@@ -349,8 +349,8 @@ class Welcome(commands.Cog):
         await welcome.send(member.mention)
         await welcome.send(embed=sendTagEmbed)
 
-    @commands.command()
     @commands.guild_only()
+    @commands.command(aliases=["setupevents"])
     async def setupEvents(self, ctx, tag, member: discord.Member = None):
         if ctx.channel.id != 677272915779125269:
             await ctx.send(embed=discord.Embed(description="This command can't be used in this channel.", colour=discord.Colour.red()))
@@ -389,7 +389,7 @@ class Welcome(commands.Cog):
 
                 try:
                     LAMember = member.guild.get_role(654334569528688641)
-                    guest = member.guild.get_role(656506416911351848)
+                    guest = member.guild.get_role(701822453021802596)
                     if not player_in_club:
                         await member.add_roles(guest)
                         msg += f"Assigned roles: {guest.name}\n"
