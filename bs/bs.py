@@ -1430,6 +1430,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def vincular(self, ctx, tag):
+        """LA Spain's verification command"""
         if ctx.guild.id != 460550486257565697:
             return await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description="No puedes usar este comando en este servidor."))
 
@@ -1511,7 +1512,12 @@ class BrawlStarsCog(commands.Cog):
             msg += await self.addroleifnotpresent(member, memberrole)
             msg += await self.addroleifnotpresent(member, member_role_expected)
         if msg != "":
-            await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
+            await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg), delete_after=60)
+
+        await asyncio.sleep(60)
+        await ctx.message.delete()
+
+
 
 
     @commands.command()
@@ -1719,7 +1725,7 @@ class BrawlStarsCog(commands.Cog):
                         embedFields.append([e_name, e_value])
 
             else:
-                if len(clubs[i].members) <= 90:
+                if len(clubs[i].members) <= 92:
                     offclubs = []
                     for k in (await self.config.guild(ctx.guild).clubs()).keys():
                         offclubs.append([await self.config.guild(ctx.guild).clubs.get_raw(k, "lastPosition"), k])
