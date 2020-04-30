@@ -1706,7 +1706,7 @@ class BrawlStarsCog(commands.Cog):
                     sort.trophies), reverse=True)
 
                 for i in range(len(clubs)):
-                    if len(clubs[i].members) <= 90:
+                    if len(clubs[i].members) <= 92:
                         key = ""
                         for k in (await self.config.guild(ctx.guild).clubs()).keys():
                             if clubs[i].tag.replace("#", "") == await self.config.guild(ctx.guild).clubs.get_raw(k, "tag"):
