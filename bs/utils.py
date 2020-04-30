@@ -117,6 +117,8 @@ def get_brawler_emoji(name : str):
         return "<:mrp:671379771585855508>"
     elif name == "JACKY":
         return "<:jackie:697096353494597642>"
+    elif name == "SPROUT":
+        return "<:sprout:705235612890038282>"
     
 def remove_codes(text : str):
     toremove = ["</c>", "<c1>", "<c2>", "<c3>", "<c4>", "<c5>", "<c6>", "<c7>", "<c8>", "<c9>", "<c0>"]

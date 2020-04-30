@@ -305,7 +305,7 @@ class BrawlStarsCog(commands.Cog):
                 f"{get_brawler_emoji(brawler[0])} **{brawler[0].lower().capitalize()}**: {brawler[1]} <:bstrophy:552558722770141204>\n")
         if len(brawlersmsg) > 0:
             messages.append(brawlersmsg)
-        messages[0] = f"**Brawlers({len(brawlers)}\\34):**\n" + messages[0]
+        messages[0] = f"**Brawlers({len(brawlers)}\\35):**\n" + messages[0]
         for i in range(len(messages)):
             embed = discord.Embed(description=messages[i], color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
             if i == 0:
@@ -1490,11 +1490,11 @@ class BrawlStarsCog(commands.Cog):
             msg += await self.removeroleifpresent(member, newcomer)
             msg += await self.addroleifnotpresent(member, guest)
 
-        if player_in_club and "LA " not in player.club.name and player.club.tag not in tags:
+        if player_in_club and not player.club.name.startswith("LA") and player.club.tag not in tags:
             msg += await self.removeroleifpresent(member, newcomer)
             msg += await self.addroleifnotpresent(member, guest)
 
-        if player_in_club and "LA" in player.club.name and player.club.tag not in tags:
+        if player_in_club and player.club.name.startswith("LA") and player.club.tag not in tags:
             msg += await self.removeroleifpresent(member, newcomer)
             msg += await self.addroleifnotpresent(member, memberrole, otherclubs)
 
