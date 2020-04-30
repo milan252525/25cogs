@@ -1677,6 +1677,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.guild_only()
     async def lowclubs(self, ctx):
         """Show all the clubs in your server that are low on members"""
+        offline = False
         await ctx.trigger_typing()
 
         if len((await self.config.guild(ctx.guild).clubs()).keys()) < 1:
