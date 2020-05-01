@@ -1788,7 +1788,7 @@ class BrawlStarsCog(commands.Cog):
                 continue
             tag = await self.config.user(member).tag()
             if tag is None:
-                msg += f"**{member.name}**: has no tag saved.\n}"
+                msg += f"**{member.name}**: has no tag saved.\n"
             try:
                 player = await self.ofcbsapi.get_player(tag)
                 await asyncio.sleep(0.2)
