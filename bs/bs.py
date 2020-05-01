@@ -1788,16 +1788,16 @@ class BrawlStarsCog(commands.Cog):
                 continue
             tag = await self.config.user(member).tag()
             if tag is None:
-                msg += f"**{member.name}**: has no tag saved."
+                msg += f"**{member.name}**: has no tag saved.\n}"
             try:
                 player = await self.ofcbsapi.get_player(tag)
                 await asyncio.sleep(0.2)
             except brawlstats.errors.RequestError as e:
-                msg += f"**{member.name}**: request error."
+                msg += f"**{member.name}**: request error.\n"
                 continue
             except Exception as e:
                 msg += "Something went wrong."
                 return
             clubobj = await self.ofcbsapi.get_club(player.club.tag)
-            msg += f"**{member.name}**: {player.club.name} ({len(clubobj.members)}/100)"
+            msg += f"**{member.name}**: {player.club.name} ({len(clubobj.members)}/100)\n"
         await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=msg))
