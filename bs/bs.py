@@ -1798,5 +1798,6 @@ class BrawlStarsCog(commands.Cog):
             except Exception as e:
                 msg += "Something went wrong."
                 return
-            msg += f"**{member.name}**: {player.club.name} ({len(player.club.members)}/100)"
+            clubobj = player.club
+            msg += f"**{member.name}**: {player.club.name} ({len(clubobj.members)}/100)"
         await ctx.send(embed=discord.Embed(colour=discord.Colour.white()), description=msg)
