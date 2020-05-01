@@ -1778,7 +1778,7 @@ class BrawlStarsCog(commands.Cog):
         if ctx.guild.id != 401883208511389716:
             return await ctx.send("This command can only be used in LA Gaming - Brawl Stars.")
 
-        await ch.trigger_typing()
+        await ctx.trigger_typing()
 
         whitelist = ctx.guild.get_role(693659561747546142)
 
@@ -1799,4 +1799,4 @@ class BrawlStarsCog(commands.Cog):
                 msg += "Something went wrong."
                 return
             msg += f"**{member.name}**: {player.club.name} ({len(player.club.members)}/100)"
-        await ch.send(embed=discord.Embed(colour=discord.Colour.white()), description=msg)
+        await ctx.send(embed=discord.Embed(colour=discord.Colour.white()), description=msg)
