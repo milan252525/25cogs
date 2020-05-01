@@ -1773,7 +1773,7 @@ class BrawlStarsCog(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    async def whitelist(self, ctx):
+    async def whitelistclubs(self, ctx):
         """Utility command for whitelist in LA Gaming - Brawl Stars"""
         if ctx.guild.id != 401883208511389716:
             return await ctx.send("This command can only be used in LA Gaming - Brawl Stars.")
