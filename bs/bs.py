@@ -1770,3 +1770,33 @@ class BrawlStarsCog(commands.Cog):
         except ZeroDivisionError as e:
             return await ctx.send(
                 "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
+
+    @commands.command()
+    @commands.guild_only()
+    async def whitelist(self, ctx):
+        """Utility command for whitelist in LA Gaming - Brawl Stars"""
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send("This command can only be used in LA Gaming - Brawl Stars.")
+
+        await ch.trigger_typing()
+
+        whitelist = ctx.guild.get_role(693659561747546142)
+
+        msg = ""
+        for member in ctx.guild.members:
+            if whitelist not in member.roles:
+                continue
+            tag = await self.config.user(member).tag()
+            if tag is None:
+                msg += f"**{member.name}**: has no tag saved."
+            try:
+                player = await self.ofcbsapi.get_player(tag)
+                await asyncio.sleep(0.2)
+            except brawlstats.errors.RequestError as e:
+                msg += f"**{member.name}**: request error."
+                continue
+            except Exception as e:
+                msg += "Something went wrong."
+                return
+            msg += f"**{member.name}**: {player.club.name} ({len(player.club.members)}/100)"
+        await ch.send(embed=discord.Embed(colour=discord.Colour.white()), description=msg)
