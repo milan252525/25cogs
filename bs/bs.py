@@ -1798,6 +1798,6 @@ class BrawlStarsCog(commands.Cog):
             except Exception as e:
                 msg += "Something went wrong."
                 return
-            clubobj = player.club
+            clubobj = await self.ofcbsapi.get_club(player.club.tag)
             msg += f"**{member.name}**: {player.club.name} ({len(clubobj.members)}/100)"
         await ctx.send(embed=discord.Embed(colour=discord.Colour.white()), description=msg)
