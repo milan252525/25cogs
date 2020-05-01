@@ -1800,4 +1800,4 @@ class BrawlStarsCog(commands.Cog):
                 return
             clubobj = await self.ofcbsapi.get_club(player.club.tag)
             msg += f"**{member.name}**: {player.club.name} ({len(clubobj.members)}/100)"
-        await ctx.send(embed=discord.Embed(colour=discord.Colour.green()), description=msg)
+        await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=msg))
