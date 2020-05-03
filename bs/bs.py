@@ -1669,7 +1669,7 @@ class BrawlStarsCog(commands.Cog):
                 discordn += f"{str(member)}\n"
                 ign += f"{player.name}\n"
                 clubn += "None\n"
-            await asyncio.sleep(5)
+            await asyncio.sleep(1)
         if len(discordn) > 0 or len(ign) > 0 or len(clubn) > 0:
             discords.append(discordn)
             igns.append(ign)
