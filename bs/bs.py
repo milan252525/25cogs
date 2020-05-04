@@ -473,6 +473,8 @@ class BrawlStarsCog(commands.Cog):
     @commands.group(invoke_without_command=True)
     async def clubs(self, ctx, key: str = None):
         """View all clubs saved in a server"""
+        if ctx.author.id != 359131399132807178:
+            return await ctx.send("Clubs command is under maintenance. Sorry fot the inconvenience.")
         offline = False
         await ctx.trigger_typing()
         if key == "forceoffline":
@@ -483,11 +485,44 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(
                 embed=badEmbed(f"This server has no clubs saved. Save a club by using {ctx.prefix}clubs add!"))
 
+        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n────────── (0%)", title=str(member), timestamp=datetime.datetime.now())
+        msg = await ctx.send(embed=loadingembed)
         try:
             try:
                 clubs = []
-                for key in (await self.config.guild(ctx.guild).clubs()).keys():
+                keys = (await self.config.guild(ctx.guild).clubs()).keys()
+                for ind, key in enumerate(keys):
                     club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs.get_raw(key, "tag"))
+                    if ind / len(keys) == 0.1:
+                        loadingembed.set_description("Requesting clubs. Might take a while.\n━───────── (10%)")
+                        await msg.edit(embed=loadingembed)
+                    elif ind / len(keys) == 0.2:
+                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━──────── (20%)")
+                        await msg.edit(embed=loadingembed)
+                    elif ind / len(keys) == 0.3:
+                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━━─────── (30%)")
+                        await msg.edit(embed=loadingembed)
+                    elif ind / len(keys) == 0.4:
+                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━━━────── (40%)")
+                        await msg.edit(embed=loadingembed)
+                    elif ind / len(keys) == 0.5:
+                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━━━━───── (50%)")
+                        await msg.edit(embed=loadingembed)
+                    elif ind / len(keys) == 0.6:
+                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━━━━━──── (60%)")
+                        await msg.edit(embed=loadingembed)
+                    elif ind / len(keys) == 0.7:
+                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━━━━━━─── (70%)")
+                        await msg.edit(embed=loadingembed)
+                    elif ind / len(keys) == 0.8:
+                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━━━━━━━── (80%)")
+                        await msg.edit(embed=loadingembed)
+                    elif ind / len(keys) == 0.9:
+                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━━━━━━━━─ (90%)")
+                        await msg.edit(embed=loadingembed)
+                    elif ind / len(keys) == 1:
+                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━━━━━━━━━ (100%)")
+                        await msg.edit(embed=loadingembed)
                     clubs.append(club)
                     # await asyncio.sleep(1)
             except brawlstats.errors.RequestError as e:
@@ -555,7 +590,7 @@ class BrawlStarsCog(commands.Cog):
             if len(embedsToSend) > 1:
                 await menu(ctx, embedsToSend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
             else:
-                await ctx.send(embed=embedsToSend[0])
+                await msg.edit(embed=embedsToSend[0])
 
         except ZeroDivisionError as e:
             return await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
