@@ -474,7 +474,7 @@ class BrawlStarsCog(commands.Cog):
     async def clubs(self, ctx, key: str = None):
         """View all clubs saved in a server"""
         if ctx.author.id != 359131399132807178:
-            return await ctx.send("Clubs command is under maintenance. Sorry fot the inconvenience.")
+            return await ctx.send("Clubs command is under maintenance. Sorry for the inconvenience.")
         offline = False
         await ctx.trigger_typing()
         if key == "forceoffline":
