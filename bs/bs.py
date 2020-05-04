@@ -473,8 +473,6 @@ class BrawlStarsCog(commands.Cog):
     @commands.group(invoke_without_command=True)
     async def clubs(self, ctx, key: str = None):
         """View all clubs saved in a server"""
-        if ctx.author.id != 359131399132807178:
-            return await ctx.send("Clubs command is under maintenance. Sorry for the inconvenience.")
         offline = False
         await ctx.trigger_typing()
         if key == "forceoffline":
@@ -493,35 +491,17 @@ class BrawlStarsCog(commands.Cog):
                 keys = (await self.config.guild(ctx.guild).clubs()).keys()
                 for ind, key in enumerate(keys):
                     club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs.get_raw(key, "tag"))
-                    if 0 <= ind / len(keys) <= 0.1:
-                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(10%) ─", title="Loading...")
+                    if 0 <= ind / len(keys) <= 0.25:
+                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(25%) ─────", title="Loading...")
                         await msg.edit(embed=loadingembed)
-                    elif 0.1 <= ind / len(keys) <= 0.2:
-                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(20%) ──", title="Loading...")
+                    elif 0.25 <= ind / len(keys) <= 0.5:
+                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(50%) ──────────", title="Loading...")
                         await msg.edit(embed=loadingembed)
-                    elif 0.2 <= ind / len(keys) <= 0.3:
-                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(30%) ───", title="Loading...")
+                    elif 0.5 <= ind / len(keys) <= 0.75:
+                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(75%) ───────────────", title="Loading...")
                         await msg.edit(embed=loadingembed)
-                    elif 0.3 <= ind / len(keys) <= 0.4:
-                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(40%) ────", title="Loading...")
-                        await msg.edit(embed=loadingembed)
-                    elif 0.4 <= ind / len(keys) <= 0.5:
-                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(50%) ─────", title="Loading...")
-                        await msg.edit(embed=loadingembed)
-                    elif 0.5 <= ind / len(keys) <= 0.6:
-                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(60%) ──────", title="Loading...")
-                        await msg.edit(embed=loadingembed)
-                    elif 0.6 <= ind / len(keys) <= 0.7:
-                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(70%) ───────", title="Loading...")
-                        await msg.edit(embed=loadingembed)
-                    elif 0.7 <= ind / len(keys) <= 0.8:
-                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(80%) ────────", title="Loading...")
-                        await msg.edit(embed=loadingembed)
-                    elif 0.8 <= ind / len(keys) <= 0.9:
-                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(90%) ─────────", title="Loading...")
-                        await msg.edit(embed=loadingembed)
-                    elif 0.9 <= ind / len(keys) <= 1:
-                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(100%) ──────────", title="Loading...")
+                    elif 0.75 <= ind / len(keys) <= 1:
+                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(100%) ────────────────────", title="Loading...")
                         await msg.edit(embed=loadingembed)
                     clubs.append(club)
                     # await asyncio.sleep(1)
