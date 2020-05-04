@@ -492,16 +492,16 @@ class BrawlStarsCog(commands.Cog):
                 for ind, key in enumerate(keys):
                     club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs.get_raw(key, "tag"))
                     if 0 <= ind / len(keys) <= 0.25:
-                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(25%) ─────", title="Loading...")
+                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(25%) ────", title="Loading...")
                         await msg.edit(embed=loadingembed)
                     elif 0.25 <= ind / len(keys) <= 0.5:
-                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(50%) ──────────", title="Loading...")
+                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(50%) ────────", title="Loading...")
                         await msg.edit(embed=loadingembed)
                     elif 0.5 <= ind / len(keys) <= 0.75:
-                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(75%) ───────────────", title="Loading...")
+                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(75%) ────────────", title="Loading...")
                         await msg.edit(embed=loadingembed)
                     elif 0.75 <= ind / len(keys) <= 1:
-                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(100%) ────────────────────", title="Loading...")
+                        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(100%) ────────────────", title="Loading...")
                         await msg.edit(embed=loadingembed)
                     clubs.append(club)
                     # await asyncio.sleep(1)
