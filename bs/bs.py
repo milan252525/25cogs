@@ -494,34 +494,34 @@ class BrawlStarsCog(commands.Cog):
                 for ind, key in enumerate(keys):
                     club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs.get_raw(key, "tag"))
                     if ind / len(keys) == 0.1:
-                        loadingembed.set_description("Requesting clubs. Might take a while.\n━───────── (10%)")
+                        loadingembed.description("Requesting clubs. Might take a while.\n━───────── (10%)")
                         await msg.edit(embed=loadingembed)
                     elif ind / len(keys) == 0.2:
-                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━──────── (20%)")
+                        loadingembed.description("Requesting clubs. Might take a while.\n━━──────── (20%)")
                         await msg.edit(embed=loadingembed)
                     elif ind / len(keys) == 0.3:
-                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━━─────── (30%)")
+                        loadingembed.description("Requesting clubs. Might take a while.\n━━━─────── (30%)")
                         await msg.edit(embed=loadingembed)
                     elif ind / len(keys) == 0.4:
-                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━━━────── (40%)")
+                        loadingembed.description("Requesting clubs. Might take a while.\n━━━━────── (40%)")
                         await msg.edit(embed=loadingembed)
                     elif ind / len(keys) == 0.5:
-                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━━━━───── (50%)")
+                        loadingembed.description("Requesting clubs. Might take a while.\n━━━━━───── (50%)")
                         await msg.edit(embed=loadingembed)
                     elif ind / len(keys) == 0.6:
-                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━━━━━──── (60%)")
+                        loadingembed.description("Requesting clubs. Might take a while.\n━━━━━━──── (60%)")
                         await msg.edit(embed=loadingembed)
                     elif ind / len(keys) == 0.7:
-                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━━━━━━─── (70%)")
+                        loadingembed.description("Requesting clubs. Might take a while.\n━━━━━━━─── (70%)")
                         await msg.edit(embed=loadingembed)
                     elif ind / len(keys) == 0.8:
-                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━━━━━━━── (80%)")
+                        loadingembed.description("Requesting clubs. Might take a while.\n━━━━━━━━── (80%)")
                         await msg.edit(embed=loadingembed)
                     elif ind / len(keys) == 0.9:
-                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━━━━━━━━─ (90%)")
+                        loadingembed.description("Requesting clubs. Might take a while.\n━━━━━━━━━─ (90%)")
                         await msg.edit(embed=loadingembed)
                     elif ind / len(keys) == 1:
-                        loadingembed.set_description("Requesting clubs. Might take a while.\n━━━━━━━━━━ (100%)")
+                        loadingembed.description("Requesting clubs. Might take a while.\n━━━━━━━━━━ (100%)")
                         await msg.edit(embed=loadingembed)
                     clubs.append(club)
                     # await asyncio.sleep(1)
