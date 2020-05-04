@@ -485,7 +485,7 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(
                 embed=badEmbed(f"This server has no clubs saved. Save a club by using {ctx.prefix}clubs add!"))
 
-        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n────────── (0%)", title=str(member), timestamp=datetime.datetime.now())
+        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n────────── (0%)", title="Loading...")
         msg = await ctx.send(embed=loadingembed)
         try:
             try:
