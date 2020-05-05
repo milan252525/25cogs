@@ -1153,7 +1153,7 @@ class BrawlStarsCog(commands.Cog):
             tmod = ctx.guild.get_role(533650638274297877)
             roles = ctx.guild.get_role(564552111875162112)
 
-            if mod not in ctx.author.roles and roles not in ctx.author.roles and tmod not in ctx.author.roles and not ctx.author.guild_permissions.administrator:
+            if mod not in ctx.author.roles and roles not in ctx.author.roles and tmod not in ctx.author.roles and not ctx.author.guild_permissions.administrator and ctx.author.id != 359131399132807178:
                 return await ctx.send("You can't use this command.")
 
             await ctx.trigger_typing()
@@ -1235,7 +1235,7 @@ class BrawlStarsCog(commands.Cog):
             mod = ctx.guild.get_role(663792825493618709)
             staff = ctx.guild.get_role(663792418751250432)
 
-            if mod not in ctx.author.roles and staff not in ctx.author.roles and not ctx.author.guild_permissions.administrator:
+            if mod not in ctx.author.roles and staff not in ctx.author.roles and not ctx.author.guild_permissions.administrator  and ctx.author.id != 359131399132807178:
                 return await ctx.send("You can't use this command.")
 
             await ctx.trigger_typing()
@@ -1325,7 +1325,7 @@ class BrawlStarsCog(commands.Cog):
             staff = ctx.guild.get_role(678623063344021504)
             hub = ctx.guild.get_role(678062772679868459)
 
-            if staff not in ctx.author.roles and hub not in ctx.author.roles and not ctx.author.guild_permissions.administrator:
+            if staff not in ctx.author.roles and hub not in ctx.author.roles and not ctx.author.guild_permissions.administrator  and ctx.author.id != 359131399132807178:
                 return await ctx.send("You can't use this command.")
 
             await ctx.trigger_typing()
@@ -1834,7 +1834,7 @@ class BrawlStarsCog(commands.Cog):
             player_in_club = "name" in player.raw_data["club"]
             if player_in_club:
                 clubobj = await self.ofcbsapi.get_club(player.club.tag)
-                msg += f"**{str(member)}**: {player.club.name} ({len(clubobj.members)}/100)\n"
+                msg += f"**{str(member)}** `{player.trophies}` <:bstrophy:552558722770141204>: {player.club.name} ({len(clubobj.members)}/100)\n"
             else:
-                msg += f"**{str(member)}**: not in a club.\n"
+                msg += f"**{str(member)}** `{player.trophies}` <:bstrophy:552558722770141204>: not in a club.\n"
         await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=msg))
