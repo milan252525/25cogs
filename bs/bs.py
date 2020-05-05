@@ -1463,7 +1463,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.guild_only()
     async def vincular(self, ctx, tag, member: discord.Member = None):
         """LA Spain's verification command"""
-        if ctx.guild.id != 460550486257565697:
+        if ctx.channel.id != 590962715795783684:
             return await ctx.send(embed=discord.Embed(colour=discord.Colour.red(), description="No puedes usar este comando en este servidor."))
 
         await ctx.trigger_typing()
@@ -1476,7 +1476,7 @@ class BrawlStarsCog(commands.Cog):
         if member is None:
             member = ctx.author
         elif member is not None:
-            if newcomer in member.roles:
+            if newcomer in ctx.author.roles:
                 return
 
         if newcomer not in member.roles:
