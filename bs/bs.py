@@ -1548,9 +1548,7 @@ class BrawlStarsCog(commands.Cog):
             msg += await self.addroleifnotpresent(member, memberrole)
             msg += await self.addroleifnotpresent(member, member_role_expected)
         if msg != "":
-            await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg), delete_after=60)
-
-        await asyncio.sleep(60)
+            await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
 
     @commands.command()
     @commands.guild_only()
