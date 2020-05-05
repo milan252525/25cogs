@@ -360,8 +360,8 @@ class Welcome(commands.Cog):
         newcomer = member.guild.get_role(677272975938027540)
         msg = ""
         if tag != "spectator":
-            selfroles = ctx.get_channel(665566710492823554)
-            guestselfroles = ctx.get_channel(704890962421219339)
+            selfroles = ctx.guild.get_channel(665566710492823554)
+            guestselfroles = ctx.guild.get_channel(704890962421219339)
             tags = []
             guilds = await self.bsconfig.all_guilds()
             events = guilds[654334199494606848]
