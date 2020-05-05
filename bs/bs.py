@@ -1473,11 +1473,11 @@ class BrawlStarsCog(commands.Cog):
         newcomer = ctx.guild.get_role(569473123942924308)
         otherclubs = ctx.guild.get_role(601518751472549918)
 
-        if member is None:
-            member = ctx.author
-        elif member is not None:
+        if member is not None:
             if newcomer in ctx.author.roles:
                 return
+        elif member is None:
+            member = ctx.author
 
         if newcomer not in member.roles:
             return await ctx.send("No eres nuevo, no puedes usar ese comando.")
