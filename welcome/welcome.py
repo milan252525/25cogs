@@ -360,6 +360,8 @@ class Welcome(commands.Cog):
         newcomer = member.guild.get_role(677272975938027540)
         msg = ""
         if tag != "spectator":
+            selfroles = ctx.get_channel(665566710492823554)
+            guestselfroles = ctx.get_channel(704890962421219339)
             tags = []
             guilds = await self.bsconfig.all_guilds()
             events = guilds[654334199494606848]
@@ -393,12 +395,15 @@ class Welcome(commands.Cog):
                     if not player_in_club:
                         await member.add_roles(guest)
                         msg += f"Assigned roles: {guest.name}\n"
+                        await guestselfroles.send(f"`{member.mention}, take your regional roles to get pinged when a tourney is posted.`", delete_after=10000)
                     elif player_in_club and ("LA " in player.club.name or player.club.tag in tags):
                         await member.add_roles(LAMember)
                         msg += f"Assigned roles: {LAMember.name}\n"
+                        await selfroles.send(f"`{member.mention}, take your regional roles to get pinged when a tourney is posted.`", delete_after=10000)
                     else:
                         await member.add_roles(guest)
                         msg += f"Assigned roles: {guest.name}\n"
+                        await guestselfroles.send(f"`{member.mention}, take your regional roles to get pinged when a tourney is posted.`",delete_after=10000)
                 except discord.Forbidden:
                     msg += f":exclamation:Couldn't change roles of this user.\n"
 
