@@ -1468,13 +1468,16 @@ class BrawlStarsCog(commands.Cog):
 
         await ctx.trigger_typing()
 
-        if member is None:
-            member = ctx.author
-
         memberrole = ctx.guild.get_role(526805067165073408)
         guest = ctx.guild.get_role(574176894627479583)
         newcomer = ctx.guild.get_role(569473123942924308)
         otherclubs = ctx.guild.get_role(601518751472549918)
+
+        if member is None:
+            member = ctx.author
+        elif member is not None:
+            if newcomer in member.roles:
+                return
 
         if newcomer not in member.roles:
             return await ctx.send("No eres nuevo, no puedes usar ese comando.")
