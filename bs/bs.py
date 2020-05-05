@@ -1548,10 +1548,6 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg), delete_after=60)
 
         await asyncio.sleep(60)
-        try:
-            await ctx.message.delete()
-        except CommandInvokeError:
-            pass
 
     @commands.command()
     @commands.guild_only()
