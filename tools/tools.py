@@ -39,7 +39,7 @@ class Tools(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, msg):
         #counting
-        if msg.channel.id == 584099500612780053 or msg.channel.id == 710487839753764895 and not msg.author.bot:
+        if msg.channel.id == 584099500612780053 or msg.channel.id == 710487839753764895 and not msg.author.bot and not msg.author.id == 470281886678122508:
             try:
                 number = int(msg.content.split(" ")[0])
                 history = await msg.channel.history(limit=2).flatten()
