@@ -247,11 +247,11 @@ class Statistics(commands.Cog):
     async def lbrenewalspain(self):
         channel = self.bot.get_channel(691413764867751986)
         if channel is not None:
-            message = await channel.fetch_message(710980939492229181)
-            message2 = await channel.fetch_message(710984125992927334)
-            message3 = await channel.fetch_message(710984138265460836)
-            message4 = await channel.fetch_message(710984144749985923)
-            message5 = await channel.fetch_message(710984150747840554)
+            message = await channel.fetch_message(710984852798832690)
+            message2 = await channel.fetch_message(710984856582225922)
+            message3 = await channel.fetch_message(710984885854142484)
+            message4 = await channel.fetch_message(710984892128821259)
+            message5 = await channel.fetch_message(710984913616240650)
             trophies = []
             for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
                 tag = await self.bsconfig.guild(message.guild).clubs.get_raw(key, "tag")
