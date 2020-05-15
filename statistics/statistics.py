@@ -76,8 +76,8 @@ class Statistics(commands.Cog):
     async def trophylb(self, ctx, key:str=None):
         if key is None:
             trophies = []
-            for key in (await self.bsconfig.guild(ctx.guild).clubs()).keys():
-                tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
+            for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
+                tag = await self.bsconfig.guild(message.guild).clubs.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     pair = []
@@ -86,15 +86,20 @@ class Statistics(commands.Cog):
                     pair.append(club.name)
                     trophies.append(pair)
             trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
+            messages = []
             msg = ""
             i = 1
             for trophy in trophies:
-                if trophy == trophies[20]:
-                    break
+                if trophy == trophies[20] or trophy == trophies[40] or trophy == trophies[60] or trophy == trophies[
+                    80] or trophy == trophies[100]:
+                    messages.append(msg)
+                    msg = ""
                 msg += f"{i}. <:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
                 i = i + 1
-            embed = discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:", description=msg)
-            await ctx.send(embed=embed)
+            embeds = []
+            for m in messages:
+                embeds.append(discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:", description=msg))
+            await menu(ctx, embeds, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
         elif key is not None:
             tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
             club = await self.ofcbsapi.get_club(tag)
