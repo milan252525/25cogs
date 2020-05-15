@@ -76,8 +76,8 @@ class Statistics(commands.Cog):
     async def trophylb(self, ctx, key:str=None):
         if key is None:
             trophies = []
-            for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
-                tag = await self.bsconfig.guild(message.guild).clubs.get_raw(key, "tag")
+            for key in (await self.bsconfig.guild(ctx.guild).clubs()).keys():
+                tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     pair = []
