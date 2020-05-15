@@ -1,5 +1,6 @@
 import discord
 from redbot.core import commands, Config, checks
+from redbot.core.utils.menus import menu, prev_page, next_page
 import asyncio
 import brawlstats
 import clashroyale
