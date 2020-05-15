@@ -1813,6 +1813,7 @@ class BrawlStarsCog(commands.Cog):
 
         whitelist = ctx.guild.get_role(693659561747546142)
 
+        messages = []
         msg = ""
         for member in ctx.guild.members:
             if whitelist not in member.roles:
@@ -1830,9 +1831,15 @@ class BrawlStarsCog(commands.Cog):
                 msg += "Something went wrong."
                 return
             player_in_club = "name" in player.raw_data["club"]
+            if len(msg) > 1900:
+                messages.append(msg)
+                msg = ""
             if player_in_club:
                 clubobj = await self.ofcbsapi.get_club(player.club.tag)
                 msg += f"**{str(member)}** `{player.trophies}` <:bstrophy:552558722770141204>: {player.club.name} ({len(clubobj.members)}/100)\n"
             else:
                 msg += f"**{str(member)}** `{player.trophies}` <:bstrophy:552558722770141204>: not in a club.\n"
-        await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=msg))
+        if len(msg) > 0:
+            messages.append(msg)
+        for m in messages:
+            await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=m))
