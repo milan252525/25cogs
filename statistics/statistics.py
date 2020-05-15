@@ -87,19 +87,15 @@ class Statistics(commands.Cog):
                     pair.append(club.name)
                     trophies.append(pair)
             trophies = sorted(trophies, key=lambda x: x[1], reverse=True)
-            messages = []
             msg = ""
             i = 1
             for trophy in trophies:
-                if trophy == trophies[20] or trophy == trophies[40]:
-                    messages.append(msg)
-                    msg = ""
+                if trophy == trophies[20]:
+                    break
                 msg += f"{i}. <:bstrophy:552558722770141204> {trophy[1]} **{trophy[0]}**({trophy[2]})\n"
                 i = i + 1
-            embeds = []
-            for m in messages:
-                embeds.append(discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:", description=msg))
-            await menu(ctx, embeds, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
+            embed = discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:", description=msg)
+            await ctx.send(embed=embed)
         elif key is not None:
             tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
             club = await self.ofcbsapi.get_club(tag)
