@@ -1564,6 +1564,7 @@ class BrawlStarsCog(commands.Cog):
         await ctx.trigger_typing()
 
         derucula = ctx.guild.get_role(632420307872907295)
+        member = ctx.guild.get_role(705795922067718234)
         cl = ctx.guild.get_role(700896108745982023)
         co = ctx.guild.get_role(700895961551077387)
         uy = ctx.guild.get_role(700896097987723374)
@@ -1615,10 +1616,10 @@ class BrawlStarsCog(commands.Cog):
         player_in_club = "name" in player.raw_data["club"]
 
         if player_in_club and "LA " in player.club.name and player.club.tag not in tags:
-            msg += await self.addroleifnotpresent(member, otros)
+            msg += await self.addroleifnotpresent(member, otros, member)
 
         if player_in_club and player.club.tag in tags:
-            msg += await self.addroleifnotpresent(member, derucula)
+            msg += await self.addroleifnotpresent(member, member)
             if " CL" in player.club.name:
                 msg += await self.addroleifnotpresent(member, cl)
             elif " CO" in player.club.name:
@@ -1631,6 +1632,8 @@ class BrawlStarsCog(commands.Cog):
                 msg += await self.addroleifnotpresent(member, hn)
             elif " MX" in player.club.name:
                 msg += await self.addroleifnotpresent(member, mx)
+            else:
+                msg += await self.addroleifnotpresent(member, derucula)
             try:
                 player_club = await self.ofcbsapi.get_club(player.club.tag)
                 for mem in player_club.members:
