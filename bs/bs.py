@@ -1571,7 +1571,7 @@ class BrawlStarsCog(commands.Cog):
         hn = ctx.guild.get_role(705409643375231036)
         mx = ctx.guild.get_role(700896011375214623)
         otros = ctx.guild.get_role(700896019134808116)
-        pres = ctx.guild.get_roles(703699073697579019)
+        pres = ctx.guild.get_role(703699073697579019)
         vp = ctx.guild.get_roles(703698676014383154)
 
         tags = []
