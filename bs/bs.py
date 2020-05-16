@@ -1572,7 +1572,7 @@ class BrawlStarsCog(commands.Cog):
         mx = ctx.guild.get_role(700896011375214623)
         otros = ctx.guild.get_role(700896019134808116)
         pres = ctx.guild.get_role(703699073697579019)
-        vp = ctx.guild.get_roles(703698676014383154)
+        vp = ctx.guild.get_role(703698676014383154)
 
         tags = []
         guilds = await self.config.all_guilds()
