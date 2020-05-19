@@ -1151,12 +1151,12 @@ class BrawlStarsCog(commands.Cog):
         try:
             ch = self.bot.get_channel(712394680389599281)
             await ch.trigger_typing()
-            laportugal = ctx.guild.get_role(712288417861599242)
-            elite = ctx.guild.get_role(712288829209575515)
-            visitante = ctx.guild.get_role(617040783840772241)
-            lamember = ctx.guild.get_role(712296400473555085)
-            pres = ctx.guild.get_role(616797188164550733)
-            vp = ctx.guild.get_role(616797458944622623)
+            laportugal = ch.guild.get_role(712288417861599242)
+            elite = ch.guild.get_role(712288829209575515)
+            visitante = ch.guild.get_role(617040783840772241)
+            lamember = ch.guild.get_role(712296400473555085)
+            pres = ch.guild.get_role(616797188164550733)
+            vp = ch.guild.get_role(616797458944622623)
             error_counter = 0
 
             for member in ch.guild.members:
