@@ -1225,8 +1225,7 @@ class BrawlStarsCog(commands.Cog):
                 except brawlstats.errors.RequestError:
                     msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
 
-            if msg != "":
-                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
+            await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
 
     @sortrolesportugal.before_loop
     async def before_sortrolesportugal(self):
