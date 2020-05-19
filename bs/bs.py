@@ -1155,7 +1155,6 @@ class BrawlStarsCog(commands.Cog):
             elite = ch.guild.get_role(712288829209575515)
             visitante = ch.guild.get_role(617040783840772241)
             lamember = ch.guild.get_role(712296400473555085)
-            pres = ch.guild.get_role(616797188164550733)
             vp = ch.guild.get_role(616797458944622623)
             error_counter = 0
 
@@ -1215,18 +1214,14 @@ class BrawlStarsCog(commands.Cog):
                         for mem in player_club.members:
                             if mem.tag == player.raw_data['tag']:
                                 if mem.role.lower() == 'vicepresident':
-                                    msg += await self.removeroleifpresent(member, pres)
                                     msg += await self.addroleifnotpresent(member, vp)
-                                elif mem.role.lower() == 'president':
-                                    msg += await self.removeroleifpresent(member, vp)
-                                    msg += await self.addroleifnotpresent(member, pres)
                                 else:
-                                    msg += await self.removeroleifpresent(member, vp, pres)
+                                    msg += await self.removeroleifpresent(member, vp)
                                 break
                     except brawlstats.errors.RequestError:
                         msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
-
-                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
+                if msg != "":
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
         except Exception as e:
             await ch.send(e)
 
@@ -1754,7 +1749,6 @@ class BrawlStarsCog(commands.Cog):
         elite = ctx.guild.get_role(712288829209575515)
         visitante = ctx.guild.get_role(617040783840772241)
         lamember = ctx.guild.get_role(712296400473555085)
-        pres = ctx.guild.get_role(616797188164550733)
         vp = ctx.guild.get_role(616797458944622623)
 
         tags = []
@@ -1817,8 +1811,6 @@ class BrawlStarsCog(commands.Cog):
                     if mem.tag == player.raw_data['tag']:
                         if mem.role.lower() == 'vicepresident':
                             msg += await self.addroleifnotpresent(member, vp)
-                        elif mem.role.lower() == 'president':
-                            msg += await self.addroleifnotpresent(member, pres)
                         break
             except brawlstats.errors.RequestError:
                 msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
