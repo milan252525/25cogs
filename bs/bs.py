@@ -1660,7 +1660,7 @@ class BrawlStarsCog(commands.Cog):
 
         await ctx.trigger_typing()
 
-        portugal = ctx.guild.get_role(712288417861599242)
+        laportugal = ctx.guild.get_role(712288417861599242)
         elite = ctx.guild.get_role(712288829209575515)
         visitante = ctx.guild.get_role(617040783840772241)
         lamember = ctx.guild.get_role(712296400473555085)
@@ -1718,7 +1718,7 @@ class BrawlStarsCog(commands.Cog):
 
         if player_in_club and player.club.tag in tags:
             if player.club.name == "LA Portugal":
-                msg += await self.addroleifnotpresent(member, portugal)
+                msg += await self.addroleifnotpresent(member, laportugal)
             elif player.club.name == "LA Elite":
                 msg += await self.addroleifnotpresent(member, elite)
             try:
