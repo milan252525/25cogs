@@ -1651,6 +1651,93 @@ class BrawlStarsCog(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
+    async def salvar(self, ctx, tag, member: discord.Member):
+        """Verification command for LA Portugal"""
+        staff = ctx.guild.get_role(617041332946599941)
+
+        if staff not in ctx.author.roles and not ctx.author.guild_permissions.administrator and ctx.author.id != 359131399132807178:
+            return await ctx.send("You can't use this command.")
+
+        await ctx.trigger_typing()
+
+        portugal = ctx.guild.get_role(712288417861599242)
+        elite = ctx.guild.get_role(712288829209575515)
+        visitante = ctx.guild.get_role(617040783840772241)
+        lamember = ctx.guild.get_role(712296400473555085)
+        pres = ctx.guild.get_role(616797188164550733)
+        vp = ctx.guild.get_role(616797458944622623)
+
+        tags = []
+        guilds = await self.config.all_guilds()
+        portugal = guilds[616673259538350084]
+        clubs = portugal["clubs"]
+        for club in clubs:
+            info = clubs[club]
+            tagn = "#" + info["tag"]
+            tags.append(tagn)
+
+        tag = tag.lower().replace('O', '0')
+        if tag.startswith("#"):
+            tag = tag.strip('#')
+
+        msg = ""
+        try:
+            player = await self.ofcbsapi.get_player(tag)
+            await self.config.user(member).tag.set(tag.replace("#", ""))
+            msg += f"BS account **{player.name}** was saved to **{member.name}**\n"
+        except brawlstats.errors.NotFoundError:
+            return await ctx.send(embed=badEmbed("No player with this tag found!"))
+
+        except brawlstats.errors.RequestError as e:
+            return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+
+        except Exception as e:
+            return await ctx.send(
+                "**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+
+        nick = f"{player.name}"
+        try:
+            await member.edit(nick=nick[:31])
+            msg += f"New nickname: **{nick[:31]}**\n"
+        except discord.Forbidden:
+            msg += f"I dont have permission to change nickname of this user!\n"
+        except Exception as e:
+            return await ctx.send(
+                embed=discord.Embed(colour=discord.Colour.blue(), description=f"Something went wrong: {str(e)}"))
+
+        player_in_club = "name" in player.raw_data["club"]
+
+        if not player_in_club:
+            msg += await self.addroleifnotpresent(member, visitante)
+
+        if player_in_club and "LA " not in player.club.name and player.club.tag not in tags:
+            msg += await self.addroleifnotpresent(member, visitante)
+
+        if player_in_club and "LA " in player.club.name and player.club.tag not in tags:
+            msg += await self.addroleifnotpresent(member, lamember)
+
+        if player_in_club and player.club.tag in tags:
+            if player.club.name == "LA Portugal":
+                msg += await self.addroleifnotpresent(member, portugal)
+            elif player.club.name == "LA Elite":
+                msg += await self.addroleifnotpresent(member, elite)
+            try:
+                player_club = await self.ofcbsapi.get_club(player.club.tag)
+                for mem in player_club.members:
+                    if mem.tag == player.raw_data['tag']:
+                        if mem.role.lower() == 'vicepresident':
+                            msg += await self.addroleifnotpresent(member, vp)
+                        elif mem.role.lower() == 'president':
+                            msg += await self.addroleifnotpresent(member, pres)
+                        break
+            except brawlstats.errors.RequestError:
+                msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
+
+        if msg != "":
+            await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
+
+    @commands.command()
+    @commands.guild_only()
     async def userbytag(self, ctx, tag: str):
         """Find user with a specific tag saved"""
         tag = tag.lower().replace('O', '0')
