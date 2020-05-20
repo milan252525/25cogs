@@ -217,10 +217,10 @@ class BrawlStarsCog(commands.Cog):
         if "powerPlayPoints" in player.raw_data:
             embed.add_field(
                 name=f"Power Play Points{title_extra}",
-                value=f"<:powertrophies:661266876235513867> {player.raw_data['powerPlayPoints']} {value_extra}")
+                value=f"<:powertrophies:661266876235513867> {player.raw_data['powerPlayPoints']}{value_extra}")
         else:
-            embed.add_field(name="Power Play Points",
-                            value=f"<:powertrophies:661266876235513867> 0")
+            embed.add_field(name=f"Power Play Points{title_extra}",
+                            value=f"<:powertrophies:661266876235513867> 0 {value_extra}")
         emo = "<:good:450013422717763609> Qualified" if player.raw_data['isQualifiedFromChampionshipChallenge'] else "<:bad:450013438756782081> Not qualified"
         embed.add_field(
             name="Championship",
