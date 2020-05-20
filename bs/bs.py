@@ -90,7 +90,7 @@ class BrawlStarsCog(commands.Cog):
         await ctx.send("Done.")
             
     @commands.command(aliases=['rbs'])
-    async def renamebs(self, ctx, member: discord.Member = None):
+    async def renamebs(self, ctx, member: discord.Member = None, club_name:bool = True):
         """Change a name of a user to be nickname|club_name"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
@@ -101,7 +101,7 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
 
         player = await self.ofcbsapi.get_player(tag)
-        if "name" in player.raw_data["club"]:
+        if "name" in player.raw_data["club"] and club_name:
             nick = f"{player.name} | {player.club.name}"
         else:
             nick = f"{player.name}"
@@ -201,37 +201,36 @@ class BrawlStarsCog(commands.Cog):
             name="3v3 Wins",
             value=f"<:3v3:614519914815815693> {player.raw_data['3vs3Victories']}")
         embed.add_field(
-            name="Solo SD Wins",
-            value=f"<:sd:614517124219666453> {player.solo_victories}")
+            name="Showdown Wins",
+            value=f"<:sd:614517124219666453> {player.solo_victories} <:duosd:614517166997372972> {player.duo_victories}")
         embed.add_field(
-            name="Duo SD Wins",
-            value=f"<:duosd:614517166997372972> {player.duo_victories}")
-        #embed.add_field(
-        #    name="Best Time in Robo Rumble",
-        #    value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time//60}:{str(player.best_robo_rumble_time%60).rjust(2, '0')}")
+            name="Best Level in Robo Rumble",
+            value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time}")
         #embed.add_field(
         #    name="Best Time as Big Brawler",
         #    value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler//60}:{str(player.best_time_as_big_brawler%60).rjust(2, '0')}")
+        title_extra = ""
+        value_extra = ""
+        if "highestPowerPlayPoints" in player.raw_data:
+            title_extra = " (Highest)"
+            value_extra = f" ({player.raw_data['highestPowerPlayPoints']})"
         if "powerPlayPoints" in player.raw_data:
             embed.add_field(
-                name="Power Play Points",
-                value=f"<:powertrophies:661266876235513867> {player.raw_data['powerPlayPoints']}")
+                name=f"Power Play Points{title_extra}",
+                value=f"<:powertrophies:661266876235513867> {player.raw_data['powerPlayPoints']}{value_extra}")
         else:
-            embed.add_field(name="Power Play Points",
-                            value=f"<:powertrophies:661266876235513867> 0")
-        if "highestPowerPlayPoints" in player.raw_data:
-            embed.add_field(
-                name="Highest PP Points",
-                value=f"<:powertrophies:661266876235513867> {player.raw_data['highestPowerPlayPoints']}")
-        #embed.add_field(
-        #    name="Qualified For Championship",
-        #    value=f"<:powertrophies:661266876235513867> {player.raw_data['isQualifiedFromChampionshipChallenge']}")
+            embed.add_field(name=f"Power Play Points{title_extra}",
+                            value=f"<:powertrophies:661266876235513867> 0 {value_extra}")
+        emo = "<:good:450013422717763609> Qualified" if player.raw_data['isQualifiedFromChampionshipChallenge'] else "<:bad:450013438756782081> Not qualified"
+        embed.add_field(
+            name="Championship",
+            value=f"{emo}")
         texts = [
             "Check out all your brawlers using /brawlers!", 
             "Want to see your club stats? Try /club!", 
             "Have you seen all our clubs? No? Do /clubs!",
             "You can see stats of other players by typing /p @user.",
-            "You can display player's stats by using his tag! /p #TAGHERE",
+            "You can display player's stats by using his tag! /p #TAG",
             "Did you know LA Bot can display CR stats as well? /crp"
         ]
         embed.set_footer(text=choice(texts))
@@ -408,7 +407,7 @@ class BrawlStarsCog(commands.Cog):
                 return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {ctx.prefix}bssave <tag>"))
             try:
                 player = await self.ofcbsapi.get_player(mtag)
-                if not player.club.tag:
+                if not "tag" in player.raw_data["club"]:
                     return await ctx.send("This user is not in a club!")
                 tag = player.club.tag
             except brawlstats.errors.RequestError as e:
@@ -1259,7 +1258,8 @@ class BrawlStarsCog(commands.Cog):
             try:
                 player = await self.ofcbsapi.get_player(tag)
                 await self.config.user(member).tag.set(tag.replace("#", ""))
-                msg += f"BS account **{player.name}** was saved to **{member.name}**\n"
+                cl_name = f"<:bsband:600741378497970177> {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> No club"
+                msg += f"**{player.name}** <:bstrophy:552558722770141204> {player.trophies} {cl_name}\n"
             except brawlstats.errors.NotFoundError:
                 return await ctx.send(embed=badEmbed("No player with this tag found!"))
 
