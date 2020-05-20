@@ -206,9 +206,9 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(
             name="Best Level in Robo Rumble",
             value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time}")
-        embed.add_field(
-            name="Best Time as Big Brawler",
-            value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler//60}:{str(player.best_time_as_big_brawler%60).rjust(2, '0')}")
+        #embed.add_field(
+        #    name="Best Time as Big Brawler",
+        #    value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler//60}:{str(player.best_time_as_big_brawler%60).rjust(2, '0')}")
         title_extra = ""
         value_extra = ""
         if "highestPowerPlayPoints" in player.raw_data:
@@ -1257,7 +1257,8 @@ class BrawlStarsCog(commands.Cog):
             try:
                 player = await self.ofcbsapi.get_player(tag)
                 await self.config.user(member).tag.set(tag.replace("#", ""))
-                msg += f"BS account **{player.name}** was saved to **{member.name}**\n"
+                cl_name = f"<:bsband:600741378497970177> {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> No club"
+                msg += f"**{player.name}** <:bstrophy:552558722770141204> {player.trophies} {cl_name}"
             except brawlstats.errors.NotFoundError:
                 return await ctx.send(embed=badEmbed("No player with this tag found!"))
 
