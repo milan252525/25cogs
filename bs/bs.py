@@ -206,12 +206,12 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(
             name="Duo SD Wins",
             value=f"<:duosd:614517166997372972> {player.duo_victories}")
-        #embed.add_field(
-        #    name="Best Time in Robo Rumble",
-        #    value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time//60}:{str(player.best_robo_rumble_time%60).rjust(2, '0')}")
-        #embed.add_field(
-        #    name="Best Time as Big Brawler",
-        #    value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler//60}:{str(player.best_time_as_big_brawler%60).rjust(2, '0')}")
+        embed.add_field(
+            name="Best Difficulty in Robo Rumble",
+            value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time")
+        embed.add_field(
+            name="Best Time as Big Brawler",
+            value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler//60}:{str(player.best_time_as_big_brawler%60).rjust(2, '0')}")
         if "powerPlayPoints" in player.raw_data:
             embed.add_field(
                 name="Power Play Points",
@@ -223,9 +223,10 @@ class BrawlStarsCog(commands.Cog):
             embed.add_field(
                 name="Highest PP Points",
                 value=f"<:powertrophies:661266876235513867> {player.raw_data['highestPowerPlayPoints']}")
-        #embed.add_field(
-        #    name="Qualified For Championship",
-        #    value=f"<:powertrophies:661266876235513867> {player.raw_data['isQualifiedFromChampionshipChallenge']}")
+        emo = "<:good:450013422717763609>" if player.raw_data['isQualifiedFromChampionshipChallenge'] else "<:bad:450013438756782081>"
+        embed.add_field(
+            name="Qualified For Championship",
+            value=f"<:powertrophies:661266876235513867> {emo}")
         texts = [
             "Check out all your brawlers using /brawlers!", 
             "Want to see your club stats? Try /club!", 
