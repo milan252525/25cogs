@@ -90,7 +90,7 @@ class BrawlStarsCog(commands.Cog):
         await ctx.send("Done.")
             
     @commands.command(aliases=['rbs'])
-    async def renamebs(self, ctx, member: discord.Member = None):
+    async def renamebs(self, ctx, member: discord.Member = None, club_name:bool = True):
         """Change a name of a user to be nickname|club_name"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
@@ -101,7 +101,7 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
 
         player = await self.ofcbsapi.get_player(tag)
-        if "name" in player.raw_data["club"]:
+        if "name" and club_name in player.raw_data["club"]:
             nick = f"{player.name} | {player.club.name}"
         else:
             nick = f"{player.name}"
@@ -408,7 +408,7 @@ class BrawlStarsCog(commands.Cog):
                 return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {ctx.prefix}bssave <tag>"))
             try:
                 player = await self.ofcbsapi.get_player(mtag)
-                if not player.club.tag:
+                if not "tag" in player.raw_data["club"]:
                     return await ctx.send("This user is not in a club!")
                 tag = player.club.tag
             except brawlstats.errors.RequestError as e:
