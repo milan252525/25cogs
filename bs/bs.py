@@ -204,25 +204,23 @@ class BrawlStarsCog(commands.Cog):
             name="Showdown Wins",
             value=f"<:sd:614517124219666453> {player.solo_victories} <:duosd:614517166997372972> {player.duo_victories}")
         embed.add_field(
-            name="Duo SD Wins",
-            value=f"")
-        embed.add_field(
             name="Best Level in Robo Rumble",
             value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time}")
         embed.add_field(
             name="Best Time as Big Brawler",
             value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler//60}:{str(player.best_time_as_big_brawler%60).rjust(2, '0')}")
+        title_extra = ""
+        value_extra = ""
+        if "highestPowerPlayPoints" in player.raw_data:
+            title_extra = " (Highest)"
+            value_extra = f" ({player.raw_data['highestPowerPlayPoints']})"
         if "powerPlayPoints" in player.raw_data:
             embed.add_field(
-                name="Power Play Points",
-                value=f"<:powertrophies:661266876235513867> {player.raw_data['powerPlayPoints']}")
+                name=f"Power Play Points{title_extra}",
+                value=f"<:powertrophies:661266876235513867> {player.raw_data['powerPlayPoints']} {value_extra}")
         else:
             embed.add_field(name="Power Play Points",
                             value=f"<:powertrophies:661266876235513867> 0")
-        if "highestPowerPlayPoints" in player.raw_data:
-            embed.add_field(
-                name="Highest PP Points",
-                value=f"<:powertrophies:661266876235513867> {player.raw_data['highestPowerPlayPoints']}")
         emo = "<:good:450013422717763609> Qualified" if player.raw_data['isQualifiedFromChampionshipChallenge'] else "<:bad:450013438756782081> Not qualified"
         embed.add_field(
             name="Championship",
@@ -232,7 +230,7 @@ class BrawlStarsCog(commands.Cog):
             "Want to see your club stats? Try /club!", 
             "Have you seen all our clubs? No? Do /clubs!",
             "You can see stats of other players by typing /p @user.",
-            "You can display player's stats by using his tag! /p #TAGHERE",
+            "You can display player's stats by using his tag! /p #TAG",
             "Did you know LA Bot can display CR stats as well? /crp"
         ]
         embed.set_footer(text=choice(texts))
