@@ -1258,7 +1258,7 @@ class BrawlStarsCog(commands.Cog):
                 player = await self.ofcbsapi.get_player(tag)
                 await self.config.user(member).tag.set(tag.replace("#", ""))
                 cl_name = f"<:bsband:600741378497970177> {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> No club"
-                msg += f"**{player.name}** <:bstrophy:552558722770141204> {player.trophies} {cl_name}"
+                msg += f"**{player.name}** <:bstrophy:552558722770141204> {player.trophies} {cl_name}\n"
             except brawlstats.errors.NotFoundError:
                 return await ctx.send(embed=badEmbed("No player with this tag found!"))
 
