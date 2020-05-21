@@ -59,6 +59,17 @@ class BrawlStarsCog(commands.Cog):
                     await (self.bot.get_channel(680113859759308910)).send(tag.upper())
             except ValueError:
                 pass
+            
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        if member.guild.id == 401883208511389716:
+            tag = await self.config.user(member).tag()
+            if tag is not None:
+                ch = member.guild.get_channel(547087959015292929)
+                embed = discord.Embed(colour=discord.Colour.blue(), description=f"#{tag.upper()}")
+                embed.set_author(name=member.display_name, icon_url=member.avatar_url)
+                await asyncio.sleep(3)
+                await ch.send(embed=embed)
 
     @commands.command(aliases=['bssave'])
     async def save(self, ctx, tag, member: discord.Member = None):
