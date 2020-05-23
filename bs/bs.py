@@ -70,6 +70,14 @@ class BrawlStarsCog(commands.Cog):
                 embed.set_author(name=member.display_name, icon_url=member.avatar_url)
                 await asyncio.sleep(3)
                 await ch.send(embed=embed)
+        elif member.guild.id == 616673259538350084:
+            tag = await self.config.user(member).tag()
+            if tag is not None:
+                ch = member.guild.get_channel(616696393729441849)
+                embed = discord.Embed(colour=discord.Colour.blue(), description=f"#{tag.upper()}")
+                embed.set_author(name=member.display_name, icon_url=member.avatar_url)
+                await asyncio.sleep(3)
+                await ch.send(embed=embed)
 
     @commands.command(aliases=['bssave'])
     async def save(self, ctx, tag, member: discord.Member = None):
@@ -1784,7 +1792,8 @@ class BrawlStarsCog(commands.Cog):
         try:
             player = await self.ofcbsapi.get_player(tag)
             await self.config.user(member).tag.set(tag.replace("#", ""))
-            msg += f"BS account **{player.name}** was saved to **{member.name}**\n"
+            cl_name = f"<:bsband:600741378497970177> {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> No club"
+            msg += f"**{player.name}** <:bstrophy:552558722770141204> {player.trophies} {cl_name}\n"
         except brawlstats.errors.NotFoundError:
             return await ctx.send(embed=badEmbed("No player with this tag found!"))
 
