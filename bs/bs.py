@@ -114,6 +114,9 @@ class BrawlStarsCog(commands.Cog):
         await ctx.trigger_typing()
         prefix = ctx.prefix
         member = ctx.author if member is None else member
+        
+        if ctx.author != member and ctx.author.top_role < member.top_role:
+            return await ctx.send("You can't do this!")
 
         tag = await self.config.user(member).tag()
         if tag is None:
