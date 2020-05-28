@@ -1173,9 +1173,9 @@ class BrawlStarsCog(commands.Cog):
     async def sortrolesportugal(self):
         ch = self.bot.get_channel(712394680389599281)
         await ch.trigger_typing()
-        bibi = ctx.guild.get_role(713413824878870568)
-        revolution = ctx.guild.get_role(713413515582373921)
-        alpha = ctx.guild.get_role(713413699389620305)
+        bibi = ch.guild.get_role(713413824878870568)
+        revolution = ch.guild.get_role(713413515582373921)
+        alpha = ch.guild.get_role(713413699389620305)
         laportugal = ch.guild.get_role(712288417861599242)
         elite = ch.guild.get_role(712288829209575515)
         visitante = ch.guild.get_role(617040783840772241)
