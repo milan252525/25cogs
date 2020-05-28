@@ -1425,6 +1425,7 @@ class BrawlStarsCog(commands.Cog):
             united = ch.guild.get_role(631166049395539988)
             fury = ch.guild.get_role(703591387970535435)
             newcomer = ch.guild.get_role(631516344684380205)
+            minus = ch.guild.get_role(701772917909880892)
             error_counter = 0
 
             for member in ch.guild.members:
@@ -1474,6 +1475,7 @@ class BrawlStarsCog(commands.Cog):
 
                 if player_in_club and player.club.tag in tags:
                     msg += await self.removeroleifpresent(member, lafam, viewer, newcomer)
+                    msg += await self.addroleifnotpresent(member, minus)
                     if player.club.name == "LA United":
                         msg += await self.removeroleifpresent(member, aqua, fury)
                         msg += await self.addroleifnotpresent(member, united)
@@ -1941,6 +1943,7 @@ class BrawlStarsCog(commands.Cog):
             united = ctx.guild.get_role(631166049395539988)
             fury = ctx.guild.get_role(703591387970535435)
             newcomer = ctx.guild.get_role(631516344684380205)
+            minus = ctx.guild.get_role(701772917909880892)
 
             tags = []
             guilds = await self.config.all_guilds()
@@ -1998,6 +2001,7 @@ class BrawlStarsCog(commands.Cog):
 
             if player_in_club and player.club.tag in tags:
                 msg += await self.removeroleifpresent(member, newcomer)
+                msg += await self.addroleifnotpresent(member, minus)
                 if player.club.name == "LA United":
                     msg += await self.addroleifnotpresent(member, united)
                 elif player.club.name == "LA Aqua":
