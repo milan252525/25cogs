@@ -1173,6 +1173,9 @@ class BrawlStarsCog(commands.Cog):
     async def sortrolesportugal(self):
         ch = self.bot.get_channel(712394680389599281)
         await ch.trigger_typing()
+        bibi = ctx.guild.get_role(713413824878870568)
+        revolution = ctx.guild.get_role(713413515582373921)
+        alpha = ctx.guild.get_role(713413699389620305)
         laportugal = ch.guild.get_role(712288417861599242)
         elite = ch.guild.get_role(712288829209575515)
         visitante = ch.guild.get_role(617040783840772241)
@@ -1229,9 +1232,22 @@ class BrawlStarsCog(commands.Cog):
             if player_in_club and player.club.tag in tags:
                 msg += await self.removeroleifpresent(member, lamember, visitante, newcomer)
                 if player.club.name == "LA Portugal":
+                    msg += await self.removeroleifpresent(member, elite, revolution, bibi, alpha)
                     msg += await self.addroleifnotpresent(member, laportugal)
                 elif player.club.name == "LA Elite":
+                    msg += await self.removeroleifpresent(member, laportugal, revolution, bibi, alpha)
                     msg += await self.addroleifnotpresent(member, elite)
+                elif player.club.name == "LA Revolution":
+                    msg += await self.removeroleifpresent(member, elite, laportugal, bibi, alpha)
+                    msg += await self.addroleifnotpresent(member, revolution)
+                elif player.club.name == "LA Bibi":
+                    msg += await self.removeroleifpresent(member, elite, revolution, laportugal, alpha)
+                    msg += await self.addroleifnotpresent(member, bibi)
+                elif player.club.name == "LA Alpha":
+                    msg += await self.removeroleifpresent(member, elite, revolution, bibi, laportugal)
+                    msg += await self.addroleifnotpresent(member, alpha)
+                else:
+                    msg += f"Couldn't find a role for {player.club.name}."
                 try:
                     player_club = await self.ofcbsapi.get_club(player.club.tag)
                     for mem in player_club.members:
