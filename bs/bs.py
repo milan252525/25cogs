@@ -688,6 +688,18 @@ class BrawlStarsCog(commands.Cog):
         except KeyError:
             await ctx.send(embed=badEmbed(f"{key.title()} isn't saved club in this server!"))
 
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    @clubs.command(name="family")
+    async def clubs_family(self, ctx, key: str, *, family: str = ""):
+        """Edit club's family"""
+        await ctx.trigger_typing()
+        try:
+            await self.config.guild(ctx.guild).clubs.set_raw(key, "family", value=family)
+            await ctx.send(embed=goodEmbed("Club family successfully edited!"))
+        except KeyError:
+            await ctx.send(embed=badEmbed(f"{key.title()} isn't saved club in this server!"))
+
     async def removeroleifpresent(self, member: discord.Member, *roles):
         msg = ""
         for role in roles:
