@@ -500,43 +500,57 @@ class BrawlStarsCog(commands.Cog):
 
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
-    async def clubs(self, ctx, key: str = None):
+    async def clubs(self, ctx, keyword: str = None):
         """View all clubs saved in a server"""
         offline = False
         await ctx.trigger_typing()
-        if key == "forceoffline":
+        if keyword == "forceoffline":
             offline = True
-            key = None
+            keyword = keyword.replace("forceoffline", "").strip()
 
         if len((await self.config.guild(ctx.guild).clubs()).keys()) < 1:
             return await ctx.send(
                 embed=badEmbed(f"This server has no clubs saved. Save a club by using {ctx.prefix}clubs add!"))
 
-        loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(0%)", title="Loading...")
+        loadingembed = discord.Embed(colour=discord.Colour.red(),
+                                     description="Requesting clubs. Might take a while.\n(0%)", title="Loading...")
         msg = await ctx.send(embed=loadingembed)
         try:
             try:
                 clubs = []
                 keys = (await self.config.guild(ctx.guild).clubs()).keys()
                 for ind, key in enumerate(keys):
-                    club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs.get_raw(key, "tag"))
+                    if keyword == "":
+                        club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs.get_raw(key, "tag"))
+                        clubs.append(club)
+                    elif keyword != "":
+                        if await self.config.guild(ctx.guild).clubs.get_raw(key, "family", default="") == keyword:
+                            club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs.get_raw(key, "tag"))
+                            clubs.append(club)
                     if 0 <= ind / len(keys) <= 0.25:
                         if loadingembed.description != "Requesting clubs. Might take a while.\n(25%) ────":
-                            loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(25%) ────", title="Loading...")
+                            loadingembed = discord.Embed(colour=discord.Colour.red(),
+                                                         description="Requesting clubs. Might take a while.\n(25%) ────",
+                                                         title="Loading...")
                             await msg.edit(embed=loadingembed)
                     elif 0.25 <= ind / len(keys) <= 0.5:
                         if loadingembed.description != "Requesting clubs. Might take a while.\n(50%) ────────":
-                            loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(50%) ────────", title="Loading...")
+                            loadingembed = discord.Embed(colour=discord.Colour.red(),
+                                                         description="Requesting clubs. Might take a while.\n(50%) ────────",
+                                                         title="Loading...")
                             await msg.edit(embed=loadingembed)
                     elif 0.5 <= ind / len(keys) <= 0.75:
                         if loadingembed.description != "Requesting clubs. Might take a while.\n(75%) ────────────":
-                            loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(75%) ────────────", title="Loading...")
+                            loadingembed = discord.Embed(colour=discord.Colour.red(),
+                                                         description="Requesting clubs. Might take a while.\n(75%) ────────────",
+                                                         title="Loading...")
                             await msg.edit(embed=loadingembed)
                     elif 0.75 <= ind / len(keys) <= 1:
                         if loadingembed.description != "Requesting clubs. Might take a while.\n(100%) ────────────────":
-                            loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting clubs. Might take a while.\n(100%) ────────────────", title="Loading...")
+                            loadingembed = discord.Embed(colour=discord.Colour.red(),
+                                                         description="Requesting clubs. Might take a while.\n(100%) ────────────────",
+                                                         title="Loading...")
                             await msg.edit(embed=loadingembed)
-                    clubs.append(club)
                     # await asyncio.sleep(1)
             except brawlstats.errors.RequestError as e:
                 offline = True
@@ -557,8 +571,10 @@ class BrawlStarsCog(commands.Cog):
                         if clubs[i].tag.replace("#", "") == await self.config.guild(ctx.guild).clubs.get_raw(k, "tag"):
                             key = k
 
-                    await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastMemberCount', value=len(clubs[i].members))
-                    await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastRequirement', value=clubs[i].required_trophies)
+                    await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastMemberCount',
+                                                                     value=len(clubs[i].members))
+                    await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastRequirement',
+                                                                     value=clubs[i].required_trophies)
                     await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastScore', value=clubs[i].trophies)
                     await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastPosition', value=i)
 
@@ -585,7 +601,7 @@ class BrawlStarsCog(commands.Cog):
                     cinfo = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "info")
                     cmembers = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "lastMemberCount")
                     creq = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "lastRequirement")
-                        
+
                     e_name = f"<:bsband:600741378497970177> {cname} [{ckey}] #{ctag} {cinfo}"
                     e_value = f"<:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` "
                     embedFields.append([e_name, e_value])
@@ -616,7 +632,8 @@ class BrawlStarsCog(commands.Cog):
                 await ctx.send(embed=embedsToSend[0])
 
         except ZeroDivisionError as e:
-            return await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
+            return await ctx.send(
+                "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
