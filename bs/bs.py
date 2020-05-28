@@ -520,7 +520,7 @@ class BrawlStarsCog(commands.Cog):
                 clubs = []
                 keys = (await self.config.guild(ctx.guild).clubs()).keys()
                 for ind, key in enumerate(keys):
-                    if keyword == "":
+                    if keyword == "" or keyword is None:
                         club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs.get_raw(key, "tag"))
                         clubs.append(club)
                     elif keyword != "":
