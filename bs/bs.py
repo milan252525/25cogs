@@ -1557,36 +1557,7 @@ class BrawlStarsCog(commands.Cog):
                     tagn = "#" + info["tag"]
                     tags.append(tagn)
 
-                tag = tag.lower().replace('O', '0')
-                if tag.startswith("#"):
-                    tag = tag.strip('#')
-
                 msg = ""
-                try:
-                    player = await self.ofcbsapi.get_player(tag)
-                    await self.config.user(member).tag.set(tag.replace("#", ""))
-                    msg += f"BS account **{player.name}** was saved to **{member.name}**\n"
-                except brawlstats.errors.NotFoundError:
-                    return await ctx.send(embed=badEmbed("No player with this tag found!"))
-
-                except brawlstats.errors.RequestError as e:
-                    return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-
-                except Exception as e:
-                    return await ctx.send(
-                        "**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
-
-                nick = f"{player.name}"
-                try:
-                    await member.edit(nick=nick[:31])
-                    msg += f"New nickname: **{nick[:31]}**\n"
-                except discord.Forbidden:
-                    msg += f"I dont have permission to change nickname of this user!\n"
-                except Exception as e:
-                    return await ctx.send(
-                        embed=discord.Embed(colour=discord.Colour.blue(),
-                                            description=f"Something went wrong: {str(e)}"))
-
                 player_in_club = "name" in player.raw_data["club"]
 
                 if not player_in_club:
