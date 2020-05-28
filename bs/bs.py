@@ -1739,6 +1739,7 @@ class BrawlStarsCog(commands.Cog):
             aqua = ctx.guild.get_role(700698977271808040)
             united = ctx.guild.get_role(631166049395539988)
             fury = ctx.guild.get_role(703591387970535435)
+            newcomer = ctx.guild.get_role(631516344684380205)
 
             tags = []
             guilds = await self.config.all_guilds()
