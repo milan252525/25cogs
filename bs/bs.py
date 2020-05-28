@@ -1604,7 +1604,7 @@ class BrawlStarsCog(commands.Cog):
                         msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
 
                 if msg != "":
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
         except Exception as e:
             await ch.send(e)
 
