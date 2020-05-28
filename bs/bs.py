@@ -1488,13 +1488,13 @@ class BrawlStarsCog(commands.Cog):
                         for mem in player_club.members:
                             if mem.tag == player.raw_data['tag']:
                                 if mem.role.lower() == 'senior':
-                                    msg += await self.removeroleifnotpresent(member, memberclub)
+                                    msg += await self.removeroleifpresent(member, memberclub)
                                     msg += await self.addroleifnotpresent(member, senior)
                                 elif mem.role.lower() == 'member':
-                                    msg += await self.removeroleifnotpresent(member, senior)
+                                    msg += await self.removeroleifpresent(member, senior)
                                     msg += await self.addroleifnotpresent(member, memberclub)
                                 else:
-                                    msg += await self.removeroleifnotpresent(member, senior, memberclub)
+                                    msg += await self.removeroleifpresent(member, senior, memberclub)
                                 break
                     except brawlstats.errors.RequestError:
                         msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
