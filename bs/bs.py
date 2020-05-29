@@ -638,6 +638,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def clubfamilies(self, ctx):
+        await ctx.trigget_typing()
         msg = ""
         for key in (await self.config.guild(ctx.guild).clubs()).keys():
             family = self.config.guild(ctx.guild).clubs.get_raw(key, "family", default="")
