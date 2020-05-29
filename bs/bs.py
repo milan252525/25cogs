@@ -637,6 +637,15 @@ class BrawlStarsCog(commands.Cog):
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
+    async def clubfamilies(self, ctx):
+        msg = ""
+        for key in (await self.config.guild(ctx.guild).clubs()).keys():
+            family = self.config.guild(ctx.guild).clubs.get_raw(key, "family", default="")
+            msg += f"{key}: {family}\n"
+        await ctx.send(msg)
+
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
     @clubs.command(name="add")
     async def clans_add(self, ctx, key: str, tag: str):
         """
