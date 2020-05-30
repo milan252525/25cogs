@@ -304,6 +304,7 @@ class Statistics(commands.Cog):
         Add a user or player to blacklist
         """
         await ctx.trigger_typing()
+        await ctx.send(person)
         if type(person) is str:
             tag = person
 
