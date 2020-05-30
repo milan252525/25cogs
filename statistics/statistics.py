@@ -380,9 +380,15 @@ class Statistics(commands.Cog):
             await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'ign', value=plr.name)
             await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'club', value=plr.club.name)
 
+            keys = (await self.bsconfig.guild(ctx.guild).clubs()).keys()
+            clubs = []
+            for key in keys:
+                club = await self.config.guild(ctx.guild).clubs.get_raw(key, "tag")
+                clubs.append(club)
+
             keyforembed = "#" + key.upper()
 
-            msg += f"{plr.name}({keyforembed}) <:bsband:600741378497970177> **{plr.club.name}**"
+            msg += f"{plr.name}({keyforembed}) <:bsband:600741378497970177> **{plr.club.name}**\n"
 
         await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=msg, title="Blacklist"))
 
