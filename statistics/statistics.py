@@ -319,7 +319,6 @@ class Statistics(commands.Cog):
             result = {
                 "ign": player.name,
                 "club": player.club.name,
-                "discord": dc
             }
             await self.config.guild(ctx.guild).blacklisted.set_raw(tag, value=result)
             await ctx.send(embed=goodEmbed(f"{player.name} was successfully blacklisted!"))
@@ -380,20 +379,12 @@ class Statistics(commands.Cog):
                 if plr.tag.replace("#", "").lower() == k:
                     key = k
 
-            dc = None
-            for user in (await self.config.all_users()):
-                person = self.bot.get_user(user)
-                if person is not None:
-                    persontag = await self.config.user(person).tag()
-                    persontag = "#" + persontag.upper()
-                    if plr.tag == persontag:
-                        dc = str(user)
-
             await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'ign', value=plr.name)
             await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'club', value=plr.club.name)
-            await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'discord', value=dc)
 
-            msg += f"{plr.name}({key}) <:bsband:600741378497970177> **{plr.club.name}** Discord: {dc}"
+            keyforembed = "#" + key.upper()
+
+            msg += f"{plr.name}({keyforembed}) <:bsband:600741378497970177> **{plr.club.name}**"
 
         await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=msg, title="Blacklist"))
 
