@@ -23,6 +23,7 @@ class BrawlStarsCog(commands.Cog):
         self.config.register_user(**default_user)
         default_guild = {"clubs": {}}
         self.config.register_guild(**default_guild)
+        self.statsconfig = Config.get_conf(None, identifier=42424269, cog_name="Statistics")
         self.sortroles.start()
         self.sortrolesasia.start()
         self.sortrolesbd.start()
@@ -1664,6 +1665,9 @@ class BrawlStarsCog(commands.Cog):
             tag = tag.lower().replace('O', '0')
             if tag.startswith("#"):
                 tag = tag.strip('#')
+
+            if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+                return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
 
             msg = ""
             try:
