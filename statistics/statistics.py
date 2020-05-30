@@ -361,7 +361,7 @@ class Statistics(commands.Cog):
 
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
-    async def blacklist(self, ctx):
+    async def blacklisted(self, ctx):
         """View all blacklisted people"""
         await ctx.trigger_typing()
 
