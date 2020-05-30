@@ -367,6 +367,11 @@ class Statistics(commands.Cog):
 
         try:
             player = await self.ofcbsapi.get_player(tag)
+            player_in_club = "name" in player.raw_data["club"]
+            if player_in_club:
+                clubname = player.club.name
+            else:
+                clubname = "No club"
             result = {
                 "ign": player.name,
                 "club": player.club.name,
