@@ -236,9 +236,14 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(
             name="Showdown Wins",
             value=f"<:sd:614517124219666453> {player.solo_victories} <:duosd:614517166997372972> {player.duo_victories}")
+        rr_levels = ["-", "Normal", "Hard", "Expert", "Master", "Insane"]
+        if player.best_robo_rumble_time > 5:
+            rr_level = f"Insane {player.best_robo_rumble_time - 5}"
+        else:
+            rr_level = rr_levels[player.best_robo_rumble_time]
         embed.add_field(
-            name="Best Level in Robo Rumble",
-            value=f"<:roborumble:614516967092781076> {player.best_robo_rumble_time}")
+            name="Best RR Level",
+            value=f"<:roborumble:614516967092781076> {rr_level}")
         #embed.add_field(
         #    name="Best Time as Big Brawler",
         #    value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler//60}:{str(player.best_time_as_big_brawler%60).rjust(2, '0')}")
