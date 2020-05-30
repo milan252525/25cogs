@@ -327,7 +327,7 @@ class Statistics(commands.Cog):
 
             player_in_club = "name" in plr.raw_data["club"]
             if player_in_club:
-                clubname = player.club.name
+                clubname = plr.club.name
             else:
                 clubname = "No club"
 
@@ -362,7 +362,7 @@ class Statistics(commands.Cog):
     @blacklisted.command(name="add")
     async def blacklist_add(self, ctx, tag: str, *, reason: str = ""):
         """
-        Add a user or player to blacklist
+        Add a player to blacklist
         """
         await ctx.trigger_typing()
 
