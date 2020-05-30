@@ -420,5 +420,5 @@ class Statistics(commands.Cog):
 
     @commands.command()
     async def unitedutil(self, ctx):
-        for keey in (await self.bsconfig.guild(ctx.guild).clubs()).keys():
+        for keey in (await self.config.guild(ctx.guild).blacklisted()).keys():
             await ctx.send(keey)
