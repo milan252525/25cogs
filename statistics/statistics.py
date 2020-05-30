@@ -365,7 +365,7 @@ class Statistics(commands.Cog):
         """View all blacklisted people"""
         await ctx.trigger_typing()
 
-        if len((await self.config.guild(ctx.guild).clubs()).keys()) < 1:
+        if len((await self.config.guild(ctx.guild).blacklisted()).keys()) < 1:
             return await ctx.send(
                 embed=badEmbed(f"This server doesn't have anyone blacklisted!"))
 
