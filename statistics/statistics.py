@@ -320,6 +320,7 @@ class Statistics(commands.Cog):
         for plr in players:
             alert = False
             key = ""
+            clubname = ""
             for k in (await self.config.guild(ctx.guild).blacklisted()).keys():
                 if plr.tag.replace("#", "").lower() == k:
                     key = k
