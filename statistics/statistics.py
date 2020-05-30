@@ -297,8 +297,8 @@ class Statistics(commands.Cog):
                     await message5.edit(embed=embed)
 
     @commands.guild_only()
-    @commands.command()
     @commands.has_permissions(administrator=True)
+    @blacklisted.command(name="add")
     async def blacklist_add(self, ctx, tag: str):
         """
         Add a user or player to blacklist
@@ -308,8 +308,6 @@ class Statistics(commands.Cog):
         tag = tag.lower().replace('O', '0')
         if tag.startswith("#"):
             tag = tag.strip('#')
-
-        dc = None
 
         if tag in (await self.config.guild(ctx.guild).blacklisted()).keys():
             return await ctx.send(embed=badEmbed("This person is already blacklisted!"))
@@ -335,7 +333,7 @@ class Statistics(commands.Cog):
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
-    @commands.command()
+    @blacklisted.command(name="remove")
     async def blacklist_remove(self, ctx, tag: str):
         """
         Remove a person from blacklist
