@@ -377,7 +377,7 @@ class Statistics(commands.Cog):
         for plr in players:
             key = ""
             for k in (await self.config.guild(ctx.guild).blacklisted()).keys():
-                if plr.tag.replace("#", "") == k:
+                if plr.tag.replace("#", "").lower() == k:
                     key = k
 
             dc = None
@@ -393,7 +393,7 @@ class Statistics(commands.Cog):
             await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'club', value=plr.club.name)
             await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'discord', value=dc)
 
-            msg += f"{plr.name}({key}) <:bsband:600741378497970177> {plr.club.name} Discord: {dc}"
+            msg += f"{plr.name}({key}) <:bsband:600741378497970177> **{plr.club.name}** Discord: {dc}"
 
         await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=msg, title="Blacklist"))
 
