@@ -338,7 +338,7 @@ class Statistics(commands.Cog):
 
             keyforembed = "#" + key.upper()
 
-            reason = await self.config.guild(ctx.guild).clubs.get_raw(key, "reason", default="")
+            reason = await self.config.guild(ctx.guild).blacklisted.get_raw(key, "reason", default="")
             if alert:
                 msg += f"--->{plr.name}({keyforembed}) <:bsband:600741378497970177> **{plr.club.name}** Reason: {reason}<---\n"
             if not alert:
@@ -374,7 +374,7 @@ class Statistics(commands.Cog):
                 clubname = "No club"
             result = {
                 "ign": player.name,
-                "club": player.club.name,
+                "club": clubname,
                 "reason": reason
             }
             await self.config.guild(ctx.guild).blacklisted.set_raw(tag, value=result)
