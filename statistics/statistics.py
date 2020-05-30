@@ -338,10 +338,11 @@ class Statistics(commands.Cog):
 
             keyforembed = "#" + key.upper()
 
+            reason = await self.config.guild(ctx.guild).clubs.get_raw(key, "reason", default="")
             if alert:
-                msg += f"--->{plr.name}({keyforembed}) <:bsband:600741378497970177> **{plr.club.name}**<---\n"
+                msg += f"--->{plr.name}({keyforembed}) <:bsband:600741378497970177> **{plr.club.name}** Reason: {reason}<---\n"
             if not alert:
-                msg += f"{plr.name}({keyforembed}) <:bsband:600741378497970177> **{plr.club.name}**\n"
+                msg += f"{plr.name}({keyforembed}) <:bsband:600741378497970177> **{plr.club.name}** Reason: {reason}\n"
 
         if alertembed:
             await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=msg, title="Blacklist"))
@@ -351,7 +352,7 @@ class Statistics(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @blacklisted.command(name="add")
-    async def blacklist_add(self, ctx, tag: str):
+    async def blacklist_add(self, ctx, tag: str, *, reason: str = ""):
         """
         Add a user or player to blacklist
         """
@@ -369,6 +370,7 @@ class Statistics(commands.Cog):
             result = {
                 "ign": player.name,
                 "club": player.club.name,
+                "reason": reason
             }
             await self.config.guild(ctx.guild).blacklisted.set_raw(tag, value=result)
             await ctx.send(embed=goodEmbed(f"{player.name} was successfully blacklisted!"))
