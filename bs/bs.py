@@ -346,7 +346,7 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command()
-    async def brawler(self, ctx, *, brawler, member: discord.Member = None):
+    async def brawler(self, ctx, brawler, member: discord.Member = None):
         """Brawler specific info"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
@@ -381,7 +381,7 @@ class BrawlStarsCog(commands.Cog):
             if b.get('name') == brawler.upper():
                 br = b
         if br is None:
-            return await ctx.send(embed=badEmbed(f"There's no such brawler!"))
+            return await ctx.send(embed=badEmbed(f"No such brawler found! If the brawler's name contains spaces surround it with quotes!"))
 
         colour = player.name_color if player.name_color is not None else "0xffffffff"
         embed = discord.Embed(color=discord.Colour.from_rgb(
