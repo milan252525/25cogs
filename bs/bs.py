@@ -1030,6 +1030,8 @@ class BrawlStarsCog(commands.Cog):
                 club = await self.config.guild(ch.guild).clubs.get_raw(key, "tag")
                 clubs.append(club)
 
+            tags = (await self.statsconfig.guild(ch.guild).blacklisted()).keys()
+            await ch.send(f"{tag} - {tags}")
             for tag in (await self.statsconfig.guild(ch.guild).blacklisted()).keys():
                 try:
                     player = await self.ofcbsapi.get_player(tag)
@@ -1050,6 +1052,10 @@ class BrawlStarsCog(commands.Cog):
                                                                    title=str(member)))
         except Exception as e:
             await ch.send(e)
+
+    @spainblacklistjob.before_loop
+    async def before_spainblacklistjob(self):
+        await asyncio.sleep(5)
 
     @tasks.loop(hours=6)
     async def sortrolesspain(self):
