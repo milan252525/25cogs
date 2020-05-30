@@ -12,7 +12,7 @@ import brawlstats
 from typing import Union
 from re import sub
 import datetime
-
+import aiohttp
 
 class BrawlStarsCog(commands.Cog):
 
@@ -24,6 +24,7 @@ class BrawlStarsCog(commands.Cog):
         default_guild = {"clubs": {}}
         self.config.register_guild(**default_guild)
         self.statsconfig = Config.get_conf(None, identifier=42424269, cog_name="Statistics")
+        self.aiohttp_session = aiohttp.ClientSession()
         self.sortroles.start()
         self.sortrolesasia.start()
         self.sortrolesbd.start()
@@ -52,6 +53,12 @@ class BrawlStarsCog(commands.Cog):
                 "The Official Brawl Stars API key has not been set.")
         self.ofcbsapi = brawlstats.Client(
             ofcbsapikey["api_key"], is_async=True)
+        self.starlist_key = (await self.bot.get_shared_api_tokens("starlist"))["starlist"]
+        
+    async def starlist_request(self, url):
+        header = {"Authorization": f"Bearer {self.starlist_key}"}
+        async with self.aiohttp_session.get(url, headers=header) as resp:
+            return await resp.json() 
         
     @commands.Cog.listener()
     async def on_message(self, msg):
@@ -195,9 +202,12 @@ class BrawlStarsCog(commands.Cog):
         colour = player.name_color if player.name_color is not None else "0xffffffff"
         embed = discord.Embed(color=discord.Colour.from_rgb(
             int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
+        player_icon_id = player.raw_data["icon"]["id"]
+        icons = await self.starlist_request("https://www.starlist.pro/app/icons/")
+        player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
         embed.set_author(
             name=f"{player.name} {player.raw_data['tag']}",
-            icon_url=member.avatar_url if isinstance(member, discord.Member) else "https://i.imgur.com/ZwIP41S.png")
+            icon_url=player_icon if icons['status'] == 'ok' else member.avatar_url)
         embed.add_field(
             name="Trophies",
             value=f"{get_league_emoji(player.trophies)} {player.trophies}")
