@@ -324,7 +324,7 @@ class Statistics(commands.Cog):
                 if plr.tag.replace("#", "").lower() == k:
                     key = k
 
-            player_in_club = "name" in player.raw_data["club"]
+            player_in_club = "name" in plr.raw_data["club"]
             if player_in_club:
                 clubname = player.club.name
             else:
