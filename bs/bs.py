@@ -1029,7 +1029,7 @@ class BrawlStarsCog(commands.Cog):
     async def spainblacklistjob(self):
         try:
             ch = self.bot.get_channel(716329434466222092)
-            await blacklistch.trigger_typing()
+            await ch.trigger_typing()
             clubs = []
             for key in (await self.config.guild(ch.guild).clubs()).keys():
                 club = await self.config.guild(ch.guild).clubs.get_raw(key, "tag")
@@ -1052,7 +1052,7 @@ class BrawlStarsCog(commands.Cog):
                 if player_in_club:
                     if player.club.tag.strip("#") in clubs:
                         reason = await self.statsconfig.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
-                        await blacklistch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                        await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                                    description=f"Blacklisted user {player.name} with tag {player.tag} joined {player.club.name}!\nBlacklist reason: {reason}",
                                                                    title=str(member)))
         except Exception as e:
