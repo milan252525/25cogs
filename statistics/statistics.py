@@ -306,6 +306,7 @@ class Statistics(commands.Cog):
                     await message5.edit(embed=embed)
 
     @commands.guild_only()
+    @commands.command()
     @commands.has_permissions(administrator=True)
     async def blacklist_add(self, ctx, person):
         """
