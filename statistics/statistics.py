@@ -361,10 +361,16 @@ class Statistics(commands.Cog):
             messages.append(msg)
 
         for m in messages:
-            if alertembed:
-                await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=m, title="Blacklist"))
-            elif not alertembed:
-                await ctx.send(embed=discord.Embed(color=discord.Colour.green(), description=m, title="Blacklist"))
+            if m == m[0]:
+                if alertembed:
+                    await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=m, title="Blacklist"))
+                elif not alertembed:
+                    await ctx.send(embed=discord.Embed(color=discord.Colour.green(), description=m, title="Blacklist"))
+            else:
+                if alertembed:
+                    await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=m))
+                elif not alertembed:
+                    await ctx.send(embed=discord.Embed(color=discord.Colour.green(), description=m))
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
