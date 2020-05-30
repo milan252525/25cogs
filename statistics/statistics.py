@@ -316,7 +316,9 @@ class Statistics(commands.Cog):
             await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         msg = ""
+        alertembed = False
         for plr in players:
+            alert = False
             key = ""
             for k in (await self.config.guild(ctx.guild).blacklisted()).keys():
                 if plr.tag.replace("#", "").lower() == k:
@@ -325,11 +327,26 @@ class Statistics(commands.Cog):
             await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'ign', value=plr.name)
             await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'club', value=plr.club.name)
 
+            clubs = []
+            for keey in (await self.bsconfig.guild(ctx.guild).clubs()).keys():
+                club = await self.bsconfig.guild(ctx.guild).clubs.get_raw(keey, "tag")
+                clubs.append(club)
+
+            if player.club.tag in clubs:
+                alert = True
+                alertembed = True
+
             keyforembed = "#" + key.upper()
 
-            msg += f"{plr.name}({keyforembed}) <:bsband:600741378497970177> **{plr.club.name}**\n"
+            if alert:
+                msg += f"--->{plr.name}({keyforembed}) <:bsband:600741378497970177> **{plr.club.name}**<---\n"
+            if not alert:
+                msg += f"{plr.name}({keyforembed}) <:bsband:600741378497970177> **{plr.club.name}**\n"
 
-        await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=msg, title="Blacklist"))
+        if alertembed:
+            await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=msg, title="Blacklist"))
+        elif not alertembed:
+            await ctx.send(embed=discord.Embed(color=discord.Colour.green(), description=msg, title="Blacklist"))
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
