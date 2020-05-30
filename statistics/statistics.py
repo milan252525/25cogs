@@ -332,7 +332,7 @@ class Statistics(commands.Cog):
                 club = await self.bsconfig.guild(ctx.guild).clubs.get_raw(keey, "tag")
                 clubs.append(club)
 
-            if player.club.tag in clubs:
+            if plr.club.tag in clubs:
                 alert = True
                 alertembed = True
 
