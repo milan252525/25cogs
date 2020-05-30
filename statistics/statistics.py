@@ -419,6 +419,5 @@ class Statistics(commands.Cog):
             await ctx.send(embed=badEmbed(f"{ign} isn't blacklisted in this server!"))
 
     @commands.command()
-    async def unitedutil(self, ctx):
-        for keey in (await self.config.guild(ctx.guild).blacklisted()).keys():
-            await ctx.send(keey)
+    async def simpleremove(self, ctx, name):
+        await self.config.guild(ctx.guild).blacklisted.clear_raw(name)
