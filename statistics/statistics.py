@@ -297,6 +297,47 @@ class Statistics(commands.Cog):
                     await message5.edit(embed=embed)
 
     @commands.guild_only()
+    @commands.group(invoke_without_command=True)
+    async def blacklisted(self, ctx):
+        """View all blacklisted people"""
+        await ctx.trigger_typing()
+
+        if len((await self.config.guild(ctx.guild).blacklisted()).keys()) < 1:
+            return await ctx.send(
+                embed=badEmbed(f"This server doesn't have anyone blacklisted!"))
+
+        try:
+            players = []
+            keys = (await self.config.guild(ctx.guild).blacklisted()).keys()
+            for key in keys:
+                player = await self.ofcbsapi.get_player(key)
+                players.append(player)
+        except brawlstats.errors.RequestError as e:
+            await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+
+        msg = ""
+        for plr in players:
+            key = ""
+            for k in (await self.config.guild(ctx.guild).blacklisted()).keys():
+                if plr.tag.replace("#", "").lower() == k:
+                    key = k
+
+            await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'ign', value=plr.name)
+            await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'club', value=plr.club.name)
+
+            keys = (await self.bsconfig.guild(ctx.guild).clubs()).keys()
+            clubs = []
+            for key in keys:
+                club = await self.config.guild(ctx.guild).clubs.get_raw(key, "tag")
+                clubs.append(club)
+
+            keyforembed = "#" + key.upper()
+
+            msg += f"{plr.name}({keyforembed}) <:bsband:600741378497970177> **{plr.club.name}**\n"
+
+        await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=msg, title="Blacklist"))
+
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @blacklisted.command(name="add")
     async def blacklist_add(self, ctx, tag: str):
@@ -350,47 +391,6 @@ class Statistics(commands.Cog):
             await ctx.send(embed=goodEmbed(f"{ign} was successfully removed from this server's blacklist!"))
         except KeyError:
             await ctx.send(embed=badEmbed(f"{ign} isn't blacklisted in this server!"))
-
-    @commands.guild_only()
-    @commands.group(invoke_without_command=True)
-    async def blacklisted(self, ctx):
-        """View all blacklisted people"""
-        await ctx.trigger_typing()
-
-        if len((await self.config.guild(ctx.guild).blacklisted()).keys()) < 1:
-            return await ctx.send(
-                embed=badEmbed(f"This server doesn't have anyone blacklisted!"))
-
-        try:
-            players = []
-            keys = (await self.config.guild(ctx.guild).blacklisted()).keys()
-            for key in keys:
-                player = await self.ofcbsapi.get_player(key)
-                players.append(player)
-        except brawlstats.errors.RequestError as e:
-            await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-
-        msg = ""
-        for plr in players:
-            key = ""
-            for k in (await self.config.guild(ctx.guild).blacklisted()).keys():
-                if plr.tag.replace("#", "").lower() == k:
-                    key = k
-
-            await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'ign', value=plr.name)
-            await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'club', value=plr.club.name)
-
-            keys = (await self.bsconfig.guild(ctx.guild).clubs()).keys()
-            clubs = []
-            for key in keys:
-                club = await self.config.guild(ctx.guild).clubs.get_raw(key, "tag")
-                clubs.append(club)
-
-            keyforembed = "#" + key.upper()
-
-            msg += f"{plr.name}({keyforembed}) <:bsband:600741378497970177> **{plr.club.name}**\n"
-
-        await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=msg, title="Blacklist"))
 
     @commands.guild_only()
     @commands.command()
