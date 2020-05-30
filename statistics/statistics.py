@@ -1,6 +1,7 @@
 import discord
 from redbot.core import commands, Config, checks
 from redbot.core.utils.menus import menu, prev_page, next_page
+from bs.utils import badEmbed, goodEmbed
 import asyncio
 import brawlstats
 import clashroyale
@@ -36,16 +37,6 @@ class Statistics(commands.Cog):
         if ofcbsapikey["api_key"] is None:
             raise ValueError("The Official Brawl Stars API key has not been set.")
         self.ofcbsapi = brawlstats.Client(ofcbsapikey["api_key"], is_async=True)
-
-    def badEmbed(text):
-        bembed = Embed(color=0xff0000)
-        bembed.set_author(name=text, icon_url="https://i.imgur.com/dgE1VCm.png")
-        return bembed
-
-    def goodEmbed(text):
-        gembed = Embed(color=0x45cafc)
-        gembed.set_author(name=text, icon_url="https://i.imgur.com/fSAGoHh.png")
-        return gembed
 
     @commands.is_owner()
     @commands.command()
@@ -320,7 +311,7 @@ class Statistics(commands.Cog):
                 tag = tag.strip('#').upper().replace('O', '0')
 
             dc = None
-        elif type(person) is discord.User:
+        elif type(person) is discord.Member:
             tag = self.bsconfig.user(member).tag
             if tag is None:
                 return await ctx.send(embed=badEmbed("This person doesn't have a tag saved!"))
