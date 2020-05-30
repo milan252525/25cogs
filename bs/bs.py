@@ -1761,6 +1761,9 @@ class BrawlStarsCog(commands.Cog):
             if tag.startswith("#"):
                 tag = tag.strip('#')
 
+            if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+                return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
+
             msg = ""
             try:
                 player = await self.ofcbsapi.get_player(tag)
@@ -1856,6 +1859,9 @@ class BrawlStarsCog(commands.Cog):
             tag = tag.lower().replace('O', '0')
             if tag.startswith("#"):
                 tag = tag.strip('#')
+
+            if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+                return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
 
             msg = ""
             try:
@@ -1991,6 +1997,9 @@ class BrawlStarsCog(commands.Cog):
             if tag.startswith("#"):
                 tag = tag.strip('#')
 
+            if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+                return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
+
             msg = ""
             try:
                 player = await self.ofcbsapi.get_player(tag)
@@ -2082,6 +2091,9 @@ class BrawlStarsCog(commands.Cog):
         tag = tag.lower().replace('O', '0')
         if tag.startswith("#"):
             tag = tag.strip('#')
+
+        if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+            return await ctx.send(embed=badEmbed("Looks like you are blacklisted!"))
 
         tags = []
         guilds = await self.config.all_guilds()
@@ -2185,6 +2197,9 @@ class BrawlStarsCog(commands.Cog):
         if tag.startswith("#"):
             tag = tag.strip('#')
 
+        if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+            return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
+
         msg = ""
         try:
             player = await self.ofcbsapi.get_player(tag)
@@ -2279,6 +2294,9 @@ class BrawlStarsCog(commands.Cog):
         tag = tag.lower().replace('O', '0')
         if tag.startswith("#"):
             tag = tag.strip('#')
+
+        if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+            return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
 
         msg = ""
         try:
