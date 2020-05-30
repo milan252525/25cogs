@@ -1018,11 +1018,38 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortrolesbd(self):
         await asyncio.sleep(5)
 
+    @tasks.loop(hours=2)
+    async def spainblacklistjob(self):
+        blacklistch = self.bot.get_channel(716329434466222092)
+
+        clubs = []
+        for key in (await self.config.guild(ch.guild).clubs()).keys():
+            club = await self.config.guild(ch.guild).clubs.get_raw(key, "tag")
+            clubs.append(club)
+
+        for tag in (await self.statsconfig.guild(ch.guild).blacklisted()).keys():
+            try:
+                player = await self.ofcbsapi.get_player(tag)
+                player_in_club = "name" in player.raw_data["club"]
+                await asyncio.sleep(0.5)
+            except brawlstats.errors.RequestError as e:
+                await asyncio.sleep(1)
+                continue
+            except Exception as e:
+                return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                         description=f"**Algo ha ido mal solicitando {tag}!**\n({str(e)})"))
+
+            if player_in_club:
+                if player.club.tag.strip("#") in clubs:
+                    reason = await self.statsconfig.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
+                    await blacklistch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                               description=f"Blacklisted user {player.name} with tag {player.tag} joined {player.club.name}!\nBlacklist reason: {reason}",
+                                                               title=str(member)))
+
     @tasks.loop(hours=6)
     async def sortrolesspain(self):
         try:
             ch = self.bot.get_channel(693781513363390475)
-            blacklistch = self.bot.get_channel(716329434466222092)
             await ch.trigger_typing()
             memberrole = ch.guild.get_role(526805067165073408)
             guest = ch.guild.get_role(574176894627479583)
@@ -1058,17 +1085,6 @@ class BrawlStarsCog(commands.Cog):
                 member_roles = []
                 member_role = None
                 member_role_expected = None
-
-                if player_in_club:
-                    if tag in (await self.statsconfig.guild(ch.guild).blacklisted()).keys():
-                        clubs = []
-                        for keey in (await self.config.guild(ch.guild).clubs()).keys():
-                            club = await self.config.guild(ch.guild).clubs.get_raw(keey, "tag")
-                            clubs.append(club)
-
-                        if player.club.tag.strip("#") in clubs:
-                            reason = await self.statsconfig.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
-                            await blacklistch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Blacklisted user {player.name} with tag {player.tag} joined {player.club.name}!\nBlacklist reason: {reason}", title=str(member)))
 
                 tags = []
                 guilds = await self.config.all_guilds()
