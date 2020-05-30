@@ -306,7 +306,6 @@ class Statistics(commands.Cog):
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
-    @blacklist.command(name="add")
     async def blacklist_add(self, ctx, person):
         """
         Add a user or player to blacklist
