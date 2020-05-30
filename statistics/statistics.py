@@ -374,11 +374,10 @@ class Statistics(commands.Cog):
             await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         msg = ""
-        await ctx.send(players)
-        for i in range(len(players)):
+        for plr in players:
             key = ""
             for k in (await self.config.guild(ctx.guild).blacklisted()).keys():
-                if player[i].tag.replace("#", "") == k:
+                if plr.tag.replace("#", "") == k:
                     key = k
 
             dc = None
@@ -387,14 +386,14 @@ class Statistics(commands.Cog):
                 if person is not None:
                     persontag = await self.config.user(person).tag()
                     persontag = "#" + persontag.upper()
-                    if player[i].tag == persontag:
+                    if plr.tag == persontag:
                         dc = str(user)
 
-            await self.config.guild(ctx.guild).clubs.set_raw(key, 'ign', value=player.name)
-            await self.config.guild(ctx.guild).clubs.set_raw(key, 'club', value=player.club.name)
+            await self.config.guild(ctx.guild).clubs.set_raw(key, 'ign', value=plr.name)
+            await self.config.guild(ctx.guild).clubs.set_raw(key, 'club', value=plr.club.name)
             await self.config.guild(ctx.guild).clubs.set_raw(key, 'discord', value=dc)
 
-            msg += f"{player.name}({key}) <:bsband:600741378497970177> {player.club.name} Discord: {dc}"
+            msg += f"{plr.name}({key}) <:bsband:600741378497970177> {plr.club.name} Discord: {dc}"
 
         await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=msg, title="Blacklist"))
 
