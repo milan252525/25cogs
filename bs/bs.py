@@ -202,11 +202,12 @@ class BrawlStarsCog(commands.Cog):
         colour = player.name_color if player.name_color is not None else "0xffffffff"
         embed = discord.Embed(color=discord.Colour.from_rgb(
             int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
-        player_icon = player.raw_data["icon"]["id"]
-        #player_icon_url = await starlist_request("")
+        player_icon_id = player.raw_data["icon"]["id"]
+        icons = await starlist_request("https://www.starlist.pro/app/icons/")
+        player_icon = icons['player'][player_icon_id]['imageUrl2']
         embed.set_author(
             name=f"{player.name} {player.raw_data['tag']}",
-            icon_url=member.avatar_url if isinstance(member, discord.Member) else "https://i.imgur.com/ZwIP41S.png")
+            icon_url=player_icon if icons['status'] == 'ok' else member.avatar_url)
         embed.add_field(
             name="Trophies",
             value=f"{get_league_emoji(player.trophies)} {player.trophies}")
