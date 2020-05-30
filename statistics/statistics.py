@@ -10,6 +10,7 @@ class Statistics(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.config = Config.get_conf(self, identifier=42424269)
         default_guild = {"blacklisted": {}}
         self.config.register_guild(**default_guild)
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
