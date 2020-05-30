@@ -53,7 +53,7 @@ class BrawlStarsCog(commands.Cog):
                 "The Official Brawl Stars API key has not been set.")
         self.ofcbsapi = brawlstats.Client(
             ofcbsapikey["api_key"], is_async=True)
-        self.starlist_key = await self.bot.get_shared_api_tokens("starlist")["starlist"]
+        self.starlist_key = (await self.bot.get_shared_api_tokens("starlist"))["starlist"]
         
     async def starlist_request(self, url):
         header = {"Authorization": f"Bearer {self.starlist_key}"}
