@@ -374,6 +374,7 @@ class Statistics(commands.Cog):
             await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         msg = ""
+        await ctx.send(players)
         for i in range(len(players)):
             key = ""
             for k in (await self.config.guild(ctx.guild).blacklisted()).keys():
