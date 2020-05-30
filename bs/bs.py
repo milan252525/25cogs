@@ -207,9 +207,11 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(
             name="Level",
             value=f"<:exp:614517287809974405> {player.exp_level}")
+        star_powers = sum([len(x) for x in player.brawlers.star_powers])
+        gadgets = sum([len(x) for x in player.raw_data['brawlers']['gadgets']])
         embed.add_field(
             name="Unlocked Brawlers",
-            value=f"<:brawlers:614518101983232020> {len(player.brawlers)}")
+            value=f"<:brawlers:614518101983232020> {len(player.brawlers)} <:starpower:664267686720700456> {star_powers} <:gadget:716341776608133130> {gadgets}")
         if "tag" in player.raw_data["club"]:
             embed.add_field(
                 name="Club",
