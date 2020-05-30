@@ -1022,7 +1022,7 @@ class BrawlStarsCog(commands.Cog):
     async def spainblacklistjob(self):
         try:
             blacklistch = self.bot.get_channel(716329434466222092)
-
+            await blacklistch.trigger_typing()
             clubs = []
             for key in (await self.config.guild(ch.guild).clubs()).keys():
                 club = await self.config.guild(ch.guild).clubs.get_raw(key, "tag")
