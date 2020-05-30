@@ -381,6 +381,7 @@ class Statistics(commands.Cog):
         msg = ""
         for i in range(len(players)):
             key = ""
+            await ctx.send(player[i])
             for k in (await self.config.guild(ctx.guild).blacklisted()).keys():
                 if player[i].tag.replace("#", "") == k:
                     key = k
