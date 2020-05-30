@@ -358,3 +358,46 @@ class Statistics(commands.Cog):
             await ctx.send(embed=goodEmbed(f"{ign} was successfully removed from this server's blacklist!"))
         except KeyError:
             await ctx.send(embed=badEmbed(f"{ign} isn't blacklisted in this server!"))
+
+    @commands.guild_only()
+    @commands.group(invoke_without_command=True)
+    async def blacklist(self, ctx):
+        """View all blacklisted people"""
+        await ctx.trigger_typing()
+
+        if len((await self.config.guild(ctx.guild).clubs()).keys()) < 1:
+            return await ctx.send(
+                embed=badEmbed(f"This server doesn't have anyone blacklisted!"))
+
+        try:
+            players = []
+            keys = (await self.config.guild(ctx.guild).blacklisted()).keys()
+            for key in enumerate(keys):
+                player = await self.ofcbsapi.get_player(key)
+                players.append(player)
+        except brawlstats.errors.RequestError as e:
+            await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+
+        msg = ""
+        for i in range(len(players)):
+            key = ""
+            for k in (await self.config.guild(ctx.guild).blacklisted()).keys():
+                if player[i].tag.replace("#", "") == k:
+                    key = k
+
+            dc = None
+            for user in (await self.config.all_users()):
+                person = self.bot.get_user(user)
+                if person is not None:
+                    persontag = await self.config.user(person).tag()
+                    persontag = "#" + persontag.upper()
+                    if player[i].tag == persontag:
+                        dc = str(user)
+
+            await self.config.guild(ctx.guild).clubs.set_raw(key, 'ign', value=player.name)
+            await self.config.guild(ctx.guild).clubs.set_raw(key, 'club', value=player.club.name)
+            await self.config.guild(ctx.guild).clubs.set_raw(key, 'discord', value=dc)
+
+            msg += f"{player.name}({key}) <:bsband:600741378497970177> {player.club.name} Discord: {dc}"
+
+        await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=msg, title="Blacklist"))
