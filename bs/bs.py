@@ -1020,31 +1020,34 @@ class BrawlStarsCog(commands.Cog):
 
     @tasks.loop(hours=2)
     async def spainblacklistjob(self):
-        blacklistch = self.bot.get_channel(716329434466222092)
+        try:
+            blacklistch = self.bot.get_channel(716329434466222092)
 
-        clubs = []
-        for key in (await self.config.guild(ch.guild).clubs()).keys():
-            club = await self.config.guild(ch.guild).clubs.get_raw(key, "tag")
-            clubs.append(club)
+            clubs = []
+            for key in (await self.config.guild(ch.guild).clubs()).keys():
+                club = await self.config.guild(ch.guild).clubs.get_raw(key, "tag")
+                clubs.append(club)
 
-        for tag in (await self.statsconfig.guild(ch.guild).blacklisted()).keys():
-            try:
-                player = await self.ofcbsapi.get_player(tag)
-                player_in_club = "name" in player.raw_data["club"]
-                await asyncio.sleep(0.5)
-            except brawlstats.errors.RequestError as e:
-                await asyncio.sleep(1)
-                continue
-            except Exception as e:
-                return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                         description=f"**Algo ha ido mal solicitando {tag}!**\n({str(e)})"))
+            for tag in (await self.statsconfig.guild(ch.guild).blacklisted()).keys():
+                try:
+                    player = await self.ofcbsapi.get_player(tag)
+                    player_in_club = "name" in player.raw_data["club"]
+                    await asyncio.sleep(0.5)
+                except brawlstats.errors.RequestError as e:
+                    await asyncio.sleep(1)
+                    continue
+                except Exception as e:
+                    return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                             description=f"**Algo ha ido mal solicitando {tag}!**\n({str(e)})"))
 
-            if player_in_club:
-                if player.club.tag.strip("#") in clubs:
-                    reason = await self.statsconfig.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
-                    await blacklistch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                               description=f"Blacklisted user {player.name} with tag {player.tag} joined {player.club.name}!\nBlacklist reason: {reason}",
-                                                               title=str(member)))
+                if player_in_club:
+                    if player.club.tag.strip("#") in clubs:
+                        reason = await self.statsconfig.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
+                        await blacklistch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                                   description=f"Blacklisted user {player.name} with tag {player.tag} joined {player.club.name}!\nBlacklist reason: {reason}",
+                                                                   title=str(member)))
+        except Exception as e:
+            await ch.send(e)
 
     @tasks.loop(hours=6)
     async def sortrolesspain(self):
