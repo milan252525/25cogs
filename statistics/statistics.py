@@ -372,8 +372,7 @@ class Statistics(commands.Cog):
         try:
             players = []
             keys = (await self.config.guild(ctx.guild).blacklisted()).keys()
-            for key in enumerate(keys):
-                await ctx.send(key)
+            for key in keys:
                 player = await self.ofcbsapi.get_player(key)
                 players.append(player)
         except brawlstats.errors.RequestError as e:
