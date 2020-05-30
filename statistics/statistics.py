@@ -389,10 +389,10 @@ class Statistics(commands.Cog):
             await ctx.send(embed=goodEmbed(f"{player.name} was successfully blacklisted!"))
 
         except brawlstats.errors.NotFoundError as e:
-            await ctx.send(embed=badEmbed("No player with this tag found, try again!"))
+            return await ctx.send(embed=badEmbed("No player with this tag found, try again!"))
 
         except brawlstats.errors.RequestError as e:
-            await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+            return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         except Exception as e:
             return await ctx.send(
@@ -417,3 +417,8 @@ class Statistics(commands.Cog):
             await ctx.send(embed=goodEmbed(f"{ign} was successfully removed from this server's blacklist!"))
         except KeyError:
             await ctx.send(embed=badEmbed(f"{ign} isn't blacklisted in this server!"))
+
+    @commands.command()
+    async def unitedutil(self, ctx):
+        for keey in (await self.bsconfig.guild(ctx.guild).clubs()).keys():
+            await ctx.send(keey)
