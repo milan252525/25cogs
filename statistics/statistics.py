@@ -332,8 +332,7 @@ class Statistics(commands.Cog):
                 club = await self.bsconfig.guild(ctx.guild).clubs.get_raw(keey, "tag")
                 clubs.append(club)
 
-            await ctx.send(f"{plr.club.tag} - {clubs}")
-            if plr.club.tag in clubs:
+            if plr.club.tag.strip("#") in clubs:
                 alert = True
                 alertembed = True
 
