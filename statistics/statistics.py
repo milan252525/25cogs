@@ -328,7 +328,7 @@ class Statistics(commands.Cog):
             keys = (await self.bsconfig.guild(ctx.guild).clubs()).keys()
             clubs = []
             for key in keys:
-                club = await self.config.guild(ctx.guild).clubs.get_raw(key, "tag")
+                club = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
                 clubs.append(club)
 
             keyforembed = "#" + key.upper()
