@@ -353,6 +353,11 @@ class BrawlStarsCog(commands.Cog):
         await ctx.trigger_typing()
         prefix = ctx.prefix
         member = ctx.author if member is None else member
+                
+        try:
+            member.id
+        except AttributeError:
+            return await ctx.send(embed=badEmbed(f"No such brawler found! If the brawler's name contains spaces surround it with quotes!"))
 
         tag = await self.config.user(member).tag()
         if tag is None:
