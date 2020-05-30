@@ -324,15 +324,19 @@ class Statistics(commands.Cog):
                 if plr.tag.replace("#", "").lower() == k:
                     key = k
 
+            player_in_club = "name" in player.raw_data["club"]
+            if player_in_club:
+                clubname = player.club.name
+            else:
+                clubname = "No club"
+
             await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'ign', value=plr.name)
-            await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'club', value=plr.club.name)
+            await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'club', value=clubname)
 
             clubs = []
             for keey in (await self.bsconfig.guild(ctx.guild).clubs()).keys():
                 club = await self.bsconfig.guild(ctx.guild).clubs.get_raw(keey, "tag")
                 clubs.append(club)
-
-            player_in_club = "name" in player.raw_data["club"]
 
             if player_in_club:
                 if plr.club.tag.strip("#") in clubs:
@@ -343,9 +347,9 @@ class Statistics(commands.Cog):
 
             reason = await self.config.guild(ctx.guild).blacklisted.get_raw(key, "reason", default="")
             if alert:
-                msg += f"--->{plr.name}({keyforembed}) <:bsband:600741378497970177> **{plr.club.name}** Reason: {reason}<---\n"
+                msg += f"--->{plr.name}({keyforembed}) <:bsband:600741378497970177> **{clubname}** Reason: {reason}<---\n"
             if not alert:
-                msg += f"{plr.name}({keyforembed}) <:bsband:600741378497970177> **{plr.club.name}** Reason: {reason}\n"
+                msg += f"{plr.name}({keyforembed}) <:bsband:600741378497970177> **{clubname}** Reason: {reason}\n"
 
         if alertembed:
             await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=msg, title="Blacklist"))
