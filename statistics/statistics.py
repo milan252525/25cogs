@@ -389,9 +389,9 @@ class Statistics(commands.Cog):
                     if plr.tag == persontag:
                         dc = str(user)
 
-            await self.config.guild(ctx.guild).clubs.set_raw(key, 'ign', value=plr.name)
-            await self.config.guild(ctx.guild).clubs.set_raw(key, 'club', value=plr.club.name)
-            await self.config.guild(ctx.guild).clubs.set_raw(key, 'discord', value=dc)
+            await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'ign', value=plr.name)
+            await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'club', value=plr.club.name)
+            await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'discord', value=dc)
 
             msg += f"{plr.name}({key}) <:bsband:600741378497970177> {plr.club.name} Discord: {dc}"
 
