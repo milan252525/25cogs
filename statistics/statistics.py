@@ -332,9 +332,12 @@ class Statistics(commands.Cog):
                 club = await self.bsconfig.guild(ctx.guild).clubs.get_raw(keey, "tag")
                 clubs.append(club)
 
-            if plr.club.tag.strip("#") in clubs:
-                alert = True
-                alertembed = True
+            player_in_club = "name" in player.raw_data["club"]
+
+            if player_in_club:
+                if plr.club.tag.strip("#") in clubs:
+                    alert = True
+                    alertembed = True
 
             keyforembed = "#" + key.upper()
 

@@ -1110,6 +1110,7 @@ class BrawlStarsCog(commands.Cog):
     @tasks.loop(hours=6)
     async def sortrolesspain(self):
         ch = self.bot.get_channel(693781513363390475)
+        blacklistch = self.bot.get_channel(716329434466222092)
         await ch.trigger_typing()
         memberrole = ch.guild.get_role(526805067165073408)
         guest = ch.guild.get_role(574176894627479583)
@@ -1138,11 +1139,25 @@ class BrawlStarsCog(commands.Cog):
                 return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                          description=f"**Algo ha ido mal solicitando {tag}!**\n({str(e)})"))
 
+
+
             msg = ""
             player_in_club = "name" in player.raw_data["club"]
             member_roles = []
             member_role = None
             member_role_expected = None
+
+            if player_in_club:
+                if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+                    clubs = []
+                    for keey in (await self.config.guild(ctx.guild).clubs()).keys():
+                        club = await self.config.guild(ctx.guild).clubs.get_raw(keey, "tag")
+                        clubs.append(club)
+
+                    if player.club.tag.strip("#") in clubs:
+                        reason = await self.statsconfig.guild(ctx.guild).blacklisted.get_raw(key, "reason", default="")
+                        await blacklistch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Blacklisted user {player.name} with tag {player.tag} joined {player.club.name}!\nBlacklist reason: {reason}", title=str(member)))
+
             tags = []
             guilds = await self.config.all_guilds()
             spain = guilds[460550486257565697]
