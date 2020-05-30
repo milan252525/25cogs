@@ -383,7 +383,7 @@ class Statistics(commands.Cog):
 
         except Exception as e:
             return await ctx.send(
-                "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
+                f"**Something went wrong, please send a personal message to LA Modmail bot or try again!** ({e})")
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
