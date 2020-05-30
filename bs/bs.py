@@ -1053,7 +1053,7 @@ class BrawlStarsCog(commands.Cog):
                     if player.club.tag.strip("#") in clubs:
                         reason = await self.statsconfig.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
                         await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                                   description=f"Blacklisted user {player.name} with tag {player.tag} joined {player.club.name}!\nBlacklist reason: {reason}"))
+                                                                   description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
         except Exception as e:
             await ch.send(e)
 
