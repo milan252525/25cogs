@@ -10,6 +10,8 @@ class Statistics(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        default_guild = {"blacklisted": {}}
+        self.config.register_guild(**default_guild)
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
         self.crconfig = Config.get_conf(None, identifier=2512325, cog_name="ClashRoyaleCog")
         self.lbrenewallabs.start()
@@ -33,6 +35,16 @@ class Statistics(commands.Cog):
         if ofcbsapikey["api_key"] is None:
             raise ValueError("The Official Brawl Stars API key has not been set.")
         self.ofcbsapi = brawlstats.Client(ofcbsapikey["api_key"], is_async=True)
+
+    def badEmbed(text):
+        bembed = Embed(color=0xff0000)
+        bembed.set_author(name=text, icon_url="https://i.imgur.com/dgE1VCm.png")
+        return bembed
+
+    def goodEmbed(text):
+        gembed = Embed(color=0x45cafc)
+        gembed.set_author(name=text, icon_url="https://i.imgur.com/fSAGoHh.png")
+        return gembed
 
     @commands.is_owner()
     @commands.command()
@@ -291,3 +303,48 @@ class Statistics(commands.Cog):
                 elif m == messages[4]:
                     embed = discord.Embed(color=discord.Colour.gold(), description=m)
                     await message5.edit(embed=embed)
+
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    @blacklist.command(name="add")
+    async def blacklist_add(self, ctx, person):
+        """
+        Add a user or player to blacklist
+        """
+        await ctx.trigger_typing()
+        if type(person) is str:
+            tag = person
+
+            if tag.startswith("#"):
+                tag = tag.strip('#').upper().replace('O', '0')
+
+            dc = None
+        elif type(person) is discord.User:
+            tag = self.bsconfig.user(member).tag
+            if tag is None:
+                return await ctx.send(embed=badEmbed("This person doesn't have a tag saved!"))
+
+            dc = str(person)
+
+        if tag in (await self.config.guild(ctx.guild).blacklisted()).keys():
+            return await ctx.send(embed=badEmbed("This person is already blacklisted!"))
+
+        try:
+            player = await self.ofcbsapi.get_player(tag)
+            result = {
+                "ign": player.name,
+                "club": player.club.name,
+                "discord": dc
+            }
+            await self.config.guild(ctx.guild).blacklisted.set_raw(tag, value=result)
+            await ctx.send(embed=goodEmbed(f"{player.name} was successfully blacklisted!"))
+
+        except brawlstats.errors.NotFoundError as e:
+            await ctx.send(embed=badEmbed("No player with this tag found, try again!"))
+
+        except brawlstats.errors.RequestError as e:
+            await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+
+        except Exception as e:
+            return await ctx.send(
+                "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
