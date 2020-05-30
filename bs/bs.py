@@ -204,7 +204,7 @@ class BrawlStarsCog(commands.Cog):
             int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
         player_icon_id = player.raw_data["icon"]["id"]
         icons = await self.starlist_request("https://www.starlist.pro/app/icons/")
-        player_icon = icons['player'][player_icon_id]['imageUrl2']
+        player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
         embed.set_author(
             name=f"{player.name} {player.raw_data['tag']}",
             icon_url=player_icon if icons['status'] == 'ok' else member.avatar_url)
