@@ -317,6 +317,7 @@ class Statistics(commands.Cog):
 
         msg = ""
         alertembed = False
+        messages = []
         for plr in players:
             alert = False
             key = ""
@@ -346,16 +347,24 @@ class Statistics(commands.Cog):
 
             keyforembed = "#" + key.upper()
 
+            if len(msg) > 1800:
+                messages.append(msg)
+                msg = ""
+
             reason = await self.config.guild(ctx.guild).blacklisted.get_raw(key, "reason", default="")
             if alert:
                 msg += f"--->{plr.name}({keyforembed}) <:bsband:600741378497970177> **{clubname}** Reason: {reason}<---\n"
             if not alert:
                 msg += f"{plr.name}({keyforembed}) <:bsband:600741378497970177> **{clubname}** Reason: {reason}\n"
 
-        if alertembed:
-            await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=msg, title="Blacklist"))
-        elif not alertembed:
-            await ctx.send(embed=discord.Embed(color=discord.Colour.green(), description=msg, title="Blacklist"))
+        if len(msg) > 0:
+            messages.append(msg)
+
+        for m in messages:
+            if alertembed:
+                await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=m, title="Blacklist"))
+            elif not alertembed:
+                await ctx.send(embed=discord.Embed(color=discord.Colour.green(), description=m, title="Blacklist"))
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
@@ -417,7 +426,3 @@ class Statistics(commands.Cog):
             await ctx.send(embed=goodEmbed(f"{ign} was successfully removed from this server's blacklist!"))
         except KeyError:
             await ctx.send(embed=badEmbed(f"{ign} isn't blacklisted in this server!"))
-
-    @commands.command()
-    async def simpleremove(self, ctx, name):
-        await self.config.guild(ctx.guild).blacklisted.clear_raw(name)
