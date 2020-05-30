@@ -346,7 +346,7 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command()
-    async def brawler(self, ctx, brawler, member: discord.Member = None):
+    async def brawler(self, ctx, brawler: str, member: Union[discord.Member, str] = None):
         """Brawler specific info"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
