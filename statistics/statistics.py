@@ -299,25 +299,22 @@ class Statistics(commands.Cog):
     @commands.guild_only()
     @commands.command()
     @commands.has_permissions(administrator=True)
-    async def blacklist_add(self, ctx, person):
+    async def blacklist_add(self, ctx, person: str):
         """
         Add a user or player to blacklist
         """
         await ctx.trigger_typing()
-        await ctx.send(person)
-        if type(person) is str:
+
+        tag = self.bsconfig.user(person).tag
+
+        if tag is None:
             tag = person
 
-            if tag.startswith("#"):
-                tag = tag.strip('#').upper().replace('O', '0')
+        tag = tag.lower().replace('O', '0')
+        if tag.startswith("#"):
+            tag = tag.strip('#')
 
-            dc = None
-        elif type(person) is discord.Member:
-            tag = self.bsconfig.user(member).tag
-            if tag is None:
-                return await ctx.send(embed=badEmbed("This person doesn't have a tag saved!"))
-
-            dc = str(person)
+        dc = None
 
         if tag in (await self.config.guild(ctx.guild).blacklisted()).keys():
             return await ctx.send(embed=badEmbed("This person is already blacklisted!"))
@@ -341,3 +338,23 @@ class Statistics(commands.Cog):
         except Exception as e:
             return await ctx.send(
                 "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
+
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    @commands.command()
+    async def blacklist_remove(self, ctx, tag: str):
+        """
+        Remove a person from blacklist
+        """
+        await ctx.trigger_typing()
+
+        tag = tag.lower().replace('O', '0')
+        if tag.startswith("#"):
+            tag = tag.strip('#')
+
+        try:
+            ign = await self.config.guild(ctx.guild).blacklisted.get_raw(tag, "name")
+            await self.config.guild(ctx.guild).blacklisted.clear_raw(tag)
+            await ctx.send(embed=goodEmbed(f"{ign} was successfully removed from this server's blacklist!"))
+        except KeyError:
+            await ctx.send(embed=badEmbed(f"{ign} isn't blacklisted in this server!"))
