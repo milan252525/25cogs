@@ -299,16 +299,11 @@ class Statistics(commands.Cog):
     @commands.guild_only()
     @commands.command()
     @commands.has_permissions(administrator=True)
-    async def blacklist_add(self, ctx, person: str):
+    async def blacklist_add(self, ctx, tag: str):
         """
         Add a user or player to blacklist
         """
         await ctx.trigger_typing()
-
-        tag = self.bsconfig.user(person).tag
-
-        if tag is None:
-            tag = person
 
         tag = tag.lower().replace('O', '0')
         if tag.startswith("#"):
@@ -381,7 +376,6 @@ class Statistics(commands.Cog):
         msg = ""
         for i in range(len(players)):
             key = ""
-            await ctx.send(player[i])
             for k in (await self.config.guild(ctx.guild).blacklisted()).keys():
                 if player[i].tag.replace("#", "") == k:
                     key = k
@@ -402,3 +396,11 @@ class Statistics(commands.Cog):
             msg += f"{player.name}({key}) <:bsband:600741378497970177> {player.club.name} Discord: {dc}"
 
         await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=msg, title="Blacklist"))
+
+    @commands.guild_only()
+    @commands.command()
+    async def clearblacklisted(self, ctx):
+        keys = (await self.config.guild(ctx.guild).blacklisted()).keys()
+        for key in keys:
+            await self.config.guild(ctx.guild).blacklisted.clear_raw(key)
+            await ctx.send(f"{key} deleted")
