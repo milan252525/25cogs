@@ -448,8 +448,8 @@ class BrawlStarsCog(commands.Cog):
         embed = discord.Embed(title="EVENTS", colour=discord.Colour.green())
         active = ""
         for ev in events['active']:
-            if ev['map']['gameMode']['name'] == "Duo Showdown":
-                await ctx.send(str(ev))
+            if ev['slot']['name'] == "Duo Showdown":
+                continue
             modifier = ""
             if ev['modifier'] is not None:
                 modifier = f"↳ Modifier: {ev['modifier']['name']}\n"
@@ -457,6 +457,8 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(name="ACTIVE", value=active, inline=False)
         upcoming = ""
         for ev in events['upcoming']:
+            if ev['slot']['name'] == "Duo Showdown":
+                continue
             modifier = ""
             if ev['modifier'] is not None:
                 modifier = f"↳ Modifier: {ev['modifier']['name']}\n"
