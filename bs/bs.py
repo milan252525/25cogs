@@ -437,7 +437,7 @@ class BrawlStarsCog(commands.Cog):
     def time_left(self, seconds):
         hours, remainder = divmod(seconds, 3600)
         minutes, _ = divmod(remainder, 60)
-        return "h {:02}m".format(int(hours), int(minutes))
+        return "{}h {:02}m".format(int(hours), int(minutes))
                        
     @commands.command(aliases=['e'])
     async def events(self, ctx):
@@ -448,14 +448,17 @@ class BrawlStarsCog(commands.Cog):
         embed = discord.Embed(title="EVENTS", colour=discord.Colour.green())
         active = ""
         for ev in events['active']:
-            active += f"__{ev['map']['gameMode']['name']}__\n↳ **Map:** {ev['map']['name']}\n"
-        embed.add_field(name="Active", value=active, inline=False)
+            modifier = ""
+            if ev['modifier'] is not None:
+                modifier = f"↳ *Modifier:* {ev['modifier']['name']}\n"
+            active += f"**{ev['map']['gameMode']['name']}**\n↳ *Map:* {ev['map']['name']}\n{modifier}"
+        embed.add_field(name="ACTIVE", value=active, inline=False)
         upcoming = ""
         for ev in events['upcoming']:
             start = datetime.datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
             diff = self.time_left((start - time_now).total_seconds())
-            upcoming += f"__{ev['map']['gameMode']['name']}__\n↳ **Map:** {ev['map']['name']}\n↳ **Starts in:** {diff}\n"
-        embed.add_field(name="Upcoming", value=upcoming, inline=False)
+            upcoming += f"**{ev['map']['gameMode']['name']}**\n↳ *Map:* {ev['map']['name']}\n↳ *Starts in:* {diff}\n"
+        embed.add_field(name="UPCOMING", value=upcoming, inline=False)
         await ctx.send(embed=embed)
         #await ctx.send(str(events['upcoming'][0]))
                       
