@@ -448,13 +448,13 @@ class BrawlStarsCog(commands.Cog):
         embed = discord.Embed(title="Events", colour=discord.Colour.green())
         active = ""
         for ev in events['active']:
-            active += f"**{ev['map']['gameMode']['name']}** {ev['map']['name']}`n"
+            active += f"**{ev['map']['gameMode']['name']}** {ev['map']['name']}\n"
         embed.add_field(name="Active", value=active, inline=False)
         upcoming = ""
         for ev in events['upcoming']:
             start = datetime.datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
             diff = self.time_left((start - time_now).total_seconds())
-            upcoming += f"**{ev['map']['gameMode']['name']}** {ev['map']['name']} in {diff}`n"
+            upcoming += f"**{ev['map']['gameMode']['name']}** {ev['map']['name']} in {diff}\n"
         embed.add_field(name="Upcoming", value=upcoming, inline=False)
         await ctx.send(embed=embed)
         await ctx.send(str(events['upcoming'][0]))
