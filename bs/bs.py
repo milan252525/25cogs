@@ -433,7 +433,21 @@ class BrawlStarsCog(commands.Cog):
             starpowers += f"<:starpower:664267686720700456> {star.get('name')}\n"
         embed.add_field(name="Star Powers", value=starpowers if starpowers != "" else "<:starpower:664267686720700456> None")
         await ctx.send(embed=embed)
-                        
+            
+    @commands.command(aliases=['e'])
+    async def events(self, ctx, *):
+        events = await self.starlist_request("https://www.starlist.pro/app/events2")
+        if events['status'] != "ok":
+            return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
+        embed = discord.Embed(title="Events", colour=discord.Colour.green())
+        active = ""
+        for ev in events['active']:
+            active += f"**{ev['slot']['name']}** {ev['map']['name']}"
+        upcoming = ""
+        for ev in events['upcoming']:
+            upcoming += f"**{ev['slot']['name']}** {ev['map']['name']} {ev['startTime']}"
+        await ctx.send(embed=embed)
+                      
     @commands.command()
     async def club(self, ctx, key: Union[discord.Member, str] = None):
         """View players club or club saved in a server"""
