@@ -451,7 +451,7 @@ class BrawlStarsCog(commands.Cog):
             modifier = ""
             if ev['modifier'] is not None:
                 modifier = f"↳ Modifier: {ev['modifier']['name']}\n"
-            active += f"**{ev['map']['gameMode']['name']}**\n↳ 🗺️ {ev['map']['name']}\n{modifier}"
+            active += f"**{ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n{modifier}"
         embed.add_field(name="ACTIVE", value=active, inline=False)
         upcoming = ""
         for ev in events['upcoming']:
@@ -460,7 +460,7 @@ class BrawlStarsCog(commands.Cog):
                 modifier = f"↳ Modifier: {ev['modifier']['name']}\n"
             start = datetime.datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
             diff = self.time_left((start - time_now).total_seconds())
-            upcoming += f"**{ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n↳ 🕒 {diff}\n{modifier}"
+            upcoming += f"**{ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n↳ Starts in: {diff}\n{modifier}"
         embed.add_field(name="UPCOMING", value=upcoming, inline=False)
         await ctx.send(embed=embed)
         #await ctx.send(str(events['upcoming'][0]))
