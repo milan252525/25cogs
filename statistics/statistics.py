@@ -436,7 +436,7 @@ class Statistics(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @commands.command()
-    async def blacklist_remove(self, ctx, tag: str):
+    async def simpleremove(self, ctx, tag):
         await self.config.guild(ctx.guild).blacklisted.clear_raw(tag)
         await ctx.send(embed=goodEmbed("removed"))
 
