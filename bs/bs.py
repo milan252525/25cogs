@@ -439,13 +439,18 @@ class BrawlStarsCog(commands.Cog):
         events = await self.starlist_request("https://www.starlist.pro/app/events2")
         if events['status'] != "ok":
             return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
+        time_now = datetime.datetime.now()
         embed = discord.Embed(title="Events", colour=discord.Colour.green())
         active = ""
         for ev in events['active']:
-            active += f"**{ev['slot']['name']}** {ev['map']['name']}"
+            active += f"**{ev['gameMode']['name']}** {ev['map']['name']}"
+        embed.add_field(name="Active", value=active, inline=False)
         upcoming = ""
         for ev in events['upcoming']:
-            upcoming += f"**{ev['slot']['name']}** {ev['map']['name']} {ev['startTime']}"
+            start = datetime.datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
+            diff = start - time_now
+            upcoming += f"**{ev['gameMode']['name']}** {ev['map']['name']} in {diff}"
+        embed.add_field(name="Upcoming", value=upcoming, inline=False)
         await ctx.send(embed=embed)
         await ctx.send(str(events['upcoming'][0]))
                       
