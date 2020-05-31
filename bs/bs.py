@@ -433,7 +433,12 @@ class BrawlStarsCog(commands.Cog):
             starpowers += f"<:starpower:664267686720700456> {star.get('name')}\n"
         embed.add_field(name="Star Powers", value=starpowers if starpowers != "" else "<:starpower:664267686720700456> None")
         await ctx.send(embed=embed)
-            
+    
+    def time_left(self, seconds):
+        hours, remainder = divmod(seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        return "{:02}:{:02}:{:02}".format(int(hours), int(minutes), int(seconds))
+                       
     @commands.command(aliases=['e'])
     async def events(self, ctx):
         events = await self.starlist_request("https://www.starlist.pro/app/events2")
@@ -443,13 +448,13 @@ class BrawlStarsCog(commands.Cog):
         embed = discord.Embed(title="Events", colour=discord.Colour.green())
         active = ""
         for ev in events['active']:
-            active += f"**{ev['map']['gameMode']['name']}** {ev['map']['name']}"
+            active += f"**{ev['map']['gameMode']['name']}** {ev['map']['name']}`n"
         embed.add_field(name="Active", value=active, inline=False)
         upcoming = ""
         for ev in events['upcoming']:
             start = datetime.datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
-            diff = start - time_now
-            upcoming += f"**{ev['map']['gameMode']['name']}** {ev['map']['name']} in {diff}"
+            diff = self.time_left((start - time_now).total_seconds())
+            upcoming += f"**{ev['map']['gameMode']['name']}** {ev['map']['name']} in {diff}`n"
         embed.add_field(name="Upcoming", value=upcoming, inline=False)
         await ctx.send(embed=embed)
         await ctx.send(str(events['upcoming'][0]))
