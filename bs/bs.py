@@ -448,6 +448,8 @@ class BrawlStarsCog(commands.Cog):
         embed = discord.Embed(title="EVENTS", colour=discord.Colour.green())
         active = ""
         for ev in events['active']:
+            if ev['map']['gameMode']['name'] == "Duo Showdown":
+                await ctx.send(str(ev))
             modifier = ""
             if ev['modifier'] is not None:
                 modifier = f"↳ Modifier: {ev['modifier']['name']}\n"
