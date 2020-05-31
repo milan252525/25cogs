@@ -432,3 +432,13 @@ class Statistics(commands.Cog):
             await ctx.send(embed=goodEmbed(f"{ign} was successfully removed from this server's blacklist!"))
         except KeyError:
             await ctx.send(embed=badEmbed(f"{ign} isn't blacklisted in this server!"))
+
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    @commands.command()
+    async def blacklist_remove(self, ctx, tag: str):
+        await self.config.guild(ctx.guild).blacklisted.clear_raw(tag)
+        await ctx.send(embed=goodEmbed("removed"))
+
+
+
