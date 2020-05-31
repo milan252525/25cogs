@@ -435,7 +435,7 @@ class BrawlStarsCog(commands.Cog):
         await ctx.send(embed=embed)
             
     @commands.command(aliases=['e'])
-    async def events(self, ctx, *):
+    async def events(self, ctx):
         events = await self.starlist_request("https://www.starlist.pro/app/events2")
         if events['status'] != "ok":
             return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
@@ -447,6 +447,7 @@ class BrawlStarsCog(commands.Cog):
         for ev in events['upcoming']:
             upcoming += f"**{ev['slot']['name']}** {ev['map']['name']} {ev['startTime']}"
         await ctx.send(embed=embed)
+        await ctx.send(str(events['upcoming'][0]))
                       
     @commands.command()
     async def club(self, ctx, key: Union[discord.Member, str] = None):
