@@ -2,7 +2,7 @@ import discord
 from redbot.core import commands, Config, checks
 from redbot.core.data_manager import cog_data_path
 from discord.ext import tasks
-from asyncio import sleep, TimeoutError
+from asyncio import sleep, TimeoutError, ensure_future
 from random import choice, randint
 from copy import copy
 from time import time
@@ -39,7 +39,7 @@ class Events(commands.Cog):
                 self.longwords.append(line.replace("\n", ""))
                 line = file.readline()
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
-        self.brawlers = asyncio.get_event_loop().run_until_complete(self.get_brawlers())
+        self.brawlers = ensure_future(self.get_brawlers())
 
     async def get_brawlers(self):
         return await self.bsconfig.starlist_request("www.starlist.pro/app/brawlers")
