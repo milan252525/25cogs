@@ -43,7 +43,16 @@ class Events(commands.Cog):
 
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
-            chall = choice(("word", "math", "geo", "trivia", "brawl", "brawl", "brawl")) 
+            chall = choice(("word", "math", "geo", "trivia", "brawl", "brawl", "brawl"))
+            only_first_three = False
+            if randint(1, 100) < 20:
+                only_first_three = True
+                embed = discord.Embed(title="ATTENTION", description=f"Next challenge accepts only first **3** right answers!", colour=discord.Color.red())
+                embed.set_footer(text="Be quick!")
+                message = await self.bf_data["channel"].send(embed=embed)
+                await sleep(5)
+                await message.delete()
+
             #start random challenge
             if chall == "word":
                 res = await self.word_chall()
@@ -56,6 +65,8 @@ class Events(commands.Cog):
             elif chall == "brawl":
                 res = await self.brawler_chall()
             #process results
+            if only_first_three:
+                res = res[:3]
             damage = 0
             log = ""
             dealt = self.DAMAGE_PER_CHALL
@@ -223,7 +234,7 @@ class Events(commands.Cog):
         brawler = choice(self.brawlers['list'])
         key = choice(("starPowers", "gadgets"))
         to_guess = choice(brawler[key])
-        answer = brawler.name
+        answer = brawler['name']
         embed = discord.Embed(title="BRAWL CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`What brawler has Star Power/Gadget called {to_guess.name}?`", colour=discord.Color.green())
         embed.set_footer(text="Letter case doesn't matter.")
         message = await self.bf_data["channel"].send(embed=embed)
