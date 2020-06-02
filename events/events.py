@@ -259,7 +259,7 @@ class Events(commands.Cog):
         if self.bf_active:
             return await ctx.send("Boss Fight is already running!")
         if self.brawlers is None:
-            self.brawlers = await self.bsconfig.starlist_request("www.starlist.pro/app/brawlers")
+            self.brawlers = await self.bsconfig.starlist_request("https://www.starlist.pro/app/brawlers")
         self.bf_data = {
                 "channel" : channel,
                 "message" : None,
