@@ -1601,11 +1601,11 @@ class BrawlStarsCog(commands.Cog):
                     tags.append(tagn)
 
                 if not player_in_club:
-                    msg += await self.removeroleifpresent(member, lafam, memberclub, senior, aqua, united, fury, newcomer)
+                    msg += await self.removeroleifpresent(member, lafam, memberclub, senior, aqua, united, fury, newcomer, minus)
                     msg += await self.addroleifnotpresent(member, viewer)
 
                 if player_in_club and "LA " not in player.club.name and player.club.tag not in tags:
-                    msg += await self.removeroleifpresent(member, lafam, memberclub, senior, aqua, united, fury, newcomer)
+                    msg += await self.removeroleifpresent(member, lafam, memberclub, senior, aqua, united, fury, newcomer, minus)
                     msg += await self.addroleifnotpresent(member, viewer)
 
                 if player_in_club and "LA " in player.club.name and player.club.tag not in tags:
