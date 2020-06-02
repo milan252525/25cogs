@@ -225,7 +225,7 @@ class BrawlStarsCog(commands.Cog):
             value=f"{get_league_emoji(player.trophies)} {player.trophies}")
         embed.add_field(
             name="Highest Trophies",
-            value=f"<:totaltrophies:614517396111097866> {player.highest_trophies}")
+            value=f"<:totaltrophies:614517396111097866> {player.highest_trophies} (<:starpoint:661265872891150346> {calculate_starpoints(player)})")
         embed.add_field(
             name="Level",
             value=f"<:exp:614517287809974405> {player.exp_level}")
@@ -2764,14 +2764,3 @@ class BrawlStarsCog(commands.Cog):
             messages.append(msg)
         for m in messages:
             await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=m))
-
-    @commands.command()
-    @commands.has_permissions(administrator=True)
-    async def starpointstest(self, ctx, person: discord.Member):
-        if person is None:
-            person = author
-
-        tag = await self.config.user(person).tag()
-        player = await self.ofcbsapi.get_player(tag)
-
-        await ctx.send(calculate_starpoints(player))
