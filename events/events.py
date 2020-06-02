@@ -46,7 +46,7 @@ class Events(commands.Cog):
 
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
-            chall = choice(("word", "math", "geo", "trivia", "brawl")) 
+            chall = choice(("word", "math", "geo", "trivia", "brawl", "brawl", "brawl")) 
             #start random challenge
             if chall == "word":
                 res = await self.word_chall()
