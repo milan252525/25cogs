@@ -38,6 +38,8 @@ class Events(commands.Cog):
             while line != "":
                 self.longwords.append(line.replace("\n", ""))
                 line = file.readline()
+        self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
+        self.brawlers = await self.bsconfig.starlist_request("www.starlist.pro/app/brawlers")
 
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
@@ -211,6 +213,30 @@ class Events(commands.Cog):
                 pass
         await message.edit(embed=discord.Embed(title="TRIVIA CHALLENGE", description=f"The right answer was `{answers[0].upper()}`", colour=discord.Color.dark_orange()))
         await message.delete(delay=5) 
+        return success
+
+    async def brawler_chall(self):
+        limit = 15
+        start = time()
+        brawler = choice(self.brawlers['list']))
+        key = choice(("starPowers", "gadgets"))
+        to_guess = choice(brawler[key])
+        answer = brawler.name
+        embed = discord.Embed(title="BRAWL CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`What brawler has Star Power/Gadget called {to_guess.name}?`", colour=discord.Color.green())
+        embed.set_footer(text="Letter case doesn't matter.")
+        message = await self.bf_data["channel"].send(embed=embed)
+        def check(m):
+            return not m.author.bot and answer.lower() in m.content.lower() and m.channel == self.bf_data["channel"]
+        success = []
+        while time() - start < limit:
+            try:
+                msg = await self.bot.wait_for('message', check=check, timeout=3)
+                if msg.author not in success:
+                    success.append(msg.author)
+            except TimeoutError:
+                pass
+        await message.edit(embed=discord.Embed(title="BRAWL CHALLENGE", description=f"The right answer was `{answer}`", colour=discord.Color.dark_green()))
+        await message.delete(delay=5)
         return success
     
     @commands.Cog.listener()
