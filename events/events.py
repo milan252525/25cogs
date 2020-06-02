@@ -45,10 +45,11 @@ class Events(commands.Cog):
         while self.bf_data['hp_left'] > 0:
             chall = choice(("word", "math", "geo", "trivia", "brawl", "brawl", "brawl"))
             
+            chance = randint(0, 100)
             only_first_three = False
-            if randint(1, 100) < 10:
+            if chance < 15:
                 only_first_three = True
-                embed = discord.Embed(title="ATTENTION", description=f"Next challenge accepts only first **3** right answers!", colour=discord.Color.red())
+                embed = discord.Embed(title="BOSS GOT ANGRY", description=f"Next challenge accepts only first **3** right answers!", colour=discord.Color.red())
                 embed.set_footer(text="Be quick!")
                 message = await self.bf_data["channel"].send(embed=embed)
                 await sleep(5)
@@ -56,7 +57,7 @@ class Events(commands.Cog):
 
             boss_kill = False
             dead = []
-            if randint(1, 100) < 50 and not only_first_three and len(self.bf_data["players"]) > 0:
+            if not only_first_three and chance < 30 and len(self.bf_data["players"]) > 0:
                 hit = ""
                 boss_kill = True
                 for _ in range(randint(2, 5)):
@@ -64,10 +65,10 @@ class Events(commands.Cog):
                     if to_kill not in dead:
                         dead.append(to_kill)
                 hit = " ".join([self.bot.get_user(x).mention for x in dead])
-                embed = discord.Embed(title="MISSILE INCOMING", description=f"Boss launched a missile!\nFollowing players got hit and can't answer this round:\n{hit}", colour=discord.Color.red())
+                embed = discord.Embed(title="BOSS LAUNCHED A MISSILE", description=f"Following players got hit and can't answer this round:\n{hit}", colour=discord.Color.red())
                 embed.set_footer(text="Better luck next time!")
                 message = await self.bf_data["channel"].send(embed=embed)
-                await sleep(5)
+                await sleep(10)
                 await message.delete()
 
             #start random challenge
