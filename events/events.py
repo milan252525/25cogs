@@ -218,7 +218,7 @@ class Events(commands.Cog):
     async def brawler_chall(self):
         limit = 15
         start = time()
-        brawler = choice(self.brawlers['list']))
+        brawler = choice(self.brawlers['list'])
         key = choice(("starPowers", "gadgets"))
         to_guess = choice(brawler[key])
         answer = brawler.name
@@ -235,7 +235,7 @@ class Events(commands.Cog):
                     success.append(msg.author)
             except TimeoutError:
                 pass
-        await message.edit(embed=discord.Embed(title="BRAWL CHALLENGE", description=f"The right answer was `{answer}`", colour=discord.Color.dark_green()))
+        await message.edit(embed=discord.Embed(title="BRAWL CHALLENGE", description=f"The right answer was `{answer}`", colour=discord.Color.dark_green ()))
         await message.delete(delay=5)
         return success
     
