@@ -1564,10 +1564,11 @@ class BrawlStarsCog(commands.Cog):
             fury = ch.guild.get_role(703591387970535435)
             newcomer = ch.guild.get_role(631516344684380205)
             minus = ch.guild.get_role(701772917909880892)
+            whitelist = ch.guild.get_role(714503658183852052)
             error_counter = 0
 
             for member in ch.guild.members:
-                if member.bot:
+                if member.bot or whitelist in member.roles:
                     continue
                 tag = await self.config.user(member).tag()
                 if tag is None:
@@ -1609,7 +1610,7 @@ class BrawlStarsCog(commands.Cog):
 
                 if player_in_club and "LA " in player.club.name and player.club.tag not in tags:
                     msg += await self.removeroleifpresent(member, viewer, memberclub, senior, aqua, united, fury, newcomer)
-                    msg += await self.addroleifnotpresent(member, lafam)
+                    msg += await self.addroleifnotpresent(member, lafam, minus)
 
                 if player_in_club and player.club.tag in tags:
                     msg += await self.removeroleifpresent(member, lafam, viewer, newcomer)
