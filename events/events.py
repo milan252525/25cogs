@@ -2,7 +2,7 @@ import discord
 from redbot.core import commands, Config, checks
 from redbot.core.data_manager import cog_data_path
 from discord.ext import tasks
-from asyncio import sleep, TimeoutError
+from asyncio import sleep, TimeoutError, ensure_future, get_event_loop
 from random import choice, randint
 from copy import copy
 from time import time
@@ -21,7 +21,7 @@ class Events(commands.Cog):
         default_user = {"boss_fight": {"damage" : 0, "participated" : 0}}
         self.config.register_member(**default_user)
         self.DAMAGE_PER_CHALL = 200
-        self.START_WAIT_TIME = 120
+        self.START_WAIT_TIME = 60
         self.DAMAGE_EMOJI = "<:damage:643539221428174849>"
         self.HP_EMOJI = "<:health:688109898508009611>"
         self.LOG_EMOJI = "<:log:688112584368586779>"
@@ -38,10 +38,39 @@ class Events(commands.Cog):
             while line != "":
                 self.longwords.append(line.replace("\n", ""))
                 line = file.readline()
+        self.bscog = bot.get_cog("BrawlStarsCog")
+        self.brawlers = None
 
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
-            chall = choice(("word", "math", "geo", "trivia")) 
+            chall = choice(("word", "math", "geo", "trivia", "brawl"))
+            
+            chance = randint(0, 100)
+            only_first_three = False
+            if chance < 15:
+                only_first_three = True
+                embed = discord.Embed(title="BOSS GOT ANGRY", description=f"Next challenge accepts only first **3** right answers!", colour=discord.Color.red())
+                embed.set_footer(text="Be quick!")
+                message = await self.bf_data["channel"].send(embed=embed)
+                await sleep(5)
+                await message.delete()
+
+            boss_kill = False
+            dead = []
+            if not only_first_three and chance < 30 and len(self.bf_data["players"]) > 0:
+                hit = ""
+                boss_kill = True
+                for _ in range(randint(1, (len(self.bf_data["players"])//5)+2)):
+                    to_kill = choice(list(self.bf_data["players"].keys()))
+                    if to_kill not in dead:
+                        dead.append(to_kill)
+                hit = " ".join([self.bot.get_user(x).mention for x in dead])
+                embed = discord.Embed(title="BOSS LAUNCHED A MISSILE", description=f"Following players got hit and can't answer this round:\n{hit}", colour=discord.Color.red())
+                embed.set_footer(text="Better luck next time!")
+                message = await self.bf_data["channel"].send(embed=embed)
+                await sleep(10)
+                await message.delete()
+
             #start random challenge
             if chall == "word":
                 res = await self.word_chall()
@@ -51,7 +80,18 @@ class Events(commands.Cog):
                 res = await self.geo_chall()
             elif chall == "trivia":
                 res = await self.trivia_chall()
+            elif chall == "brawl":
+                res = await self.brawler_chall()
+            
             #process results
+            if only_first_three:
+                res = res[:3]
+            if boss_kill:
+                for d in dead:
+                    to_kill = self.bot.get_user(d)
+                    if to_kill in res:
+                        res.remove(to_kill)
+
             damage = 0
             log = ""
             dealt = self.DAMAGE_PER_CHALL
@@ -212,6 +252,30 @@ class Events(commands.Cog):
         await message.edit(embed=discord.Embed(title="TRIVIA CHALLENGE", description=f"The right answer was `{answers[0].upper()}`", colour=discord.Color.dark_orange()))
         await message.delete(delay=5) 
         return success
+
+    async def brawler_chall(self):
+        limit = 10
+        start = time()
+        brawler = choice(self.brawlers['list'])
+        key = choice(("starPowers", "gadgets"))
+        to_guess = choice(brawler[key])
+        answer = brawler['name']
+        embed = discord.Embed(title="BRAWL CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`What brawler has Star Power/Gadget called {to_guess['name']}?`", colour=discord.Color.green())
+        embed.set_footer(text="Letter case doesn't matter.")
+        message = await self.bf_data["channel"].send(embed=embed)
+        def check(m):
+            return not m.author.bot and answer.lower() in m.content.lower() and m.channel == self.bf_data["channel"]
+        success = []
+        while time() - start < limit:
+            try:
+                msg = await self.bot.wait_for('message', check=check, timeout=3)
+                if msg.author not in success:
+                    success.append(msg.author)
+            except TimeoutError:
+                pass
+        await message.edit(embed=discord.Embed(title="BRAWL CHALLENGE", description=f"The right answer was `{answer}`", colour=discord.Color.dark_green ()))
+        await message.delete(delay=5)
+        return success
     
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -230,6 +294,8 @@ class Events(commands.Cog):
     async def bossfight(self, ctx, channel:discord.TextChannel):
         if self.bf_active:
             return await ctx.send("Boss Fight is already running!")
+        if self.brawlers is None:
+            self.brawlers = await self.bscog.starlist_request("https://www.starlist.pro/app/brawlers")
         self.bf_data = {
                 "channel" : channel,
                 "message" : None,

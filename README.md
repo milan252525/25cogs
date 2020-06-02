@@ -17,13 +17,15 @@ ELO leaderboard
 #### Tools
 Various tools including countdown, command to view members with specific role, multi-server ban and more
 #### Welcome
-Welcoming processes for LA servers 
-#### Events, Tracking
-WIP
+Welcoming processes for LA servers
+#### Statistics
+Statistic command for LA
+#### Events
+Boss Fight - event with multiple challenges
 
 Some cogs won't work in some bots as they are made specifically for our server.
 
 Our Discord server:
-https://discord.gg/8Juv2xc
+https://discord.gg/YS4DMYH
 
 http://legendaryalliancegaming.com/

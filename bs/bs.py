@@ -25,15 +25,7 @@ class BrawlStarsCog(commands.Cog):
         self.config.register_guild(**default_guild)
         self.statsconfig = Config.get_conf(None, identifier=42424269, cog_name="Statistics")
         self.aiohttp_session = aiohttp.ClientSession()
-        self.sortroles.start()
-        self.sortrolesasia.start()
-        self.sortrolesbd.start()
-        self.spainblacklistjob.start()
-        self.sortrolesspain.start()
-        self.sortrolesportugal.start()
-        self.sortrolesevents.start()
-        self.sortrolesaquaunited.start()
-        self.sortroleslatam.start()
+        asyncio.ensure_future(self.start_tasks())
 
     def cog_unload(self):
         self.sortroles.cancel()
@@ -45,6 +37,26 @@ class BrawlStarsCog(commands.Cog):
         self.sortrolesevents.cancel()
         self.sortrolesaquaunited.cancel()
         self.sortroleslatam.cancel()
+
+    async def start_tasks(self):
+        await asyncio.sleep(300)
+        self.sortroles.start()
+        await asyncio.sleep(300)
+        self.sortrolesasia.start()
+        await asyncio.sleep(120)
+        self.sortrolesbd.start()
+        await asyncio.sleep(120)
+        self.spainblacklistjob.start()
+        await asyncio.sleep(120)
+        self.sortrolesspain.start()
+        await asyncio.sleep(120)
+        self.sortrolesportugal.start()
+        await asyncio.sleep(120)
+        self.sortrolesevents.start()
+        await asyncio.sleep(120)
+        self.sortrolesaquaunited.start()
+        await asyncio.sleep(120)
+        self.sortroleslatam.start()
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
