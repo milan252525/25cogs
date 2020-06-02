@@ -38,7 +38,7 @@ class BrawlStarsCog(commands.Cog):
         self.sortrolesaquaunited.cancel()
         self.sortroleslatam.cancel()
 
-    async def start_tasks():
+    async def start_tasks(self):
         await asyncio.sleep(300)
         self.sortroles.start()
         await asyncio.sleep(300)
