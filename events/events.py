@@ -21,7 +21,7 @@ class Events(commands.Cog):
         default_user = {"boss_fight": {"damage" : 0, "participated" : 0}}
         self.config.register_member(**default_user)
         self.DAMAGE_PER_CHALL = 200
-        self.START_WAIT_TIME = 1
+        self.START_WAIT_TIME = 60
         self.DAMAGE_EMOJI = "<:damage:643539221428174849>"
         self.HP_EMOJI = "<:health:688109898508009611>"
         self.LOG_EMOJI = "<:log:688112584368586779>"
@@ -43,7 +43,7 @@ class Events(commands.Cog):
 
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
-            chall = choice(("word", "math", "geo", "trivia", "brawl", "brawl", "brawl"))
+            chall = choice(("word", "math", "geo", "trivia", "brawl"))
             
             chance = randint(0, 100)
             only_first_three = False
@@ -60,7 +60,7 @@ class Events(commands.Cog):
             if not only_first_three and chance < 30 and len(self.bf_data["players"]) > 0:
                 hit = ""
                 boss_kill = True
-                for _ in range(randint(2, 5)):
+                for _ in range(randint(1, (len(self.bf_data["players"])//5)+2)):
                     to_kill = choice(list(self.bf_data["players"].keys()))
                     if to_kill not in dead:
                         dead.append(to_kill)
