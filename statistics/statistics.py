@@ -432,3 +432,9 @@ class Statistics(commands.Cog):
             await ctx.send(embed=goodEmbed(f"{ign} was successfully removed from this server's blacklist!"))
         except KeyError:
             await ctx.send(embed=badEmbed(f"{ign} isn't blacklisted in this server!"))
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def imadumbfuk(self, ctx):
+        player = await self.ofcbsapi.get_player("89l8cv8ur")
+        await ctx.send(type(player))
