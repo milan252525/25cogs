@@ -39,10 +39,10 @@ class Events(commands.Cog):
                 self.longwords.append(line.replace("\n", ""))
                 line = file.readline()
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
-        self.brawlers = ensure_future(self.get_brawlers())
+        ensure_future(self.get_brawlers())
 
     async def get_brawlers(self):
-        return await self.bsconfig.starlist_request("www.starlist.pro/app/brawlers")
+        self.brawlers = await self.bsconfig.starlist_request("www.starlist.pro/app/brawlers")
 
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
