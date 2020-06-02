@@ -25,7 +25,7 @@ class BrawlStarsCog(commands.Cog):
         self.config.register_guild(**default_guild)
         self.statsconfig = Config.get_conf(None, identifier=42424269, cog_name="Statistics")
         self.aiohttp_session = aiohttp.ClientSession()
-        asyncio.get_event_loop().run_until_complete(start_tasks())
+        asyncio.get_event_loop().run_until_complete(self.start_tasks())
 
     def cog_unload(self):
         self.sortroles.cancel()
