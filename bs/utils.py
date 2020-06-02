@@ -1,4 +1,5 @@
 from discord import Embed
+import brawlstats
 
 def badEmbed(text):
     bembed = Embed(color=0xff0000)
@@ -127,3 +128,44 @@ def remove_codes(text : str):
     for code in toremove:
         text = text.replace(code, "")
     return text
+
+def calculate_starpoints(player : brawlstats.models.Player):
+    total = 0
+    for b in player.raw_data['brawlers']:
+        if 550 <= b.get('trophies') <= 599:
+            total = total + 70
+        elif 600 <= b.get('trophies') <= 649:
+            total = total + 120
+        elif 650 <= b.get('trophies') <= 699:
+            total = total + 160
+        elif 700 <= b.get('trophies') <= 749:
+            total = total + 200
+        elif 750 <= b.get('trophies') <= 799:
+            total = total + 220
+        elif 800 <= b.get('trophies') <= 849:
+            total = total + 240
+        elif 850 <= b.get('trophies') <= 899:
+            total = total + 260
+        elif 900 <= b.get('trophies') <= 949:
+            total = total + 280
+        elif 950 <= b.get('trophies') <= 999:
+            total = total + 300
+        elif 1000 <= b.get('trophies') <= 1049:
+            total = total + 320
+        elif 1050 <= b.get('trophies') <= 1099:
+            total = total + 340
+        elif 1100 <= b.get('trophies') <= 1149:
+            total = total + 360
+        elif 1150 <= b.get('trophies') <= 1199:
+            total = total + 380
+        elif 1200 <= b.get('trophies') <= 1249:
+            total = total + 400
+        elif 1250 <= b.get('trophies') <= 1299:
+            total = total + 420
+        elif 1300 <= b.get('trophies') <= 1349:
+            total = total + 440
+        elif 1350 <= b.get('trophies') <= 1399:
+            total = total + 460
+        elif 1400 <= b.get('trophies'):
+            total = total + 480
+    return total

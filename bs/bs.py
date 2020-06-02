@@ -4,7 +4,7 @@ from redbot.core.utils.embed import randomize_colour
 from redbot.core.utils.menus import menu, prev_page, next_page
 from discord.ext import tasks
 
-from .utils import badEmbed, goodEmbed, get_league_emoji, get_rank_emoji, get_brawler_emoji, remove_codes
+from .utils import badEmbed, goodEmbed, get_league_emoji, get_rank_emoji, get_brawler_emoji, remove_codes, calculate_starpoints
 
 from random import choice
 import asyncio
@@ -2764,3 +2764,14 @@ class BrawlStarsCog(commands.Cog):
             messages.append(msg)
         for m in messages:
             await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=m))
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def starpointstest(self, ctx, person: discord.Member):
+        if person is None:
+            person = author
+
+        tag = await self.config.user(person).tag()
+        player = await self.ofcbsapi.get_player(tag)
+
+        await ctx.send(calculate_starpoints(player))
