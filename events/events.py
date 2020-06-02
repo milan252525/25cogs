@@ -46,7 +46,7 @@ class Events(commands.Cog):
             chall = choice(("word", "math", "geo", "trivia", "brawl", "brawl", "brawl"))
             
             only_first_three = False
-            if randint(1, 100) < 20:
+            if randint(1, 100) < 10:
                 only_first_three = True
                 embed = discord.Embed(title="ATTENTION", description=f"Next challenge accepts only first **3** right answers!", colour=discord.Color.red())
                 embed.set_footer(text="Be quick!")
@@ -56,14 +56,14 @@ class Events(commands.Cog):
 
             boss_kill = False
             dead = []
-            if randint(1, 100) < 25 and not only_first_three:
+            if randint(1, 100) < 50 and not only_first_three and len(self.bf_data["players"]) > 0:
                 hit = ""
                 boss_kill = True
                 for _ in range(randint(2, 5)):
-                    to_kill = choice(self.bf_data["players"].keys())
+                    to_kill = choice(list(self.bf_data["players"].keys()))
                     if to_kill not in dead:
                         dead.append(to_kill)
-                hit = ",".join([self.bot.get_user(x).mention for x in dead])
+                hit = " ".join([self.bot.get_user(x).mention for x in dead])
                 embed = discord.Embed(title="MISSILE INCOMING", description=f"Boss launched a missile!\nFollowing players got hit and can't answer this round:\n{hit}", colour=discord.Color.red())
                 embed.set_footer(text="Better luck next time!")
                 message = await self.bf_data["channel"].send(embed=embed)
@@ -81,6 +81,7 @@ class Events(commands.Cog):
                 res = await self.trivia_chall()
             elif chall == "brawl":
                 res = await self.brawler_chall()
+            
             #process results
             if only_first_three:
                 res = res[:3]
