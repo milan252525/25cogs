@@ -39,10 +39,7 @@ class Events(commands.Cog):
                 self.longwords.append(line.replace("\n", ""))
                 line = file.readline()
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
-        ensure_future(self.get_brawlers(), loop=get_event_loop())
-
-    async def get_brawlers(self):
-        self.brawlers = await self.bsconfig.starlist_request("www.starlist.pro/app/brawlers")
+        self.brawlers = None
 
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
@@ -261,6 +258,8 @@ class Events(commands.Cog):
     async def bossfight(self, ctx, channel:discord.TextChannel):
         if self.bf_active:
             return await ctx.send("Boss Fight is already running!")
+        if self.brawlers is None:
+            self.brawlers = await self.bsconfig.starlist_request("www.starlist.pro/app/brawlers")
         self.bf_data = {
                 "channel" : channel,
                 "message" : None,
