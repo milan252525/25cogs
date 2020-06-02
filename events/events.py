@@ -44,11 +44,28 @@ class Events(commands.Cog):
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
             chall = choice(("word", "math", "geo", "trivia", "brawl", "brawl", "brawl"))
+            
             only_first_three = False
             if randint(1, 100) < 20:
                 only_first_three = True
                 embed = discord.Embed(title="ATTENTION", description=f"Next challenge accepts only first **3** right answers!", colour=discord.Color.red())
                 embed.set_footer(text="Be quick!")
+                message = await self.bf_data["channel"].send(embed=embed)
+                await sleep(5)
+                await message.delete()
+
+            boss_kill = False
+            dead = []
+            if randint(1, 100) < 25 and not only_first_three:
+                hit = ""
+                boss_kill = True
+                for _ in range(randint(2, 5)):
+                    to_kill = choice(self.bf_data["players"].keys())
+                    if to_kill not in dead:
+                        dead.append(to_kill)
+                hit = ",".join([self.bot.get_user(x).mention for x in dead])
+                embed = discord.Embed(title="MISSILE INCOMING", description=f"Boss launched a missile!\nFollowing players got hit and can't answer this round:\n{hit}", colour=discord.Color.red())
+                embed.set_footer(text="Better luck next time!")
                 message = await self.bf_data["channel"].send(embed=embed)
                 await sleep(5)
                 await message.delete()
@@ -67,6 +84,12 @@ class Events(commands.Cog):
             #process results
             if only_first_three:
                 res = res[:3]
+            if boss_kill:
+                for d in dead:
+                    to_kill = self.bot.get_user(d)
+                    if to_kill in res:
+                        res.remove(to_kill)
+
             damage = 0
             log = ""
             dealt = self.DAMAGE_PER_CHALL
@@ -229,7 +252,7 @@ class Events(commands.Cog):
         return success
 
     async def brawler_chall(self):
-        limit = 15
+        limit = 10
         start = time()
         brawler = choice(self.brawlers['list'])
         key = choice(("starPowers", "gadgets"))
