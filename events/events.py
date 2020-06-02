@@ -38,7 +38,7 @@ class Events(commands.Cog):
             while line != "":
                 self.longwords.append(line.replace("\n", ""))
                 line = file.readline()
-        self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
+        self.bscog = bot.get_cog("BrawlStarsCog")
         self.brawlers = None
 
     async def main_loop(self):
@@ -259,7 +259,7 @@ class Events(commands.Cog):
         if self.bf_active:
             return await ctx.send("Boss Fight is already running!")
         if self.brawlers is None:
-            self.brawlers = await self.bsconfig.starlist_request("https://www.starlist.pro/app/brawlers")
+            self.brawlers = await self.bscog.starlist_request("https://www.starlist.pro/app/brawlers")
         self.bf_data = {
                 "channel" : channel,
                 "message" : None,
