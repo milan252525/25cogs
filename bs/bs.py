@@ -380,12 +380,12 @@ class BrawlStarsCog(commands.Cog):
                 embed.add_field(name=e[0], value=e[1], inline=False)
             embedstosend.append(embed)
 
-        if len(embedsToSend) > 1:
+        if len(embedstosend) > 1:
             await msg.delete()
-            await menu(ctx, embedsToSend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
+            await menu(ctx, embedstosend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
         else:
             await msg.delete()
-            await ctx.send(embed=embedsToSend[0])
+            await ctx.send(embed=embedstosend[0])
 
     @commands.command()
     async def brawler(self, ctx, brawler: str, member: Union[discord.Member, str] = None):
