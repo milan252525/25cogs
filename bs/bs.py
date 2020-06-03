@@ -348,33 +348,44 @@ class BrawlStarsCog(commands.Cog):
 
         colour = player.name_color if player.name_color is not None else "0xffffffff"
 
+        player_icon_id = player.raw_data["icon"]["id"]
+        icons = await self.starlist_request("https://www.starlist.pro/app/icons/")
+        player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
         brawlers = []
-        messages = []
         for brawler in player.raw_data['brawlers']:
             pair = []
             pair.append(brawler.get('name'))
             pair.append(brawler.get('trophies'))
             brawlers.append(pair)
         brawlers = sorted(brawlers, key=lambda x: x[1], reverse=True)
-        brawlersmsg = ""
+        embedfields = []
         for brawler in brawlers:
-            if len(brawlersmsg) > 1800:
-                messages.append(brawlersmsg)
-                brawlersmsg = ""
-            brawlersmsg += (
-                f"{get_brawler_emoji(brawler[0])} **{brawler[0].lower().capitalize()}**: {brawler[1]} <:bstrophy:552558722770141204>\n")
-        if len(brawlersmsg) > 0:
-            messages.append(brawlersmsg)
-        messages[0] = f"**Brawlers({len(brawlers)}\\37):**\n" + messages[0]
-        for i in range(len(messages)):
-            embed = discord.Embed(description=messages[i], color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
-            if i == 0:
-                embed.set_author(
-                    name=f"{player.name} {player.raw_data['tag']}",
-                    icon_url=member.avatar_url if isinstance(member, discord.Member) else "https://i.imgur.com/ZwIP41S.png")
-            if i == len(messages)-1:
-                embed.set_footer(text="/brawler name for more stats")
-            await ctx.send(embed=embed)
+            br = None
+            for brawl in player.raw_data['brawlers']:
+                if brawl.get('name') == brawler[0]:
+                    br = brawl
+            ename = f"{get_brawler_emoji(br.get('name'))} {br.get('name').lower().capitalize()}"
+            evalue = f"<:bstrophy:552558722770141204> `{br.get('trophies')}` {get_rank_emoji(br.get('rank'))} `{br.get('highestTrophies')}`\n"
+            evalue += f"<:gadget:716341776608133130> {len(br.get('gadgets'))} "
+            evalue += f"<:starpower:664267686720700456> {len(br.get('starPowers'))} "
+            evalue = evalue.strip()
+            embedfields.append([ename, evalue])
+
+        embedstosend = []
+        for i in range(0, len(embedfields), 9):
+            embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}\\36):")
+            embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
+            embed.set_footer(text="/brawler name for more stats")
+            for e in embedfields[i:i + 9]:
+                embed.add_field(name=e[0], value=e[1], inline=False)
+            embedstosend.append(embed)
+
+        if len(embedstosend) > 1:
+            await msg.delete()
+            await menu(ctx, embedstosend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
+        else:
+            await msg.delete()
+            await ctx.send(embed=embedstosend[0])
 
     @commands.command()
     async def brawler(self, ctx, brawler: str, member: Union[discord.Member, str] = None):
