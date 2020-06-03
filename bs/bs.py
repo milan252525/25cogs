@@ -371,7 +371,7 @@ class BrawlStarsCog(commands.Cog):
             evalue = evalue.strip()
             embedfields.append([ename, evalue])
 
-        embedsToSend = []
+        embedstosend = []
         for i in range(0, len(embedfields), 9):
             embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}\\36):")
             embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
