@@ -365,18 +365,10 @@ class BrawlStarsCog(commands.Cog):
             for brawl in player.raw_data['brawlers']:
                 if brawl.get('name') == brawler[0]:
                     br = brawl
-            ename = f"{get_brawler_emoji(br.get('name'))} {br.get('name')}"
+            ename = f"{get_brawler_emoji(br.get('name'))} {br.get('name').lower().capitalize()}"
             evalue = f"<:bstrophy:552558722770141204> {br.get('trophies')} {get_rank_emoji(br.get('rank'))} {br.get('highestTrophies')}\n"
-            if br.get('gadgets') == "" or br.get('gadgets') is None:
-                evalue += "<:gadget:716341776608133130> None"
-            else:
-                for gadget in br.get('gadgets'):
-                    evalue += f"<:gadget:716341776608133130> {gadget.get('name')} "
-            if br.get('starPowers') == "" or br.get('starPowers') is None:
-                evalue += "<:starpower:664267686720700456> None"
-            else:
-                for star in br.get('starPowers'):
-                    evalue += f"<:starpower:664267686720700456> {star.get('name')} "
+            evalue += f"<:gadget:716341776608133130> {len(br.get('gadgets'))} "
+            evalue += f"<:starpower:664267686720700456> {len(br.get('starPowers'))} "
             evalue = evalue.strip()
             embedfields.append([ename, evalue])
         for e in embedfields:
