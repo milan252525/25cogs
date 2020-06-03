@@ -480,7 +480,13 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(name="UPCOMING", value=upcoming, inline=False)
         await ctx.send(embed=embed)
         #await ctx.send(str(events['upcoming'][0]))
-                      
+
+    #some day maybe
+    #def get_badge(self, badge_id):
+        guild = self.bot.get_guild(717766786019360769)
+        em = discord.utils.get(guild.emojis, name=str(badge_id))
+        return str(em)
+           
     @commands.command()
     async def club(self, ctx, key: Union[discord.Member, str] = None):
         """View players club or club saved in a server"""
@@ -699,7 +705,7 @@ class BrawlStarsCog(commands.Cog):
                 await msg.delete()
                 await ctx.send(embed=embedsToSend[0])
 
-        except ZeroDivisionError as e:
+        except Exception as e:
             return await ctx.send(
                 "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
 
