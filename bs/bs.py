@@ -592,11 +592,11 @@ class BrawlStarsCog(commands.Cog):
                 clubs = []
                 for ind, key in enumerate(saved_clubs.keys()):
                     if keyword == "" or keyword is None:
-                        club = await self.ofcbsapi.get_club(saved_clubs[key]['tag']))
+                        club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
                         clubs.append(club)
                     elif keyword != "":
                         if await self.config.guild(ctx.guild).clubs.get_raw(key, "family", default="") == keyword:
-                            club = await self.ofcbsapi.get_club(saved_clubs[key]['tag']))
+                            club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
                             clubs.append(club)
                     if 0 <= ind / len(keys) <= 0.25:
                         if loadingembed.description != "Requesting clubs. Might take a while.\n(25%) ────":
