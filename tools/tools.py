@@ -73,13 +73,6 @@ class Tools(commands.Cog):
                     return await msg.delete()
             except ValueError:
                 await msg.delete()
-
-        #spamlb LABS
-        #disabled
-        if False and not msg.author.bot and isinstance(msg.channel, discord.TextChannel) and msg.guild.id == 401883208511389716:
-            amount = await self.config.member(msg.author).messages()
-            await self.config.member(msg.author).messages.set(amount + 1)
-            await self.config.member(msg.author).name.set(msg.author.display_name)
                 
         #message redirection
         if not msg.author.bot and isinstance(msg.channel, discord.abc.PrivateChannel) and not (msg.author.id == 230947675837562880):
@@ -108,10 +101,18 @@ class Tools(commands.Cog):
                 info = f"[**{msg.author.display_name}**] ({message_profanity_prob[0]*100}%) {msg.channel.mention}: *{msg.content}*"
                 await msg.guild.get_channel(664514537004859436).send(info)
 
-    #@commands.guild_only()
-    #@commands.is_owner() 
-    #@commands.command()
+        #spamlb LA Asia
+        if not msg.author.bot and isinstance(msg.channel, discord.TextChannel) and msg.channel.id in (663804057848250368, 663804237485965312):
+            amount = await self.config.member(msg.author).messages()
+            await self.config.member(msg.author).messages.set(amount + 1)
+            await self.config.member(msg.author).name.set(msg.author.display_name)
+
+    #spamlb LA Asia
+    @commands.guild_only()
+    @commands.command()
     async def spamlb(self, ctx):
+        if ctx.channel.id != 717733283563044905:
+            return await ctx.send("You can't use that here")
         data = await self.config.all_members(ctx.guild)
         members = []
         for k in data.keys():
@@ -218,7 +219,9 @@ class Tools(commands.Cog):
                 m = m.replace('_', '\\_')
                 m = m.replace('*', '\\*')
                 m = m.replace('~', '\\~')
-            await ctx.send(embed=discord.Embed(description=m, colour=discord.Colour.green()))
+            em = discord.Embed(description=m, colour=discord.Colour.green())
+            em.set_footer(text=role.name)
+            await ctx.send(embed=em)
 
     @commands.command()
     async def members2(self, ctx, *rolenames):
@@ -257,14 +260,16 @@ class Tools(commands.Cog):
             m = m.replace('_', '\\_')
             m = m.replace('*', '\\*')
             m = m.replace('~', '\\~')
-            await ctx.send(embed=discord.Embed(description=m, colour=discord.Colour.green()))
+            em = discord.Embed(description=m, colour=discord.Colour.green())
+            em.set_footer(text=role.name)
+            await ctx.send(embed=em)
 
     @commands.guild_only()
     @commands.command()
     async def laban(self, ctx, member:Union[discord.Member, str]):
         if ctx.author.id not in [294438945578811393, 355514130737922048, 359131399132807178, 585275812429824041, 230947675837562880]:
             return await ctx.send("You can't use this command.")
-        guilds = [440960893916807188, 401883208511389716, 593248015729295360, 654334199494606848, 515962414190166041, 460550486257565697, 473169548301041674, 663716223258984496]
+        guilds = [440960893916807188, 401883208511389716, 593248015729295360, 654334199494606848, 460550486257565697, 473169548301041674, 663716223258984496]
         msg = f"Attempting to ban **{member}** in all LA servers:"
         for id in guilds:
             try:
@@ -288,7 +293,7 @@ class Tools(commands.Cog):
         if ctx.author.id not in [294438945578811393, 355514130737922048, 359131399132807178, 585275812429824041, 230947675837562880]:
             return await ctx.send("You can't use this command.")
         guilds = [440960893916807188, 401883208511389716, 593248015729295360, 654334199494606848,
-                  515962414190166041, 460550486257565697, 473169548301041674, 663716223258984496]
+                  460550486257565697, 473169548301041674, 663716223258984496]
         msg = f"Attempting to unban **{member}** in all LA servers:"
         for id in guilds:
             try:
