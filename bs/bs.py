@@ -358,7 +358,6 @@ class BrawlStarsCog(commands.Cog):
             pair.append(brawler.get('trophies'))
             brawlers.append(pair)
         brawlers = sorted(brawlers, key=lambda x: x[1], reverse=True)
-        embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}\\36):")
         embedfields = []
         for brawler in brawlers:
             br = None
@@ -366,16 +365,27 @@ class BrawlStarsCog(commands.Cog):
                 if brawl.get('name') == brawler[0]:
                     br = brawl
             ename = f"{get_brawler_emoji(br.get('name'))} {br.get('name').lower().capitalize()}"
-            evalue = f"<:bstrophy:552558722770141204> {br.get('trophies')} {get_rank_emoji(br.get('rank'))} {br.get('highestTrophies')}\n"
+            evalue = f"<:bstrophy:552558722770141204> `{br.get('trophies')}` {get_rank_emoji(br.get('rank'))} `{br.get('highestTrophies')}`\n"
             evalue += f"<:gadget:716341776608133130> {len(br.get('gadgets'))} "
             evalue += f"<:starpower:664267686720700456> {len(br.get('starPowers'))} "
             evalue = evalue.strip()
             embedfields.append([ename, evalue])
-        for e in embedfields:
-            embed.add_field(name=e[0], value=e[1], inline=True)
-        embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
-        embed.set_footer(text="/brawler name for more stats")
-        await ctx.send(embed=embed)
+
+        embedsToSend = []
+        for i in range(0, len(embedfields), 10):
+            embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}\\36):")
+            embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
+            embed.set_footer(text="/brawler name for more stats")
+            for e in embedFields[i:i + 10]:
+                embed.add_field(name=e[0], value=e[1], inline=False)
+            embedstosend.append(embed)
+
+        if len(embedsToSend) > 1:
+            await msg.delete()
+            await menu(ctx, embedsToSend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
+        else:
+            await msg.delete()
+            await ctx.send(embed=embedsToSend[0])
 
     @commands.command()
     async def brawler(self, ctx, brawler: str, member: Union[discord.Member, str] = None):
