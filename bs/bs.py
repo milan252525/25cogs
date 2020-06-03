@@ -590,7 +590,8 @@ class BrawlStarsCog(commands.Cog):
         try:
             try:
                 clubs = []
-                for ind, key in enumerate(saved_clubs):
+                keys = saved_clubs.keys()
+                for ind, key in enumerate(keys):
                     if keyword == "" or keyword is None:
                         club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
                         clubs.append(club)
