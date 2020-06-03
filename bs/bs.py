@@ -381,10 +381,8 @@ class BrawlStarsCog(commands.Cog):
             embedstosend.append(embed)
 
         if len(embedstosend) > 1:
-            await msg.delete()
             await menu(ctx, embedstosend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
         else:
-            await msg.delete()
             await ctx.send(embed=embedstosend[0])
 
     @commands.command()
