@@ -111,7 +111,7 @@ class Tools(commands.Cog):
     @commands.guild_only()
     @commands.command()
     async def spamlb(self, ctx):
-        if ctx.channel.id != 717733283563044905:
+        if ctx.channel.id != 666655288606195735:
             return await ctx.send("You can't use that here")
         data = await self.config.all_members(ctx.guild)
         members = []
@@ -219,9 +219,7 @@ class Tools(commands.Cog):
                 m = m.replace('_', '\\_')
                 m = m.replace('*', '\\*')
                 m = m.replace('~', '\\~')
-            em = discord.Embed(description=m, colour=discord.Colour.green())
-            em.set_footer(text=role.name)
-            await ctx.send(embed=em)
+            await ctx.send(embed=discord.Embed(title=role.name, description=m, colour=discord.Colour.green()))
 
     @commands.command()
     async def members2(self, ctx, *rolenames):
@@ -260,9 +258,7 @@ class Tools(commands.Cog):
             m = m.replace('_', '\\_')
             m = m.replace('*', '\\*')
             m = m.replace('~', '\\~')
-            em = discord.Embed(description=m, colour=discord.Colour.green())
-            em.set_footer(text=role.name)
-            await ctx.send(embed=em)
+            await ctx.send(embed=discord.Embed(title=role.name, description=m, colour=discord.Colour.green()))
 
     @commands.guild_only()
     @commands.command()
