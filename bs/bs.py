@@ -634,23 +634,26 @@ class BrawlStarsCog(commands.Cog):
                 clubs = sorted(clubs, key=lambda sort: (
                     sort.trophies), reverse=True)
 
+                saved_clubs = await self.config.guild(ctx.guild).clubs() 
+
                 for i in range(len(clubs)):
                     key = ""
-                    for k in (await self.config.guild(ctx.guild).clubs()).keys():
-                        if clubs[i].tag.replace("#", "") == await self.config.guild(ctx.guild).clubs.get_raw(k, "tag"):
+                    for k in saved_clubs.keys():
+                        if clubs[i].tag.replace("#", "") == saved_clubs[k]['tag']:
                             key = k
+                    
+                    saved_clubs[key]['lastMemberCount'] = len(clubs[i].members)
+                    saved_clubs[key]['lastRequirement'] = clubs[i].required_trophies
+                    saved_clubs[key]['lastScore'] = clubs[i].trophies
+                    saved_clubs[key]['lastPosition'] = i
+                    
+                    info = saved_clubs[key]["info"] if "info" in saved_clubs[key] else ""
 
-                    await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastMemberCount',
-                                                                     value=len(clubs[i].members))
-                    await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastRequirement',
-                                                                     value=clubs[i].required_trophies)
-                    await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastScore', value=clubs[i].trophies)
-                    await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastPosition', value=i)
-
-                    info = await self.config.guild(ctx.guild).clubs.get_raw(key, "info", default="")
                     e_name = f"<:bsband:600741378497970177> {clubs[i].name} [{key}] {clubs[i].tag} {info}"
                     e_value = f"<:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
                     embedFields.append([e_name, e_value])
+
+                await self.config.guild(ctx.guild).set_raw("clubs", value=saved_clubs)
 
             else:
                 loadingembed = discord.Embed(colour=discord.Colour.red(),
