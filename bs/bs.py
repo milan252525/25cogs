@@ -584,17 +584,19 @@ class BrawlStarsCog(commands.Cog):
         loadingembed = discord.Embed(colour=discord.Colour.red(),
                                      description="Requesting clubs. Might take a while.\n(0%)", title="Loading...")
         msg = await ctx.send(embed=loadingembed)
+
+        saved_clubs = await self.config.guild(ctx.guild).clubs()
+
         try:
             try:
                 clubs = []
-                keys = (await self.config.guild(ctx.guild).clubs()).keys()
-                for ind, key in enumerate(keys):
+                for ind, key in enumerate(saved_clubs.keys()):
                     if keyword == "" or keyword is None:
-                        club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs.get_raw(key, "tag"))
+                        club = await self.ofcbsapi.get_club(saved_clubs[key]['tag']))
                         clubs.append(club)
                     elif keyword != "":
                         if await self.config.guild(ctx.guild).clubs.get_raw(key, "family", default="") == keyword:
-                            club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs.get_raw(key, "tag"))
+                            club = await self.ofcbsapi.get_club(saved_clubs[key]['tag']))
                             clubs.append(club)
                     if 0 <= ind / len(keys) <= 0.25:
                         if loadingembed.description != "Requesting clubs. Might take a while.\n(25%) ────":
@@ -626,15 +628,11 @@ class BrawlStarsCog(commands.Cog):
 
             embedFields = []
 
+            loadingembed = discord.Embed(colour=discord.Colour.red(), description="Almost there!", title="Creating the embed...")
             if not offline:
-                loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                             description="Almost there.",
-                                             title="Creating the embed...")
                 await msg.edit(embed=loadingembed)
                 clubs = sorted(clubs, key=lambda sort: (
                     sort.trophies), reverse=True)
-
-                saved_clubs = await self.config.guild(ctx.guild).clubs() 
 
                 for i in range(len(clubs)):
                     key = ""
@@ -656,23 +654,20 @@ class BrawlStarsCog(commands.Cog):
                 await self.config.guild(ctx.guild).set_raw("clubs", value=saved_clubs)
 
             else:
-                loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                             description="Almost there.",
-                                             title="Creating the embed...")
                 await msg.edit(embed=loadingembed)
                 offclubs = []
-                for k in (await self.config.guild(ctx.guild).clubs()).keys():
-                    offclubs.append([await self.config.guild(ctx.guild).clubs.get_raw(k, "lastPosition"), k])
+                for k in saved_clubs.keys():
+                    offclubs.append([saved_clubs[k]['lastPosition'], k])
                 offclubs = sorted(offclubs, key=lambda x: x[0])
 
                 for club in offclubs:
                     ckey = club[1]
-                    cscore = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "lastScore")
-                    cname = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "name")
-                    ctag = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "tag")
-                    cinfo = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "info")
-                    cmembers = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "lastMemberCount")
-                    creq = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "lastRequirement")
+                    cscore = saved_clubs[ckey]['lastScore']
+                    cname = saved_clubs[ckey]['name']
+                    ctag = saved_clubs[ckey]['tag']
+                    cinfo = saved_clubs[ckey]['info']
+                    cmembers = saved_clubs[ckey]['lastMemberCount']
+                    creq = saved_clubs[ckey]['lastRequirement']
 
                     e_name = f"<:bsband:600741378497970177> {cname} [{ckey}] #{ctag} {cinfo}"
                     e_value = f"<:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` "
@@ -690,7 +685,7 @@ class BrawlStarsCog(commands.Cog):
                 embed.set_author(
                     name=f"{ctx.guild.name} clubs",
                     icon_url=ctx.guild.icon_url)
-                footer = "<:offline:642094554019004416> API is offline, showing last saved data." if offline else f"Need more info about a club? Use {ctx.prefix}club [key]"
+                footer = "API is offline, showing last saved data." if offline else f"Need more info about a club? Use {ctx.prefix}club [key]"
                 embed.set_footer(text=footer)
                 for e in embedFields[i:i + 8]:
                     embed.add_field(name=e[0], value=e[1], inline=False)
