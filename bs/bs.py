@@ -590,12 +590,12 @@ class BrawlStarsCog(commands.Cog):
         try:
             try:
                 clubs = []
-                for ind, key in enumerate(saved_clubs.keys()):
+                for ind, key in enumerate(saved_clubs):
                     if keyword == "" or keyword is None:
                         club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
                         clubs.append(club)
                     elif keyword != "":
-                        if await self.config.guild(ctx.guild).clubs.get_raw(key, "family", default="") == keyword:
+                        if "family" in saved_clubs[key] and saved_clubs[key]['family'] == keyword:
                             club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
                             clubs.append(club)
                     if 0 <= ind / len(keys) <= 0.25:
@@ -698,7 +698,7 @@ class BrawlStarsCog(commands.Cog):
                 await msg.delete()
                 await ctx.send(embed=embedsToSend[0])
 
-        except Exception as e:
+        except ZeroDivisionError as e:
             return await ctx.send(
                 "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
 
