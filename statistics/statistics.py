@@ -38,6 +38,11 @@ class Statistics(commands.Cog):
             raise ValueError("The Official Brawl Stars API key has not been set.")
         self.ofcbsapi = brawlstats.Client(ofcbsapikey["api_key"], is_async=True)
 
+    def get_bs_config(self):
+        if self.bsconfig is None:
+            self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
+        return self.bsconfig
+
     @commands.is_owner()
     @commands.command()
     async def summary(self, ctx, key:str=None):
@@ -46,8 +51,8 @@ class Statistics(commands.Cog):
             averagetrophies = 0
             lower10 = 0
             members = []
-            for key in (await self.bsconfig.guild(ctx.guild).clubs()).keys():
-                tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
+            for key in (await self.get_bs_config().guild(ctx.guild).clubs()).keys():
+                tag = await self.get_bs_config().guild(ctx.guild).clubs.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     members.append(member.trophies)
@@ -65,7 +70,7 @@ class Statistics(commands.Cog):
             await ctx.send(embed=embed)
         elif key is not None:
             lower10 = 0
-            tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
+            tag = await self.get_bs_config().guild(ctx.guild).clubs.get_raw(key, "tag")
             club = await self.ofcbsapi.get_club(tag)
             for i in range(len(club.members) - (len(club.members)//10), len(club.members)):
                 lower10 = lower10 + club.members[i].trophies
@@ -81,8 +86,8 @@ class Statistics(commands.Cog):
     async def trophylb(self, ctx, key:str=None):
         if key is None:
             trophies = []
-            for key in (await self.bsconfig.guild(ctx.guild).clubs()).keys():
-                tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
+            for key in (await self.get_bs_config().guild(ctx.guild).clubs()).keys():
+                tag = await self.get_bs_config().guild(ctx.guild).clubs.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     pair = []
@@ -101,7 +106,7 @@ class Statistics(commands.Cog):
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
         elif key is not None:
-            tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
+            tag = await self.get_bs_config().guild(ctx.guild).clubs.get_raw(key, "tag")
             club = await self.ofcbsapi.get_club(tag)
             msg = ""
             i = 1
@@ -123,8 +128,8 @@ class Statistics(commands.Cog):
             message4 = await channel.fetch_message(691747291119222875)
             message5 = await channel.fetch_message(691747292511993866)
             trophies = []
-            for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
-                tag = await self.bsconfig.guild(message.guild).clubs.get_raw(key, "tag")
+            for key in (await self.get_bs_config().guild(message.guild).clubs()).keys():
+                tag = await self.get_bs_config().guild(message.guild).clubs.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     pair = []
@@ -165,8 +170,8 @@ class Statistics(commands.Cog):
         if channel is not None:
             message = await channel.fetch_message(690133472366428160)
             trophies = []
-            for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
-                tag = await self.bsconfig.guild(message.guild).clubs.get_raw(key, "tag")
+            for key in (await self.get_bs_config().guild(message.guild).clubs()).keys():
+                tag = await self.get_bs_config().guild(message.guild).clubs.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     pair = []
@@ -191,8 +196,8 @@ class Statistics(commands.Cog):
         if channel is not None:
             message = await channel.fetch_message(691296279157801050)
             trophies = []
-            for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
-                tag = await self.bsconfig.guild(message.guild).clubs.get_raw(key, "tag")
+            for key in (await self.get_bs_config().guild(message.guild).clubs()).keys():
+                tag = await self.get_bs_config().guild(message.guild).clubs.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     pair = []
@@ -258,8 +263,8 @@ class Statistics(commands.Cog):
             message4 = await channel.fetch_message(710984892128821259)
             message5 = await channel.fetch_message(710984913616240650)
             trophies = []
-            for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
-                tag = await self.bsconfig.guild(message.guild).clubs.get_raw(key, "tag")
+            for key in (await self.get_bs_config().guild(message.guild).clubs()).keys():
+                tag = await self.get_bs_config().guild(message.guild).clubs.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     pair = []
