@@ -41,21 +41,21 @@ class BrawlStarsCog(commands.Cog):
     async def start_tasks(self):
         await asyncio.sleep(300)
         self.sortroles.start()
-        await asyncio.sleep(300)
+        await asyncio.sleep(15*60)
         self.sortrolesasia.start()
-        await asyncio.sleep(120)
+        await asyncio.sleep(10*60)
         self.sortrolesbd.start()
-        await asyncio.sleep(120)
+        await asyncio.sleep(10*60)
         self.spainblacklistjob.start()
-        await asyncio.sleep(120)
+        await asyncio.sleep(10*60)
         self.sortrolesspain.start()
-        await asyncio.sleep(120)
+        await asyncio.sleep(10*60)
         self.sortrolesportugal.start()
-        await asyncio.sleep(120)
+        await asyncio.sleep(10*60)
         self.sortrolesevents.start()
-        await asyncio.sleep(120)
+        await asyncio.sleep(10*60)
         self.sortrolesaquaunited.start()
-        await asyncio.sleep(120)
+        await asyncio.sleep(10*60)
         self.sortroleslatam.start()
 
     async def initialize(self):
@@ -849,7 +849,7 @@ class BrawlStarsCog(commands.Cog):
                 continue
             try:
                 player = await self.ofcbsapi.get_player(tag)
-                await asyncio.sleep(0.2)
+                await asyncio.sleep(0.5)
             except brawlstats.errors.RequestError as e:
                 await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"{str(member)} ({member.id}) #{tag}"))
                 error_counter += 1 
@@ -927,7 +927,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortroles(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=5)
+    @tasks.loop(hours=8)
     async def sortrolesasia(self):
         ch = self.bot.get_channel(672267298001911838)
         await ch.trigger_typing()
@@ -951,7 +951,7 @@ class BrawlStarsCog(commands.Cog):
                 await asyncio.sleep(0.5)
             except brawlstats.errors.RequestError as e:
                 error_counter += 1
-                if error_counter == 20:
+                if error_counter == 5:
                     await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 20 request errors! Displaying the last one:\n({str(e)})"))
                     break
                 await asyncio.sleep(1)
@@ -1039,7 +1039,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortrolesasia(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=6)
+    @tasks.loop(hours=8)
     async def sortrolesbd(self):
         ch = self.bot.get_channel(690881058756886599)
         await ch.trigger_typing()
@@ -1069,7 +1069,7 @@ class BrawlStarsCog(commands.Cog):
                 continue
             try:
                 player = await self.ofcbsapi.get_player(tag)
-                await asyncio.sleep(0.2)
+                await asyncio.sleep(0.5)
             except brawlstats.errors.RequestError as e:
                 error_counter += 1
                 if error_counter == 5:
@@ -1189,9 +1189,10 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortrolesbd(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=2)
+    @tasks.loop(hours=4)
     async def spainblacklistjob(self):
         try:
+            errors = 0
             ch = self.bot.get_channel(716329434466222092)
             await ch.trigger_typing()
             clubs = []
@@ -1205,8 +1206,10 @@ class BrawlStarsCog(commands.Cog):
                     player_in_club = "name" in player.raw_data["club"]
                     await asyncio.sleep(0.5)
                 except brawlstats.errors.RequestError as e:
-                    await asyncio.sleep(1)
-                    continue
+                    await asyncio.sleep(5)
+                    errors += 1
+                    if errors == 5:
+                        break
                 except Exception as e:
                     return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                              description=f"**Algo ha ido mal solicitando {tag}!**\n({str(e)})"))
@@ -1223,7 +1226,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_spainblacklistjob(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=6)
+    @tasks.loop(hours=4)
     async def sortrolesspain(self):
         try:
             ch = self.bot.get_channel(693781513363390475)
@@ -1245,7 +1248,7 @@ class BrawlStarsCog(commands.Cog):
                     await asyncio.sleep(0.5)
                 except brawlstats.errors.RequestError as e:
                     error_counter += 1
-                    if error_counter == 20:
+                    if error_counter == 5:
                         await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                           description=f"¡Deteniéndose después de 5 errores de solicitud! Mostrando el último: \n({str(e)})"))
                         break
@@ -1325,7 +1328,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortrolesspain(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=7)
+    @tasks.loop(hours=8)
     async def sortrolesportugal(self):
         ch = self.bot.get_channel(712394680389599281)
         await ch.trigger_typing()
@@ -1351,7 +1354,7 @@ class BrawlStarsCog(commands.Cog):
                 await asyncio.sleep(0.5)
             except brawlstats.errors.RequestError as e:
                 error_counter += 1
-                if error_counter == 20:
+                if error_counter == 5:
                     await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                       description=f"Stopping after 20 request errors! Displaying the last one:\n({str(e)})"))
                     break
@@ -1454,7 +1457,7 @@ class BrawlStarsCog(commands.Cog):
                     await asyncio.sleep(0.5)
                 except brawlstats.errors.RequestError as e:
                     error_counter += 1
-                    if error_counter == 20:
+                    if error_counter == 5:
                         await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                           description=f"Stopping after 20 request errors! Displaying the last one:\n({str(e)})"))
                         break
@@ -1564,7 +1567,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortrolesevents(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=9)
+    @tasks.loop(hours=8)
     async def sortrolesaquaunited(self):
         try:
             ch = self.bot.get_channel(711253160999780432)
@@ -1592,7 +1595,7 @@ class BrawlStarsCog(commands.Cog):
                     await asyncio.sleep(0.5)
                 except brawlstats.errors.RequestError as e:
                     error_counter += 1
-                    if error_counter == 20:
+                    if error_counter == 5:
                         await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                           description=f"Stopping after 20 request errors! Displaying the last one:\n({str(e)})"))
                         break
@@ -1664,7 +1667,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortrolesaquaunited(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=10)
+    @tasks.loop(hours=8)
     async def sortroleslatam(self):
         ch = self.bot.get_channel(711070847841992796)
         await ch.trigger_typing()
