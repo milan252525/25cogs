@@ -42,6 +42,7 @@ class Blacklist(commands.Cog):
             keys = (await self.config.guild(ctx.guild).blacklisted()).keys()
             for key in keys:
                 player = await self.ofcbsapi.get_player(key)
+                await asyncio.sleep(0.1)
                 players.append(player)
         except brawlstats.errors.RequestError as e:
             await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
