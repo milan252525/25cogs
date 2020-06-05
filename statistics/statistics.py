@@ -1,19 +1,19 @@
 import discord
+from discord.ext import tasks
+
 from redbot.core import commands, Config, checks
 from redbot.core.utils.menus import menu, prev_page, next_page
-from bs.utils import badEmbed, goodEmbed
+
 import asyncio
 import brawlstats
 import clashroyale
-from discord.ext import tasks
+
 
 class Statistics(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=42424269)
-        default_guild = {"blacklisted": {}}
-        self.config.register_guild(**default_guild)
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
         self.crconfig = Config.get_conf(None, identifier=2512325, cog_name="ClashRoyaleCog")
         self.lbrenewallabs.start()
@@ -38,6 +38,11 @@ class Statistics(commands.Cog):
             raise ValueError("The Official Brawl Stars API key has not been set.")
         self.ofcbsapi = brawlstats.Client(ofcbsapikey["api_key"], is_async=True)
 
+    def get_bs_config(self):
+        if self.bsconfig is None:
+            self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
+        return self.bsconfig
+
     @commands.is_owner()
     @commands.command()
     async def summary(self, ctx, key:str=None):
@@ -46,8 +51,8 @@ class Statistics(commands.Cog):
             averagetrophies = 0
             lower10 = 0
             members = []
-            for key in (await self.bsconfig.guild(ctx.guild).clubs()).keys():
-                tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
+            for key in (await self.get_bs_config().guild(ctx.guild).clubs()).keys():
+                tag = await self.get_bs_config().guild(ctx.guild).clubs.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     members.append(member.trophies)
@@ -65,7 +70,7 @@ class Statistics(commands.Cog):
             await ctx.send(embed=embed)
         elif key is not None:
             lower10 = 0
-            tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
+            tag = await self.get_bs_config().guild(ctx.guild).clubs.get_raw(key, "tag")
             club = await self.ofcbsapi.get_club(tag)
             for i in range(len(club.members) - (len(club.members)//10), len(club.members)):
                 lower10 = lower10 + club.members[i].trophies
@@ -81,8 +86,8 @@ class Statistics(commands.Cog):
     async def trophylb(self, ctx, key:str=None):
         if key is None:
             trophies = []
-            for key in (await self.bsconfig.guild(ctx.guild).clubs()).keys():
-                tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
+            for key in (await self.get_bs_config().guild(ctx.guild).clubs()).keys():
+                tag = await self.get_bs_config().guild(ctx.guild).clubs.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     pair = []
@@ -101,7 +106,7 @@ class Statistics(commands.Cog):
             embed = discord.Embed(color=discord.Colour.gold(), title=f"{ctx.guild.name} leaderboard:", description=msg)
             await ctx.send(embed=embed)
         elif key is not None:
-            tag = await self.bsconfig.guild(ctx.guild).clubs.get_raw(key, "tag")
+            tag = await self.get_bs_config().guild(ctx.guild).clubs.get_raw(key, "tag")
             club = await self.ofcbsapi.get_club(tag)
             msg = ""
             i = 1
@@ -123,8 +128,8 @@ class Statistics(commands.Cog):
             message4 = await channel.fetch_message(691747291119222875)
             message5 = await channel.fetch_message(691747292511993866)
             trophies = []
-            for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
-                tag = await self.bsconfig.guild(message.guild).clubs.get_raw(key, "tag")
+            for key in (await self.get_bs_config().guild(message.guild).clubs()).keys():
+                tag = await self.get_bs_config().guild(message.guild).clubs.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     pair = []
@@ -165,8 +170,8 @@ class Statistics(commands.Cog):
         if channel is not None:
             message = await channel.fetch_message(690133472366428160)
             trophies = []
-            for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
-                tag = await self.bsconfig.guild(message.guild).clubs.get_raw(key, "tag")
+            for key in (await self.get_bs_config().guild(message.guild).clubs()).keys():
+                tag = await self.get_bs_config().guild(message.guild).clubs.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     pair = []
@@ -191,8 +196,8 @@ class Statistics(commands.Cog):
         if channel is not None:
             message = await channel.fetch_message(691296279157801050)
             trophies = []
-            for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
-                tag = await self.bsconfig.guild(message.guild).clubs.get_raw(key, "tag")
+            for key in (await self.get_bs_config().guild(message.guild).clubs()).keys():
+                tag = await self.get_bs_config().guild(message.guild).clubs.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     pair = []
@@ -258,8 +263,8 @@ class Statistics(commands.Cog):
             message4 = await channel.fetch_message(710984892128821259)
             message5 = await channel.fetch_message(710984913616240650)
             trophies = []
-            for key in (await self.bsconfig.guild(message.guild).clubs()).keys():
-                tag = await self.bsconfig.guild(message.guild).clubs.get_raw(key, "tag")
+            for key in (await self.get_bs_config().guild(message.guild).clubs()).keys():
+                tag = await self.get_bs_config().guild(message.guild).clubs.get_raw(key, "tag")
                 club = await self.ofcbsapi.get_club(tag)
                 for member in club.members:
                     pair = []
@@ -295,140 +300,3 @@ class Statistics(commands.Cog):
                 elif m == messages[4]:
                     embed = discord.Embed(color=discord.Colour.gold(), description=m)
                     await message5.edit(embed=embed)
-
-    @commands.guild_only()
-    @commands.group(invoke_without_command=True)
-    async def blacklisted(self, ctx):
-        """View all blacklisted people"""
-        await ctx.trigger_typing()
-
-        if len((await self.config.guild(ctx.guild).blacklisted()).keys()) < 1:
-            return await ctx.send(
-                embed=badEmbed(f"This server doesn't have anyone blacklisted!"))
-
-        try:
-            players = []
-            keys = (await self.config.guild(ctx.guild).blacklisted()).keys()
-            for key in keys:
-                player = await self.ofcbsapi.get_player(key)
-                players.append(player)
-        except brawlstats.errors.RequestError as e:
-            await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-
-        msg = ""
-        alertembed = False
-        messages = []
-        for plr in players:
-            alert = False
-            key = ""
-            clubname = ""
-            for k in (await self.config.guild(ctx.guild).blacklisted()).keys():
-                if plr.tag.replace("#", "").lower() == k:
-                    key = k
-
-            player_in_club = "name" in plr.raw_data["club"]
-            if player_in_club:
-                clubname = plr.club.name
-            else:
-                clubname = "No club"
-
-            await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'ign', value=plr.name)
-            await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'club', value=clubname)
-
-            clubs = []
-            for keey in (await self.bsconfig.guild(ctx.guild).clubs()).keys():
-                club = await self.bsconfig.guild(ctx.guild).clubs.get_raw(keey, "tag")
-                clubs.append(club)
-
-            if player_in_club:
-                if plr.club.tag.strip("#") in clubs:
-                    alert = True
-                    alertembed = True
-
-            keyforembed = "#" + key.upper()
-
-            if len(msg) > 1800:
-                messages.append(msg)
-                msg = ""
-
-            reason = await self.config.guild(ctx.guild).blacklisted.get_raw(key, "reason", default="")
-            if alert:
-                msg += f"--->{plr.name}({keyforembed}) <:bsband:600741378497970177> **{clubname}** Reason: {reason}<---\n"
-            if not alert:
-                msg += f"{plr.name}({keyforembed}) <:bsband:600741378497970177> **{clubname}** Reason: {reason}\n"
-
-        if len(msg) > 0:
-            messages.append(msg)
-
-        for m in messages:
-            if m == m[0]:
-                if alertembed:
-                    await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=m, title="Blacklist"))
-                elif not alertembed:
-                    await ctx.send(embed=discord.Embed(color=discord.Colour.green(), description=m, title="Blacklist"))
-            else:
-                if alertembed:
-                    await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=m))
-                elif not alertembed:
-                    await ctx.send(embed=discord.Embed(color=discord.Colour.green(), description=m))
-
-    @commands.guild_only()
-    @commands.has_permissions(administrator=True)
-    @blacklisted.command(name="add")
-    async def blacklist_add(self, ctx, tag: str, *, reason: str = ""):
-        """
-        Add a player to blacklist
-        """
-        await ctx.trigger_typing()
-
-        tag = tag.lower().replace('O', '0')
-        if tag.startswith("#"):
-            tag = tag.strip('#')
-
-        if tag in (await self.config.guild(ctx.guild).blacklisted()).keys():
-            return await ctx.send(embed=badEmbed("This person is already blacklisted!"))
-
-        try:
-            player = await self.ofcbsapi.get_player(tag)
-            player_in_club = "name" in player.raw_data["club"]
-            if player_in_club:
-                clubname = player.club.name
-            else:
-                clubname = "No club"
-            result = {
-                "ign": player.name,
-                "club": clubname,
-                "reason": reason
-            }
-            await self.config.guild(ctx.guild).blacklisted.set_raw(tag, value=result)
-            await ctx.send(embed=goodEmbed(f"{player.name} was successfully blacklisted!"))
-
-        except brawlstats.errors.NotFoundError as e:
-            return await ctx.send(embed=badEmbed("No player with this tag found, try again!"))
-
-        except brawlstats.errors.RequestError as e:
-            return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-
-        except Exception as e:
-            return await ctx.send(
-                f"**Something went wrong, please send a personal message to LA Modmail bot or try again!** ({e})")
-
-    @commands.guild_only()
-    @commands.has_permissions(administrator=True)
-    @blacklisted.command(name="remove")
-    async def blacklist_remove(self, ctx, tag: str):
-        """
-        Remove a person from blacklist
-        """
-        await ctx.trigger_typing()
-
-        tag = tag.lower().replace('O', '0')
-        if tag.startswith("#"):
-            tag = tag.strip('#')
-
-        try:
-            ign = await self.config.guild(ctx.guild).blacklisted.get_raw(tag, "ign")
-            await self.config.guild(ctx.guild).blacklisted.clear_raw(tag)
-            await ctx.send(embed=goodEmbed(f"{ign} was successfully removed from this server's blacklist!"))
-        except KeyError:
-            await ctx.send(embed=badEmbed(f"{ign} isn't blacklisted in this server!"))

@@ -48,6 +48,11 @@ class Welcome(commands.Cog):
             raise ValueError("The Official Brawl Stars API key has not been set.")
         self.ofcbsapi = brawlstats.Client(ofcbsapikey["api_key"], is_async=True)
 
+    def get_bs_config(self):
+        if self.bsconfig is None:
+            self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
+        return self.bsconfig
+
     # @commands.command(hidden=True)
     # async def detect(self, ctx):
     #     try:
@@ -117,7 +122,7 @@ class Welcome(commands.Cog):
                 except discord.Forbidden:
                     msg += f":exclamation:Couldn't change nickname of this user. ({nick[:31]})\n"
 
-                await self.bsconfig.user(member).tag.set(tag)
+                await self.get_bs_config().user(member).tag.set(tag)
 
                 try:
                     roleVerifiedMember = member.guild.get_role(597768235324145666)
@@ -214,7 +219,7 @@ class Welcome(commands.Cog):
                     msg += f":exclamation:Couldn't change nickname of this user. ({nick[:31]})\n"
 
                 await self.crconfig.user(member).tag.set(crtag)
-                await self.bsconfig.user(member).tag.set(bstag)
+                await self.get_bs_config().user(member).tag.set(bstag)
 
                 try:
                     roleVerifiedMember = member.guild.get_role(597768235324145666)
@@ -358,7 +363,7 @@ class Welcome(commands.Cog):
             selfroles = ctx.guild.get_channel(665566710492823554)
             guestselfroles = ctx.guild.get_channel(704890962421219339)
             tags = []
-            guilds = await self.bsconfig.all_guilds()
+            guilds = await self.get_bs_config().all_guilds()
             events = guilds[654334199494606848]
             clubs = events["clubs"]
             for club in clubs:
@@ -382,7 +387,7 @@ class Welcome(commands.Cog):
                 except discord.Forbidden:
                     msg += f":exclamation:Couldn't change nickname of this user. ({nick[:31]})\n"
 
-                await self.bsconfig.user(member).tag.set(tag)
+                await self.get_bs_config().user(member).tag.set(tag)
 
                 try:
                     LAMember = member.guild.get_role(654334569528688641)

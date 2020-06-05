@@ -23,7 +23,7 @@ class BrawlStarsCog(commands.Cog):
         self.config.register_user(**default_user)
         default_guild = {"clubs": {}}
         self.config.register_guild(**default_guild)
-        self.statsconfig = Config.get_conf(None, identifier=42424269, cog_name="Statistics")
+        self.blacklist_conf = Config.get_conf(None, identifier=42424269, cog_name="Blacklist")
         self.aiohttp_session = aiohttp.ClientSession()
         asyncio.ensure_future(self.start_tasks())
 
@@ -41,21 +41,21 @@ class BrawlStarsCog(commands.Cog):
     async def start_tasks(self):
         await asyncio.sleep(300)
         self.sortroles.start()
-        await asyncio.sleep(300)
+        await asyncio.sleep(15*60)
         self.sortrolesasia.start()
-        await asyncio.sleep(120)
+        await asyncio.sleep(10*60)
         self.sortrolesbd.start()
-        await asyncio.sleep(120)
+        await asyncio.sleep(10*60)
         self.spainblacklistjob.start()
-        await asyncio.sleep(120)
+        await asyncio.sleep(10*60)
         self.sortrolesspain.start()
-        await asyncio.sleep(120)
+        await asyncio.sleep(10*60)
         self.sortrolesportugal.start()
-        await asyncio.sleep(120)
+        await asyncio.sleep(10*60)
         self.sortrolesevents.start()
-        await asyncio.sleep(120)
+        await asyncio.sleep(10*60)
         self.sortrolesaquaunited.start()
-        await asyncio.sleep(120)
+        await asyncio.sleep(10*60)
         self.sortroleslatam.start()
 
     async def initialize(self):
@@ -70,7 +70,12 @@ class BrawlStarsCog(commands.Cog):
     async def starlist_request(self, url):
         header = {"Authorization": f"Bearer {self.starlist_key}"}
         async with self.aiohttp_session.get(url, headers=header) as resp:
-            return await resp.json() 
+            return await resp.json()
+
+    def get_blacklist_config(self):
+        if self.blacklist_conf is None:
+            self.blacklist_conf = Config.get_conf(None, identifier=42424269, cog_name="Blacklist")
+        return self.blacklist_conf
         
     @commands.Cog.listener()
     async def on_message(self, msg):
@@ -854,7 +859,7 @@ class BrawlStarsCog(commands.Cog):
                 continue
             try:
                 player = await self.ofcbsapi.get_player(tag)
-                await asyncio.sleep(0.2)
+                await asyncio.sleep(0.5)
             except brawlstats.errors.RequestError as e:
                 await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"{str(member)} ({member.id}) #{tag}"))
                 error_counter += 1 
@@ -932,7 +937,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortroles(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=5)
+    @tasks.loop(hours=8)
     async def sortrolesasia(self):
         ch = self.bot.get_channel(672267298001911838)
         await ch.trigger_typing()
@@ -956,7 +961,7 @@ class BrawlStarsCog(commands.Cog):
                 await asyncio.sleep(0.5)
             except brawlstats.errors.RequestError as e:
                 error_counter += 1
-                if error_counter == 20:
+                if error_counter == 5:
                     await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 20 request errors! Displaying the last one:\n({str(e)})"))
                     break
                 await asyncio.sleep(1)
@@ -1044,7 +1049,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortrolesasia(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=6)
+    @tasks.loop(hours=8)
     async def sortrolesbd(self):
         ch = self.bot.get_channel(690881058756886599)
         await ch.trigger_typing()
@@ -1074,7 +1079,7 @@ class BrawlStarsCog(commands.Cog):
                 continue
             try:
                 player = await self.ofcbsapi.get_player(tag)
-                await asyncio.sleep(0.2)
+                await asyncio.sleep(0.5)
             except brawlstats.errors.RequestError as e:
                 error_counter += 1
                 if error_counter == 5:
@@ -1194,41 +1199,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortrolesbd(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=2)
-    async def spainblacklistjob(self):
-        try:
-            ch = self.bot.get_channel(716329434466222092)
-            await ch.trigger_typing()
-            clubs = []
-            for key in (await self.config.guild(ch.guild).clubs()).keys():
-                club = await self.config.guild(ch.guild).clubs.get_raw(key, "tag")
-                clubs.append(club)
-
-            for tag in (await self.statsconfig.guild(ch.guild).blacklisted()).keys():
-                try:
-                    player = await self.ofcbsapi.get_player(tag)
-                    player_in_club = "name" in player.raw_data["club"]
-                    await asyncio.sleep(0.5)
-                except brawlstats.errors.RequestError as e:
-                    await asyncio.sleep(1)
-                    continue
-                except Exception as e:
-                    return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                             description=f"**Algo ha ido mal solicitando {tag}!**\n({str(e)})"))
-
-                if player_in_club:
-                    if player.club.tag.strip("#") in clubs:
-                        reason = await self.statsconfig.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
-                        await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                                   description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
-        except Exception as e:
-            await ch.send(e)
-
-    @spainblacklistjob.before_loop
-    async def before_spainblacklistjob(self):
-        await asyncio.sleep(5)
-
-    @tasks.loop(hours=6)
+    @tasks.loop(hours=4)
     async def sortrolesspain(self):
         try:
             ch = self.bot.get_channel(693781513363390475)
@@ -1250,7 +1221,7 @@ class BrawlStarsCog(commands.Cog):
                     await asyncio.sleep(0.5)
                 except brawlstats.errors.RequestError as e:
                     error_counter += 1
-                    if error_counter == 20:
+                    if error_counter == 5:
                         await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                           description=f"¡Deteniéndose después de 5 errores de solicitud! Mostrando el último: \n({str(e)})"))
                         break
@@ -1330,7 +1301,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortrolesspain(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=7)
+    @tasks.loop(hours=8)
     async def sortrolesportugal(self):
         ch = self.bot.get_channel(712394680389599281)
         await ch.trigger_typing()
@@ -1356,7 +1327,7 @@ class BrawlStarsCog(commands.Cog):
                 await asyncio.sleep(0.5)
             except brawlstats.errors.RequestError as e:
                 error_counter += 1
-                if error_counter == 20:
+                if error_counter == 5:
                     await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                       description=f"Stopping after 20 request errors! Displaying the last one:\n({str(e)})"))
                     break
@@ -1459,7 +1430,7 @@ class BrawlStarsCog(commands.Cog):
                     await asyncio.sleep(0.5)
                 except brawlstats.errors.RequestError as e:
                     error_counter += 1
-                    if error_counter == 20:
+                    if error_counter == 5:
                         await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                           description=f"Stopping after 20 request errors! Displaying the last one:\n({str(e)})"))
                         break
@@ -1569,7 +1540,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortrolesevents(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=9)
+    @tasks.loop(hours=8)
     async def sortrolesaquaunited(self):
         try:
             ch = self.bot.get_channel(711253160999780432)
@@ -1598,7 +1569,7 @@ class BrawlStarsCog(commands.Cog):
                     await asyncio.sleep(0.5)
                 except brawlstats.errors.RequestError as e:
                     error_counter += 1
-                    if error_counter == 20:
+                    if error_counter == 5:
                         await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                           description=f"Stopping after 20 request errors! Displaying the last one:\n({str(e)})"))
                         break
@@ -1673,7 +1644,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortrolesaquaunited(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=10)
+    @tasks.loop(hours=8)
     async def sortroleslatam(self):
         ch = self.bot.get_channel(711070847841992796)
         await ch.trigger_typing()
@@ -1798,7 +1769,7 @@ class BrawlStarsCog(commands.Cog):
             if tag.startswith("#"):
                 tag = tag.strip('#')
 
-            if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+            if tag in (await self.get_blacklist_config().guild(ctx.guild).blacklisted()).keys():
                 return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
 
             msg = ""
@@ -1893,7 +1864,7 @@ class BrawlStarsCog(commands.Cog):
             if tag.startswith("#"):
                 tag = tag.strip('#')
 
-            if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+            if tag in (await self.get_blacklist_config().guild(ctx.guild).blacklisted()).keys():
                 return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
 
             msg = ""
@@ -1992,7 +1963,7 @@ class BrawlStarsCog(commands.Cog):
             if tag.startswith("#"):
                 tag = tag.strip('#')
 
-            if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+            if tag in (await self.get_blacklist_config().guild(ctx.guild).blacklisted()).keys():
                 return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
 
             msg = ""
@@ -2130,7 +2101,7 @@ class BrawlStarsCog(commands.Cog):
             if tag.startswith("#"):
                 tag = tag.strip('#')
 
-            if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+            if tag in (await self.get_blacklist_config().guild(ctx.guild).blacklisted()).keys():
                 return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
 
             msg = ""
@@ -2227,7 +2198,7 @@ class BrawlStarsCog(commands.Cog):
         if tag.startswith("#"):
             tag = tag.strip('#')
 
-        if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+        if tag in (await self.get_blacklist_config().guild(ctx.guild).blacklisted()).keys():
             return await ctx.send(embed=badEmbed("Looks like you are blacklisted!"))
 
         tags = []
@@ -2332,7 +2303,7 @@ class BrawlStarsCog(commands.Cog):
         if tag.startswith("#"):
             tag = tag.strip('#')
 
-        if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+        if tag in (await self.get_blacklist_config().guild(ctx.guild).blacklisted()).keys():
             return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
 
         msg = ""
@@ -2430,7 +2401,7 @@ class BrawlStarsCog(commands.Cog):
         if tag.startswith("#"):
             tag = tag.strip('#')
 
-        if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+        if tag in (await self.get_blacklist_config().guild(ctx.guild).blacklisted()).keys():
             return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
 
         msg = ""
