@@ -23,7 +23,6 @@ class BrawlStarsCog(commands.Cog):
         self.config.register_user(**default_user)
         default_guild = {"clubs": {}}
         self.config.register_guild(**default_guild)
-        self.statsconfig = Config.get_conf(None, identifier=42424269, cog_name="Statistics")
         self.aiohttp_session = aiohttp.ClientSession()
         asyncio.ensure_future(self.start_tasks())
 
@@ -1187,43 +1186,6 @@ class BrawlStarsCog(commands.Cog):
 
     @sortrolesbd.before_loop
     async def before_sortrolesbd(self):
-        await asyncio.sleep(5)
-
-    @tasks.loop(hours=4)
-    async def spainblacklistjob(self):
-        try:
-            errors = 0
-            ch = self.bot.get_channel(716329434466222092)
-            await ch.trigger_typing()
-            clubs = []
-            for key in (await self.config.guild(ch.guild).clubs()).keys():
-                club = await self.config.guild(ch.guild).clubs.get_raw(key, "tag")
-                clubs.append(club)
-
-            for tag in (await self.statsconfig.guild(ch.guild).blacklisted()).keys():
-                try:
-                    player = await self.ofcbsapi.get_player(tag)
-                    player_in_club = "name" in player.raw_data["club"]
-                    await asyncio.sleep(0.5)
-                except brawlstats.errors.RequestError as e:
-                    await asyncio.sleep(5)
-                    errors += 1
-                    if errors == 5:
-                        break
-                except Exception as e:
-                    return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                             description=f"**Algo ha ido mal solicitando {tag}!**\n({str(e)})"))
-
-                if player_in_club:
-                    if player.club.tag.strip("#") in clubs:
-                        reason = await self.statsconfig.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
-                        await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                                   description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
-        except Exception as e:
-            await ch.send(e)
-
-    @spainblacklistjob.before_loop
-    async def before_spainblacklistjob(self):
         await asyncio.sleep(5)
 
     @tasks.loop(hours=4)

@@ -1,0 +1,9 @@
+{
+  "author": ["milan_25", "datura-metel"],
+  "name" : "Blacklist",
+  "description": "Blacklist cog",
+  "install_msg": "Thank you for installing our Blacklist cog. Set your BS API token with `[p]set api bsapi api_key,YOURAPIKEY`",
+  "short": "Blacklist BS players",
+  "requirements" : ["brawlstats"],
+  "tags": ["blacklist"]
+}
