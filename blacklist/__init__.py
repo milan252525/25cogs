@@ -1,4 +1,4 @@
-from .bs import Blacklist
+from .blacklist import Blacklist
 
 async def setup(bot):
   cog = Blacklist(bot)

@@ -4,8 +4,6 @@ from discord.ext import tasks
 from redbot.core import commands, Config, checks
 from redbot.core.utils.menus import menu, prev_page, next_page
 
-from bs.utils import badEmbed, goodEmbed
-
 import asyncio
 import brawlstats
 import clashroyale
