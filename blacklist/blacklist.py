@@ -45,7 +45,7 @@ class Blacklist(commands.Cog):
                 await asyncio.sleep(0.1)
                 players.append(player)
         except brawlstats.errors.RequestError as e:
-            await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+            return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         msg = ""
         alertembed = False
