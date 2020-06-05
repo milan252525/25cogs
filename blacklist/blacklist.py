@@ -37,7 +37,6 @@ class Blacklist(commands.Cog):
         if len((await self.config.guild(ctx.guild).blacklisted()).keys()) < 1:
             return await ctx.send(
                 embed=badEmbed(f"This server doesn't have anyone blacklisted!"))
-
         try:
             players = []
             keys = (await self.config.guild(ctx.guild).blacklisted()).keys()
