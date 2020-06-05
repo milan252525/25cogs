@@ -369,7 +369,8 @@ class BrawlStarsCog(commands.Cog):
             if br.get('name') is not None:
                 ename = f"{get_brawler_emoji(br.get('name'))} {br.get('name').lower().capitalize()}"
             elif br.get('name') is None:
-                ename = f"{get_brawler_emoji(br.get('name'))} Nani"
+                emoji = get_brawler_emoji("NANI")
+                ename = f"{emoji} Nani"
             evalue = f"<:bstrophy:552558722770141204> `{br.get('trophies')}` {get_rank_emoji(br.get('rank'))} `{br.get('highestTrophies')}`\n"
             evalue += f"<:gadget:716341776608133130> {len(br.get('gadgets'))} "
             evalue += f"<:starpower:664267686720700456> {len(br.get('starPowers'))} "
