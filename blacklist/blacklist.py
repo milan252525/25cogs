@@ -15,6 +15,7 @@ class Blacklist(commands.Cog):
         self.config = Config.get_conf(self, identifier=42424242)
         default_guild = {"blacklisted": {}}
         self.config.register_guild(**default_guild)
+        self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
