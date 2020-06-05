@@ -3,11 +3,10 @@ from discord.ext import tasks
 
 from redbot.core import commands, Config, checks
 
-from .utils import badEmbed, goodEmbed, get_league_emoji, get_rank_emoji, get_brawler_emoji, remove_codes, calculate_starpoints
+from bs.utils import badEmbed, goodEmbed, get_league_emoji, get_rank_emoji, get_brawler_emoji, remove_codes, calculate_starpoints
 
 import asyncio
 import brawlstats
-
 
 class Blacklist(commands.Cog):
 
