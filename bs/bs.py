@@ -23,6 +23,7 @@ class BrawlStarsCog(commands.Cog):
         self.config.register_user(**default_user)
         default_guild = {"clubs": {}}
         self.config.register_guild(**default_guild)
+        self.blacklist_conf = Config.get_conf(None, identifier=42424269, cog_name="Blacklist")
         self.aiohttp_session = aiohttp.ClientSession()
         asyncio.ensure_future(self.start_tasks())
 
@@ -69,7 +70,12 @@ class BrawlStarsCog(commands.Cog):
     async def starlist_request(self, url):
         header = {"Authorization": f"Bearer {self.starlist_key}"}
         async with self.aiohttp_session.get(url, headers=header) as resp:
-            return await resp.json() 
+            return await resp.json()
+
+    def get_blacklist_config(self):
+        if self.blacklist_conf is None:
+            self.blacklist_conf = Config.get_conf(None, identifier=42424269, cog_name="Blacklist")
+        return self.blacklist_conf
         
     @commands.Cog.listener()
     async def on_message(self, msg):
@@ -1754,7 +1760,7 @@ class BrawlStarsCog(commands.Cog):
             if tag.startswith("#"):
                 tag = tag.strip('#')
 
-            if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+            if tag in (await self.get_blacklist_config().guild(ctx.guild).blacklisted()).keys():
                 return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
 
             msg = ""
@@ -1849,7 +1855,7 @@ class BrawlStarsCog(commands.Cog):
             if tag.startswith("#"):
                 tag = tag.strip('#')
 
-            if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+            if tag in (await self.get_blacklist_config().guild(ctx.guild).blacklisted()).keys():
                 return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
 
             msg = ""
@@ -1948,7 +1954,7 @@ class BrawlStarsCog(commands.Cog):
             if tag.startswith("#"):
                 tag = tag.strip('#')
 
-            if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+            if tag in (await self.get_blacklist_config().guild(ctx.guild).blacklisted()).keys():
                 return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
 
             msg = ""
@@ -2085,7 +2091,7 @@ class BrawlStarsCog(commands.Cog):
             if tag.startswith("#"):
                 tag = tag.strip('#')
 
-            if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+            if tag in (await self.get_blacklist_config().guild(ctx.guild).blacklisted()).keys():
                 return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
 
             msg = ""
@@ -2180,7 +2186,7 @@ class BrawlStarsCog(commands.Cog):
         if tag.startswith("#"):
             tag = tag.strip('#')
 
-        if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+        if tag in (await self.get_blacklist_config().guild(ctx.guild).blacklisted()).keys():
             return await ctx.send(embed=badEmbed("Looks like you are blacklisted!"))
 
         tags = []
@@ -2285,7 +2291,7 @@ class BrawlStarsCog(commands.Cog):
         if tag.startswith("#"):
             tag = tag.strip('#')
 
-        if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+        if tag in (await self.get_blacklist_config().guild(ctx.guild).blacklisted()).keys():
             return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
 
         msg = ""
@@ -2383,7 +2389,7 @@ class BrawlStarsCog(commands.Cog):
         if tag.startswith("#"):
             tag = tag.strip('#')
 
-        if tag in (await self.statsconfig.guild(ctx.guild).blacklisted()).keys():
+        if tag in (await self.get_blacklist_config().guild(ctx.guild).blacklisted()).keys():
             return await ctx.send(embed=badEmbed("Looks like this person is blacklisted!"))
 
         msg = ""
