@@ -385,7 +385,7 @@ class BrawlStarsCog(commands.Cog):
             embedstosend.append(embed)
 
         for i in range(len(embedstosend)):
-            embedstosend[i].set_footer(text=f"Page {i}/{len(embedstosend)}\n/brawler name for more stats")
+            embedstosend[i].set_footer(text=f"Page {i+1}/{len(embedstosend)}\n/brawler name for more stats")
 
         if len(embedstosend) > 1:
             await menu(ctx, embedstosend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
