@@ -364,7 +364,10 @@ class BrawlStarsCog(commands.Cog):
             for brawl in player.raw_data['brawlers']:
                 if brawl.get('name') == brawler[0]:
                     br = brawl
-            ename = f"{get_brawler_emoji(br.get('name'))} {br.get('name').lower().capitalize()}"
+            if br.get('name') is not None:
+                ename = f"{get_brawler_emoji(br.get('name'))} {br.get('name').lower().capitalize()}"
+            elif br.get('name') is None:
+                ename = f"{get_brawler_emoji(br.get('name'))} Nani"
             evalue = f"<:bstrophy:552558722770141204> `{br.get('trophies')}` {get_rank_emoji(br.get('rank'))} `{br.get('highestTrophies')}`\n"
             evalue += f"<:gadget:716341776608133130> {len(br.get('gadgets'))} "
             evalue += f"<:starpower:664267686720700456> {len(br.get('starPowers'))} "
@@ -375,10 +378,12 @@ class BrawlStarsCog(commands.Cog):
         for i in range(0, len(embedfields), 9):
             embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}\\36):")
             embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
-            embed.set_footer(text="/brawler name for more stats")
             for e in embedfields[i:i + 9]:
                 embed.add_field(name=e[0], value=e[1], inline=True)
             embedstosend.append(embed)
+
+        for i in range(len(embedstosend)):
+            embedstosend[i].set_footer(text=f"Page {i}/{len(embedstosend)}\n/brawler name for more stats")
 
         if len(embedstosend) > 1:
             await menu(ctx, embedstosend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
@@ -1576,6 +1581,7 @@ class BrawlStarsCog(commands.Cog):
             aqua = ch.guild.get_role(700698977271808040)
             united = ch.guild.get_role(631166049395539988)
             fury = ch.guild.get_role(703591387970535435)
+            arrow = ch.guild.get_role(718138400582008852)
             newcomer = ch.guild.get_role(631516344684380205)
             minus = ch.guild.get_role(701772917909880892)
             whitelist = ch.guild.get_role(714503658183852052)
@@ -1630,14 +1636,17 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.removeroleifpresent(member, lafam, viewer, newcomer)
                     msg += await self.addroleifnotpresent(member, minus)
                     if player.club.name == "LA United":
-                        msg += await self.removeroleifpresent(member, aqua, fury)
+                        msg += await self.removeroleifpresent(member, aqua, fury, arrow)
                         msg += await self.addroleifnotpresent(member, united)
                     elif player.club.name == "LA Aqua":
-                        msg += await self.removeroleifpresent(member, united, fury)
+                        msg += await self.removeroleifpresent(member, united, fury, arrow)
                         msg += await self.addroleifnotpresent(member, aqua)
                     elif player.club.name == "LA Fury":
-                        msg += await self.removeroleifpresent(member, aqua, united)
+                        msg += await self.removeroleifpresent(member, aqua, united, arrow)
                         msg += await self.addroleifnotpresent(member, fury)
+                    elif player.club.name == "LA Arrow":
+                        msg += await self.removeroleifpresent(member, aqua, united, fury)
+                        msg += await self.addroleifnotpresent(member, arrow)
                     else:
                         msg += f"Couldn't find a role for {player.club.name}."
                     try:
@@ -2104,6 +2113,7 @@ class BrawlStarsCog(commands.Cog):
             aqua = ctx.guild.get_role(700698977271808040)
             united = ctx.guild.get_role(631166049395539988)
             fury = ctx.guild.get_role(703591387970535435)
+            arrow = ctx.guild.get_role(718138400582008852)
             newcomer = ctx.guild.get_role(631516344684380205)
             minus = ctx.guild.get_role(701772917909880892)
 
@@ -2173,6 +2183,8 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.addroleifnotpresent(member, aqua)
                 elif player.club.name == "LA Fury":
                     msg += await self.addroleifnotpresent(member, fury)
+                elif player.club.name == "LA Arrow":
+                    msg += await self.addroleifnotpresent(member, arrow)
                 try:
                     player_club = await self.ofcbsapi.get_club(player.club.tag)
                     for mem in player_club.members:
