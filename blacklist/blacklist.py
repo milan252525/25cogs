@@ -21,6 +21,11 @@ class Blacklist(commands.Cog):
         if ofcbsapikey["api_key"] is None:
             raise ValueError("The Official Brawl Stars API key has not been set.")
         self.ofcbsapi = brawlstats.Client(ofcbsapikey["api_key"], is_async=True)
+
+    def get_bs_config(self):
+        if self.bsconfig is None:
+            self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
+        return self.bsconfig
         
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
@@ -62,8 +67,8 @@ class Blacklist(commands.Cog):
             await self.config.guild(ctx.guild).blacklisted.set_raw(key, 'club', value=clubname)
 
             clubs = []
-            for keey in (await self.bsconfig.guild(ctx.guild).clubs()).keys():
-                club = await self.bsconfig.guild(ctx.guild).clubs.get_raw(keey, "tag")
+            for keey in (await self.get_bs_config().guild(ctx.guild).clubs()).keys():
+                club = await self.get_bs_config().guild(ctx.guild).clubs.get_raw(keey, "tag")
                 clubs.append(club)
 
             if player_in_club:
