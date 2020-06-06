@@ -595,6 +595,7 @@ class BrawlStarsCog(commands.Cog):
         return await ctx.send(embed=randomize_colour(embed))
 
     @commands.cooldown(1, 30, commands.BucketType.guild)
+    @commands.cooldown(1, 180, commands.BucketType.user)
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
     async def clubs(self, ctx, keyword: str = None):
@@ -623,9 +624,8 @@ class BrawlStarsCog(commands.Cog):
                     try:
                         club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
                     except brawlstats.errors.RequestError as e:
-                        continue
-                        #offline = True
-                        #break
+                        offline = True
+                        break
                     clubs.append(club)
                 elif keyword != "":
                     if "family" in saved_clubs[key] and saved_clubs[key]['family'] == keyword:
@@ -864,11 +864,11 @@ class BrawlStarsCog(commands.Cog):
                 continue
             try:
                 player = await self.ofcbsapi.get_player(tag)
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(1)
             except brawlstats.errors.RequestError as e:
                 await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"{str(member)} ({member.id}) #{tag}"))
                 error_counter += 1 
-                if error_counter == 5:
+                if error_counter == 50:
                     await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 5 request errors! Displaying the last one:\n({str(e)})"))
                     break
                 await asyncio.sleep(1)
