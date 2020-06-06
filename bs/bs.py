@@ -623,8 +623,9 @@ class BrawlStarsCog(commands.Cog):
                     try:
                         club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
                     except brawlstats.errors.RequestError as e:
-                        offline = True
-                        break
+                        continue
+                        #offline = True
+                        #break
                     clubs.append(club)
                 elif keyword != "":
                     if "family" in saved_clubs[key] and saved_clubs[key]['family'] == keyword:
@@ -654,7 +655,7 @@ class BrawlStarsCog(commands.Cog):
                                                         description="Requesting clubs. Might take a while.\n(100%) ────────────────",
                                                         title="Loading...")
                         await msg.edit(embed=loadingembed)
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(0.5)
 
             embedFields = []
 
