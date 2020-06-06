@@ -29,18 +29,18 @@ class BrawlStarsCog(commands.Cog):
 
     def cog_unload(self):
         self.sortroles.cancel()
-        self.sortrolesasia.cancel()
+        """ self.sortrolesasia.cancel()
         self.sortrolesbd.cancel()
         self.sortrolesspain.cancel()
         self.sortrolesportugal.cancel()
         self.sortrolesevents.cancel()
         self.sortrolesaquaunited.cancel()
-        self.sortroleslatam.cancel()
+        self.sortroleslatam.cancel() """
 
     async def start_tasks(self):
         await asyncio.sleep(300)
         self.sortroles.start()
-        await asyncio.sleep(15*60)
+        """ await asyncio.sleep(15*60)
         self.sortrolesasia.start()
         await asyncio.sleep(10*60)
         self.sortrolesbd.start()
@@ -53,7 +53,7 @@ class BrawlStarsCog(commands.Cog):
         await asyncio.sleep(10*60)
         self.sortrolesaquaunited.start()
         await asyncio.sleep(10*60)
-        self.sortroleslatam.start()
+        self.sortroleslatam.start() """
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
@@ -165,6 +165,7 @@ class BrawlStarsCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Something went wrong: {str(e)}")
 
+    @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.command(aliases=['p', 'bsp', 'stats'])
     async def profile(self, ctx, *, member: Union[discord.Member, str] = None):
         """View player's BS statistics"""
@@ -298,6 +299,7 @@ class BrawlStarsCog(commands.Cog):
         embed.set_footer(text=choice(texts))
         await ctx.send(embed=embed)
 
+    @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.command(aliases=['b'])
     async def brawlers(self, ctx, *, member: Union[discord.Member, str] = None):
         """Brawl Stars brawlers"""
@@ -393,6 +395,7 @@ class BrawlStarsCog(commands.Cog):
         else:
             await ctx.send(embed=embedstosend[0])
 
+    @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.command()
     async def brawler(self, ctx, brawler: str, member: Union[discord.Member, str] = None):
         """Brawler specific info"""
@@ -503,7 +506,8 @@ class BrawlStarsCog(commands.Cog):
         guild = self.bot.get_guild(717766786019360769)
         em = discord.utils.get(guild.emojis, name=str(badge_id))
         return str(em)
-           
+    
+    @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.command()
     async def club(self, ctx, key: Union[discord.Member, str] = None):
         """View players club or club saved in a server"""
@@ -590,6 +594,7 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(name="Lowest Members", value=worstm, inline=True)
         return await ctx.send(embed=randomize_colour(embed))
 
+    @commands.cooldown(1, 60, commands.BucketType.guild)
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
     async def clubs(self, ctx, keyword: str = None):
@@ -611,44 +616,45 @@ class BrawlStarsCog(commands.Cog):
         saved_clubs = await self.config.guild(ctx.guild).clubs()
 
         try:
-            try:
-                clubs = []
-                keys = saved_clubs.keys()
-                for ind, key in enumerate(keys):
-                    if keyword == "" or keyword is None:
+            clubs = []
+            keys = saved_clubs.keys()
+            for ind, key in enumerate(keys):
+                if keyword == "" or keyword is None:
+                    try:
+                        club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
+                    except brawlstats.errors.RequestError as e:
+                        offline = True
+                        break
+                    clubs.append(club)
+                elif keyword != "":
+                    if "family" in saved_clubs[key] and saved_clubs[key]['family'] == keyword:
                         club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
                         clubs.append(club)
-                    elif keyword != "":
-                        if "family" in saved_clubs[key] and saved_clubs[key]['family'] == keyword:
-                            club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
-                            clubs.append(club)
-                    if 0 <= ind / len(keys) <= 0.25:
-                        if loadingembed.description != "Requesting clubs. Might take a while.\n(25%) ────":
-                            loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                                         description="Requesting clubs. Might take a while.\n(25%) ────",
-                                                         title="Loading...")
-                            await msg.edit(embed=loadingembed)
-                    elif 0.25 <= ind / len(keys) <= 0.5:
-                        if loadingembed.description != "Requesting clubs. Might take a while.\n(50%) ────────":
-                            loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                                         description="Requesting clubs. Might take a while.\n(50%) ────────",
-                                                         title="Loading...")
-                            await msg.edit(embed=loadingembed)
-                    elif 0.5 <= ind / len(keys) <= 0.75:
-                        if loadingembed.description != "Requesting clubs. Might take a while.\n(75%) ────────────":
-                            loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                                         description="Requesting clubs. Might take a while.\n(75%) ────────────",
-                                                         title="Loading...")
-                            await msg.edit(embed=loadingembed)
-                    elif 0.75 <= ind / len(keys) <= 1:
-                        if loadingembed.description != "Requesting clubs. Might take a while.\n(100%) ────────────────":
-                            loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                                         description="Requesting clubs. Might take a while.\n(100%) ────────────────",
-                                                         title="Loading...")
-                            await msg.edit(embed=loadingembed)
-                    # await asyncio.sleep(1)
-            except brawlstats.errors.RequestError as e:
-                offline = True
+                if 0 <= ind / len(keys) <= 0.25:
+                    if loadingembed.description != "Requesting clubs. Might take a while.\n(25%) ────":
+                        loadingembed = discord.Embed(colour=discord.Colour.red(),
+                                                        description="Requesting clubs. Might take a while.\n(25%) ────",
+                                                        title="Loading...")
+                        await msg.edit(embed=loadingembed)
+                elif 0.25 <= ind / len(keys) <= 0.5:
+                    if loadingembed.description != "Requesting clubs. Might take a while.\n(50%) ────────":
+                        loadingembed = discord.Embed(colour=discord.Colour.red(),
+                                                        description="Requesting clubs. Might take a while.\n(50%) ────────",
+                                                        title="Loading...")
+                        await msg.edit(embed=loadingembed)
+                elif 0.5 <= ind / len(keys) <= 0.75:
+                    if loadingembed.description != "Requesting clubs. Might take a while.\n(75%) ────────────":
+                        loadingembed = discord.Embed(colour=discord.Colour.red(),
+                                                        description="Requesting clubs. Might take a while.\n(75%) ────────────",
+                                                        title="Loading...")
+                        await msg.edit(embed=loadingembed)
+                elif 0.75 <= ind / len(keys) <= 1:
+                    if loadingembed.description != "Requesting clubs. Might take a while.\n(100%) ────────────────":
+                        loadingembed = discord.Embed(colour=discord.Colour.red(),
+                                                        description="Requesting clubs. Might take a while.\n(100%) ────────────────",
+                                                        title="Loading...")
+                        await msg.edit(embed=loadingembed)
+                await asyncio.sleep(0.1)
 
             embedFields = []
 
@@ -828,7 +834,7 @@ class BrawlStarsCog(commands.Cog):
                 msg += f"Added **{str(role)}**\n"
         return msg
 
-    @tasks.loop(hours=4)
+    @tasks.loop(hours=8)
     async def sortroles(self):
         ch = self.bot.get_channel(653295573872672810)
         await ch.trigger_typing()
@@ -1197,7 +1203,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortrolesbd(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=4)
+    @tasks.loop(hours=8)
     async def sortrolesspain(self):
         try:
             ch = self.bot.get_channel(693781513363390475)
@@ -2627,6 +2633,7 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed=embed)
             i = i + 1
 
+    @commands.cooldown(1, 60, commands.BucketType.default)
     @commands.command()
     @commands.guild_only()
     async def lowclubs(self, ctx):
@@ -2719,6 +2726,7 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(
                 "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
 
+    @commands.cooldown(1, 60, commands.BucketType.default)
     @commands.command()
     @commands.guild_only()
     async def whitelistclubs(self, ctx):
