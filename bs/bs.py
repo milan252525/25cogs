@@ -594,7 +594,7 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(name="Lowest Members", value=worstm, inline=True)
         return await ctx.send(embed=randomize_colour(embed))
 
-    @commands.cooldown(1, 60, commands.BucketType.guild)
+    @commands.cooldown(1, 30, commands.BucketType.guild)
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
     async def clubs(self, ctx, keyword: str = None):
@@ -728,7 +728,7 @@ class BrawlStarsCog(commands.Cog):
                 await msg.delete()
                 await ctx.send(embed=embedsToSend[0])
 
-        except Exception as e:
+        except ZeroDivisionError as e:
             return await ctx.send(
                 "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
 
