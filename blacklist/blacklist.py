@@ -37,6 +37,11 @@ class Blacklist(commands.Cog):
     async def blacklisted(self, ctx):
         """View all blacklisted people"""
         await ctx.trigger_typing()
+        
+        if ctx.guild.id == 460550486257565697 and ctx.author.top_role < ctx.guild.get_role(462066723789471744):
+            return await ctx.send("You can't use this command.")
+        if ctx.guild.id != 460550486257565697 and not ctx.author.guild_permissions.kick_members:
+            return await ctx.send("You can't use this command.")
 
         if len((await self.config.guild(ctx.guild).blacklisted()).keys()) < 1:
             return await ctx.send(
