@@ -49,7 +49,7 @@ class Blacklist(commands.Cog):
             try:
                 player = await self.ofcbsapi.get_player(key)
                 players.append(player)
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(0.2)
             except brawlstats.errors.RequestError as e:
                 error = True
         if error:
@@ -195,7 +195,7 @@ class Blacklist(commands.Cog):
                 club = saved_clubs[key]["tag"]
                 clubs.append(club)
 
-            blacklisted = await self.statsconfig.guild(ch.guild).blacklisted()
+            blacklisted = await self.config.guild(ch.guild).blacklisted()
             for tag in blacklisted.keys():
                 try:
                     player = await self.ofcbsapi.get_player(tag)
