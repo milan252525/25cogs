@@ -13,6 +13,7 @@ from typing import Union
 from re import sub
 import datetime
 import aiohttp
+from cachetools import TTLCache
 
 class BrawlStarsCog(commands.Cog):
 
@@ -62,6 +63,7 @@ class BrawlStarsCog(commands.Cog):
                 "The Official Brawl Stars API key has not been set.")
         self.ofcbsapi = brawlstats.Client(
             ofcbsapikey["api_key"], is_async=True)
+        self.ofcbsapi.cache = TTLCache(10000, 60*20)
         self.starlist_key = (await self.bot.get_shared_api_tokens("starlist"))["starlist"]
         
     async def starlist_request(self, url):
