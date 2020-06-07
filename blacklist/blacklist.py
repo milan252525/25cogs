@@ -126,7 +126,7 @@ class Blacklist(commands.Cog):
         """
         await ctx.trigger_typing()
 
-        if ctx.guild.id == 460550486257565697 and ctx.author.top_role < ctx.guild.get_role(462066723789471744):
+        if ctx.guild.id == 460550486257565697 and not ctx.author.guild_permissions.administrator:
             return await ctx.send("You can't use this command.")
         if ctx.guild.id != 460550486257565697 and not ctx.author.guild_permissions.kick_members:
             return await ctx.send("You can't use this command.")
@@ -172,7 +172,7 @@ class Blacklist(commands.Cog):
         """
         await ctx.trigger_typing()
 
-        if ctx.guild.id == 460550486257565697 and ctx.author.top_role < ctx.guild.get_role(462066723789471744):
+        if ctx.guild.id == 460550486257565697 and not ctx.author.guild_permissions.administrator:
             return await ctx.send("You can't use this command.")
         if ctx.guild.id != 460550486257565697 and not ctx.author.guild_permissions.kick_members:
             return await ctx.send("You can't use this command.")
