@@ -2725,7 +2725,7 @@ class BrawlStarsCog(commands.Cog):
             else:
                 await ctx.send(embed=embedsToSend[0])
 
-        except Exception as e:
+        except ZeroDivisionError as e:
             return await ctx.send(
                 "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
 
