@@ -42,18 +42,18 @@ class Blacklist(commands.Cog):
             return await ctx.send(
                 embed=badEmbed(f"This server doesn't have anyone blacklisted!"))
         
-            players = []
-            keys = (await self.config.guild(ctx.guild).blacklisted()).keys()
-            error = False
-            for key in keys:
-                try:
-                    player = await self.ofcbsapi.get_player(key)
-                    players.append(player)
-                    await asyncio.sleep(0.2)
-                except brawlstats.errors.RequestError as e:
-                    error = True
-            if error:
-                return await ctx.send(embed=badEmbed(f"BS API Error - some players aren't displayed!"))  
+        players = []
+        keys = (await self.config.guild(ctx.guild).blacklisted()).keys()
+        error = False
+        for key in keys:
+            try:
+                player = await self.ofcbsapi.get_player(key)
+                players.append(player)
+                await asyncio.sleep(0.2)
+            except brawlstats.errors.RequestError as e:
+                error = True
+        if error:
+            return await ctx.send(embed=badEmbed(f"BS API Error - some players aren't displayed!"))  
 
         msg = ""
         alertembed = False
