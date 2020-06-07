@@ -596,8 +596,7 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(name="Lowest Members", value=worstm, inline=True)
         return await ctx.send(embed=randomize_colour(embed))
 
-    #@commands.cooldown(1, 30, commands.BucketType.guild)
-    #@commands.cooldown(1, 180, commands.BucketType.user)
+    @commands.cooldown(1, 30, commands.BucketType.guild)
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
     async def clubs(self, ctx, keyword: str = None):
@@ -606,9 +605,9 @@ class BrawlStarsCog(commands.Cog):
         low_clubs = False
         skip_errors = False
         await ctx.trigger_typing()
-        if "forceoffline" in keyword:
+        if "offline" in keyword:
             offline = True
-            keyword = keyword.replace("forceoffline", "").strip()
+            keyword = keyword.replace("offline", "").strip()
 
         if "low" in keyword:
             low_clubs = True
@@ -632,13 +631,17 @@ class BrawlStarsCog(commands.Cog):
             clubs = []
             keys = saved_clubs.keys()
             for ind, key in enumerate(keys):
+                if offline:
+                    break
                 if keyword == "" or keyword is None:
                     try:
                         club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
                     except brawlstats.errors.RequestError as e:
-                        #offline = True
-                        #break
-                        continue
+                        if skip_errors:
+                            continue
+                        else:
+                            offline = True
+                            break
                     clubs.append(club)
                 elif keyword != "":
                     if "family" in saved_clubs[key] and saved_clubs[key]['family'] == keyword:
