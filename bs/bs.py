@@ -604,14 +604,19 @@ class BrawlStarsCog(commands.Cog):
         """View all clubs saved in a server"""
         offline = False
         low_clubs = False
+        skip_errors = False
         await ctx.trigger_typing()
-        if keyword == "forceoffline":
+        if "forceoffline" in keyword:
             offline = True
             keyword = keyword.replace("forceoffline", "").strip()
 
-        if keyword == "low":
+        if "low" in keyword:
             low_clubs = True
             keyword = keyword.replace("low", "").strip()
+
+        if "skiperrors" in keyword:
+            skip_errors = True
+            keyword = keyword.replace("skiperrors", "").strip()
 
         if len((await self.config.guild(ctx.guild).clubs()).keys()) < 1:
             return await ctx.send(
