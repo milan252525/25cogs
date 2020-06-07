@@ -504,7 +504,7 @@ class BrawlStarsCog(commands.Cog):
         #await ctx.send(str(events['upcoming'][0]))
 
     #some day maybe
-    #def get_badge(self, badge_id):
+    def get_badge(self, badge_id):
         guild = self.bot.get_guild(717766786019360769)
         em = discord.utils.get(guild.emojis, name=str(badge_id))
         return str(em)
