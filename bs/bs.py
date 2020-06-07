@@ -671,7 +671,7 @@ class BrawlStarsCog(commands.Cog):
                                                         description="Requesting clubs. Might take a while.\n(100%) ────────────────",
                                                         title="Loading...")
                         await msg.edit(embed=loadingembed)
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(0.3)
 
             embedFields = []
 
@@ -890,8 +890,8 @@ class BrawlStarsCog(commands.Cog):
             except brawlstats.errors.RequestError as e:
                 await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"{str(member)} ({member.id}) #{tag}"))
                 error_counter += 1 
-                if error_counter == 50:
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 5 request errors! Displaying the last one:\n({str(e)})"))
+                if error_counter == 20:
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 20 request errors! Displaying the last one:\n({str(e)})"))
                     break
                 await asyncio.sleep(1)
                 continue
