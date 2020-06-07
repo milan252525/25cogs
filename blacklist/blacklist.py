@@ -41,15 +41,18 @@ class Blacklist(commands.Cog):
         if len((await self.config.guild(ctx.guild).blacklisted()).keys()) < 1:
             return await ctx.send(
                 embed=badEmbed(f"This server doesn't have anyone blacklisted!"))
-        try:
+        
             players = []
             keys = (await self.config.guild(ctx.guild).blacklisted()).keys()
+            error = False
             for key in keys:
-                player = await self.ofcbsapi.get_player(key)
-                await asyncio.sleep(0.1)
-                players.append(player)
-        except brawlstats.errors.RequestError as e:
-            return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+                try:
+                    player = await self.ofcbsapi.get_player(key)
+                    players.append(player)
+                    await asyncio.sleep(0.2)
+                except brawlstats.errors.RequestError as e:
+            if error:
+                return await ctx.send(embed=badEmbed(f"BS API Error - some players aren't displayed!"))  
 
         msg = ""
         alertembed = False
@@ -186,19 +189,21 @@ class Blacklist(commands.Cog):
             ch = self.bot.get_channel(716329434466222092)
             await ch.trigger_typing()
             clubs = []
-            for key in (await self.config.guild(ch.guild).clubs()).keys():
-                club = await self.config.guild(ch.guild).clubs.get_raw(key, "tag")
+            saved_clubs = await self.config.guild(ch.guild).clubs()
+            for key in saved_clubs.keys():
+                club = saved_clubs[key]["tag"]
                 clubs.append(club)
 
-            for tag in (await self.statsconfig.guild(ch.guild).blacklisted()).keys():
+            blacklisted = await self.statsconfig.guild(ch.guild).blacklisted()
+            for tag in blacklisted.keys():
                 try:
                     player = await self.ofcbsapi.get_player(tag)
                     player_in_club = "name" in player.raw_data["club"]
-                    await asyncio.sleep(0.5)
+                    await asyncio.sleep(1)
                 except brawlstats.errors.RequestError as e:
                     await asyncio.sleep(5)
                     errors += 1
-                    if errors == 5:
+                    if errors == 30:
                         break
                 except Exception as e:
                     return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
