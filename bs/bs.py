@@ -596,8 +596,8 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(name="Lowest Members", value=worstm, inline=True)
         return await ctx.send(embed=randomize_colour(embed))
 
-    @commands.cooldown(1, 30, commands.BucketType.guild)
-    @commands.cooldown(1, 180, commands.BucketType.user)
+    #@commands.cooldown(1, 30, commands.BucketType.guild)
+    #@commands.cooldown(1, 180, commands.BucketType.user)
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
     async def clubs(self, ctx, keyword: str = None):
@@ -685,10 +685,12 @@ class BrawlStarsCog(commands.Cog):
                     
                     info = saved_clubs[key]["info"] if "info" in saved_clubs[key] else ""
 
-                    if not low_clubs or not len(clubs[i].members) < 95:
-                        e_name = f"<:bsband:600741378497970177> {clubs[i].name} [{key}] {clubs[i].tag} {info}"
-                        e_value = f"<:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
-                        embedFields.append([e_name, e_value])
+                    if low_clubs and len(clubs[i].members) >= 95:
+                        continue
+
+                    e_name = f"<:bsband:600741378497970177> {clubs[i].name} [{key}] {clubs[i].tag} {info}"
+                    e_value = f"<:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
+                    embedFields.append([e_name, e_value])
 
                 await self.config.guild(ctx.guild).set_raw("clubs", value=saved_clubs)
 
@@ -708,10 +710,12 @@ class BrawlStarsCog(commands.Cog):
                     cmembers = saved_clubs[ckey]['lastMemberCount']
                     creq = saved_clubs[ckey]['lastRequirement']
 
-                    if not low_clubs or not cmembers < 95:
-                        e_name = f"<:bsband:600741378497970177> {cname} [{ckey}] #{ctag} {cinfo}"
-                        e_value = f"<:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` "
-                        embedFields.append([e_name, e_value])
+                    if low_clubs and cmembers >= 95:
+                        continue
+
+                    e_name = f"<:bsband:600741378497970177> {cname} [{ckey}] #{ctag} {cinfo}"
+                    e_value = f"<:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` "
+                    embedFields.append([e_name, e_value])
 
             colour = choice([discord.Colour.green(),
                              discord.Colour.blue(),
