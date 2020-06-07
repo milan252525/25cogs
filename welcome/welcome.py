@@ -83,7 +83,7 @@ class Welcome(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    async def setup(self, ctx, game, tag, member: discord.Member = None):
+    async def setup(self, ctx, game, tag = "", member: discord.Member = None):
         if ctx.channel.id != 674348799673499671:
             await ctx.send(embed=discord.Embed(description="This command can't be used in this channel.", colour=discord.Colour.red()))
             return
