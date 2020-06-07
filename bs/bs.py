@@ -631,8 +631,9 @@ class BrawlStarsCog(commands.Cog):
                     try:
                         club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
                     except brawlstats.errors.RequestError as e:
-                        offline = True
-                        break
+                        #offline = True
+                        #break
+                        continue
                     clubs.append(club)
                 elif keyword != "":
                     if "family" in saved_clubs[key] and saved_clubs[key]['family'] == keyword:
