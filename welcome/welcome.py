@@ -85,10 +85,16 @@ class Welcome(commands.Cog):
     @commands.guild_only()
     async def setup(self, ctx, game, tag = "", member: discord.Member = None):
         if ctx.channel.id != 674348799673499671:
-            await ctx.send(embed=discord.Embed(description="This command can't be used in this channel.", colour=discord.Colour.red()))
-            return
+            return await ctx.send(embed=discord.Embed(description="This command can't be used in this channel.", colour=discord.Colour.red()))
         if member == None:
             member = ctx.author
+
+        if not (game == "cr" or game == "bs" or game == "other"):
+            return await ctx.send(embed=discord.Embed(description="That's not a valid option (`cr`, `bs` or `other`)!", colour=discord.Colour.red()))
+
+        if (game == "cr" or game == "bs") and (tag == "" or len(tag) < 3):
+            return await ctx.send(embed=discord.Embed(description="That doesn't look like a valid tag!", colour=discord.Colour.red()))
+
         globalChat = self.bot.get_channel(556425378764423179)
         newcomer = member.guild.get_role(597767307397169173)
         roleVerifiedMember = member.guild.get_role(597768235324145666)

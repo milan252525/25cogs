@@ -110,6 +110,14 @@ class BrawlStarsCog(commands.Cog):
                 embed.set_author(name=member.display_name, icon_url=member.avatar_url)
                 await asyncio.sleep(3)
                 await ch.send(embed=embed)
+        elif member.guild.id == 674348799673499671:
+            tag = await self.config.user(member).tag()
+            if tag is not None:
+                ch = member.guild.get_channel(674348799673499671)
+                embed = discord.Embed(colour=discord.Colour.blue(), description=f"#{tag.upper()}")
+                embed.set_author(name=member.display_name, icon_url=member.avatar_url)
+                await asyncio.sleep(3)
+                await ch.send(embed=embed)
 
     @commands.command(aliases=['bssave'])
     async def save(self, ctx, tag, member: discord.Member = None):
