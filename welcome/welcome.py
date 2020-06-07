@@ -89,14 +89,14 @@ class Welcome(commands.Cog):
             return
         if member == None:
             member = ctx.author
-        globalChat = self.bot.get_channel()
-        newcomer = member.guild.get_role()
-        roleVerifiedMember = member.guild.get_role()
-        roleBSMember = member.guild.get_role()
-        roleCRMember = member.guild.get_role()
-        roleCR = member.guild.get_role()
-        roleBS = member.guild.get_role()
-        roleGuest = member.guild.get_role()
+        globalChat = self.bot.get_channel(556425378764423179)
+        newcomer = member.guild.get_role(597767307397169173)
+        roleVerifiedMember = member.guild.get_role(597768235324145666)
+        roleBSMember = member.guild.get_role(514642403278192652)
+        roleCRMember = member.guild.get_role(475043204861788171)
+        roleCR = member.guild.get_role(523444129221312522)
+        roleBS = member.guild.get_role(523444501096824947)
+        roleGuest = member.guild.get_role(472632693461614593)
 
         msg = ""
         if game.lower() == "bs":
