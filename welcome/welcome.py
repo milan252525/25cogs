@@ -75,7 +75,7 @@ class Welcome(commands.Cog):
         welcome = self.bot.get_channel(674348799673499671)
         welcomeEmbed = discord.Embed(colour=discord.Colour.blue())
         welcomeEmbed.set_image(url="https://i.imgur.com/wwhgP4f.png")
-        text = f"Welcome to **LA** {member.mention}!\nMake sure to read <#713858515135103047> and <#713882338018459729> to familiarise yourself with the server.\nPlease type **/setup cr #your\_cr\_tag** or **/setup bs #your\_bs\_tag**,\nfor other games type **/setup other** to get verified and see rest of the server!"
+        text = f"Welcome to **LA** {member.mention}!\nMake sure to read <#713858515135103047> and <#713882338018459729> to familiarise yourself with the server.\nPlease type **/setup cr #your\\_cr\\_tag** or **/setup bs #your\\_bs\\_tag**,\nfor other games type **/setup other** to get verified and see rest of the server!"
         await welcome.send(embed=welcomeEmbed)
         await welcome.send(text)
 
