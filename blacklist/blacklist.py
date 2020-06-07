@@ -51,6 +51,7 @@ class Blacklist(commands.Cog):
                     players.append(player)
                     await asyncio.sleep(0.2)
                 except brawlstats.errors.RequestError as e:
+                    error = True
             if error:
                 return await ctx.send(embed=badEmbed(f"BS API Error - some players aren't displayed!"))  
 
