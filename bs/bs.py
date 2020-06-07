@@ -603,10 +603,15 @@ class BrawlStarsCog(commands.Cog):
     async def clubs(self, ctx, keyword: str = None):
         """View all clubs saved in a server"""
         offline = False
+        low_clubs = False
         await ctx.trigger_typing()
         if keyword == "forceoffline":
             offline = True
             keyword = keyword.replace("forceoffline", "").strip()
+
+        if keyword == "low":
+            low_clubs = True
+            keyword = keyword.replace("low", "").strip()
 
         if len((await self.config.guild(ctx.guild).clubs()).keys()) < 1:
             return await ctx.send(
@@ -680,9 +685,10 @@ class BrawlStarsCog(commands.Cog):
                     
                     info = saved_clubs[key]["info"] if "info" in saved_clubs[key] else ""
 
-                    e_name = f"<:bsband:600741378497970177> {clubs[i].name} [{key}] {clubs[i].tag} {info}"
-                    e_value = f"<:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
-                    embedFields.append([e_name, e_value])
+                    if not low_clubs or not len(clubs[i].members) < 95:
+                        e_name = f"<:bsband:600741378497970177> {clubs[i].name} [{key}] {clubs[i].tag} {info}"
+                        e_value = f"<:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
+                        embedFields.append([e_name, e_value])
 
                 await self.config.guild(ctx.guild).set_raw("clubs", value=saved_clubs)
 
@@ -702,9 +708,10 @@ class BrawlStarsCog(commands.Cog):
                     cmembers = saved_clubs[ckey]['lastMemberCount']
                     creq = saved_clubs[ckey]['lastRequirement']
 
-                    e_name = f"<:bsband:600741378497970177> {cname} [{ckey}] #{ctag} {cinfo}"
-                    e_value = f"<:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` "
-                    embedFields.append([e_name, e_value])
+                    if not low_clubs or not cmembers < 95:
+                        e_name = f"<:bsband:600741378497970177> {cname} [{ckey}] #{ctag} {cinfo}"
+                        e_value = f"<:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` "
+                        embedFields.append([e_name, e_value])
 
             colour = choice([discord.Colour.green(),
                              discord.Colour.blue(),
@@ -2635,99 +2642,6 @@ class BrawlStarsCog(commands.Cog):
             embed.add_field(name="Club(Role)", value=clubs[i], inline=True)
             await ctx.send(embed=embed)
             i = i + 1
-
-    @commands.cooldown(1, 60, commands.BucketType.default)
-    @commands.command()
-    @commands.guild_only()
-    async def lowclubs(self, ctx):
-        """Show all the clubs in your server that are low on members"""
-        offline = False
-        await ctx.trigger_typing()
-
-        if len((await self.config.guild(ctx.guild).clubs()).keys()) < 1:
-            return await ctx.send(
-                embed=badEmbed(f"This server has no clubs saved. Save a club by using {ctx.prefix}clubs add!"))
-
-        try:
-            try:
-                clubs = []
-                for key in (await self.config.guild(ctx.guild).clubs()).keys():
-                    club = await self.ofcbsapi.get_club(await self.config.guild(ctx.guild).clubs.get_raw(key, "tag"))
-                    clubs.append(club)
-            except brawlstats.errors.RequestError as e:
-                offline = True
-
-            embedFields = []
-
-            if not offline:
-                clubs = sorted(clubs, key=lambda sort: (
-                    sort.trophies), reverse=True)
-
-                for i in range(len(clubs)):
-                    if len(clubs[i].members) <= 92:
-                        key = ""
-                        for k in (await self.config.guild(ctx.guild).clubs()).keys():
-                            if clubs[i].tag.replace("#", "") == await self.config.guild(ctx.guild).clubs.get_raw(k, "tag"):
-                                key = k
-
-                        await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastMemberCount',
-                                                                         value=len(clubs[i].members))
-                        await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastRequirement',
-                                                                         value=clubs[i].required_trophies)
-                        await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastScore', value=clubs[i].trophies)
-                        await self.config.guild(ctx.guild).clubs.set_raw(key, 'lastPosition', value=i)
-
-                        info = await self.config.guild(ctx.guild).clubs.get_raw(key, "info", default="")
-                        e_name = f"<:bsband:600741378497970177> {clubs[i].name} [{key}] {clubs[i].tag} {info}"
-                        e_value = f"<:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
-                        embedFields.append([e_name, e_value])
-
-            else:
-                if len(clubs[i].members) <= 92:
-                    offclubs = []
-                    for k in (await self.config.guild(ctx.guild).clubs()).keys():
-                        offclubs.append([await self.config.guild(ctx.guild).clubs.get_raw(k, "lastPosition"), k])
-                    offclubs = sorted(offclubs, key=lambda x: x[0])
-
-                    for club in offclubs:
-                        ckey = club[1]
-                        cscore = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "lastScore")
-                        cname = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "name")
-                        ctag = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "tag")
-                        cinfo = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "info")
-                        cmembers = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "lastMemberCount")
-                        creq = await self.config.guild(ctx.guild).clubs.get_raw(ckey, "lastRequirement")
-
-                        e_name = f"<:bsband:600741378497970177> {cname} [{ckey}] #{ctag} {cinfo}"
-                        e_value = f"<:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` "
-                        embedFields.append([e_name, e_value])
-
-            colour = choice([discord.Colour.green(),
-                             discord.Colour.blue(),
-                             discord.Colour.purple(),
-                             discord.Colour.orange(),
-                             discord.Colour.red(),
-                             discord.Colour.teal()])
-            embedsToSend = []
-            for i in range(0, len(embedFields), 8):
-                embed = discord.Embed(colour=colour)
-                embed.set_author(
-                    name=f"{ctx.guild.name} clubs",
-                    icon_url=ctx.guild.icon_url)
-                footer = "<:offline:642094554019004416> API is offline, showing last saved data." if offline else f"Need more info about a club? Use {ctx.prefix}club [key]"
-                embed.set_footer(text=footer)
-                for e in embedFields[i:i + 8]:
-                    embed.add_field(name=e[0], value=e[1], inline=False)
-                embedsToSend.append(embed)
-
-            if len(embedsToSend) > 1:
-                await menu(ctx, embedsToSend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
-            else:
-                await ctx.send(embed=embedsToSend[0])
-
-        except ZeroDivisionError as e:
-            return await ctx.send(
-                "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
 
     @commands.cooldown(1, 60, commands.BucketType.default)
     @commands.command()
