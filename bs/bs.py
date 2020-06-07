@@ -607,7 +607,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.cooldown(1, 30, commands.BucketType.guild)
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
-    async def clubs(self, ctx, *, keyword: str = None):
+    async def clubs(self, ctx, *, keyword: str = ""):
         """View all clubs saved in a server"""
         offline = False
         low_clubs = False
