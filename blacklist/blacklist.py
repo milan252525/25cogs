@@ -217,7 +217,7 @@ class Blacklist(commands.Cog):
 
                 if player_in_club:
                     if player.club.tag.strip("#") in clubs:
-                        reason = await self.statsconfig.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
+                        reason = await self.config.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
                         await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                                    description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
         except Exception as e:
