@@ -39,9 +39,9 @@ class BrawlStarsCog(commands.Cog):
         self.sortroleslatam.cancel() """
 
     async def start_tasks(self):
-        await asyncio.sleep(300)
+        await asyncio.sleep(3*60)
         self.sortroles.start()
-        """ await asyncio.sleep(15*60)
+        await asyncio.sleep(15*60)
         self.sortrolesasia.start()
         await asyncio.sleep(10*60)
         self.sortrolesbd.start()
@@ -54,7 +54,7 @@ class BrawlStarsCog(commands.Cog):
         await asyncio.sleep(10*60)
         self.sortrolesaquaunited.start()
         await asyncio.sleep(10*60)
-        self.sortroleslatam.start() """
+        self.sortroleslatam.start()
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
@@ -63,7 +63,7 @@ class BrawlStarsCog(commands.Cog):
                 "The Official Brawl Stars API key has not been set.")
         self.ofcbsapi = brawlstats.Client(
             ofcbsapikey["api_key"], is_async=True)
-        self.ofcbsapi.cache = TTLCache(10000, 60*20)
+        self.ofcbsapi.cache = TTLCache(10000, 60*10)
         self.starlist_key = (await self.bot.get_shared_api_tokens("starlist"))["starlist"]
         
     async def starlist_request(self, url):
@@ -175,7 +175,7 @@ class BrawlStarsCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Something went wrong: {str(e)}")
 
-    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command(aliases=['p', 'bsp', 'stats'])
     async def profile(self, ctx, *, member: Union[discord.Member, str] = None):
         """View player's BS statistics"""
@@ -309,7 +309,7 @@ class BrawlStarsCog(commands.Cog):
         embed.set_footer(text=choice(texts))
         await ctx.send(embed=embed)
 
-    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command(aliases=['b'])
     async def brawlers(self, ctx, *, member: Union[discord.Member, str] = None):
         """Brawl Stars brawlers"""
@@ -405,7 +405,7 @@ class BrawlStarsCog(commands.Cog):
         else:
             await ctx.send(embed=embedstosend[0])
 
-    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command()
     async def brawler(self, ctx, brawler: str, member: Union[discord.Member, str] = None):
         """Brawler specific info"""
@@ -517,7 +517,7 @@ class BrawlStarsCog(commands.Cog):
         em = discord.utils.get(guild.emojis, name=str(badge_id))
         return str(em)
     
-    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command()
     async def club(self, ctx, key: Union[discord.Member, str] = None):
         """View players club or club saved in a server"""
@@ -604,7 +604,7 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(name="Lowest Members", value=worstm, inline=True)
         return await ctx.send(embed=randomize_colour(embed))
 
-    @commands.cooldown(1, 30, commands.BucketType.guild)
+    @commands.cooldown(1, 5, commands.BucketType.guild)
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
     async def clubs(self, ctx, *, keyword: str = ""):
@@ -679,7 +679,7 @@ class BrawlStarsCog(commands.Cog):
                                                         description="Requesting clubs. Might take a while.\n(100%) ────────────────",
                                                         title="Loading...")
                         await msg.edit(embed=loadingembed)
-                await asyncio.sleep(0.3)
+                #await asyncio.sleep(0.3)
 
             embedFields = []
 
@@ -865,7 +865,7 @@ class BrawlStarsCog(commands.Cog):
                 msg += f"Added **{str(role)}**\n"
         return msg
 
-    @tasks.loop(hours=8)
+    @tasks.loop(hours=4)
     async def sortroles(self):
         ch = self.bot.get_channel(653295573872672810)
         await ch.trigger_typing()
@@ -894,12 +894,12 @@ class BrawlStarsCog(commands.Cog):
                 continue
             try:
                 player = await self.ofcbsapi.get_player(tag)
-                await asyncio.sleep(1)
+                await asyncio.sleep(0.3)
             except brawlstats.errors.RequestError as e:
                 await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"{str(member)} ({member.id}) #{tag}"))
                 error_counter += 1 
-                if error_counter == 20:
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 20 request errors! Displaying the last one:\n({str(e)})"))
+                if error_counter == 10:
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 10 request errors! Displaying the last one:\n({str(e)})"))
                     break
                 await asyncio.sleep(1)
                 continue
@@ -972,7 +972,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortroles(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=8)
+    @tasks.loop(hours=4)
     async def sortrolesasia(self):
         ch = self.bot.get_channel(672267298001911838)
         await ch.trigger_typing()
@@ -993,7 +993,7 @@ class BrawlStarsCog(commands.Cog):
                 continue
             try:
                 player = await self.ofcbsapi.get_player(tag)
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(0.3)
             except brawlstats.errors.RequestError as e:
                 error_counter += 1
                 if error_counter == 5:
@@ -1062,7 +1062,7 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.removeroleifpresent(member, member_role)
                     msg += await self.addroleifnotpresent(member, member_role_expected)
                 try:
-                    await asyncio.sleep(0.5)
+                    await asyncio.sleep(0.3)
                     player_club = await self.ofcbsapi.get_club(player.club.tag)
                     for mem in player_club.members:
                         if mem.tag == player.raw_data['tag']:
@@ -1114,7 +1114,7 @@ class BrawlStarsCog(commands.Cog):
                 continue
             try:
                 player = await self.ofcbsapi.get_player(tag)
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(0.3)
             except brawlstats.errors.RequestError as e:
                 error_counter += 1
                 if error_counter == 5:
@@ -1209,7 +1209,7 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.addroleifnotpresent(member, member_role_expected)
                 if member_role_expected is not None:
                     try:
-                        await asyncio.sleep(0.2)
+                        await asyncio.sleep(0.3)
                         player_club = await self.ofcbsapi.get_club(player.club.tag)
                         for mem in player_club.members:
                             if mem.tag == player.raw_data['tag']:
@@ -1234,7 +1234,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortrolesbd(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=8)
+    @tasks.loop(hours=4)
     async def sortrolesspain(self):
         try:
             ch = self.bot.get_channel(693781513363390475)
@@ -1253,12 +1253,12 @@ class BrawlStarsCog(commands.Cog):
                     continue
                 try:
                     player = await self.ofcbsapi.get_player(tag)
-                    await asyncio.sleep(0.5)
+                    await asyncio.sleep(0.3)
                 except brawlstats.errors.RequestError as e:
                     error_counter += 1
-                    if error_counter == 5:
+                    if error_counter == 10:
                         await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                          description=f"¡Deteniéndose después de 5 errores de solicitud! Mostrando el último: \n({str(e)})"))
+                                                          description=f"¡Deteniéndose después de 10 errores de solicitud! Mostrando el último: \n({str(e)})"))
                         break
                     await asyncio.sleep(1)
                     continue
@@ -1336,7 +1336,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortrolesspain(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=8)
+    @tasks.loop(hours=4)
     async def sortrolesportugal(self):
         ch = self.bot.get_channel(712394680389599281)
         await ch.trigger_typing()
@@ -1359,7 +1359,7 @@ class BrawlStarsCog(commands.Cog):
                 continue
             try:
                 player = await self.ofcbsapi.get_player(tag)
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(0.3)
             except brawlstats.errors.RequestError as e:
                 error_counter += 1
                 if error_counter == 5:
@@ -1462,7 +1462,7 @@ class BrawlStarsCog(commands.Cog):
                     continue
                 try:
                     player = await self.ofcbsapi.get_player(tag)
-                    await asyncio.sleep(0.5)
+                    await asyncio.sleep(0.3)
                 except brawlstats.errors.RequestError as e:
                     error_counter += 1
                     if error_counter == 5:
@@ -1575,7 +1575,7 @@ class BrawlStarsCog(commands.Cog):
     async def before_sortrolesevents(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=8)
+    @tasks.loop(hours=4)
     async def sortrolesaquaunited(self):
         try:
             ch = self.bot.get_channel(711253160999780432)
@@ -1601,7 +1601,7 @@ class BrawlStarsCog(commands.Cog):
                     continue
                 try:
                     player = await self.ofcbsapi.get_player(tag)
-                    await asyncio.sleep(0.5)
+                    await asyncio.sleep(0.3)
                 except brawlstats.errors.RequestError as e:
                     error_counter += 1
                     if error_counter == 5:
@@ -1704,7 +1704,7 @@ class BrawlStarsCog(commands.Cog):
                 continue
             try:
                 player = await self.ofcbsapi.get_player(tag)
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(0.3)
             except brawlstats.errors.RequestError as e:
                 error_counter += 1
                 if error_counter == 20:
@@ -2664,7 +2664,7 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed=embed)
             i = i + 1
 
-    @commands.cooldown(1, 60, commands.BucketType.default)
+    @commands.cooldown(1, 20, commands.BucketType.user)
     @commands.command()
     @commands.guild_only()
     async def whitelistclubs(self, ctx):
