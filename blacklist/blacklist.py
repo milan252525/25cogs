@@ -195,7 +195,7 @@ class Blacklist(commands.Cog):
             ch = self.bot.get_channel(716329434466222092)
             await ch.trigger_typing()
             clubs = []
-            saved_clubs = await self.config.guild(ch.guild).clubs()
+            saved_clubs = await self.bsconfig.guild(ch.guild).clubs()
             for key in saved_clubs.keys():
                 club = saved_clubs[key]["tag"]
                 clubs.append(club)
