@@ -114,6 +114,7 @@ class Tools(commands.Cog):
     async def spamadd(self, ctx, amount: int, member: discord.Member):
         value = await self.config.member(member).messages()
         await self.config.member(member).messages.set(value+amount)
+        await self.config.member(member).name.set(member.display_name)
         await ctx.send("Done!")
             
     #spamlb LA Asia
