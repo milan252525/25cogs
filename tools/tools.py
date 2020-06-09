@@ -108,6 +108,14 @@ class Tools(commands.Cog):
             await self.config.member(msg.author).messages.set(amount + 1)
             await self.config.member(msg.author).name.set(msg.author.display_name)
 
+    @commands.guild_only()
+    @commands.is_owner()
+    @commands.command()
+    async def spamadd(self, ctx, amount: int, member: discord.Member):
+        value = await self.config.member(member).messages()
+        await await self.config.member(member).messages.set(value+amount)
+        await ctx.send("Done!")
+            
     #spamlb LA Asia
     @commands.guild_only()
     @commands.command()
