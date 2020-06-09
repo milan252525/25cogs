@@ -7,6 +7,7 @@ from time import time
 from random import choice
 import random
 from typing import Union
+import asyncio
 #from profanity_check import predict, predict_prob
 #from profanityfilter import ProfanityFilter
 
@@ -154,7 +155,7 @@ class Tools(commands.Cog):
     
     @updater.before_loop
     async def before_updater(self):
-        await self.bot.wait_until_ready()
+        await asyncio.sleep(10)
         
     @commands.command()
     async def countdown(self, ctx, amount : int, timeunit : str):
