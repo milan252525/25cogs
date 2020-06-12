@@ -1588,6 +1588,7 @@ class BrawlStarsCog(commands.Cog):
             united = ch.guild.get_role(631166049395539988)
             fury = ch.guild.get_role(703591387970535435)
             arrow = ch.guild.get_role(718138400582008852)
+            shade = ch.guild.get_role(720716725766717560)
             newcomer = ch.guild.get_role(631516344684380205)
             minus = ch.guild.get_role(701772917909880892)
             whitelist = ch.guild.get_role(714503658183852052)
@@ -1642,17 +1643,20 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.removeroleifpresent(member, lafam, viewer, newcomer)
                     msg += await self.addroleifnotpresent(member, minus)
                     if player.club.name == "LA United":
-                        msg += await self.removeroleifpresent(member, aqua, fury, arrow)
+                        msg += await self.removeroleifpresent(member, aqua, fury, arrow, shade)
                         msg += await self.addroleifnotpresent(member, united)
                     elif player.club.name == "LA Aqua":
-                        msg += await self.removeroleifpresent(member, united, fury, arrow)
+                        msg += await self.removeroleifpresent(member, united, fury, arrow, shade)
                         msg += await self.addroleifnotpresent(member, aqua)
                     elif player.club.name == "LA Fury":
-                        msg += await self.removeroleifpresent(member, aqua, united, arrow)
+                        msg += await self.removeroleifpresent(member, aqua, united, arrow, shade)
                         msg += await self.addroleifnotpresent(member, fury)
                     elif player.club.name == "LA Arrow":
-                        msg += await self.removeroleifpresent(member, aqua, united, fury)
+                        msg += await self.removeroleifpresent(member, aqua, united, fury, shade)
                         msg += await self.addroleifnotpresent(member, arrow)
+                    elif player.club.name == "LA Shade":
+                        msg += await self.removeroleifpresent(member, aqua, united, fury, arrow)
+                        msg += await self.addroleifnotpresent(member, shade)
                     else:
                         msg += f"Couldn't find a role for {player.club.name}."
                     try:
@@ -2120,6 +2124,7 @@ class BrawlStarsCog(commands.Cog):
             united = ctx.guild.get_role(631166049395539988)
             fury = ctx.guild.get_role(703591387970535435)
             arrow = ctx.guild.get_role(718138400582008852)
+            shade = ctx.guild.get_role(720716725766717560)
             newcomer = ctx.guild.get_role(631516344684380205)
             minus = ctx.guild.get_role(701772917909880892)
 
@@ -2191,6 +2196,8 @@ class BrawlStarsCog(commands.Cog):
                     msg += await self.addroleifnotpresent(member, fury)
                 elif player.club.name == "LA Arrow":
                     msg += await self.addroleifnotpresent(member, arrow)
+                elif player.club.name == "LA Shade":
+                    msg += await self.addroleifnotpresent(member, shade)
                 try:
                     player_club = await self.ofcbsapi.get_club(player.club.tag)
                     for mem in player_club.members:
