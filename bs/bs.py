@@ -511,13 +511,12 @@ class BrawlStarsCog(commands.Cog):
             upcoming += f"**{ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n↳ Starts in: {diff}\n{modifier}"
         embed.add_field(name="UPCOMING", value=upcoming, inline=False)
         await ctx.send(embed=embed)
-        #await ctx.send(str(events['upcoming'][0]))
                         
     @commands.command(aliases=['m'])
     async def map(self, ctx, *, map_name: str):
         if self.maps is None:
             final = {}
-            all_maps = await self.starlist_request("https://www.api.starlist.pro/maps")
+            all_maps = await self.starlist_request("https://api.starlist.pro/maps")
             for m in all_maps['list']:
                 final[m['hash']] = {'url' : m['imageUrl'], 'name' : m['name']}
             self.maps = final
