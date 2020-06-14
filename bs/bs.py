@@ -485,7 +485,7 @@ class BrawlStarsCog(commands.Cog):
                        
     @commands.command(aliases=['e'])
     async def events(self, ctx):
-        events = await self.starlist_request("https://www.api.starlist.pro/events2")
+        events = await self.starlist_request("https://api.starlist.pro/events2")
         if events['status'] != "ok":
             return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
         time_now = datetime.datetime.now()
@@ -519,13 +519,15 @@ class BrawlStarsCog(commands.Cog):
             all_maps = await self.starlist_request("https://api.starlist.pro/maps")
             for m in all_maps['list']:
                 final[m['hash']] = {'url' : m['imageUrl'], 'name' : m['name'], 
-                                    'disabled' : m['disabled'], 'link' : m['link']}
+                                   'disabled' : m['disabled'], 'link' : m['link'],
+                                   'gm_url' : m['gameMode']['imageUrl']}
             self.maps = final
                         
         map_name = map_name.replace(" ", "-")
         result = process.extract(map_name, list(self.maps.keys()), limit=1)
         result_map = self.maps[result[0][0]]
-        embed = discord.Embed(colour=discord.Colour.green(), title=result_map['name'], url=result_map['link'])
+        embed = discord.Embed(colour=discord.Colour.green() )
+        embed.set_author(name=result_map['name'], url=result_map['link'], icon_url=result_map['gm_url'])
         if result_map['name']:
             embed.set_footer(text="This map is currently disabled.")
         embed.set_image(url=result_map['url'])
