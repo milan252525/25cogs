@@ -14,6 +14,7 @@ from re import sub
 import datetime
 import aiohttp
 from cachetools import TTLCache
+from fuzzywuzzy import process
 
 class BrawlStarsCog(commands.Cog):
 
@@ -25,6 +26,7 @@ class BrawlStarsCog(commands.Cog):
         default_guild = {"clubs": {}}
         self.config.register_guild(**default_guild)
         self.blacklist_conf = Config.get_conf(None, identifier=42424269, cog_name="Blacklist")
+        self.maps = None
         self.aiohttp_session = aiohttp.ClientSession()
         asyncio.ensure_future(self.start_tasks())
 
@@ -483,7 +485,7 @@ class BrawlStarsCog(commands.Cog):
                        
     @commands.command(aliases=['e'])
     async def events(self, ctx):
-        events = await self.starlist_request("https://www.starlist.pro/app/events2")
+        events = await self.starlist_request("https://www.api.starlist.pro/events2")
         if events['status'] != "ok":
             return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
         time_now = datetime.datetime.now()
@@ -510,7 +512,23 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(name="UPCOMING", value=upcoming, inline=False)
         await ctx.send(embed=embed)
         #await ctx.send(str(events['upcoming'][0]))
-
+                        
+    @commands.command(aliases=['m'])
+    async def map(self, ctx, *, map_name: str):
+        if self.maps is None:
+            final = {}
+            all_maps = await self.starlist_request("https://www.api.starlist.pro/maps")
+            for m in all_maps['list']:
+                final[m['hash']] = {'url' : m['imageUrl'], 'name' : m['name']}
+            self.maps = final
+                        
+        map_name = map_name.replace(" ", "-")
+        result = process.extract(map_name, list(self.maps.keys()), limit=1)
+        result_map = self.maps[result]
+        embed = discord.Embed(colour=discord.Colour.green(), title=result_map['name'])
+        embed.set_image(url=result_map['url'])
+        await ctx.send(embed=embed)
+       
     #some day maybe
     def get_badge(self, badge_id):
         guild = self.bot.get_guild(717766786019360769)
