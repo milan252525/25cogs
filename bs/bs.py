@@ -523,7 +523,7 @@ class BrawlStarsCog(commands.Cog):
                         
         map_name = map_name.replace(" ", "-")
         result = process.extract(map_name, list(self.maps.keys()), limit=1)
-        result_map = self.maps[result]
+        result_map = self.maps[result[0][0]]
         embed = discord.Embed(colour=discord.Colour.green(), title=result_map['name'])
         embed.set_image(url=result_map['url'])
         await ctx.send(embed=embed)
