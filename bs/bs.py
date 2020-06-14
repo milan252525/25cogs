@@ -518,13 +518,15 @@ class BrawlStarsCog(commands.Cog):
             final = {}
             all_maps = await self.starlist_request("https://api.starlist.pro/maps")
             for m in all_maps['list']:
-                final[m['hash']] = {'url' : m['imageUrl'], 'name' : m['name']}
+                final[m['hash']] = {'url' : m['imageUrl'], 'name' : m['name'], 'disabled' : m['disabled']}
             self.maps = final
                         
         map_name = map_name.replace(" ", "-")
         result = process.extract(map_name, list(self.maps.keys()), limit=1)
         result_map = self.maps[result[0][0]]
         embed = discord.Embed(colour=discord.Colour.green(), title=result_map['name'])
+        if result_map['name']:
+            embed.set_footer(text="This map is currently disabled.")
         embed.set_image(url=result_map['url'])
         await ctx.send(embed=embed)
        
