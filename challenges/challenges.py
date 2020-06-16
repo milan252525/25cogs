@@ -78,7 +78,7 @@ class Challenges(commands.Cog):
         bs_conf = self.get_bs_config()
         for m in members:
             if members[m]['tracking']:
-                m = ""
+                msg = ""
                 progress = 0
                 user = self.bot.get_guild(self.labs).get_member(m)
                 tag = await bs_conf.user(user).tag()
@@ -92,7 +92,7 @@ class Challenges(commands.Cog):
                     break
                 for battle in log:
                     b_time = datetime.strptime(battle['battleTime'], '%Y%m%dT%H%M%S.%fZ')
-                    m += str(b_time) + "\n"
+                    msg += str(b_time) + "\n"
                     if b_time <= datetime.strptime(members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
                         break
                     player = None
@@ -105,11 +105,11 @@ class Challenges(commands.Cog):
                         for p in battle['battle']['players']:
                             if p['tag'].replace("#", "") == tag.upper():
                                 player = p
-                    m += str(player) + "\n"
+                    msg += str(player) + "\n"
                     #CHALLENGE CONDITION HERE
                     if player['brawler']['name'] == "BARLEY":
                         progress += 1
-                        m += "found batley \n"
+                        msg += "found batley \n"
                 
                 await self.config.member(user).progress.set(members[m]['progress'] + progress)
                 await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
