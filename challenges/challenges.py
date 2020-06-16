@@ -91,7 +91,7 @@ class Challenges(commands.Cog):
                         break
                     player = None
                     for t in battle['teams']:
-                        for p in in t:
+                        for p in t:
                             if p['tag'].replace("#", "") == tag.upper():
                                 player = p
                     #CHALLENGE CONDITION HERE
