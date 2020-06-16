@@ -44,7 +44,7 @@ class Challenges(commands.Cog):
     async def challenge_track(self, ctx):
         if not self.labs_check(ctx.guild):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
-        labs_mem = guild.get_role(576028728052809728)
+        labs_mem = ctx.guild.get_role(576028728052809728)
         if labs_mem not in ctx.author.roles:
             return await ctx.send("Only LA members can participate!")
         bs_conf = get_bs_config()
