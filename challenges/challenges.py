@@ -79,7 +79,7 @@ class Challenges(commands.Cog):
         for m in members:
             if members[m]['tracking']:
                 progress = 0
-                user = self.bot.get_guild(self.labs).get_members(m)
+                user = self.bot.get_guild(self.labs).get_member(m)
                 tag = await bs_conf.user(user).tag()
                 try:
                     log = await self.ofcbsapi.get_battle_logs(tag)
