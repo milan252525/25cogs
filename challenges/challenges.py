@@ -94,8 +94,13 @@ class Challenges(commands.Cog):
                     if b_time <= datetime.strptime(members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
                         break
                     player = None
-                    for t in battle['battle']['teams']:
-                        for p in t:
+                    if "teams" in battle['battle']:
+                        for t in battle['battle']['teams']:
+                            for p in t:
+                                if p['tag'].replace("#", "") == tag.upper():
+                                    player = p
+                    else:
+                        for p in battle['battle']['players']:
                             if p['tag'].replace("#", "") == tag.upper():
                                 player = p
                     #CHALLENGE CONDITION HERE
