@@ -63,8 +63,8 @@ class Challenges(commands.Cog):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
         if not (await self.config.member(ctx.author).tracking()):
             return await ctx.send("Use `/challenge track` first!")
-        await ctx.send("Progress: " + str(await self.config.member(ctx.author).progress()))
-        await ctx.send("Last battle time: " + str(await self.config.member(ctx.author).lastBattleTime()))
+        await ctx.send("Challenge progress: " + str(await self.config.member(ctx.author).progress()))
+        await ctx.send("Time of last seen battle: " + str(await self.config.member(ctx.author).lastBattleTime()), '%Y%m%dT%H%M%S.%fZ'))
     
 
     #datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -78,7 +78,6 @@ class Challenges(commands.Cog):
         bs_conf = self.get_bs_config()
         for m in members:
             if members[m]['tracking']:
-                msg = ""
                 progress = 0
                 user = self.bot.get_guild(self.labs).get_member(m)
                 tag = await bs_conf.user(user).tag()
@@ -92,7 +91,6 @@ class Challenges(commands.Cog):
                     break
                 for battle in log:
                     b_time = datetime.strptime(battle['battleTime'], '%Y%m%dT%H%M%S.%fZ')
-                    msg += str(b_time) + "\n"
                     if b_time <= datetime.strptime(members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
                         break
                     player = None
@@ -105,12 +103,9 @@ class Challenges(commands.Cog):
                         for p in battle['battle']['players']:
                             if p['tag'].replace("#", "") == tag.upper():
                                 player = p
-                    msg += str(player) + "\n"
                     #CHALLENGE CONDITION HERE
                     if player['brawler']['name'] == "BARLEY":
                         progress += 1
-                        msg += "found batley \n"
-                await ctx.send(msg[:2000])
                 
                 await self.config.member(user).progress.set(members[m]['progress'] + progress)
                 await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
