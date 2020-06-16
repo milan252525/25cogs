@@ -48,10 +48,10 @@ class Challenges(commands.Cog):
         if labs_mem not in ctx.author.roles:
             return await ctx.send("Only LA members can participate!")
         bs_conf = self.get_bs_config()
-        if (await bs_conf.user(ctx.author).tag()) is None:
+        if (await bs_conf.member(ctx.author).tag()) is None:
             return await ctx.send("Save your tag using `/save` first!")
-        if not (await self.config.user(ctx.author).tracking()):
-            await self.config.user(ctx.author).tracking.set(True)
+        if not (await self.config.member(ctx.author).tracking()):
+            await self.config.member(ctx.author).tracking.set(True)
             return await ctx.send("Challenge tracking enabled!")
         else:
             return await ctx.send("Your progress is already being tracked!")
@@ -61,10 +61,10 @@ class Challenges(commands.Cog):
     async def challenge_stats(self, ctx):
         if not self.labs_check(ctx.guild):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
-        if not (await self.config.user(ctx.author).tracking()):
+        if not (await self.config.member(ctx.author).tracking()):
             return await ctx.send("Use `/challenge track` first!")
-        await ctx.send("Progress: " + str(await self.config.user(ctx.author).progress()))
-        await ctx.send("Last battle time: " + str(await self.config.user(ctx.author).lastBattleTime()))
+        await ctx.send("Progress: " + str(await self.config.member(ctx.author).progress()))
+        await ctx.send("Last battle time: " + str(await self.config.member(ctx.author).lastBattleTime()))
     
 
     #datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
