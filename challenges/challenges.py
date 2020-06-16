@@ -99,7 +99,7 @@ class Challenges(commands.Cog):
                             if p['tag'].replace("#", "") == tag.upper():
                                 player = p
                     #CHALLENGE CONDITION HERE
-                    if p['brawlers']['name'] == "BARLEY":
+                    if p['brawler']['name'] == "BARLEY":
                         progress += 1
                 
                 await self.config.member(user).progress.set(members[m]['progress'] + progress)
