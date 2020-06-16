@@ -40,7 +40,7 @@ class Challenges(commands.Cog):
         await ctx.send("Some cool challenge info here.")
 
     @commands.guild_only()
-    @clubs.command(name="track")
+    @challenge.command(name="track")
     async def challenge_track(self, ctx):
         if not self.labs_check(ctx.guild):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
@@ -57,7 +57,7 @@ class Challenges(commands.Cog):
             return await ctx.send("Your progress is already being tracked!")
 
     @commands.guild_only()
-    @clubs.command(name="stats")
+    @challenge.command(name="stats")
     async def challenge_stats(self, ctx):
         if not self.labs_check(ctx.guild):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
