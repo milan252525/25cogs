@@ -110,7 +110,7 @@ class Challenges(commands.Cog):
                     if player['brawler']['name'] == "BARLEY":
                         progress += 1
                         msg += "found batley \n"
-                await ctx.send(msg)
+                await ctx.send(msg[:2000])
                 
                 await self.config.member(user).progress.set(members[m]['progress'] + progress)
                 await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
