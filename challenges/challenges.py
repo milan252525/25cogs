@@ -90,11 +90,11 @@ class Challenges(commands.Cog):
                     print(e)
                     break
                 for battle in log:
-                    b_time = datetime.strptime(battle['battle_time'], '%Y-%m-%dT%H:%M:%S.%fZ')
+                    b_time = datetime.strptime(battle['battleTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
                     if b_time <= datetime.strptime(members[m]['lastBattleTime'], '%Y-%m-%dT%H:%M:%S.%fZ'):
                         break
                     player = None
-                    for t in battle['teams']:
+                    for t in battle['battle']['teams']:
                         for p in t:
                             if p['tag'].replace("#", "") == tag.upper():
                                 player = p
@@ -103,4 +103,4 @@ class Challenges(commands.Cog):
                         progress += 1
                 
                 await self.config.member(user).progress.set(members[m]['progress'] + progress)
-                await self.config.member(user).lastBattleTime.set(log[0]['battle_time'])
+                await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
