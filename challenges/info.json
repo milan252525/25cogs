@@ -1,0 +1,9 @@
+{
+  "author": ["milan_25"],
+  "name" : "Challenges",
+  "description": "Cog for LA challenges",
+  "install_msg": "Thank you for installing our Challenge cog.",
+  "short": "Cog for challenges",
+  "requirements" : [],
+  "tags": ["challenges"]
+}
