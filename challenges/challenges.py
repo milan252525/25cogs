@@ -74,7 +74,7 @@ class Challenges(commands.Cog):
     @commands.guild_only()
     @challenge.command(name="run")
     async def challenge_run(self, ctx):
-        members = await self.config.all_members(self.labs)
+        members = await self.config.all_members(self.bot.get_guild(self.labs)
         bs_conf = self.get_bs_config()
         for m in members:
             if members[m]['tracking']:
