@@ -12,7 +12,7 @@ class Challenges(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=25202025)
-        default_member = {'tokens' : 0, 'tracking' : False, 'lastBattleTime' : 0, 'progress' : 0}
+        default_member = {'tokens' : 0, 'tracking' : False, 'lastBattleTime' : "20200101T010101.000Z", 'progress' : 0}
         self.config.register_member(**default_member)
         self.labs = 401883208511389716
         self.bsconfig = None
