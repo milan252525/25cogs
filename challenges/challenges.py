@@ -104,6 +104,7 @@ class Challenges(commands.Cog):
                         for p in battle['battle']['players']:
                             if p['tag'].replace("#", "") == tag.upper():
                                 player = p
+                    await ctx.send(player)
                     #CHALLENGE CONDITION HERE
                     if p['brawler']['name'] == "BARLEY":
                         progress += 1
