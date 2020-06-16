@@ -47,7 +47,7 @@ class Challenges(commands.Cog):
         labs_mem = ctx.guild.get_role(576028728052809728)
         if labs_mem not in ctx.author.roles:
             return await ctx.send("Only LA members can participate!")
-        bs_conf = get_bs_config()
+        bs_conf = self.get_bs_config()
         if (await bs_conf.user(ctx.author).tag()) is None:
             return await ctx.send("Save your tag using `/save` first!")
         if not (await self.config.user(ctx.author).tracking()):
@@ -72,7 +72,7 @@ class Challenges(commands.Cog):
     @tasks.loop(minutes=15)
     async def battle_check(self):
         members = await self.config.all_members(self.labs)
-        bs_conf = get_bs_config()
+        bs_conf = self.get_bs_config()
         for m in members:
             if members[m]['tracking']:
                 progress = 0
