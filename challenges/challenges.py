@@ -91,7 +91,7 @@ class Challenges(commands.Cog):
                     break
                 for battle in log:
                     b_time = datetime.strptime(battle['battleTime'], '%Y%m%dT%H%M%S%fZ')
-                    if b_time <= datetime.strptime(members[m]['lastBattleTime'], ''%Y%m%dT%H%M%S%fZ'):
+                    if b_time <= datetime.strptime(members[m]['lastBattleTime'], '%Y%m%dT%H%M%S%fZ'):
                         break
                     player = None
                     for t in battle['battle']['teams']:
