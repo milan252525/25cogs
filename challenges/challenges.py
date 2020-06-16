@@ -48,7 +48,7 @@ class Challenges(commands.Cog):
         if labs_mem not in ctx.author.roles:
             return await ctx.send("Only LA members can participate!")
         bs_conf = self.get_bs_config()
-        if (await bs_conf.member(ctx.author).tag()) is None:
+        if (await bs_conf.user(ctx.author).tag()) is None:
             return await ctx.send("Save your tag using `/save` first!")
         if not (await self.config.member(ctx.author).tracking()):
             await self.config.member(ctx.author).tracking.set(True)
