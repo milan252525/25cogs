@@ -69,8 +69,11 @@ class Challenges(commands.Cog):
 
     #datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
 
-    @tasks.loop(minutes=15)
-    async def battle_check(self):
+    #@tasks.loop(minutes=15)
+    #async def battle_check(self):
+    @commands.guild_only()
+    @challenge.command(name="run")
+    async def challenge_run(self, ctx):
         members = await self.config.all_members(self.labs)
         bs_conf = self.get_bs_config()
         for m in members:
