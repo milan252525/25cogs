@@ -63,8 +63,8 @@ class Challenges(commands.Cog):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
         if not (await self.config.user(ctx.author).tracking()):
             return await ctx.send("Use `/challenge track` first!")
-        await ctx.send(await self.config.user(ctx.author).progress())
-        await ctx.send(await self.config.user(ctx.author).lastBattleTime())
+        await ctx.send("Progress: " + str(await self.config.user(ctx.author).progress()))
+        await ctx.send("Last battle time: " + str(await self.config.user(ctx.author).lastBattleTime()))
     
 
     #datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
