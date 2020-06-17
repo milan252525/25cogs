@@ -485,7 +485,7 @@ class BrawlStarsCog(commands.Cog):
                        
     @commands.command(aliases=['e'])
     async def events(self, ctx):
-        events = await self.starlist_request("https://api.starlist.pro/events2")
+        events = await self.starlist_request("https://api.starlist.pro/events")
         if events['status'] != "ok":
             return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
         time_now = datetime.datetime.now()
