@@ -528,7 +528,7 @@ class BrawlStarsCog(commands.Cog):
         result_map = self.maps[result[0][0]]
         embed = discord.Embed(colour=discord.Colour.green() )
         embed.set_author(name=result_map['name'], url=result_map['link'], icon_url=result_map['gm_url'])
-        if result_map['name']:
+        if result_map['disabled']:
             embed.set_footer(text="This map is currently disabled.")
         embed.set_image(url=result_map['url'])
         await ctx.send(embed=embed)
