@@ -107,7 +107,7 @@ class Challenges(commands.Cog):
         if len(wins) > 0:
             for br in wins:
                 loss = 0 if br not in loses else loses[br]
-                win_rate = wins[br] // (wins[br] + loss)
+                win_rate = int((wins[br] / (wins[br] + loss)) * 100)
                 embed.add_field(name=br.title(), value=f"{wins[br]} ({win_rate}%)")
         embed.set_footer(text=f"Time of last seen battle:  {datetime.strptime(await self.config.member(member).lastBattleTime(), '%Y%m%dT%H%M%S.%fZ')}")
         await ctx.send(embed=embed)
