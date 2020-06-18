@@ -80,7 +80,7 @@ class Challenges(commands.Cog):
         wins = await self.config.member(member).wins()
         if len(wins) > 0:
             for br in wins:
-                embed.add_field(name=br, value=wins[br])
+                embed.add_field(name=br.title(), value=wins[br])
         embed.set_footer(text=f"Time of last seen battle:  {datetime.strptime(await self.config.member(member).lastBattleTime(), '%Y%m%dT%H%M%S.%fZ')}")
         await ctx.send(embed=embed)
     
@@ -130,8 +130,8 @@ class Challenges(commands.Cog):
                         continue
                     if "rank" in battle['battle'] and battle['battle']['mode'] != "soloShowdown" and battle['battle']['rank'] > 2:
                         continue
+                    brawler_name = player['brawler']['name']
                     if group_plant:
-                        brawler_name = player['brawler']['name']
                         if brawler_name in ("SPIKE", "ROSA", "SPROUT"):
                             progress += 1
                             if brawler_name in wins:
