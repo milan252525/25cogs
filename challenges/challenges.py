@@ -12,8 +12,12 @@ class Challenges(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=25202025)
-        default_member = {'tokens' : 0, 'tracking' : False, 'lastBattleTime' : "20200101T010101.000Z", 'progress' : 0}
+        default_member = {'tokens' : 0, 'tracking' : False, 'lastBattleTime' : "20200101T010101.000Z", 'progress' : 0, 'plant' : None}
         self.config.register_member(**default_member)
+        self.config.register_global(
+            plants = 0,
+            zombies = 0
+        )
         self.labs = 401883208511389716
         self.bsconfig = None
 
@@ -41,7 +45,7 @@ class Challenges(commands.Cog):
 
     @commands.guild_only()
     @challenge.command(name="track")
-    async def challenge_track(self, ctx):
+    async def challenge_track(self, ctx, group: str = None):
         if not self.labs_check(ctx.guild):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
         labs_mem = ctx.guild.get_role(576028728052809728)
@@ -50,11 +54,17 @@ class Challenges(commands.Cog):
         bs_conf = self.get_bs_config()
         if (await bs_conf.user(ctx.author).tag()) is None:
             return await ctx.send("Save your tag using `/save` first!")
+        if group is None:
+            recommended = "Plants" if (await self.config.plants()) > (await self.config.zombies()) else "Zombies"
+            return await ctx.send(f"Choose your side!\nTo play as a zombie (EMZ, Frank, Mortis) type `/ch track zombie`.\nTo play as plant (Sprout, Spike, Rosa) type `/ch track plant`\nRecommended group: {recommended}.")
+        else if group.lower() not in ("plant", "zombie"):
+            return await ctx.send("That doesn't look like a valid option.\nOptions: `zombie`, `plant`")
         if not (await self.config.member(ctx.author).tracking()):
+            await self.config.member(ctx.author).plant.set(option.lower() == "plant")
             await self.config.member(ctx.author).tracking.set(True)
-            return await ctx.send("Challenge tracking enabled!")
+            return await ctx.send(f"Challenge tracking enabled!\nChosen group: {option.title()}")
         else:
-            return await ctx.send("Your progress is already being tracked!")
+            return await ctx.send("Your progress is already being tracked! Group cannot be changed after registering.")
 
     @commands.guild_only()
     @challenge.command(name="stats")
@@ -91,7 +101,7 @@ class Challenges(commands.Cog):
                     break
                 for battle in log:
                     b_time = datetime.strptime(battle['battleTime'], '%Y%m%dT%H%M%S.%fZ')
-                    if b_time <= await self.config.member(ctx.author).lastBattleTime(), '%Y%m%dT%H%M%S.%fZ'members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
+                    if b_time <= datetime.strptime(members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
                         break
                     player = None
                     if "teams" in battle['battle']:
