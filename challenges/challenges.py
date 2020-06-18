@@ -64,7 +64,7 @@ class Challenges(commands.Cog):
         if not (await self.config.member(ctx.author).tracking()):
             return await ctx.send("Use `/challenge track` first!")
         await ctx.send("Challenge progress: " + str(await self.config.member(ctx.author).progress()))
-        await ctx.send("Time of last seen battle: " + str(await self.config.member(ctx.author).lastBattleTime()), '%Y%m%dT%H%M%S.%fZ'))
+        await ctx.send("Time of last seen battle: " + str(datetime.strptime(await self.config.member(ctx.author).lastBattleTime(), '%Y%m%dT%H%M%S.%fZ')))
     
 
     #datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -91,7 +91,7 @@ class Challenges(commands.Cog):
                     break
                 for battle in log:
                     b_time = datetime.strptime(battle['battleTime'], '%Y%m%dT%H%M%S.%fZ')
-                    if b_time <= datetime.strptime(members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
+                    if b_time <= await self.config.member(ctx.author).lastBattleTime(), '%Y%m%dT%H%M%S.%fZ'members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
                         break
                     player = None
                     if "teams" in battle['battle']:
