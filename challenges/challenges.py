@@ -6,7 +6,6 @@ import brawlstats
 import asyncio
 from datetime import datetime
 
-
 class Challenges(commands.Cog):
     
     def __init__(self, bot):
@@ -41,7 +40,32 @@ class Challenges(commands.Cog):
     async def challenge(self, ctx):
         if not self.labs_check(ctx.guild):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
-        await ctx.send("Some cool challenge info here.")
+        members = await self.config.all_members(self.bot.get_guild(self.labs))
+        plants = []
+        plants_total = 0
+        zombies = []
+        zombies_total = 0
+        for m in members:
+            if members[m]['tracking']:
+                if members[m]['plant']:
+                    plants.append((m, members[m]['progress']))
+                    plants_total += members[m]['progress']
+                else:
+                    zombies.append((m, members[m]['progress']))
+                    zombies_total += members[m]['progress']
+        plants.sort(key=lambda x: x[1])
+        zombies.sort(key=lambda x: x[1])
+        plants_msg = ""
+        for p in plants[:15]:
+            plants_msg += f"`{p[1]}` {self.bot.get_user(p[0]).mention}\n"
+        zombies_msg = ""
+        for z in zombies[:15]:
+            zombies_msg += f"`{z[1]}` {self.bot.get_user(z[0]).mention}\n"
+
+        embed = discord.Embed(colour=discord.Colour.dark_magenta(), title="Plants vs Zombies Leaderboard")
+        embed.add_field(name=f"PLANTS Total: {plants_total}", value=plants_msg)
+        embed.add_field(name=f"ZOMBIES Total: {zombies_total}", value=zombies_msg)
+        await ctx.send(embed=embed)
 
     @commands.guild_only()
     @challenge.command(name="track")
