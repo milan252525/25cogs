@@ -53,8 +53,8 @@ class Challenges(commands.Cog):
                 else:
                     zombies.append((m, members[m]['progress']))
                     zombies_total += members[m]['progress']
-        plants.sort(key=lambda x: x[1])
-        zombies.sort(key=lambda x: x[1])
+        plants.sort(key=lambda x: x[1], reverse=True)
+        zombies.sort(key=lambda x: x[1], reverse=True)
         plants_msg = ""
         for p in plants[:15]:
             plants_msg += f"`{p[1]}` {self.bot.get_user(p[0]).mention}\n"
