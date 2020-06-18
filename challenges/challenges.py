@@ -113,6 +113,7 @@ class Challenges(commands.Cog):
 
     #@tasks.loop(minutes=15)
     #async def battle_check(self):
+    @commands.is_owner()
     @commands.guild_only()
     @challenge.command(name="run")
     async def challenge_run(self, ctx):
@@ -175,3 +176,4 @@ class Challenges(commands.Cog):
                 await self.config.member(user).progress.set(members[m]['progress'] + progress)
                 await self.config.member(user).set_raw('wins', value=wins)
                 await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
+        await ctx.send("Done")
