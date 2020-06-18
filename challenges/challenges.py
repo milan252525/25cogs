@@ -65,6 +65,7 @@ class Challenges(commands.Cog):
         embed = discord.Embed(colour=discord.Colour.dark_magenta(), title="Plants vs Zombies Leaderboard")
         embed.add_field(name=f"🌻 PLANTS Total: {plants_total}", value=plants_msg, inline=False)
         embed.add_field(name=f"🧟 ZOMBIES Total: {zombies_total}", value=zombies_msg)
+        embed.set_footer(text=f"Plants: {len(plants)} Zombies: {len(zombies)}")
         await ctx.send(embed=embed)
 
     @commands.guild_only()
