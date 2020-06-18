@@ -56,13 +56,13 @@ class Challenges(commands.Cog):
             return await ctx.send("Save your tag using `/save` first!")
         if group is None:
             recommended = "Plants" if (await self.config.plants()) > (await self.config.zombies()) else "Zombies"
-            return await ctx.send(f"Choose your side!\nTo play as a zombie (EMZ, Frank, Mortis) type `/ch track zombie`.\nTo play as plant (Sprout, Spike, Rosa) type `/ch track plant`\nRecommended group: {recommended}.")
+            return await ctx.send(f"Choose your side!\nTo play as a zombie (EMZ, Frank, Mortis) type `/ch track zombie`\nTo play as a plant (Sprout, Spike, Rosa) type `/ch track plant`\nRecommended group: {recommended}")
         if group.lower() not in ("plant", "zombie"):
             return await ctx.send("That doesn't look like a valid option.\nOptions: `zombie`, `plant`")
         if not (await self.config.member(ctx.author).tracking()):
-            await self.config.member(ctx.author).plant.set(option.lower() == "plant")
+            await self.config.member(ctx.author).plant.set(group.lower() == "plant")
             await self.config.member(ctx.author).tracking.set(True)
-            return await ctx.send(f"Challenge tracking enabled!\nChosen group: {option.title()}")
+            return await ctx.send(f"Challenge tracking enabled!\nChosen group: {group.title()}")
         else:
             return await ctx.send("Your progress is already being tracked! Group cannot be changed after registering.")
 
@@ -74,7 +74,7 @@ class Challenges(commands.Cog):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
         if not (await self.config.member(member).tracking()):
             return await ctx.send(f"**{member.display_name}** isn't participating yet! (`/ch track`)")
-        await ctx.send("Group: " + "Plants" if await self.config.member(member).plant() else "Zombies")
+        await ctx.send("Group: " + ("Plants" if await self.config.member(member).plant() else "Zombies"))
         await ctx.send("Challenge progress: " + str(await self.config.member(member).progress()))
         await ctx.send("Time of last seen battle: " + str(datetime.strptime(await self.config.member(member).lastBattleTime(), '%Y%m%dT%H%M%S.%fZ')))
     
