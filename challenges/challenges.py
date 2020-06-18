@@ -68,13 +68,15 @@ class Challenges(commands.Cog):
 
     @commands.guild_only()
     @challenge.command(name="stats")
-    async def challenge_stats(self, ctx):
+    async def challenge_stats(self, ctx, member: discord.Member = None):
+        member = ctx.author if member is None else member
         if not self.labs_check(ctx.guild):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
-        if not (await self.config.member(ctx.author).tracking()):
-            return await ctx.send("Use `/challenge track` first!")
-        await ctx.send("Challenge progress: " + str(await self.config.member(ctx.author).progress()))
-        await ctx.send("Time of last seen battle: " + str(datetime.strptime(await self.config.member(ctx.author).lastBattleTime(), '%Y%m%dT%H%M%S.%fZ')))
+        if not (await self.config.member(member).tracking()):
+            return await ctx.send(f"**{member.display_name}** isn't participating yet! (`/ch track`)")
+        await ctx.send("Group: " + "Plants" if await self.config.member(member).plant() else "Zombies")
+        await ctx.send("Challenge progress: " + str(await self.config.member(member).progress()))
+        await ctx.send("Time of last seen battle: " + str(datetime.strptime(await self.config.member(member).lastBattleTime(), '%Y%m%dT%H%M%S.%fZ')))
     
 
     #datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -88,6 +90,7 @@ class Challenges(commands.Cog):
         bs_conf = self.get_bs_config()
         for m in members:
             if members[m]['tracking']:
+                group_plant = members[m]['plant']
                 progress = 0
                 user = self.bot.get_guild(self.labs).get_member(m)
                 tag = await bs_conf.user(user).tag()
@@ -114,8 +117,14 @@ class Challenges(commands.Cog):
                             if p['tag'].replace("#", "") == tag.upper():
                                 player = p
                     #CHALLENGE CONDITION HERE
-                    if player['brawler']['name'] == "BARLEY":
-                        progress += 1
+                    if group_plant:
+                        if player['brawler']['name'] in ("SPIKE", "ROSA", "SPROUT"):
+                            progress += 1
+                            await ctx.send(player)
+                    else:
+                        if player['brawler']['name'] in ("MORTIS", "FRANK", "EMZ"):
+                            progress += 1
+                            await ctx.send(player)
                 
                 await self.config.member(user).progress.set(members[m]['progress'] + progress)
                 await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
