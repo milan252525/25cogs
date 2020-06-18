@@ -104,11 +104,12 @@ class Challenges(commands.Cog):
         embed.add_field(name="Total wins", value=await self.config.member(member).progress())
         wins = await self.config.member(member).wins()
         loses = await self.config.member(member).loses()
-        if len(wins) > 0:
-            for br in wins:
-                loss = 0 if br not in loses else loses[br]
-                win_rate = int((wins[br] / (wins[br] + loss)) * 100)
-                embed.add_field(name=br.title(), value=f"{wins[br]} ({win_rate}%)")
+        brawlers = ("SPIKE", "ROSA", "SPROUT") if await self.config.member(member).plant() else ("MORTIS", "FRANK", "EMZ")
+        for br in brawlers:
+            win = 0 if br not in wins else wins[br]
+            loss = 0 if br not in loses else loses[br]
+            win_rate = int((win / win + loss)) * 100)
+            embed.add_field(name=br.title(), value=f"{win} ({win_rate}%)")
         embed.set_footer(text=f"Time of last seen battle:  {datetime.strptime(await self.config.member(member).lastBattleTime(), '%Y%m%dT%H%M%S.%fZ')}")
         await ctx.send(embed=embed)
     
