@@ -170,12 +170,12 @@ class Challenges(commands.Cog):
                                     wins[brawler_name] += 1
                                 else:
                                     wins[brawler_name] = 1
-                                await ctx.send(player)
                             else:
                                 if brawler_name in loses:
                                     loses[brawler_name] += 1
                                 else:
                                     loses[brawler_name] = 1
+                            await ctx.send(player)
                     else:
                         if brawler_name in ("MORTIS", "FRANK", "EMZ"):
                             if win:
@@ -190,8 +190,10 @@ class Challenges(commands.Cog):
                                     loses[brawler_name] += 1
                                 else:
                                     loses[brawler_name] = 1
+                            await ctx.send(player)
                 
                 await self.config.member(user).progress.set(members[m]['progress'] + progress)
                 await self.config.member(user).set_raw('wins', value=wins)
+                await self.config.member(user).set_raw('loses', value=loses)
                 await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
         await ctx.send("Done")
