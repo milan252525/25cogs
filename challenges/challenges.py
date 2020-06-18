@@ -63,8 +63,8 @@ class Challenges(commands.Cog):
             zombies_msg += f"`{z[1]}` {self.bot.get_user(z[0]).mention}\n"
 
         embed = discord.Embed(colour=discord.Colour.dark_magenta(), title="Plants vs Zombies Leaderboard")
-        embed.add_field(name=f"PLANTS Total: {plants_total}", value=plants_msg)
-        embed.add_field(name=f"ZOMBIES Total: {zombies_total}", value=zombies_msg)
+        embed.add_field(name=f"🌻 PLANTS Total: {plants_total}", value=plants_msg, inline=False)
+        embed.add_field(name=f"🧟 ZOMBIES Total: {zombies_total}", value=zombies_msg)
         await ctx.send(embed=embed)
 
     @commands.guild_only()
