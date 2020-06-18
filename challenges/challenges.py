@@ -12,7 +12,7 @@ class Challenges(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=25202025)
-        default_member = {'tokens' : 0, 'tracking' : False, 'lastBattleTime' : "20200101T010101.000Z", 'progress' : 0, 'plant' : None}
+        default_member = {'tokens' : 0, 'tracking' : False, 'lastBattleTime' : "20200101T010101.000Z", 'progress' : 0, 'plant' : None, 'wins' : {}}
         self.config.register_member(**default_member)
         self.config.register_global(
             plants = 0,
@@ -56,7 +56,7 @@ class Challenges(commands.Cog):
             return await ctx.send("Save your tag using `/save` first!")
         if group is None:
             recommended = "Plants" if (await self.config.plants()) > (await self.config.zombies()) else "Zombies"
-            return await ctx.send(f"Choose your side!\nTo play as a zombie (EMZ, Frank, Mortis) type `/ch track zombie`\nTo play as a plant (Sprout, Spike, Rosa) type `/ch track plant`\nRecommended group: {recommended}")
+            return await ctx.send(f"Choose your side!\nTo play as a plant (Sprout, Spike, Rosa) type `/ch track plant`\nTo play as a zombie (EMZ, Frank, Mortis) type `/ch track zombie`\nRecommended group: {recommended}")
         if group.lower() not in ("plant", "zombie"):
             return await ctx.send("That doesn't look like a valid option.\nOptions: `zombie`, `plant`")
         if not (await self.config.member(ctx.author).tracking()):
@@ -74,9 +74,15 @@ class Challenges(commands.Cog):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
         if not (await self.config.member(member).tracking()):
             return await ctx.send(f"**{member.display_name}** isn't participating yet! (`/ch track`)")
-        await ctx.send("Group: " + ("Plants" if await self.config.member(member).plant() else "Zombies"))
-        await ctx.send("Challenge progress: " + str(await self.config.member(member).progress()))
-        await ctx.send("Time of last seen battle: " + str(datetime.strptime(await self.config.member(member).lastBattleTime(), '%Y%m%dT%H%M%S.%fZ')))
+        embed = discord.Embed(colour=discord.Colour.green(), title="Stats")
+        embed.add_field(name="Group", value="Plants" if await self.config.member(member).plant() else "Zombies")
+        embed.add_field(name="Total wins", value=await self.config.member(member).progress())
+        wins = await self.config.member(member).wins()
+        if len(wins) > 0:
+            for br in wins:
+                embed.add_field(name=br, value=wins[br])
+        embed.set_footer(text=f"Time of last seen battle:  {datetime.strptime(await self.config.member(member).lastBattleTime(), '%Y%m%dT%H%M%S.%fZ')}")
+        await ctx.send(embed=embed)
     
 
     #datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -94,6 +100,7 @@ class Challenges(commands.Cog):
                 progress = 0
                 user = self.bot.get_guild(self.labs).get_member(m)
                 tag = await bs_conf.user(user).tag()
+                wins = members[m]['wins']
                 try:
                     log = await self.ofcbsapi.get_battle_logs(tag)
                     log = log.raw_data
@@ -117,14 +124,30 @@ class Challenges(commands.Cog):
                             if p['tag'].replace("#", "") == tag.upper():
                                 player = p
                     #CHALLENGE CONDITION HERE
+                    if "result" in battle['battle'] and battle['battle']['result'] != "victory":
+                        continue
+                    if "rank" in battle['battle'] and battle['battle']['mode'] == "soloShowdown" and battle['battle']['rank'] > 4:
+                        continue
+                    if "rank" in battle['battle'] and battle['battle']['mode'] != "soloShowdown" and battle['battle']['rank'] > 2:
+                        continue
                     if group_plant:
-                        if player['brawler']['name'] in ("SPIKE", "ROSA", "SPROUT"):
+                        brawler_name = player['brawler']['name']
+                        if brawler_name in ("SPIKE", "ROSA", "SPROUT"):
                             progress += 1
+                            if brawler_name in wins:
+                                wins[brawler_name] += 1
+                            else:
+                                wins[brawler_name] = 1
                             await ctx.send(player)
                     else:
-                        if player['brawler']['name'] in ("MORTIS", "FRANK", "EMZ"):
+                        if brawler_name in ("MORTIS", "FRANK", "EMZ"):
                             progress += 1
+                            if brawler_name in wins:
+                                wins[brawler_name] += 1
+                            else:
+                                wins[brawler_name] = 1
                             await ctx.send(player)
                 
                 await self.config.member(user).progress.set(members[m]['progress'] + progress)
+                await self.config.member(user).set_raw('wins', value=wins)
                 await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
