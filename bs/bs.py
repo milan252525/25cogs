@@ -550,7 +550,7 @@ class BrawlStarsCog(commands.Cog):
                 return await ctx.send(embed=badEmbed(f"You have no tag saved! Use {ctx.prefix}bssave <tag>"))
             try:
                 player = await self.ofcbsapi.get_player(mtag)
-                if not player.club.tag:
+                if not "tag" in player.raw_data["club"]:
                     return await ctx.send("This user is not in a club!")
                 tag = player.club.tag
             except brawlstats.errors.RequestError as e:
