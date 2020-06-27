@@ -147,6 +147,9 @@ class Challenges(commands.Cog):
                             for p in battle['battle']['players']:
                                 if p['tag'].replace("#", "") == tag.upper():
                                     player = p
+                        if player is None:
+                            await error_ch.send(battle)
+                            continue
                         #CHALLENGE CONDITION HERE
                         win = True
                         if "result" in battle['battle'] and battle['battle']['result'] == "draw":
