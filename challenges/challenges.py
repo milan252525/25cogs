@@ -66,9 +66,9 @@ class Challenges(commands.Cog):
             await self.config.member(ctx.author).plant.set(group.lower() == "plant")
             await self.config.member(ctx.author).tracking.set(True)
             if group.lower() == "plant":
-                await self.config.plants.set(self.config.plants()+1)
+                await self.config.plants.set(await self.config.plants()+1)
             else:
-                await self.config.zombies.set(self.config.zombies()+1)
+                await self.config.zombies.set(await self.config.zombies()+1)
             return await ctx.send(f"Challenge tracking enabled!\nChosen group: {group.title()}")
         else:
             return await ctx.send("Your progress is already being tracked! Group cannot be changed after registering.")
