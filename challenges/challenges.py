@@ -48,6 +48,8 @@ class Challenges(commands.Cog):
     @commands.guild_only()
     @challenge.command(name="track")
     async def challenge_track(self, ctx, group: str = None):
+        if await self.config.member(ctx.author).tracking():
+            return await ctx.send("Your progress is already being tracked! Group cannot be changed after registering.")
         if not self.labs_check(ctx.guild):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
         labs_mem = ctx.guild.get_role(576028728052809728)
@@ -58,20 +60,17 @@ class Challenges(commands.Cog):
         if (await bs_conf.user(ctx.author).tag()) is None:
             return await ctx.send("Save your tag using `/save` first!")
         if group is None:
-            recommended = "Plants" if (await self.config.plants()) > (await self.config.zombies()) else "Zombies"
+            recommended = "Plants" if (await self.config.plants()) < (await self.config.zombies()) else "Zombies"
             return await ctx.send(f"Choose your side!\nTo play as a **plant** (Sprout, Spike, Rosa) type `/ch track plant`\nTo play as a **zombie** (EMZ, Frank, Mortis) type `/ch track zombie`\n**Recommended group**: {recommended}")
         if group.lower() not in ("plant", "zombie"):
             return await ctx.send("That doesn't look like a valid option.\nOptions: `zombie`, `plant`")
-        if not (await self.config.member(ctx.author).tracking()):
-            await self.config.member(ctx.author).plant.set(group.lower() == "plant")
-            await self.config.member(ctx.author).tracking.set(True)
-            if group.lower() == "plant":
-                await self.config.plants.set(await self.config.plants()+1)
-            else:
-                await self.config.zombies.set(await self.config.zombies()+1)
-            return await ctx.send(f"Challenge tracking enabled!\nChosen group: {group.title()}")
+        await self.config.member(ctx.author).plant.set(group.lower() == "plant")
+        await self.config.member(ctx.author).tracking.set(True)
+        if group.lower() == "plant":
+            await self.config.plants.set(await self.config.plants()+1)
         else:
-            return await ctx.send("Your progress is already being tracked! Group cannot be changed after registering.")
+            await self.config.zombies.set(await self.config.zombies()+1)
+        return await ctx.send(f"Challenge tracking enabled!\nChosen group: {group.title()}")
 
     @commands.guild_only()
     @challenge.command(name="stats")
