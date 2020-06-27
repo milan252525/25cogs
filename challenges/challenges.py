@@ -191,6 +191,7 @@ class Challenges(commands.Cog):
                                         else:
                                             loses[brawler_name] = 1
                         except Exception as e:
+                            await error_ch.send(f"{m}\n```py\n{e}```")
                             await error_ch.send(f"{m}\n```py\n{battle}```")
                             continue
                     
