@@ -20,7 +20,7 @@ class Challenges(commands.Cog):
         )
         self.labs = 401883208511389716
         self.bsconfig = None
-        #self.battle_check.start()
+        self.battle_check.start()
 
     def cog_unload(self):
         self.battle_check.cancel()
