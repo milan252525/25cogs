@@ -149,7 +149,7 @@ class Challenges(commands.Cog):
                                     if p['tag'].replace("#", "") == tag.upper():
                                         player = p
                             if player is None:
-                                await error_ch.send(f"{m}\n```py`\n{battle}```")
+                                await error_ch.send(f"{m}\n```py\n{battle}```")
                                 continue
                             #CHALLENGE CONDITION HERE
                             win = True
@@ -191,7 +191,7 @@ class Challenges(commands.Cog):
                                         else:
                                             loses[brawler_name] = 1
                         except Exception as e:
-                            await error_ch.send(f"{m}\n```py`\n{battle}```")
+                            await error_ch.send(f"{m}\n```py\n{battle}```")
                             continue
                     
                     await self.config.member(user).progress.set(members[m]['progress'] + progress)
