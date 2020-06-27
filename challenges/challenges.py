@@ -65,6 +65,10 @@ class Challenges(commands.Cog):
         if not (await self.config.member(ctx.author).tracking()):
             await self.config.member(ctx.author).plant.set(group.lower() == "plant")
             await self.config.member(ctx.author).tracking.set(True)
+            if group.lower() == "plant":
+                await self.config.plants.set(self.config.plants()+1)
+            else:
+                await self.config.zombies.set(self.config.zombies()+1)
             return await ctx.send(f"Challenge tracking enabled!\nChosen group: {group.title()}")
         else:
             return await ctx.send("Your progress is already being tracked! Group cannot be changed after registering.")
@@ -169,7 +173,6 @@ class Challenges(commands.Cog):
                                         loses[brawler_name] += 1
                                     else:
                                         loses[brawler_name] = 1
-                                await ctx.send(player)
                         else:
                             if brawler_name in ("MORTIS", "FRANK", "EMZ"):
                                 if win:
@@ -178,13 +181,11 @@ class Challenges(commands.Cog):
                                         wins[brawler_name] += 1
                                     else:
                                         wins[brawler_name] = 1
-                                    await ctx.send(player)
                                 else:
                                     if brawler_name in loses:
                                         loses[brawler_name] += 1
                                     else:
                                         loses[brawler_name] = 1
-                                await ctx.send(player)
                     
                     await self.config.member(user).progress.set(members[m]['progress'] + progress)
                     await self.config.member(user).set_raw('wins', value=wins)
