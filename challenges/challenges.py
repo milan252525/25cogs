@@ -214,8 +214,8 @@ class Challenges(commands.Cog):
                 zombies_msg += f"`{z[1]}` {self.bot.get_user(z[0]).mention}\n"
 
             embed = discord.Embed(colour=discord.Colour.dark_magenta(), title="Plants vs Zombies Leaderboard")
-            embed.add_field(name=f"🌻 PLANTS Total: {plants_total}", value=plants_msg, inline=False)
-            embed.add_field(name=f"🧟 ZOMBIES Total: {zombies_total}", value=zombies_msg)
+            embed.add_field(name=f"🌻 PLANTS Total: {plants_total}", value=plants_msg if plants_msg != "" else "-", inline=False)
+            embed.add_field(name=f"🧟 ZOMBIES Total: {zombies_total}", value=zombies_msg if zombies_msg != "" else "-")
             embed.set_footer(text=f"Plants: {len(plants)} Zombies: {len(zombies)}")
             lbmsg = await (self.bot.get_channel(726456852249837568)).fetch_message(726462620697362484)
             await lbmsg.edit(embed=embed)
