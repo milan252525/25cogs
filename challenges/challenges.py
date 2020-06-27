@@ -54,7 +54,8 @@ class Challenges(commands.Cog):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
         labs_mem = ctx.guild.get_role(576028728052809728)
         special = ctx.guild.get_role(706420605309812776)
-        if labs_mem not in ctx.author.roles and special not in ctx.author.roles:
+        pvzrole = ctx.guild.get_role(726554301090103317)
+        if labs_mem not in ctx.author.roles and special not in ctx.author.roles and pvzrole not in ctx.author.roles:
             return await ctx.send("Only LA members can participate!")
         bs_conf = self.get_bs_config()
         if (await bs_conf.user(ctx.author).tag()) is None:
