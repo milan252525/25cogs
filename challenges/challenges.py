@@ -134,61 +134,65 @@ class Challenges(commands.Cog):
                         await error_ch.send(str(e))
                         break
                     for battle in log:
-                        b_time = datetime.strptime(battle['battleTime'], '%Y%m%dT%H%M%S.%fZ')
-                        if b_time <= datetime.strptime(members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
-                            break
-                        player = None
-                        if "teams" in battle['battle']:
-                            for t in battle['battle']['teams']:
-                                for p in t:
+                        try:
+                            b_time = datetime.strptime(battle['battleTime'], '%Y%m%dT%H%M%S.%fZ')
+                            if b_time <= datetime.strptime(members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
+                                break
+                            player = None
+                            if "teams" in battle['battle']:
+                                for t in battle['battle']['teams']:
+                                    for p in t:
+                                        if p['tag'].replace("#", "") == tag.upper():
+                                            player = p
+                            else:
+                                for p in battle['battle']['players']:
                                     if p['tag'].replace("#", "") == tag.upper():
                                         player = p
-                        else:
-                            for p in battle['battle']['players']:
-                                if p['tag'].replace("#", "") == tag.upper():
-                                    player = p
-                        if player is None:
-                            await error_ch.send(battle)
+                            if player is None:
+                                await error_ch.send(f"{m}\n```py`\n{battle}```")
+                                continue
+                            #CHALLENGE CONDITION HERE
+                            win = True
+                            if "result" in battle['battle'] and battle['battle']['result'] == "draw":
+                                continue
+                            if "result" in battle['battle'] and battle['battle']['result'] != "victory":
+                                win = False
+                            if "rank" in battle['battle'] and battle['battle']['mode'] == "soloShowdown" and battle['battle']['rank'] > 4:
+                                win = False
+                            if "rank" in battle['battle'] and battle['battle']['mode'] != "soloShowdown" and battle['battle']['rank'] > 2:
+                                win = False
+                            if battle['battle']['mode'].lower().replace('-', '').replace(' ', '') in ('roborumble', 'biggame'):
+                                continue
+                            brawler_name = player['brawler']['name']
+                            if group_plant:
+                                if brawler_name in ("SPIKE", "ROSA", "SPROUT"):
+                                    if win:
+                                        progress += 1
+                                        if brawler_name in wins:
+                                            wins[brawler_name] += 1
+                                        else:
+                                            wins[brawler_name] = 1
+                                    else:
+                                        if brawler_name in loses:
+                                            loses[brawler_name] += 1
+                                        else:
+                                            loses[brawler_name] = 1
+                            else:
+                                if brawler_name in ("MORTIS", "FRANK", "EMZ"):
+                                    if win:
+                                        progress += 1
+                                        if brawler_name in wins:
+                                            wins[brawler_name] += 1
+                                        else:
+                                            wins[brawler_name] = 1
+                                    else:
+                                        if brawler_name in loses:
+                                            loses[brawler_name] += 1
+                                        else:
+                                            loses[brawler_name] = 1
+                        except Exception as e:
+                            await error_ch.send(f"{m}\n```py`\n{battle}```")
                             continue
-                        #CHALLENGE CONDITION HERE
-                        win = True
-                        if "result" in battle['battle'] and battle['battle']['result'] == "draw":
-                            continue
-                        if "result" in battle['battle'] and battle['battle']['result'] != "victory":
-                            win = False
-                        if "rank" in battle['battle'] and battle['battle']['mode'] == "soloShowdown" and battle['battle']['rank'] > 4:
-                            win = False
-                        if "rank" in battle['battle'] and battle['battle']['mode'] != "soloShowdown" and battle['battle']['rank'] > 2:
-                            win = False
-                        if battle['battle']['mode'].lower().replace('-', '').replace(' ', '') in ('roborumble', 'biggame'):
-                            continue
-                        brawler_name = player['brawler']['name']
-                        if group_plant:
-                            if brawler_name in ("SPIKE", "ROSA", "SPROUT"):
-                                if win:
-                                    progress += 1
-                                    if brawler_name in wins:
-                                        wins[brawler_name] += 1
-                                    else:
-                                        wins[brawler_name] = 1
-                                else:
-                                    if brawler_name in loses:
-                                        loses[brawler_name] += 1
-                                    else:
-                                        loses[brawler_name] = 1
-                        else:
-                            if brawler_name in ("MORTIS", "FRANK", "EMZ"):
-                                if win:
-                                    progress += 1
-                                    if brawler_name in wins:
-                                        wins[brawler_name] += 1
-                                    else:
-                                        wins[brawler_name] = 1
-                                else:
-                                    if brawler_name in loses:
-                                        loses[brawler_name] += 1
-                                    else:
-                                        loses[brawler_name] = 1
                     
                     await self.config.member(user).progress.set(members[m]['progress'] + progress)
                     await self.config.member(user).set_raw('wins', value=wins)
