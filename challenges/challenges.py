@@ -217,5 +217,5 @@ class Challenges(commands.Cog):
             embed.add_field(name=f"🌻 PLANTS Total: {plants_total}", value=plants_msg if plants_msg != "" else "-", inline=False)
             embed.add_field(name=f"🧟 ZOMBIES Total: {zombies_total}", value=zombies_msg if zombies_msg != "" else "-")
             embed.set_footer(text=f"Plants: {len(plants)} Zombies: {len(zombies)}")
-            lbmsg = await (self.bot.get_channel(726456852249837568)).fetch_message(726462620697362484)
+            lbmsg = await (self.bot.get_channel(726456852249837568)).fetch_message(726471099306737664)
             await lbmsg.edit(embed=embed)
