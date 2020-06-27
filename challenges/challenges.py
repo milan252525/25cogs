@@ -59,7 +59,7 @@ class Challenges(commands.Cog):
             return await ctx.send("Save your tag using `/save` first!")
         if group is None:
             recommended = "Plants" if (await self.config.plants()) > (await self.config.zombies()) else "Zombies"
-            return await ctx.send(f"Choose your side!\nTo play as a plant (Sprout, Spike, Rosa) type `/ch track plant`\nTo play as a zombie (EMZ, Frank, Mortis) type `/ch track zombie`\nRecommended group: {recommended}")
+            return await ctx.send(f"Choose your side!\nTo play as a **plant** (Sprout, Spike, Rosa) type `/ch track plant`\nTo play as a **zombie** (EMZ, Frank, Mortis) type `/ch track zombie`\n**Recommended group**: {recommended}")
         if group.lower() not in ("plant", "zombie"):
             return await ctx.send("That doesn't look like a valid option.\nOptions: `zombie`, `plant`")
         if not (await self.config.member(ctx.author).tracking()):
