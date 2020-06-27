@@ -215,10 +215,10 @@ class Challenges(commands.Cog):
             zombies.sort(key=lambda x: x[1], reverse=True)
             plants_msg = ""
             for p in plants[:15]:
-                plants_msg += f"`{p[1]}` {self.bot.get_user(p[0]).mention}\n"
+                plants_msg += f"`{p[1]}` {self.bot.get_user(p[0]).display_name}\n"
             zombies_msg = ""
             for z in zombies[:15]:
-                zombies_msg += f"`{z[1]}` {self.bot.get_user(z[0]).mention}\n"
+                zombies_msg += f"`{z[1]}` {self.bot.get_user(z[0]).display_name}\n"
 
             embed = discord.Embed(colour=discord.Colour.dark_magenta(), title="Plants vs Zombies Leaderboard")
             embed.add_field(name=f"🌻 PLANTS Total: {plants_total}", value=plants_msg if plants_msg != "" else "-", inline=False)
