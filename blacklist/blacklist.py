@@ -230,7 +230,7 @@ class Blacklist(commands.Cog):
         await asyncio.sleep(5)
 
     @tasks.loop(hours=4)
-    async def blacklistalert(self, ctx):
+    async def blacklistalert(self):
         midir = self.bot.get_user(359131399132807178)
         errors = 0
         await midir.trigger_typing()
