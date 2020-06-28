@@ -40,7 +40,7 @@ class Blacklist(commands.Cog):
         
         if ctx.guild.id == 460550486257565697 and ctx.author.top_role < ctx.guild.get_role(462066723789471744):
             return await ctx.send("You can't use this command.")
-        if ctx.guild.id != 460550486257565697 and not ctx.author.guild_permissions.kick_members and ctx.author.id != 359131399132807178:
+        if ctx.guild.id != 460550486257565697 and not ctx.author.guild_permissions.kick_members:
             return await ctx.send("You can't use this command.")
 
         if len((await self.config.guild(ctx.guild).blacklisted()).keys()) < 1:
@@ -230,9 +230,34 @@ class Blacklist(commands.Cog):
     @commands.command()
     async def blacklistalert(self, ctx):
         midir = self.bot.get_user(359131399132807178)
+        errors = 0
+        await midir.trigger_typing()
+        clubs = []
+        labs = self.bot.get_guild(401883208511389716)
+        saved_clubs = await self.bsconfig.guild(labs).clubs()
+        for key in saved_clubs.keys():
+            club = saved_clubs[key]["tag"]
+            clubs.append(club)
 
-        servers = await self.config.all_guilds()
-        for server in servers:
-            serverobj = self.bot.get_guild(server)
-            servername = serverobj.name
-            await midir.send(servername)
+        asia = self.bot.get_guild(663716223258984496)
+        tags = await self.config.guild(asia).blacklisted()
+        for tag in tags:
+            try:
+                player = await self.ofcbsapi.get_player(tag)
+                player_in_club = "name" in player.raw_data["club"]
+                await asyncio.sleep(1)
+            except brawlstats.errors.RequestError as e:
+                await asyncio.sleep(5)
+                errors += 1
+                if errors == 30:
+                    break
+            except Exception as e:
+                return await midir.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                         description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
+
+            if player_in_club:
+                await midir.send(player.club.name + player.club.tag)
+                if player.club.tag.strip("#") in clubs:
+                    reason = await self.config.guild(server).blacklisted.get_raw(tag, "reason", default="")
+                    await midir.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                      description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
