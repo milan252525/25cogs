@@ -70,9 +70,7 @@ class Blacklist(commands.Cog):
             key = ""
             clubname = ""
             for k in (await self.config.guild(ctx.guild).blacklisted()).keys():
-                await ctx.send(k + " " + plr.tag.replace("#", "").lower())
                 if plr.tag.replace("#", "").lower() == k:
-                    await ctx.send("matched")
                     key = k
 
             player_in_club = "name" in plr.raw_data["club"]
@@ -272,3 +270,8 @@ class Blacklist(commands.Cog):
     @blacklistalert.before_loop
     async def before_blacklistalert(self):
         await asyncio.sleep(5)
+
+    @commands.command()
+    async def simpleremove(self, ctx, name):
+        await self.config.guild(ctx.guild).blacklisted.clear_raw(name)
+        await ctx.send(f"deleted {name}")
