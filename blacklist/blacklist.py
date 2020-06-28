@@ -242,6 +242,7 @@ class Blacklist(commands.Cog):
         servers = await self.config.all_guilds()
         for server in servers:
             serverobj = self.bot.get_guild(server)
+            servername = serverobj.name
             tags = await self.config.guild(serverobj).blacklisted()
             for tag in tags:
                 try:
@@ -262,3 +263,7 @@ class Blacklist(commands.Cog):
                         reason = await self.config.guild(server).blacklisted.get_raw(tag, "reason", default="")
                         await midir.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                           description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
+
+            await midir.send(f"Finished {servername}.")
+
+        await midir.send("Finished.")
