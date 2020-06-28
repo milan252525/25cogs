@@ -233,8 +233,7 @@ class Blacklist(commands.Cog):
         errors = 0
         await midir.trigger_typing()
         clubs = []
-        labs = self.bot.get_guild(401883208511389716)
-        saved_clubs = await self.bsconfig.guild(labs).clubs()
+        saved_clubs = await self.bsconfig.guild(ctx.guild).clubs()
         for key in saved_clubs.keys():
             club = saved_clubs[key]["tag"]
             clubs.append(club)
