@@ -244,8 +244,8 @@ class Blacklist(commands.Cog):
 
             servers = await self.config.all_guilds()
             for server in servers:
-                await midir.send(server)
-                tags = await self.config.guild(server).blacklisted()
+                serverobj = self.bot.get_guild(server)
+                tags = await self.config.guild(serverobj).blacklisted()
                 for tag in tags:
                     try:
                         player = await self.ofcbsapi.get_player(tag)
