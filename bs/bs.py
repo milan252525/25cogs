@@ -633,6 +633,7 @@ class BrawlStarsCog(commands.Cog):
         """View all clubs saved in a server"""
         offline = False
         low_clubs = False
+        roles = False
         skip_errors = False
         await ctx.trigger_typing()
         if "offline" in keyword:
@@ -642,6 +643,10 @@ class BrawlStarsCog(commands.Cog):
         if "low" in keyword:
             low_clubs = True
             keyword = keyword.replace("low", "").strip()
+
+        if "roles" in keyword:
+            roles = True
+            keyword = keyword.replace("roles", "").strip()
 
         if "skiperrors" in keyword:
             skip_errors = True
@@ -663,7 +668,7 @@ class BrawlStarsCog(commands.Cog):
             for ind, key in enumerate(keys):
                 if offline:
                     break
-                if keyword == "" or keyword is None:
+                if keyword == "":
                     try:
                         club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
                     except brawlstats.errors.RequestError as e:
@@ -723,12 +728,14 @@ class BrawlStarsCog(commands.Cog):
                     saved_clubs[key]['lastPosition'] = i
                     
                     info = saved_clubs[key]["info"] if "info" in saved_clubs[key] else ""
+                    role = ctx.guild.get_role(saved_clubs[key]["role"]) if "role" in saved_clubs[key] else None
 
                     if low_clubs and len(clubs[i].members) >= 95:
                         continue
 
                     e_name = f"<:bsband:600741378497970177> {clubs[i].name} [{key}] {clubs[i].tag} {info}"
-                    e_value = f"<:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
+                    role_info = f"{role.mention}\n" if roles and role is not None else ""
+                    e_value = f"{role_info}<:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
                     embedFields.append([e_name, e_value])
 
                 await self.config.guild(ctx.guild).set_raw("clubs", value=saved_clubs)
@@ -777,11 +784,14 @@ class BrawlStarsCog(commands.Cog):
             if len(embedsToSend) > 1:
                 await msg.delete()
                 await menu(ctx, embedsToSend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
-            else:
+            elif len(embedsToSend) == 1:
                 await msg.delete()
                 await ctx.send(embed=embedsToSend[0])
+            else:
+                await msg.delete()
+                await ctx.send("No clubs found!")
 
-        except Exception as e:
+        except ZeroDivisionError as e:
             return await ctx.send(
                 "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
 
@@ -810,7 +820,8 @@ class BrawlStarsCog(commands.Cog):
                 "lastMemberCount": club.members_count,
                 "lastRequirement": club.required_trophies,
                 "lastScore": club.trophies,
-                "info": ""
+                "info": "",
+                "role": None
             }
             key = key.lower()
             await self.config.guild(ctx.guild).clubs.set_raw(key, value=result)
@@ -852,6 +863,19 @@ class BrawlStarsCog(commands.Cog):
         try:
             await self.config.guild(ctx.guild).clubs.set_raw(key, "info", value=info)
             await ctx.send(embed=goodEmbed("Club info successfully edited!"))
+        except KeyError:
+            await ctx.send(embed=badEmbed(f"{key.title()} isn't saved club in this server!"))
+
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    @clubs.command(name="role")
+    async def clubs_role(self, ctx, key: str, role: discord.Role = None):
+        """Add a role to club"""
+        await ctx.trigger_typing()
+        try:
+            await self.config.guild(ctx.guild).clubs.set_raw(key, "role", value=role.id if role is not None else None)
+            name = role.name if role is not None else "None"
+            await ctx.send(embed=goodEmbed(f"Club role set to {name}!"))
         except KeyError:
             await ctx.send(embed=badEmbed(f"{key.title()} isn't saved club in this server!"))
 
