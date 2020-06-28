@@ -866,7 +866,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @clubs.command(name="role")
-    async def clubs_role(self, ctx, role: discord.Role = None):
+    async def clubs_role(self, ctx, key: str, role: discord.Role = None):
         """Add a role to club"""
         await ctx.trigger_typing()
         try:
