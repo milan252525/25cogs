@@ -32,13 +32,13 @@ class BrawlStarsCog(commands.Cog):
 
     def cog_unload(self):
         self.sortroles.cancel()
-        """ self.sortrolesasia.cancel()
+        self.sortrolesasia.cancel()
         self.sortrolesbd.cancel()
         self.sortrolesspain.cancel()
         self.sortrolesportugal.cancel()
         self.sortrolesevents.cancel()
         self.sortrolesaquaunited.cancel()
-        self.sortroleslatam.cancel() """
+        self.sortroleslatam.cancel()
 
     async def start_tasks(self):
         await asyncio.sleep(3*60)
