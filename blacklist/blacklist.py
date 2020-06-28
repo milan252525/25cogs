@@ -261,7 +261,6 @@ class Blacklist(commands.Cog):
                                                              description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
 
                 if player_in_club:
-                    await midir.send(player.club.name + player.club.tag)
                     if player.club.tag.strip("#") in clubs:
                         reason = await self.config.guild(serverobj).blacklisted.get_raw(tag, "reason", default="")
                         await midir.send(embed=discord.Embed(colour=discord.Colour.red(),
