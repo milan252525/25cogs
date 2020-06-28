@@ -270,8 +270,3 @@ class Blacklist(commands.Cog):
     @blacklistalert.before_loop
     async def before_blacklistalert(self):
         await asyncio.sleep(5)
-
-    @commands.command()
-    async def simpleremove(self, ctx, name):
-        await self.config.guild(ctx.guild).blacklisted.clear_raw(name)
-        await ctx.send(f"deleted {name}")
