@@ -231,44 +231,41 @@ class Blacklist(commands.Cog):
 
     @tasks.loop(hours=4)
     async def blacklistalert(self):
-        midir = self.bot.get_user(359131399132807178)
-        errors = 0
-        await midir.trigger_typing()
-        clubs = []
-        labs = self.bot.get_guild(401883208511389716)
-        saved_clubs = await self.bsconfig.guild(labs).clubs()
-        for key in saved_clubs.keys():
-            club = saved_clubs[key]["tag"]
-            clubs.append(club)
+        try:
+            ch = self.bot.get_channel(726824198663700540)
+            errors = 0
+            await ch.trigger_typing()
+            clubs = []
+            saved_clubs = await self.bsconfig.guild(ch.guild).clubs()
+            for key in saved_clubs.keys():
+                club = saved_clubs[key]["tag"]
+                clubs.append(club)
 
-        servers = await self.config.all_guilds()
-        for server in servers:
-            serverobj = self.bot.get_guild(server)
-            servername = serverobj.name
-            tags = await self.config.guild(serverobj).blacklisted()
-            for tag in tags:
-                try:
-                    player = await self.ofcbsapi.get_player(tag)
-                    player_in_club = "name" in player.raw_data["club"]
-                    await asyncio.sleep(1)
-                except brawlstats.errors.RequestError as e:
-                    await asyncio.sleep(5)
-                    errors += 1
-                    if errors == 30:
-                        break
-                except Exception as e:
-                    return await midir.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                             description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
+            servers = await self.config.all_guilds()
+            for server in servers:
+                serverobj = self.bot.get_guild(server)
+                tags = await self.config.guild(serverobj).blacklisted()
+                for tag in tags:
+                    try:
+                        player = await self.ofcbsapi.get_player(tag)
+                        player_in_club = "name" in player.raw_data["club"]
+                        await asyncio.sleep(1)
+                    except brawlstats.errors.RequestError as e:
+                        await asyncio.sleep(5)
+                        errors += 1
+                        if errors == 30:
+                            break
+                    except Exception as e:
+                        return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                                 description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
 
-                if player_in_club:
-                    if player.club.tag.strip("#") in clubs:
-                        reason = await self.config.guild(serverobj).blacklisted.get_raw(tag, "reason", default="")
-                        await midir.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                          description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
-
-            await midir.send(f"Finished {servername}")
-
-        await midir.send("Finished.")
+                    if player_in_club:
+                        if player.club.tag.strip("#") in clubs:
+                            reason = await self.config.guild(serverobj).blacklisted.get_raw(tag, "reason", default="")
+                            await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                              description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
+        except Exception as e:
+            await ch.send(e)
 
     @blacklistalert.before_loop
     async def before_blacklistalert(self):
