@@ -668,7 +668,7 @@ class BrawlStarsCog(commands.Cog):
             for ind, key in enumerate(keys):
                 if offline:
                     break
-                if keyword == "" or keyword is None:
+                if keyword == "":
                     try:
                         club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
                     except brawlstats.errors.RequestError as e:
@@ -734,7 +734,7 @@ class BrawlStarsCog(commands.Cog):
                         continue
 
                     e_name = f"<:bsband:600741378497970177> {clubs[i].name} [{key}] {clubs[i].tag} {info}"
-                    role_info = f"{role.mention}\n" if role is not None else ""
+                    role_info = f"{role.mention}\n" if roles and role is not None else ""
                     e_value = f"{role_info}<:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
                     embedFields.append([e_name, e_value])
 
@@ -788,7 +788,7 @@ class BrawlStarsCog(commands.Cog):
                 await msg.delete()
                 await ctx.send(embed=embedsToSend[0])
 
-        except Exception as e:
+        except ZeroDivisionError as e:
             return await ctx.send(
                 "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
 
