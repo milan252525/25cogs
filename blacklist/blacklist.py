@@ -258,11 +258,11 @@ class Blacklist(commands.Cog):
                         return await midir.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                                  description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
 
-                    if player_in_club:
-                        if player.club.tag.strip("#") in clubs:
-                            reason = await self.config.guild(server).blacklisted.get_raw(tag, "reason", default="")
-                            await midir.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                              description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
+                    #if player_in_club:
+                        #if player.club.tag.strip("#") in clubs:
+                    reason = await self.config.guild(server).blacklisted.get_raw(tag, "reason", default="")
+                    await midir.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                      description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
         except Exception as e:
             await midir.send(e)
 
