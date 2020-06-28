@@ -17,6 +17,7 @@ class Blacklist(commands.Cog):
         self.config.register_guild(**default_guild)
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
         self.spainblacklistjob.start()
+        self.blacklistalert.start()
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
@@ -31,6 +32,7 @@ class Blacklist(commands.Cog):
         
     def cog_unload(self):
         self.spainblacklistjob.cancel()
+        self.blacklistalert.cancel()
 
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
@@ -227,7 +229,7 @@ class Blacklist(commands.Cog):
     async def before_spainblacklistjob(self):
         await asyncio.sleep(5)
 
-    @commands.command()
+    @tasks.loop(hours=4)
     async def blacklistalert(self, ctx):
         midir = self.bot.get_user(359131399132807178)
         errors = 0
@@ -239,25 +241,36 @@ class Blacklist(commands.Cog):
             club = saved_clubs[key]["tag"]
             clubs.append(club)
 
-        asia = self.bot.get_guild(663716223258984496)
-        tags = await self.config.guild(asia).blacklisted()
-        for tag in tags:
-            try:
-                player = await self.ofcbsapi.get_player(tag)
-                player_in_club = "name" in player.raw_data["club"]
-                await asyncio.sleep(1)
-            except brawlstats.errors.RequestError as e:
-                await asyncio.sleep(5)
-                errors += 1
-                if errors == 30:
-                    break
-            except Exception as e:
-                return await midir.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                         description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
+        servers = await self.config.all_guilds()
+        for server in servers:
+            serverobj = self.bot.get_guild(server)
+            servername = serverobj.name
+            tags = await self.config.guild(serverobj).blacklisted()
+            for tag in tags:
+                try:
+                    player = await self.ofcbsapi.get_player(tag)
+                    player_in_club = "name" in player.raw_data["club"]
+                    await asyncio.sleep(1)
+                except brawlstats.errors.RequestError as e:
+                    await asyncio.sleep(5)
+                    errors += 1
+                    if errors == 30:
+                        break
+                except Exception as e:
+                    return await midir.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                             description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
 
-            if player_in_club:
-                await midir.send(player.club.name + player.club.tag)
-                if player.club.tag.strip("#") in clubs:
-                    reason = await self.config.guild(asia).blacklisted.get_raw(tag, "reason", default="")
-                    await midir.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                      description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
+                if player_in_club:
+                    await midir.send(player.club.name + player.club.tag)
+                    if player.club.tag.strip("#") in clubs:
+                        reason = await self.config.guild(serverobj).blacklisted.get_raw(tag, "reason", default="")
+                        await midir.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                          description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
+
+            await midir.send(f"Finished {servername}")
+
+        await midir.send("Finished.")
+
+    @blacklistalert.before_loop
+    async def before_blacklistalert(self):
+        await asyncio.sleep(5)
