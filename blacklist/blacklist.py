@@ -231,6 +231,7 @@ class Blacklist(commands.Cog):
     async def blacklistalert(self, ctx):
         midir = self.bot.get_user(359131399132807178)
 
-        servers = await self.config.all_guilds()
         for server in servers:
-            await midir.send(server.name)
+            serverobj = self.bot.get_guild(server)
+            servername = serverobj.name
+            await midir.send(servername)
