@@ -244,6 +244,7 @@ class Blacklist(commands.Cog):
 
             servers = await self.config.all_guilds()
             for server in servers:
+                await midir.send(server)
                 tags = await self.config.guild(server).blacklisted()
                 for tag in tags:
                     try:
