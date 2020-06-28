@@ -70,6 +70,7 @@ class Blacklist(commands.Cog):
             key = ""
             clubname = ""
             for k in (await self.config.guild(ctx.guild).blacklisted()).keys():
+                await ctx.send(k + " " + plr.tag)
                 if plr.tag.replace("#", "").lower() == k:
                     key = k
 
