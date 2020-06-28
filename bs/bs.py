@@ -728,7 +728,7 @@ class BrawlStarsCog(commands.Cog):
                     saved_clubs[key]['lastPosition'] = i
                     
                     info = saved_clubs[key]["info"] if "info" in saved_clubs[key] else ""
-                    role = saved_clubs[key]["role"] if "role" in saved_clubs[key] else None
+                    role = ctx.guild.get_role(saved_clubs[key]["role"]) if "role" in saved_clubs[key] else None
 
                     if low_clubs and len(clubs[i].members) >= 95:
                         continue
@@ -784,9 +784,12 @@ class BrawlStarsCog(commands.Cog):
             if len(embedsToSend) > 1:
                 await msg.delete()
                 await menu(ctx, embedsToSend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
-            else:
+            elif len(embedsToSend) == 1:
                 await msg.delete()
                 await ctx.send(embed=embedsToSend[0])
+            else:
+                await msg.delete()
+                await ctx.send("No clubs found!")
 
         except ZeroDivisionError as e:
             return await ctx.send(
