@@ -258,6 +258,6 @@ class Blacklist(commands.Cog):
             if player_in_club:
                 await midir.send(player.club.name + player.club.tag)
                 if player.club.tag.strip("#") in clubs:
-                    reason = await self.config.guild(server).blacklisted.get_raw(tag, "reason", default="")
+                    reason = await self.config.guild(asia).blacklisted.get_raw(tag, "reason", default="")
                     await midir.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                       description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
