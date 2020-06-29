@@ -243,6 +243,8 @@ class Blacklist(commands.Cog):
 
             servers = await self.config.all_guilds()
             for server in servers:
+                if server == "460550486257565697":
+                    continue
                 serverobj = self.bot.get_guild(server)
                 tags = await self.config.guild(serverobj).blacklisted()
                 for tag in tags:
