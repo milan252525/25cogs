@@ -246,6 +246,7 @@ class Blacklist(commands.Cog):
                 if server == "460550486257565697":
                     continue
                 serverobj = self.bot.get_guild(server)
+                servername = serverobj.name
                 tags = await self.config.guild(serverobj).blacklisted()
                 for tag in tags:
                     try:
@@ -266,6 +267,11 @@ class Blacklist(commands.Cog):
                             reason = await self.config.guild(serverobj).blacklisted.get_raw(tag, "reason", default="")
                             await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                               description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
+
+                await ch.send(f"Finished {servername}")
+
+            await ch.send("Finished")
+
         except Exception as e:
             await ch.send(e)
 
