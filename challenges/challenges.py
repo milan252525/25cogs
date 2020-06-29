@@ -119,6 +119,9 @@ class Challenges(commands.Cog):
                     group_plant = members[m]['plant']
                     progress = 0
                     user = labs.get_member(m)
+                    if user is None:
+                        await error_ch.send(m)
+                        continue
                     tag = tags[user.id]['tag'].replace("o", "0").replace("O", "0")
                     wins = members[m]['wins']
                     loses = members[m]['loses']
