@@ -5,6 +5,8 @@ from redbot.core import commands, Config, checks
 
 from bs.utils import badEmbed, goodEmbed, get_league_emoji, get_rank_emoji, get_brawler_emoji, remove_codes, calculate_starpoints
 
+from re import sub
+
 import asyncio
 import brawlstats
 
