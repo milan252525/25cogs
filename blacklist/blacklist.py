@@ -122,7 +122,6 @@ class Blacklist(commands.Cog):
                     await ctx.send(embed=discord.Embed(color=discord.Colour.green(), description=m))
 
     @commands.guild_only()
-    @commands.has_permissions(administrator=True)
     @blacklisted.command(name="add")
     async def blacklist_add(self, ctx, tag: str, *, reason: str = ""):
         """
@@ -168,7 +167,6 @@ class Blacklist(commands.Cog):
                 f"**Something went wrong, please send a personal message to LA Modmail bot or try again!** ({e})")
 
     @commands.guild_only()
-    @commands.has_permissions(administrator=True)
     @blacklisted.command(name="remove")
     async def blacklist_remove(self, ctx, tag: str):
         """
