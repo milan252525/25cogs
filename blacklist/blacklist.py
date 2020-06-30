@@ -229,7 +229,7 @@ class Blacklist(commands.Cog):
     async def before_spainblacklistjob(self):
         await asyncio.sleep(5)
 
-    @tasks.loop(hours=4)
+    @tasks.loop(hours=8)
     async def blacklistalert(self):
         try:
             ch = self.bot.get_channel(726824198663700540)
@@ -263,7 +263,16 @@ class Blacklist(commands.Cog):
 
                     if player_in_club:
                         if player.club.tag.strip("#") in clubs:
+                            for role in ch.guild.roles:
+                                if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(r'[^\x00-\x7f]', r'', player.club.name).strip():
+                                    roletoping = role
+                                    break
+                            if roletoping is None:
+                                party = f"Couldn't find a role for the club {player.club.name}"
+                            else:
+                                party = role.mention
                             reason = await self.config.guild(serverobj).blacklisted.get_raw(tag, "reason", default="")
+                            await ch.send(f"Source: {serverobj.name}\nResponsible party: {party}")
                             await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                               description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
         except Exception as e:
