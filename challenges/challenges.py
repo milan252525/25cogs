@@ -115,6 +115,8 @@ class Challenges(commands.Cog):
             bs_conf = self.get_bs_config()
             tags = await bs_conf.all_users()
             for m in members:
+                if "tracking" not in members[m]:
+                    continue
                 if members[m]['tracking']:
                     group_plant = members[m]['plant']
                     progress = 0
