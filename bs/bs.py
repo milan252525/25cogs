@@ -4,7 +4,8 @@ from redbot.core.utils.embed import randomize_colour
 from redbot.core.utils.menus import menu, prev_page, next_page
 from discord.ext import tasks
 
-from .utils import badEmbed, goodEmbed, get_league_emoji, get_rank_emoji, get_brawler_emoji, remove_codes, calculate_starpoints, get_gamemode_id, get_gamemode_emoji
+from .utils import badEmbed, goodEmbed, get_league_emoji, get_rank_emoji, get_brawler_emoji, 
+    remove_codes, calculate_starpoints, get_gamemode_id, get_gamemode_emoji, club_status
 
 from random import choice
 import asyncio
@@ -378,8 +379,8 @@ class BrawlStarsCog(commands.Cog):
             rank = discord.utils.get(self.bot.emojis, name=f"rank_{br['rank']}")
             ename = f"{get_brawler_emoji(br['name'])} {br['name'].lower().title()}"
             evalue = f"{rank} `{br['trophies']}/{br['highestTrophies']}`\n"
-            evalue += f"<:star_power:729732781638156348>`{len(br['starPowers'])}` "
-            evalue += f"<:gadget:716341776608133130>`{len(br['gadgets'])}`"
+            evalue += f"<:star_power:729732781638156348> `{len(br['starPowers'])}` "
+            evalue += f"<:gadget:716341776608133130> `{len(br['gadgets'])}`"
             evalue = evalue.strip()
             embedfields.append([ename, evalue])
         
@@ -654,8 +655,8 @@ class BrawlStarsCog(commands.Cog):
             name="Members",
             value=f"<:icon_gameroom:553299647729238016> {len(club.members)}/100")
         embed.add_field(
-            name="Status",
-            value=f"<:bslock:552560387279814690> {club.type.title()}")
+            name=club_status[club.type.lower()]['name'],
+            value=club_status[club.type.lower()]['emoji'])
         topm = ""
         for i in range(5):
             try:

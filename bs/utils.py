@@ -11,6 +11,12 @@ def goodEmbed(text):
     gembed.set_author(name=text, icon_url="https://i.imgur.com/fSAGoHh.png")
     return gembed
 
+club_status = {
+    "inviteonly" : {"name": "Invite Only", "emoji": "<:invite_only:729734736490266625>"},
+    "closed" : {"name": "Closed", "emoji": "<:locked:729734736573890570>"},
+    "open" : {"name": "Open", "emoji": "<:open:729734736695787564> "}
+}
+
 ids = {
     'supercityrampage': 16, 
     'hotzone': 15, 
