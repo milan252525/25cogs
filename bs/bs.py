@@ -463,8 +463,7 @@ class BrawlStarsCog(commands.Cog):
             embed.set_author(name=f"{player.name}'s {data['name']}", icon_url=data['imageUrl2'])
         else:
             embed.set_author(name=f"{data['name']} (Not unlocked)", icon_url=data['imageUrl2'])
-        embed.description = "```" + data['description'] + "```"
-        embed.add_field(name="Rarity", value=f"<:brawlers:614518101983232020> {data['rarity']}")
+        embed.description = f"<:brawlers:614518101983232020> {data['rarity']}" + "\n```" + data['description'] + "```"
         if unlocked:
             rank = discord.utils.get(self.bot.emojis, name=f"rank_{br['rank']}")
             embed.add_field(
