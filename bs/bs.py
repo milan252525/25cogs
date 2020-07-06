@@ -533,35 +533,53 @@ class BrawlStarsCog(commands.Cog):
         brawlers = (await self.starlist_request(f"https://api.starlist.pro/brawlers"))['list']
         stats = data['stats']
         
-        wr = ""
-        stats.sort(key=itemgetter('winRate'), reverse=True)
-        for counter, br in enumerate(stats[:10], start=1):
-            name = None
-            for b in brawlers:
-                if b['id'] == br['brawler']:
-                    name = b['name'].upper()
-                    break
-            if name is None:
-                continue                               
-            wr += f"{get_brawler_emoji(name)} `{int(br['winRate'])}%` "
-            if counter == 5:
-                wr += "\n"
-        embed.add_field(name="Best Win Rates", value=wr, inline=False)
-                                            
-        ur = ""
-        stats.sort(key=itemgetter('useRate'), reverse=True)
-        for counter, br in enumerate(stats[:10], start=1):
-            name = None
-            for b in brawlers:
-                if b['id'] == br['brawler']:
-                    name = b['name'].upper()
-                    break
-            if name is None:
-                continue                               
-            ur += f"{get_brawler_emoji(name)} `{int(br['useRate'])}%` "
-            if counter == 5:
-                ur += "\n"
-        embed.add_field(name="Highest Use Rates", value=ur, inline=False)
+        if 'winRate' in brawlers[0]:
+            wr = ""
+            stats.sort(key=itemgetter('winRate'), reverse=True)
+            for counter, br in enumerate(stats[:10], start=1):
+                name = None
+                for b in brawlers:
+                    if b['id'] == br['brawler']:
+                        name = b['name'].upper()
+                        break
+                if name is None:
+                    continue                               
+                wr += f"{get_brawler_emoji(name)} `{int(br['winRate'])}%` "
+                if counter == 5:
+                    wr += "\n"
+            embed.add_field(name="Best Win Rates", value=wr, inline=False)
+                   
+        if 'bossWinRate' in brawlers[0]:
+            bwr = ""
+            stats.sort(key=itemgetter('bossWinRate'), reverse=True)
+            for counter, br in enumerate(stats[:10], start=1):
+                name = None
+                for b in brawlers:
+                    if b['id'] == br['brawler']:
+                        name = b['name'].upper()
+                        break
+                if name is None:
+                    continue                               
+                bwr += f"{get_brawler_emoji(name)} `{int(br['bossWinRate'])}%` "
+                if counter == 5:
+                    bwr += "\n"
+            embed.add_field(name="Highest Use Rates", value=bwr, inline=False)
+                  
+        if 'useRate' in brawlers[0]:
+            ur = ""
+            stats.sort(key=itemgetter('useRate'), reverse=True)
+            for counter, br in enumerate(stats[:10], start=1):
+                name = None
+                for b in brawlers:
+                    if b['id'] == br['brawler']:
+                        name = b['name'].upper()
+                        break
+                if name is None:
+                    continue                               
+                ur += f"{get_brawler_emoji(name)} `{int(br['useRate'])}%` "
+                if counter == 5:
+                    ur += "\n"
+            embed.add_field(name="Highest Use Rates", value=ur, inline=False)
                                             
         if result_map['disabled']:
             embed.description = "This map is currently disabled."
