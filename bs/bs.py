@@ -4,8 +4,8 @@ from redbot.core.utils.embed import randomize_colour
 from redbot.core.utils.menus import menu, prev_page, next_page
 from discord.ext import tasks
 
-from .utils import badEmbed, goodEmbed, get_league_emoji, get_rank_emoji, get_brawler_emoji, 
-remove_codes, calculate_starpoints, get_gamemode_id, get_gamemode_emoji, club_status
+from .utils import badEmbed, goodEmbed, get_league_emoji, get_rank_emoji, get_brawler_emoji
+from .utils import remove_codes, calculate_starpoints, get_gamemode_id, get_gamemode_emoji, club_status
 
 from random import choice
 import asyncio
