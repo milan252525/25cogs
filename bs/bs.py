@@ -657,7 +657,7 @@ class BrawlStarsCog(commands.Cog):
             return
 
         if club.description is not None:
-            embed = discord.Embed(description=f"```{remove_codes(club.description)}```")
+            embed = discord.Embed(description=f"```{club.description}```")
         else:
             embed = discord.Embed(description="```None```")
         embed.set_author(name=f"{club.name} {club.tag}")
