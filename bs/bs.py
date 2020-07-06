@@ -464,6 +464,7 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(
             name="Trophies",
             value=f"{rank} {br.get('trophies')}/{br.get('highestTrophies')}")
+        embed.set_footer(text=br['class'])
         embed.add_field(name="Power Level", value=f"<:pp:664267845336825906> {br.get('power')}")
         starpowers = ""
         gadgets = ""
@@ -489,7 +490,10 @@ class BrawlStarsCog(commands.Cog):
     def time_left(self, seconds):
         hours, remainder = divmod(seconds, 3600)
         minutes, _ = divmod(remainder, 60)
-        return "{}h {:02}m".format(int(hours), int(minutes))
+        if hours <= 24:
+            return f"{}h {:02}m".format(int(hours), int(minutes))
+        else:
+            return f"{hours//24}d {(hours//24)%24}h"
                        
     @commands.command(aliases=['e'])
     async def events(self, ctx):
