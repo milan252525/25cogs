@@ -456,7 +456,7 @@ class BrawlStarsCog(commands.Cog):
         embed = discord.Embed(color=discord.Colour.from_rgb(
             int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
         embed.set_author(
-            name=f"{player.name}'s {data['name']}'",
+            name=f"{player.name}'s {data['name']}",
             icon_url=data['imageUrl2'])
         embed.description = "```" + data['description'] + "```"
         embed.add_field(name="Rarity", value=f"<:brawlers:614518101983232020> {data['rarity']}")
