@@ -826,7 +826,8 @@ class BrawlStarsCog(commands.Cog):
                 embed.set_author(
                     name=f"{ctx.guild.name} clubs",
                     icon_url=ctx.guild.icon_url)
-                footer = "API is offline, showing last saved data." if offline else f"Need more info about a club? Use {ctx.prefix}club [key]"
+                page = (len(embedFields) // 8) + 1
+                footer = f"[{page}/{len(embedFields)}] API is offline, showing last saved data." if offline else f"[{page}/{len(embedFields)}] Need more info about a club? Use {ctx.prefix}club [key]"
                 embed.set_footer(text=footer)
                 for e in embedFields[i:i + 8]:
                     embed.add_field(name=e[0], value=e[1], inline=False)
