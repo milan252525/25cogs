@@ -249,7 +249,7 @@ class BrawlStarsCog(commands.Cog):
         gadgets = sum([len(x['gadgets']) for x in player.raw_data['brawlers']])
         embed.add_field(
             name="Unlocked Brawlers",
-            value=f"<:brawlers:614518101983232020> {len(player.brawlers)} <:starpower:664267686720700456> {star_powers} <:gadget:716341776608133130> {gadgets}")
+            value=f"<:brawlers:614518101983232020> {len(player.brawlers)} <:star_power:729732781638156348> {star_powers} <:gadget:716341776608133130> {gadgets}")
         if "tag" in player.raw_data["club"]:
             embed.add_field(
                 name="Club",
@@ -379,15 +379,15 @@ class BrawlStarsCog(commands.Cog):
             ename = f"{get_brawler_emoji(br['name'])} {br['name'].lower().capitalize()}"
             evalue = f"{rank} `{br['trophies']}/{br['highestTrophies']}`\n"
             evalue += f"<:gadget:716341776608133130> {len(br['gadgets'])} "
-            evalue += f"<:starpower:664267686720700456> {len(br['starPowers'])} "
+            evalue += f"<:star_power:729732781638156348> {len(br['starPowers'])} "
             evalue = evalue.strip()
             embedfields.append([ename, evalue])
         
         embedstosend = []
-        for i in range(0, len(embedfields), 12):
+        for i in range(0, len(embedfields), 15):
             embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}/38):")
             embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
-            for e in embedfields[i:i + 12]:
+            for e in embedfields[i:i + 15]:
                 embed.add_field(name=e[0], value=e[1], inline=True)
             embedstosend.append(embed)
 
@@ -467,7 +467,7 @@ class BrawlStarsCog(commands.Cog):
             gadgets += f"<:gadget:716341776608133130> {gadget.get('name')}\n"
         embed.add_field(name="Gadgets", value=gadgets if gadgets != "" else "<:gadget:716341776608133130> None")
         for star in br.get('starPowers'):
-            starpowers += f"<:starpower:664267686720700456> {star.get('name')}\n"
+            starpowers += f"<:star_power:729732781638156348> {star.get('name')}\n"
         embed.add_field(name="Star Powers", value=starpowers if starpowers != "" else "<:starpower:664267686720700456> None")
         await ctx.send(embed=embed)
     
