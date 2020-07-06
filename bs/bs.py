@@ -683,6 +683,7 @@ class BrawlStarsCog(commands.Cog):
         low_clubs = False
         roles = False
         skip_errors = False
+        reverse_order = False
         await ctx.trigger_typing()
         if "offline" in keyword:
             offline = True
@@ -699,6 +700,10 @@ class BrawlStarsCog(commands.Cog):
         if "skiperrors" in keyword:
             skip_errors = True
             keyword = keyword.replace("skiperrors", "").strip()
+
+        if "reverse" in keyword:
+            reverse_order = True
+            keyword = keyword.replace("reverse", "").strip()
 
         if len((await self.config.guild(ctx.guild).clubs()).keys()) < 1:
             return await ctx.send(
@@ -761,8 +766,7 @@ class BrawlStarsCog(commands.Cog):
             loadingembed = discord.Embed(colour=discord.Colour.red(), description="Almost there!", title="Creating the embed...")
             if not offline:
                 await msg.edit(embed=loadingembed)
-                clubs = sorted(clubs, key=lambda sort: (
-                    sort.trophies), reverse=True)
+                clubs = sorted(clubs, key=lambda sort: (sort.trophies), reverse=not reverse_order)
 
                 for i in range(len(clubs)):
                     key = ""
@@ -795,7 +799,7 @@ class BrawlStarsCog(commands.Cog):
                 offclubs = []
                 for k in saved_clubs.keys():
                     offclubs.append([saved_clubs[k]['lastPosition'], k])
-                offclubs = sorted(offclubs, key=lambda x: x[0])
+                offclubs = sorted(offclubs, key=lambda x: x[0], reverse=reverse_order)
 
                 for club in offclubs:
                     ckey = club[1]
