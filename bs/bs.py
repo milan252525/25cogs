@@ -510,7 +510,7 @@ class BrawlStarsCog(commands.Cog):
             if ev['modifier'] is not None:
                 modifier = f"↳ Modifier: {ev['modifier']['name']}\n"
             active += f"**{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n{modifier}"
-        embed.add_field(name="ACTIVE", value=active)
+        embed.add_field(name="ACTIVE", value=active, inline=False)
         upcoming = ""
         for ev in events['upcoming']:
             if ev['slot']['name'] == "Duo Showdown":
@@ -521,7 +521,7 @@ class BrawlStarsCog(commands.Cog):
             start = datetime.datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
             diff = self.time_left((start - time_now).total_seconds())
             upcoming += f"**{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n↳ Starts in: {diff}\n{modifier}"
-        embed.add_field(name="UPCOMING", value=upcoming)
+        embed.add_field(name="UPCOMING", value=upcoming, inline=False)
         await ctx.send(embed=embed)
                         
     @commands.command(aliases=['m'])
@@ -547,7 +547,7 @@ class BrawlStarsCog(commands.Cog):
         if len(stats) > 0 and 'winRate' in stats[0]:
             wr = ""
             stats.sort(key=itemgetter('winRate'), reverse=True)
-            for counter, br in enumerate(stats[:10], start=1):
+            for counter, br in enumerate(stats[:15], start=1):
                 name = None
                 for b in brawlers:
                     if b['id'] == br['brawler']:
@@ -556,14 +556,14 @@ class BrawlStarsCog(commands.Cog):
                 if name is None:
                     continue                               
                 wr += f"{get_brawler_emoji(name)} `{int(br['winRate'])}%` "
-                if counter == 5:
+                if counter % 5 == 0:
                     wr += "\n"
             embed.add_field(name="Best Win Rates", value=wr, inline=False)
                    
         if len(stats) > 0 and 'bossWinRate' in stats[0]:
             bwr = ""
             stats.sort(key=itemgetter('bossWinRate'), reverse=True)
-            for counter, br in enumerate(stats[:10], start=1):
+            for counter, br in enumerate(stats[:15], start=1):
                 name = None
                 for b in brawlers:
                     if b['id'] == br['brawler']:
@@ -572,14 +572,14 @@ class BrawlStarsCog(commands.Cog):
                 if name is None:
                     continue                               
                 bwr += f"{get_brawler_emoji(name)} `{int(br['bossWinRate'])}%` "
-                if counter == 5:
+                if counter % 5 == 0:
                     bwr += "\n"
             embed.add_field(name="Best Boss Win Rates", value=bwr, inline=False)
                   
         if len(stats) > 0 and 'useRate' in stats[0]:
             ur = ""
             stats.sort(key=itemgetter('useRate'), reverse=True)
-            for counter, br in enumerate(stats[:10], start=1):
+            for counter, br in enumerate(stats[:15], start=1):
                 name = None
                 for b in brawlers:
                     if b['id'] == br['brawler']:
@@ -588,7 +588,7 @@ class BrawlStarsCog(commands.Cog):
                 if name is None:
                     continue                               
                 ur += f"{get_brawler_emoji(name)} `{int(br['useRate'])}%` "
-                if counter == 5:
+                if counter % 5 == 0:
                     ur += "\n"
             embed.add_field(name="Highest Use Rates", value=ur, inline=False)
                                             
