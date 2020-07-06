@@ -439,12 +439,13 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(
                 "****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
+        unlocked = False
         br = None
         for b in player.raw_data['brawlers']:
             if b['name'] == brawler.upper():
                 br = b
-        if br is None:
-            return await ctx.send(embed=badEmbed(f"No such brawler found! If the brawler's name contains spaces surround it with quotes!"))
+                unlocked = True
+                break
 
         data = None
         for b in brawler_data:
@@ -452,20 +453,26 @@ class BrawlStarsCog(commands.Cog):
                 data = b
                 break
 
+        if br is None and data is None:
+            return await ctx.send(embed=badEmbed(f"No such brawler found! If the brawler's name contains spaces surround it with quotes!"))
+
         colour = player.name_color if player.name_color is not None else "0xffffffff"
         embed = discord.Embed(color=discord.Colour.from_rgb(
             int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
-        embed.set_author(
-            name=f"{player.name}'s {data['name']}",
-            icon_url=data['imageUrl2'])
+        if unlocked:
+            embed.set_author(name=f"{player.name}'s {data['name']}", icon_url=data['imageUrl2'])
+        else:
+            embed.set_author(name=f"{data['name']} (Not unlocked)", icon_url=data['imageUrl2'])
         embed.description = "```" + data['description'] + "```"
         embed.add_field(name="Rarity", value=f"<:brawlers:614518101983232020> {data['rarity']}")
         rank = discord.utils.get(self.bot.emojis, name=f"rank_{br['rank']}")
-        embed.add_field(
-            name="Trophies",
-            value=f"{rank} {br.get('trophies')}/{br.get('highestTrophies')}")
-        embed.set_footer(text=br['class'])
-        embed.add_field(name="Power Level", value=f"<:pp:664267845336825906> {br.get('power')}")
+        if unlocked:
+            embed.add_field(
+                name="Trophies",
+                value=f"{rank} {br.get('trophies')}/{br.get('highestTrophies')}")
+        embed.set_footer(text=data['class'])
+        if unlocked:
+            embed.add_field(name="Power Level", value=f"<:pp:664267845336825906> {br.get('power')}")
         starpowers = ""
         gadgets = ""
         for star in data['starPowers']:
