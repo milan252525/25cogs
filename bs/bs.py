@@ -784,8 +784,8 @@ class BrawlStarsCog(commands.Cog):
 
                     e_name = f"<:bsband:600741378497970177> {clubs[i].name} [{key}] {clubs[i].tag} {info}"
                     role_info = f"{role.mention}\n" if roles and role is not None else ""
-                    e_value = f"{role_info}<:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}`{clubs[i].required_trophies}+` "
-                    e_value += f"<:icon_gameroom:553299647729238016>`{len(clubs[i].members)}` {club_status[clubs[i].type.lower()]['emoji']}"
+                    e_value = f"{role_info}{club_status[clubs[i].type.lower()]['emoji']} <:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}"
+                    e_value += f"`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
                     embedFields.append([e_name, e_value])
 
                 await self.config.guild(ctx.guild).set_raw("clubs", value=saved_clubs)
