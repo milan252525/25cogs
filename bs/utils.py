@@ -124,6 +124,8 @@ def get_brawler_emoji(name : str):
         return "<:gale:710492017905500191>"
     elif name == "NANI":
         return "<:nani:718555376340959242>"
+    elif name == "SURGE":
+        return "<:surge:729632664218238986>"
     
 def remove_codes(text : str):
     toremove = ["</c>", "<c1>", "<c2>", "<c3>", "<c4>", "<c5>", "<c6>", "<c7>", "<c8>", "<c9>", "<c0>"]
