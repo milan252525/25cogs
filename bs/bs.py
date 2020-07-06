@@ -533,7 +533,7 @@ class BrawlStarsCog(commands.Cog):
         brawlers = (await self.starlist_request(f"https://api.starlist.pro/brawlers"))['list']
         stats = data['stats']
         
-        if 'winRate' in stats[0]:
+        if 'winRate' in stats[0] and len(stats) > 0:
             wr = ""
             stats.sort(key=itemgetter('winRate'), reverse=True)
             for counter, br in enumerate(stats[:10], start=1):
@@ -549,7 +549,7 @@ class BrawlStarsCog(commands.Cog):
                     wr += "\n"
             embed.add_field(name="Best Win Rates", value=wr, inline=False)
                    
-        if 'bossWinRate' in stats[0]:
+        if 'bossWinRate' in stats[0] and len(stats) > 0:
             bwr = ""
             stats.sort(key=itemgetter('bossWinRate'), reverse=True)
             for counter, br in enumerate(stats[:10], start=1):
@@ -565,7 +565,7 @@ class BrawlStarsCog(commands.Cog):
                     bwr += "\n"
             embed.add_field(name="Best Boss Win Rates", value=bwr, inline=False)
                   
-        if 'useRate' in stats[0]:
+        if 'useRate' in stats[0] and len(stats) > 0:
             ur = ""
             stats.sort(key=itemgetter('useRate'), reverse=True)
             for counter, br in enumerate(stats[:10], start=1):
