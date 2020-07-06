@@ -800,7 +800,7 @@ class BrawlStarsCog(commands.Cog):
                 offclubs = []
                 for k in saved_clubs.keys():
                     offclubs.append([saved_clubs[k]['lastPosition'], k])
-                offclubs = sorted(offclubs, key=lambda x: x[0], reverse=reverse_order)
+                offclubs = sorted(offclubs, key=lambda x: x[0], reverse=not reverse_order)
 
                 for club in offclubs:
                     ckey = club[1]
