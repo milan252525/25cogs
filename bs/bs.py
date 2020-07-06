@@ -474,6 +474,8 @@ class BrawlStarsCog(commands.Cog):
         for br in brawlers:
             rank = discord.utils.get(self.bot.emojis, name=f"rank_{br['rank']}")
             message += f"{get_brawler_emoji(br['name'])} {rank} `{br['trophies']} ({br['highestTrophies']})`\n"
+            if len(message) > 1800:
+                break
 
         await ctx.send(message)
 
