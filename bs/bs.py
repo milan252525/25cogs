@@ -377,7 +377,8 @@ class BrawlStarsCog(commands.Cog):
         
         for c, br in enumerate(brawlers, start=1):
             rank = discord.utils.get(self.bot.emojis, name=f"rank_{br['rank']}")
-            ename = f"{get_brawler_emoji(br['name'])} {br['name'].lower().title()}"
+            ename = f"{get_brawler_emoji(br['name'])} {br['name'].lower().title()} "
+            ename = f"<:pp:664267845336825906> {br['power']}"
             evalue = f"{rank} `{br['trophies']}/{br['highestTrophies']}`\n"
             evalue += f"<:star_power:729732781638156348> `{len(br['starPowers'])}` "
             evalue += f"<:gadget:716341776608133130> `{len(br['gadgets'])}`"
@@ -401,7 +402,7 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed=embedstosend[0])
 
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.command()
+    @commands.command(aliases=['br'])
     async def brawler(self, ctx, brawler: str, member: Union[discord.Member, str] = None):
         """Brawler specific info"""
         await ctx.trigger_typing()
@@ -415,10 +416,10 @@ class BrawlStarsCog(commands.Cog):
 
         tag = await self.config.user(member).tag()
         if tag is None:
-            return await ctx.send(embed=badEmbed(f"You have no tag saved! Use {prefix}bssave <tag>"))
+            return await ctx.send(embed=badEmbed(f"You have no tag saved! Use {prefix}save <tag>"))
 
         if tag is None or tag == "":
-            desc = "/p\n/bsprofile @user\n/p discord_name\n/p discord_id\n/p #CRTAG"
+            desc = "/p\n/profile @user\n/p discord_name\n/p discord_id\n/p #BSTAG"
             embed = discord.Embed(
                 title="Invalid argument!",
                 colour=discord.Colour.red(),
@@ -426,7 +427,7 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(embed=embed)
         try:
             player = await self.ofcbsapi.get_player(tag)
-            #brawler_data = await self.starlist_request("https://api.starlist.pro/brawlers")
+            brawler_data = (await self.starlist_request("https://api.starlist.pro/brawlers"))['list']
 
         except brawlstats.errors.NotFoundError:
             return await ctx.send(embed=badEmbed("No player with this tag found, try again!"))
@@ -440,36 +441,47 @@ class BrawlStarsCog(commands.Cog):
 
         br = None
         for b in player.raw_data['brawlers']:
-            if b.get('name') == brawler.upper():
+            if b['name'] == brawler.upper():
                 br = b
         if br is None:
             return await ctx.send(embed=badEmbed(f"No such brawler found! If the brawler's name contains spaces surround it with quotes!"))
+
+        data = None
+        for b in brawl_data:
+            if b['id'] == br['id']:
 
         colour = player.name_color if player.name_color is not None else "0xffffffff"
         embed = discord.Embed(color=discord.Colour.from_rgb(
             int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
         embed.set_author(
-            name=f"{player.name} {player.raw_data['tag']}",
-            icon_url=member.avatar_url if isinstance(member, discord.Member) else "https://i.imgur.com/ZwIP41S.png")
-        embed.add_field(
-            name="Brawler",
-            value=f"{get_brawler_emoji(brawler.upper())} {brawler.lower().capitalize()}")
+            name=f"{player.name}'s {data['name']}'",
+            icon_url=data['imageUrl2'])
+        embed.description = "```" + data['description'] + "```"
+        embed.add_field(name="Rarity", value=f"<:brawlers:614518101983232020> {data['rarity']}")
+        rank = discord.utils.get(self.bot.emojis, name=f"rank_{br['rank']}")
         embed.add_field(
             name="Trophies",
-            value=f"<:bstrophy:552558722770141204> {br.get('trophies')}")
-        embed.add_field(
-            name="Highest Trophies",
-            value=f"{get_rank_emoji(br.get('rank'))} {br.get('highestTrophies')}")
-        embed.add_field(name="Power Level",
-                        value=f"<:pp:664267845336825906> {br.get('power')}")
+            value=f"{rank} {br.get('trophies')}/{br.get('highestTrophies')}")
+        embed.add_field(name="Power Level", value=f"<:pp:664267845336825906> {br.get('power')}")
         starpowers = ""
         gadgets = ""
-        for gadget in br.get('gadgets'):
-            gadgets += f"<:gadget:716341776608133130> {gadget.get('name')}\n"
-        embed.add_field(name="Gadgets", value=gadgets if gadgets != "" else "<:gadget:716341776608133130> None")
-        for star in br.get('starPowers'):
-            starpowers += f"<:star_power:729732781638156348> {star.get('name')}\n"
-        embed.add_field(name="Star Powers", value=starpowers if starpowers != "" else "<:starpower:664267686720700456> None")
+        for star in data['starPowers']:
+            owned = False
+            for sp in br['starPowers']:
+                if star['id'] == sp['id']:
+                    owned = True
+            emoji = "<:star_power:729732781638156348>" if owned else "<:sp_locked:729751963549302854>"
+            starpowers += f"{emoji} {star['name']}\n`{star['description']}`\n"
+        embed.add_field(name="Star Powers", value=starpowers)
+        
+        for gadget in data['gadgets']:
+            owned = False
+            for ga in br['gadgets']:
+                if gadget['id'] == ga['id']:
+                    owned = True
+            emoji = "<:gadget:716341776608133130>" if owned else "<:ga_locked:729752493793476759>"
+            gadgets += f"{emoji} {gadget['name']}\n`{gadget['description']}`\n"
+        embed.add_field(name="Gadgets", value=gadgets)
         await ctx.send(embed=embed)
     
     def time_left(self, seconds):
