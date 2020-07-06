@@ -447,7 +447,7 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(embed=badEmbed(f"No such brawler found! If the brawler's name contains spaces surround it with quotes!"))
 
         data = None
-        for b in brawl_data:
+        for b in brawler_data:
             if b['id'] == br['id']:
                 data = b
                 break
