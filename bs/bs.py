@@ -510,7 +510,7 @@ class BrawlStarsCog(commands.Cog):
             if ev['modifier'] is not None:
                 modifier = f"↳ Modifier: {ev['modifier']['name']}\n"
             active += f"**{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n{modifier}"
-        embed.add_field(name="ACTIVE", value=active, inline=False)
+        embed.add_field(name="ACTIVE", value=active)
         upcoming = ""
         for ev in events['upcoming']:
             if ev['slot']['name'] == "Duo Showdown":
@@ -521,7 +521,7 @@ class BrawlStarsCog(commands.Cog):
             start = datetime.datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
             diff = self.time_left((start - time_now).total_seconds())
             upcoming += f"**{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n↳ Starts in: {diff}\n{modifier}"
-        embed.add_field(name="UPCOMING", value=upcoming, inline=False)
+        embed.add_field(name="UPCOMING", value=upcoming)
         await ctx.send(embed=embed)
                         
     @commands.command(aliases=['m'])
