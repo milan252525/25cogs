@@ -563,7 +563,7 @@ class BrawlStarsCog(commands.Cog):
                 bwr += f"{get_brawler_emoji(name)} `{int(br['bossWinRate'])}%` "
                 if counter == 5:
                     bwr += "\n"
-            embed.add_field(name="Highest Use Rates", value=bwr, inline=False)
+            embed.add_field(name="Best Boss Win Rates", value=bwr, inline=False)
                   
         if 'useRate' in stats[0]:
             ur = ""
