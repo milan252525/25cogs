@@ -344,102 +344,6 @@ class BrawlStarsCog(commands.Cog):
                             embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
 
         if tag is None or tag == "":
-            desc = "/p\n/bsprofile @user\n/p discord_name\n/p discord_id\n/p #CRTAG"
-            embed = discord.Embed(
-                title="Invalid argument!",
-                colour=discord.Colour.red(),
-                description=desc)
-            return await ctx.send(embed=embed)
-        try:
-            player = await self.ofcbsapi.get_player(tag)
-
-        except brawlstats.errors.NotFoundError:
-            return await ctx.send(embed=badEmbed("No player with this tag found, try again!"))
-
-        except brawlstats.errors.RequestError as e:
-            return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-
-        except Exception as e:
-            return await ctx.send(
-                "****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
-
-        colour = player.name_color if player.name_color is not None else "0xffffffff"
-
-        player_icon_id = player.raw_data["icon"]["id"]
-        icons = await self.starlist_request("https://api.starlist.pro/icons")
-        player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
-        brawlers = []
-        for brawler in player.raw_data['brawlers']:
-            pair = []
-            pair.append(brawler.get('name'))
-            pair.append(brawler.get('trophies'))
-            brawlers.append(pair)
-        brawlers = sorted(brawlers, key=lambda x: x[1], reverse=True)
-        embedfields = []
-        for brawler in brawlers:
-            br = None
-            for brawl in player.raw_data['brawlers']:
-                if brawl.get('name') == brawler[0]:
-                    br = brawl
-            if br.get('name') is not None:
-                ename = f"{get_brawler_emoji(br.get('name'))} {br.get('name').lower().capitalize()}"
-            elif br.get('name') is None:
-                emoji = get_brawler_emoji("NANI")
-                ename = f"{emoji} Nani"
-            evalue = f"<:bstrophy:552558722770141204> `{br.get('trophies')}` {get_rank_emoji(br.get('rank'))} `{br.get('highestTrophies')}`\n"
-            evalue += f"<:gadget:716341776608133130> {len(br.get('gadgets'))} "
-            evalue += f"<:starpower:664267686720700456> {len(br.get('starPowers'))} "
-            evalue = evalue.strip()
-            embedfields.append([ename, evalue])
-
-        embedstosend = []
-        for i in range(0, len(embedfields), 9):
-            embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}\\37):")
-            embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
-            for e in embedfields[i:i + 9]:
-                embed.add_field(name=e[0], value=e[1], inline=True)
-            embedstosend.append(embed)
-
-        for i in range(len(embedstosend)):
-            embedstosend[i].set_footer(text=f"Page {i+1}/{len(embedstosend)}\n/brawler name for more stats")
-
-        if len(embedstosend) > 1:
-            await menu(ctx, embedstosend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
-        else:
-            await ctx.send(embed=embedstosend[0])
-
-    @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.command(aliases=['b2'])
-    async def brawlers2(self, ctx, *, member: Union[discord.Member, str] = None):
-        """Brawl Stars brawlers"""
-        await ctx.trigger_typing()
-        prefix = ctx.prefix
-        tag = ""
-        member = ctx.author if member is None else member
-
-        if isinstance(member, discord.Member):
-            tag = await self.config.user(member).tag()
-            if tag is None:
-                return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
-        elif member.startswith("#"):
-            tag = member.upper().replace('O', '0')
-        else:
-            try:
-                member = discord.utils.get(ctx.guild.members, id=int(member))
-                if member is not None:
-                    tag = await self.config.user(member).tag()
-                    if tag is None:
-                        return await ctx.send(
-                            embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
-            except ValueError:
-                member = discord.utils.get(ctx.guild.members, name=member)
-                if member is not None:
-                    tag = await self.config.user(member).tag()
-                    if tag is None:
-                        return await ctx.send(
-                            embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
-
-        if tag is None or tag == "":
             desc = "/b\n/brawlers @user\n/b discord_name\n/b discord_id\n/b #BSTAG"
             embed = discord.Embed(
                 title="Invalid argument!",
@@ -480,15 +384,15 @@ class BrawlStarsCog(commands.Cog):
             embedfields.append([ename, evalue])
         
         embedstosend = []
-        for i in range(0, len(embedfields), 9):
-            embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}\\37):")
+        for i in range(0, len(embedfields), 12):
+            embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}/38):")
             embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
-            for e in embedfields[i:i + 9]:
+            for e in embedfields[i:i + 12]:
                 embed.add_field(name=e[0], value=e[1], inline=True)
             embedstosend.append(embed)
 
         for i in range(len(embedstosend)):
-            embedstosend[i].set_footer(text=f"Page {i+1}/{len(embedstosend)}\n/brawler name for more stats")
+            embedstosend[i].set_footer(text=f"Page {i+1}/{len(embedstosend)}\n/brawler <name> for more stats")
 
         if len(embedstosend) > 1:
             await menu(ctx, embedstosend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
