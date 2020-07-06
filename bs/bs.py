@@ -543,7 +543,7 @@ class BrawlStarsCog(commands.Cog):
                     break
             if name is None:
                 continue                               
-            wr += f"{get_brawler_emoji(name)}{br['winRate']}% "
+            wr += f"{get_brawler_emoji(name)}`{int(br['winRate'])}%` "
         embed.add_field(name="Best winrates", value=wr)
                                             
         if result_map['disabled']:
