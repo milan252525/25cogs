@@ -240,7 +240,7 @@ class BrawlStarsCog(commands.Cog):
             value=f"{get_league_emoji(player.trophies)} {player.trophies} (<:starpoint:661265872891150346> {calculate_starpoints(player)})")
         embed.add_field(
             name="Highest Trophies",
-            value=f"<:totaltrophies:614517396111097866> {player.highest_trophies}")
+            value=f"{get_league_emoji(player.highest_trophies)} {player.highest_trophies}")
         embed.add_field(
             name="Level",
             value=f"<:exp:614517287809974405> {player.exp_level}")
