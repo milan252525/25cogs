@@ -535,7 +535,7 @@ class BrawlStarsCog(commands.Cog):
         
         wr = ""
         stats.sort(key=itemgetter('winRate'), reverse=True)
-        for br in stats[:10]:
+        for counter, br in enumerate(stats[:10], start=1):
             name = None
             for b in brawlers:
                 if b['id'] == br['brawler']:
@@ -543,8 +543,10 @@ class BrawlStarsCog(commands.Cog):
                     break
             if name is None:
                 continue                               
-            wr += f"{get_brawler_emoji(name)}`{int(br['winRate'])}%` "
-        embed.add_field(name="Best winrates", value=wr)
+            wr += f"{get_brawler_emoji(name)} `{int(br['winRate'])}%` "
+            if counter == 5:
+                wr += "\n"
+        embed.add_field(name="Best winrates", value=wr, inline=False)
                                             
         if result_map['disabled']:
             embed.set_footer(text="This map is currently disabled.")
