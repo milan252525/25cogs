@@ -230,7 +230,7 @@ class BrawlStarsCog(commands.Cog):
         embed = discord.Embed(color=discord.Colour.from_rgb(
             int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
         player_icon_id = player.raw_data["icon"]["id"]
-        icons = await self.starlist_request("https://www.starlist.pro/app/icons/")
+        icons = await self.starlist_request("https://api.starlist.pro/icons/")
         player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
         embed.set_author(
             name=f"{player.name} {player.raw_data['tag']}",
@@ -365,7 +365,7 @@ class BrawlStarsCog(commands.Cog):
         colour = player.name_color if player.name_color is not None else "0xffffffff"
 
         player_icon_id = player.raw_data["icon"]["id"]
-        icons = await self.starlist_request("https://www.starlist.pro/app/icons/")
+        icons = await self.starlist_request("https://api.starlist.pro/icons/")
         player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
         brawlers = []
         for brawler in player.raw_data['brawlers']:
