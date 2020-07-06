@@ -466,7 +466,7 @@ class BrawlStarsCog(commands.Cog):
         player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
 
         brawlers = player.raw_data['brawlers']
-        brawlers.sort(key=itemgetter('trophies'), reversed=True)
+        brawlers.sort(key=itemgetter('trophies'), reverse=True)
 
         embedfields = []
         
