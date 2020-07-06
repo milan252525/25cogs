@@ -209,7 +209,7 @@ class BrawlStarsCog(commands.Cog):
                         return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
 
         if tag is None or tag == "":
-            desc = "/p\n/bsprofile @user\n/p discord_name\n/p discord_id\n/p #CRTAG"
+            desc = "/p\n/bsprofile @user\n/p discord_name\n/p discord_id\n/p #BSTAG"
             embed = discord.Embed(
                 title="Invalid argument!",
                 colour=discord.Colour.red(),
@@ -407,6 +407,75 @@ class BrawlStarsCog(commands.Cog):
             await menu(ctx, embedstosend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
         else:
             await ctx.send(embed=embedstosend[0])
+
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    @commands.command(aliases=['b2'])
+    async def brawlers2(self, ctx, *, member: Union[discord.Member, str] = None):
+        """Brawl Stars brawlers"""
+        await ctx.trigger_typing()
+        prefix = ctx.prefix
+        tag = ""
+        member = ctx.author if member is None else member
+
+        if isinstance(member, discord.Member):
+            tag = await self.config.user(member).tag()
+            if tag is None:
+                return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+        elif member.startswith("#"):
+            tag = member.upper().replace('O', '0')
+        else:
+            try:
+                member = discord.utils.get(ctx.guild.members, id=int(member))
+                if member is not None:
+                    tag = await self.config.user(member).tag()
+                    if tag is None:
+                        return await ctx.send(
+                            embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+            except ValueError:
+                member = discord.utils.get(ctx.guild.members, name=member)
+                if member is not None:
+                    tag = await self.config.user(member).tag()
+                    if tag is None:
+                        return await ctx.send(
+                            embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+
+        if tag is None or tag == "":
+            desc = "/b\n/brawlers @user\n/b discord_name\n/b discord_id\n/b #BSTAG"
+            embed = discord.Embed(
+                title="Invalid argument!",
+                colour=discord.Colour.red(),
+                description=desc)
+            return await ctx.send(embed=embed)
+        try:
+            player = await self.ofcbsapi.get_player(tag)
+
+        except brawlstats.errors.NotFoundError:
+            return await ctx.send(embed=badEmbed("No player with this tag found, try again!"))
+
+        except brawlstats.errors.RequestError as e:
+            return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+
+        except Exception as e:
+            return await ctx.send(
+                "****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+
+        colour = player.name_color if player.name_color is not None else "0xffffffff"
+
+        player_icon_id = player.raw_data["icon"]["id"]
+        icons = await self.starlist_request("https://api.starlist.pro/icons")
+        player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
+
+        brawlers = player.raw_data['brawlers']
+
+        brawlers.sort(key=itemgetter('trophies'))
+
+        message = ""
+        
+        for br in brawlers:
+            rank = discord.utils.get(bot.emojis, name=f"rank_{br['rank']}")
+            message += f"{get_brawler_emoji(br['name'])} {rank} `{br['trophies']} ({br['highestTrophies']})`\n"
+
+        await ctx.send(message)
 
     @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command()
