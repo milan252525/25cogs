@@ -4,7 +4,7 @@ from redbot.core.utils.embed import randomize_colour
 from redbot.core.utils.menus import menu, prev_page, next_page
 from discord.ext import tasks
 
-from .utils import badEmbed, goodEmbed, get_league_emoji, get_rank_emoji, get_brawler_emoji, remove_codes, calculate_starpoints
+from .utils import badEmbed, goodEmbed, get_league_emoji, get_rank_emoji, get_brawler_emoji, remove_codes, calculate_starpoints, get_gamemode_id, get_gamemode_emoji
 
 from random import choice
 import asyncio
@@ -269,10 +269,10 @@ class BrawlStarsCog(commands.Cog):
                 value=f"<:noclub:661285120287834122> Not in a club")
         embed.add_field(
             name="3v3 Wins",
-            value=f"<:3v3:614519914815815693> {player.raw_data['3vs3Victories']}")
+            value=f"{get_gamemode_emoji(get_gamemode_id("gemgrab"))} {player.raw_data['3vs3Victories']}")
         embed.add_field(
             name="Showdown Wins",
-            value=f"<:sd:614517124219666453> {player.solo_victories} <:duosd:614517166997372972> {player.duo_victories}")
+            value=f"{get_gamemode_emoji(get_gamemode_id("showdown"))} {player.solo_victories} {get_gamemode_emoji(get_gamemode_id("duoshowdown"))} {player.duo_victories}")
         rr_levels = ["-", "Normal", "Hard", "Expert", "Master", "Insane"]
         if player.best_robo_rumble_time > 5:
             rr_level = f"Insane {player.best_robo_rumble_time - 5}"
@@ -280,7 +280,7 @@ class BrawlStarsCog(commands.Cog):
             rr_level = rr_levels[player.best_robo_rumble_time]
         embed.add_field(
             name="Best RR Level",
-            value=f"<:roborumble:614516967092781076> {rr_level}")
+            value=f"{get_gamemode_emoji(get_gamemode_id("roborumble"))} {rr_level}")
         #embed.add_field(
         #    name="Best Time as Big Brawler",
         #    value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler//60}:{str(player.best_time_as_big_brawler%60).rjust(2, '0')}")
