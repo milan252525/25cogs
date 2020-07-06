@@ -477,18 +477,20 @@ class BrawlStarsCog(commands.Cog):
         gadgets = ""
         for star in data['starPowers']:
             owned = False
-            for sp in br['starPowers']:
-                if star['id'] == sp['id']:
-                    owned = True
+            if unlocked:
+                for sp in br['starPowers']:
+                    if star['id'] == sp['id']:
+                        owned = True
             emoji = "<:star_power:729732781638156348>" if owned else "<:sp_locked:729751963549302854>"
             starpowers += f"{emoji} {star['name']}\n`{star['description']}`\n"
         embed.add_field(name="Star Powers", value=starpowers)
         
         for gadget in data['gadgets']:
             owned = False
-            for ga in br['gadgets']:
-                if gadget['id'] == ga['id']:
-                    owned = True
+            if unlocked:
+                for ga in br['gadgets']:
+                    if gadget['id'] == ga['id']:
+                        owned = True
             emoji = "<:gadget:716341776608133130>" if owned else "<:ga_locked:729752493793476759>"
             gadgets += f"{emoji} {gadget['name']}\n`{gadget['description']}`\n"
         embed.add_field(name="Gadgets", value=gadgets)
