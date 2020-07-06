@@ -493,7 +493,7 @@ class BrawlStarsCog(commands.Cog):
         if hours <= 24:
             return "{}h {:02}m".format(int(hours), int(minutes))
         else:
-            return f"{hours//24}d {(hours//24)%24}h"
+            return f"{int(hours)//24}d {(int(hours)//24)%24}h"
                        
     @commands.command(aliases=['e'])
     async def events(self, ctx):
