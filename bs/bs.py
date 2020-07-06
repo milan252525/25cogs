@@ -463,15 +463,13 @@ class BrawlStarsCog(commands.Cog):
             embed.set_author(name=f"{player.name}'s {data['name']}", icon_url=data['imageUrl2'])
         else:
             embed.set_author(name=f"{data['name']} (Not unlocked)", icon_url=data['imageUrl2'])
-        embed.description = f"<:brawlers:614518101983232020> {data['rarity']}" + "\n```" + data['description'] + "```"
+        embed.description = f"<:brawlers:614518101983232020> {data['rarity']}"
         if unlocked:
             rank = discord.utils.get(self.bot.emojis, name=f"rank_{br['rank']}")
-            embed.add_field(
-                name="Trophies",
-                value=f"{rank} {br.get('trophies')}/{br.get('highestTrophies')}")
+            embed.description += f" {rank} {br.get('trophies')}/{br['highestTrophies']}"
+            embed.description += f" <:pp:664267845336825906> {br['power']}"
+        embed.description += "\n```" + data['description'] + "```"
         embed.set_footer(text=data['class'])
-        if unlocked:
-            embed.add_field(name="Power Level", value=f"<:pp:664267845336825906> {br.get('power')}")
         starpowers = ""
         gadgets = ""
         for star in data['starPowers']:
