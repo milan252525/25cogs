@@ -449,7 +449,7 @@ class BrawlStarsCog(commands.Cog):
 
         data = None
         for b in brawler_data:
-            if b['id'] == br['id']:
+            f b['name'] == brawler.upper():
                 data = b
                 break
 
