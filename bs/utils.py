@@ -11,6 +11,56 @@ def goodEmbed(text):
     gembed.set_author(name=text, icon_url="https://i.imgur.com/fSAGoHh.png")
     return gembed
 
+ids = {
+    'supercityrampage': 16, 
+    'hotzone': 15, 
+    'presentplunder': 14, 
+    'gemgrab': 2, 
+    'showdown': 3, 
+    'duoshowdown': 4, 
+    'heist': 5, 
+    'bounty': 1, 
+    'brawlball': 7, 
+    'siege': 10, 
+    'takedown': 12, 
+    'lonestar': 13, 
+    'roborumble': 8, 
+    'biggame': 6, 
+    'bossfight': 9, 
+    'training': 11
+}
+
+def get_gamemode_id(name):
+    try:
+        return ids[name.lower().replace("-", "").replace(" ", "")]
+    except KeyError:
+        return None
+
+gamemodes = {
+    "1": "<:Bounty:729650154638016532>",
+    "2": "<:GemGrab:729650153388114002>",
+    "3": "<:Showdown:729650153669132359>",
+    "4": "<:DuoShowdown:729650154092625970>",
+    "5": "<:Heist:729650154139025449>",
+    "6": "<:BigGame:729650157787807756>",
+    "7": "<:BrawlBall:729650154919034882>",
+    "8": "<:RoboRumble:729650158106574898>",
+    "9": "<:BossFight:729650158098448464>",
+    "10": "<:Siege:729650155673878558>",
+    "11": "", #training cave
+    "12": "<:Takedown:729650156382978088>",
+    "13": "<:LoneStar:729650156491767849>",
+    "14": "<:PresentPlunder:729650153203433554>",
+    "15": "<:HotZone:729650153723789413>",
+    "16": "<:SuperCityRampage:729650153203433582>"
+}
+
+def get_gamemode_emoji(id):
+    try:
+        return gamemodes[str(id)]
+    except KeyError:
+        return ""
+
 def get_league_emoji(trophies : int):
     if trophies < 500:
         return "<:league_icon_00:553294108802678787>"
@@ -132,6 +182,8 @@ def get_brawler_emoji(name : str):
         return "<:nani:718555376340959242>"
     elif name == "SURGE":
         return "<:surge:729632664218238986>"
+    else:
+        return ""
     
 def remove_codes(text : str):
     toremove = ["</c>", "<c1>", "<c2>", "<c3>", "<c4>", "<c5>", "<c6>", "<c7>", "<c8>", "<c9>", "<c0>"]
