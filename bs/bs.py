@@ -449,6 +449,8 @@ class BrawlStarsCog(commands.Cog):
         data = None
         for b in brawl_data:
             if b['id'] == br['id']:
+                data = b
+                break
 
         colour = player.name_color if player.name_color is not None else "0xffffffff"
         embed = discord.Embed(color=discord.Colour.from_rgb(
