@@ -491,7 +491,7 @@ class BrawlStarsCog(commands.Cog):
         hours, remainder = divmod(seconds, 3600)
         minutes, _ = divmod(remainder, 60)
         if hours <= 24:
-            return f"{}h {:02}m".format(int(hours), int(minutes))
+            return "{}h {:02}m".format(int(hours), int(minutes))
         else:
             return f"{hours//24}d {(hours//24)%24}h"
                        
