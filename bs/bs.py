@@ -376,10 +376,10 @@ class BrawlStarsCog(commands.Cog):
         
         for c, br in enumerate(brawlers, start=1):
             rank = discord.utils.get(self.bot.emojis, name=f"rank_{br['rank']}")
-            ename = f"{get_brawler_emoji(br['name'])} {br['name'].lower().capitalize()}"
+            ename = f"{get_brawler_emoji(br['name'])} {br['name'].lower().title()}"
             evalue = f"{rank} `{br['trophies']}/{br['highestTrophies']}`\n"
-            evalue += f"<:gadget:716341776608133130> {len(br['gadgets'])} "
-            evalue += f"<:star_power:729732781638156348> {len(br['starPowers'])} "
+            evalue += f"<:star_power:729732781638156348> `{len(br['starPowers'])}`` "
+            evalue += f"<:gadget:716341776608133130> `{len(br['gadgets'])}``"
             evalue = evalue.strip()
             embedfields.append([ename, evalue])
         
