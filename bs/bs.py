@@ -466,20 +466,34 @@ class BrawlStarsCog(commands.Cog):
         player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
 
         brawlers = player.raw_data['brawlers']
+        brawlers.sort(key=itemgetter('trophies'), reversed=True)
 
-        brawlers.sort(key=itemgetter('trophies'))
-
-        message = ""
+        embedfields = []
         
         for c, br in enumerate(brawlers, start=1):
             rank = discord.utils.get(self.bot.emojis, name=f"rank_{br['rank']}")
-            message += f"{get_brawler_emoji(br['name'])} {rank} `{br['trophies']} ({br['highestTrophies']})` "
-            if c % 3 == 0:
-                message += "\n"
-            if len(message) > 1900:
-                break
+            ename = f"{get_brawler_emoji(br['name'])} {br['name'].lower().capitalize()}"
+            evalue = f"{rank} `{br['trophies']}/{br['highestTrophies']}`\n"
+            evalue += f"<:gadget:716341776608133130> {len(br['gadgets'])} "
+            evalue += f"<:starpower:664267686720700456> {len(br['starPowers'])} "
+            evalue = evalue.strip()
+            embedfields.append([ename, evalue])
+        
+        embedstosend = []
+        for i in range(0, len(embedfields), 9):
+            embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}\\37):")
+            embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
+            for e in embedfields[i:i + 9]:
+                embed.add_field(name=e[0], value=e[1], inline=True)
+            embedstosend.append(embed)
 
-        await ctx.send(message)
+        for i in range(len(embedstosend)):
+            embedstosend[i].set_footer(text=f"Page {i+1}/{len(embedstosend)}\n/brawler name for more stats")
+
+        if len(embedstosend) > 1:
+            await menu(ctx, embedstosend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
+        else:
+            await ctx.send(embed=embedstosend[0])
 
     @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command()
@@ -507,6 +521,7 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(embed=embed)
         try:
             player = await self.ofcbsapi.get_player(tag)
+            #brawler_data = await self.starlist_request("https://api.starlist.pro/brawlers")
 
         except brawlstats.errors.NotFoundError:
             return await ctx.send(embed=badEmbed("No player with this tag found, try again!"))
