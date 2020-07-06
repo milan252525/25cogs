@@ -509,7 +509,7 @@ class BrawlStarsCog(commands.Cog):
             modifier = ""
             powerplay = ""
             if ev['slot']['name'] == "Power Play":
-                powerplay = "<:powertrophies:661266876235513867>"
+                powerplay = "<:powertrophies:661266876235513867> "
             if ev['modifier'] is not None:
                 modifier = f"↳ Modifier: {ev['modifier']['name']}\n"
             active += f"**{powerplay}{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n{modifier}"
@@ -519,11 +519,14 @@ class BrawlStarsCog(commands.Cog):
             if ev['slot']['name'] == "Duo Showdown":
                 continue
             modifier = ""
+            powerplay = ""
+            if ev['slot']['name'] == "Power Play":
+                powerplay = "<:powertrophies:661266876235513867> "
             if ev['modifier'] is not None:
                 modifier = f"↳ Modifier: {ev['modifier']['name']}\n"
             start = datetime.datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
             diff = self.time_left((start - time_now).total_seconds())
-            upcoming += f"**{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n↳ Starts in: {diff}\n{modifier}"
+            upcoming += f"**{powerplay}{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n↳ Starts in: {diff}\n{modifier}"
         embed.add_field(name="UPCOMING", value=upcoming, inline=False)
         embed.set_footer(text="Data provided by starlist.pro")
         await ctx.send(embed=embed)
