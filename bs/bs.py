@@ -553,7 +553,7 @@ class BrawlStarsCog(commands.Cog):
         result_map = self.maps[result[0][0]]
         embed = discord.Embed(colour=discord.Colour.green() )
         embed.set_author(name=result_map['name'], url=result_map['link'], icon_url=result_map['gm_url'])
-        data = (await self.starlist_request(f"https://api.starlist.pro/maps/{result_map['id']}"))['map']
+        data = (await self.starlist_request(f"https://api.starlist.pro/maps/{result_map['id']}/300-599"))['map']
         brawlers = (await self.starlist_request(f"https://api.starlist.pro/brawlers"))['list']
         stats = data['stats']
         
