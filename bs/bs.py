@@ -15,6 +15,7 @@ import datetime
 import aiohttp
 from cachetools import TTLCache
 from fuzzywuzzy import process
+from operator import itemgetter, attrgetter
 
 class BrawlStarsCog(commands.Cog):
 
@@ -518,9 +519,9 @@ class BrawlStarsCog(commands.Cog):
             final = {}
             all_maps = await self.starlist_request("https://api.starlist.pro/maps")
             for m in all_maps['list']:
-                final[m['hash']] = {'url' : m['imageUrl'], 'name' : m['name'], 
-                                   'disabled' : m['disabled'], 'link' : m['link'],
-                                   'gm_url' : m['gameMode']['imageUrl']}
+                final[m['hash']] = {'url': m['imageUrl'], 'name': m['name'], 
+                                   'disabled': m['disabled'], 'link': m['link'],
+                                   'gm_url': m['gameMode']['imageUrl'], 'id': m['id']}
             self.maps = final
                         
         map_name = map_name.replace(" ", "-")
@@ -528,6 +529,23 @@ class BrawlStarsCog(commands.Cog):
         result_map = self.maps[result[0][0]]
         embed = discord.Embed(colour=discord.Colour.green() )
         embed.set_author(name=result_map['name'], url=result_map['link'], icon_url=result_map['gm_url'])
+        data = (await self.starlist_request(f"https://api.starlist.pro/maps/{result_map['id']}"))['map']
+        brawlers = (await self.starlist_request(f"https://api.starlist.pro/brawlers"))['list']
+        stats = data['stats']
+        
+        wr = ""
+        data.sort(key=attrgetter('winRate'), reverse=True)
+        for br in data[:10]:
+            name = None
+            for b in brawlers:
+                if b['id'] == br['id']:
+                    name = b['name'].upper()
+                    break
+            if name is None:
+                continue                               
+            wr += f"{get_brawler_emoji(name)}{br['winRate']}%"
+        embed.add_field(name="Best winrates", value=wr)
+                                            
         if result_map['disabled']:
             embed.set_footer(text="This map is currently disabled.")
         embed.set_image(url=result_map['url'])
