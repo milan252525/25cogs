@@ -655,8 +655,9 @@ class BrawlStarsCog(commands.Cog):
             name="Members",
             value=f"<:icon_gameroom:553299647729238016> {len(club.members)}/100")
         embed.add_field(
-            name=club_status[club.type.lower()]['name'],
-            value=club_status[club.type.lower()]['emoji'])
+            name="Status",
+            value=f"{club_status[club.type.lower()]['name']} {club_status[club.type.lower()]['emoji']}"
+        )
         topm = ""
         for i in range(5):
             try:
