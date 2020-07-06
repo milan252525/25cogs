@@ -472,7 +472,7 @@ class BrawlStarsCog(commands.Cog):
         message = ""
         
         for br in brawlers:
-            rank = discord.utils.get(bot.emojis, name=f"rank_{br['rank']}")
+            rank = discord.utils.get(self.bot.emojis, name=f"rank_{br['rank']}")
             message += f"{get_brawler_emoji(br['name'])} {rank} `{br['trophies']} ({br['highestTrophies']})`\n"
 
         await ctx.send(message)
