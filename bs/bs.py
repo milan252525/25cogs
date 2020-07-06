@@ -534,8 +534,8 @@ class BrawlStarsCog(commands.Cog):
         stats = data['stats']
         
         wr = ""
-        data.sort(key=attrgetter('winRate'), reverse=True)
-        for br in data[:10]:
+        stats.sort(key=attrgetter('winRate'), reverse=True)
+        for br in stats[:10]:
             name = None
             for b in brawlers:
                 if b['id'] == br['id']:
