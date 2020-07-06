@@ -774,7 +774,7 @@ class BrawlStarsCog(commands.Cog):
                     saved_clubs[key]['lastRequirement'] = clubs[i].required_trophies
                     saved_clubs[key]['lastScore'] = clubs[i].trophies
                     saved_clubs[key]['lastPosition'] = i
-                    
+                    saved_clubs[key]['lastStatus'] = clubs[i].type
                     
                     info = saved_clubs[key]["info"] if "info" in saved_clubs[key] else ""
                     role = ctx.guild.get_role(saved_clubs[key]["role"]) if "role" in saved_clubs[key] else None
@@ -805,12 +805,13 @@ class BrawlStarsCog(commands.Cog):
                     cinfo = saved_clubs[ckey]['info']
                     cmembers = saved_clubs[ckey]['lastMemberCount']
                     creq = saved_clubs[ckey]['lastRequirement']
+                    ctype = saved_clubs[ckey]['lastStatus']
 
                     if low_clubs and cmembers >= 95:
                         continue
 
                     e_name = f"<:bsband:600741378497970177> {cname} [{ckey}] #{ctag} {cinfo}"
-                    e_value = f"<:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` "
+                    e_value = f"{club_status[ctype.lower()]['emoji']} <:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` "
                     embedFields.append([e_name, e_value])
 
             colour = choice([discord.Colour.green(),
@@ -870,6 +871,7 @@ class BrawlStarsCog(commands.Cog):
                 "lastMemberCount": club.members_count,
                 "lastRequirement": club.required_trophies,
                 "lastScore": club.trophies,
+                "lastStatus" : club.type,
                 "info": "",
                 "role": None
             }
