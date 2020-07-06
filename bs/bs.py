@@ -507,9 +507,12 @@ class BrawlStarsCog(commands.Cog):
             if ev['slot']['name'] == "Duo Showdown":
                 continue
             modifier = ""
+            powerplay = ""
+            if ev['slot']['name'] == "Power Play":
+                powerplay = "<:powertrophies:661266876235513867>"
             if ev['modifier'] is not None:
                 modifier = f"↳ Modifier: {ev['modifier']['name']}\n"
-            active += f"**{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n{modifier}"
+            active += f"**{powerplay}{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n{modifier}"
         embed.add_field(name="ACTIVE", value=active, inline=False)
         upcoming = ""
         for ev in events['upcoming']:
@@ -548,7 +551,7 @@ class BrawlStarsCog(commands.Cog):
         if len(stats) > 0 and 'winRate' in stats[0]:
             wr = ""
             stats.sort(key=itemgetter('winRate'), reverse=True)
-            for counter, br in enumerate(stats[:15], start=1):
+            for counter, br in enumerate(stats[:10], start=1):
                 name = None
                 for b in brawlers:
                     if b['id'] == br['brawler']:
@@ -564,7 +567,7 @@ class BrawlStarsCog(commands.Cog):
         if len(stats) > 0 and 'bossWinRate' in stats[0]:
             bwr = ""
             stats.sort(key=itemgetter('bossWinRate'), reverse=True)
-            for counter, br in enumerate(stats[:15], start=1):
+            for counter, br in enumerate(stats[:10], start=1):
                 name = None
                 for b in brawlers:
                     if b['id'] == br['brawler']:
@@ -580,7 +583,7 @@ class BrawlStarsCog(commands.Cog):
         if len(stats) > 0 and 'useRate' in stats[0]:
             ur = ""
             stats.sort(key=itemgetter('useRate'), reverse=True)
-            for counter, br in enumerate(stats[:15], start=1):
+            for counter, br in enumerate(stats[:10], start=1):
                 name = None
                 for b in brawlers:
                     if b['id'] == br['brawler']:
