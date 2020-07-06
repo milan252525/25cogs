@@ -538,12 +538,12 @@ class BrawlStarsCog(commands.Cog):
         for br in stats[:10]:
             name = None
             for b in brawlers:
-                if b['id'] == br['id']:
+                if b['id'] == br['brawler']:
                     name = b['name'].upper()
                     break
             if name is None:
                 continue                               
-            wr += f"{get_brawler_emoji(name)}{br['winRate']}%"
+            wr += f"{get_brawler_emoji(name)}{br['winRate']}% "
         embed.add_field(name="Best winrates", value=wr)
                                             
         if result_map['disabled']:
