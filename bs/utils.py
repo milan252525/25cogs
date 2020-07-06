@@ -28,8 +28,14 @@ def get_league_emoji(trophies : int):
         return "<:league_icon_06:553294344841461775>"
     elif trophies < 10000:
         return "<:league_icon_07:553294109515972640>"
-    else:
+    elif trophies < 16000:
         return "<:league_icon_08:553294109217914910>"
+    elif trophies < 30000:
+        return "<:league_icon_09:729644184616828928>"
+    elif trophies < 50000:
+        return "<:league_icon_10:729644185199575140>"
+    else:
+        return "<:league_icon_11:729644185778520115>"
 
 def get_rank_emoji(rank : int):
     if 1 <= rank < 5:
