@@ -283,15 +283,13 @@ class Events(commands.Cog):
             await message.delete()
     
     @commands.has_role("Department Head") 
-    @commands.guild_only()
-    @commands.is_owner()   
+    @commands.guild_only()  
     @commands.command()
     async def bosshp(self, ctx, hp:int):
         await self.config.boss_hp.set(hp)
         await ctx.send(f"Boss HP set to {hp}")
     
-    @commands.has_role("Department Head") 
-    @commands.is_owner()   
+    @commands.has_role("Department Head")   
     @commands.command()
     async def bossfight(self, ctx, channel:discord.TextChannel):
         if self.bf_active:
