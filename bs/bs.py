@@ -246,7 +246,7 @@ class BrawlStarsCog(commands.Cog):
             tagg = "#" + tagg
             altt = "#" + altt
             prompt = await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
-                                                        title="Which one of the accounts would you like to see?", description=f":one: {tagg.capitalize()}\n:two: {altt.capitalize()}"))
+                                                        title="Which one of the accounts would you like to see?", description=f":one: {tagg.upper()}\n:two: {altt.upper()}"))
             await prompt.add_reaction("<:one1:736684730635780127>")
             await prompt.add_reaction("<:two2:736684762944634891>")
 
@@ -404,7 +404,7 @@ class BrawlStarsCog(commands.Cog):
             tagg = "#" + tagg
             altt = "#" + altt
             prompt = await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
-                                                        title="Which one of the accounts would you like to see?", description=f":one: {tagg.capitalize()}\n:two: {altt.capitalize()}"))
+                                                        title="Which one of the accounts would you like to see?", description=f":one: {tagg.upper()}\n:two: {altt.upper()}"))
             await prompt.add_reaction("<:one1:736684730635780127>")
             await prompt.add_reaction("<:two2:736684762944634891>")
 
