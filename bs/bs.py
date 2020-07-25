@@ -255,7 +255,7 @@ class BrawlStarsCog(commands.Cog):
 
             try:
                 reaction, _ = await self.bot.wait_for('reaction_add', check=check, timeout=60)
-            except TimeoutError:
+            except asyncio.TimeoutError:
                 return await prompt.delete()
 
             if str(reaction.emoji) == "<:one1:736684730635780127>":
@@ -416,7 +416,7 @@ class BrawlStarsCog(commands.Cog):
 
             try:
                 reaction, _ = await self.bot.wait_for('reaction_add', check=check, timeout=60)
-            except TimeoutError:
+            except asyncio.TimeoutError:
                 return await prompt.delete()
 
             if str(reaction.emoji) == "<:one1:736684730635780127>":
