@@ -495,28 +495,6 @@ class BrawlStarsCog(commands.Cog):
                 description=desc)
             return await ctx.send(embed=embed)
 
-        if await self.config.user(member).alt() is not None:
-            tagg = await self.config.user(member).tag()
-            altt = await self.config.user(member).alt()
-            tagg = "#" + tagg
-            altt = "#" + altt
-            prompt = await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
-                                                        title="Which one of the accounts would you like to see?", description=f":one: {tagg.capitalize()}\n:two: {altt.capitalize()}"))
-            await prompt.add_reaction("<:one1:736684730635780127>")
-            await prompt.add_reaction("<:two2:736684762944634891>")
-
-            def check(reaction, user):
-                return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in ["<:one1:736684730635780127>", "<:two2:736684762944634891>"]
-
-            reaction, _ = await self.bot.wait_for('reaction_add', check=check)
-
-            if str(reaction.emoji) == "<:one1:736684730635780127>":
-                tag = await self.config.user(member).tag()
-            elif str(reaction.emoji) == "<:two2:736684762944634891>":
-                tag = await self.config.user(member).alt()
-
-            await prompt.delete()
-
         try:
             player = await self.ofcbsapi.get_player(tag)
             brawler_data = (await self.starlist_request("https://api.starlist.pro/brawlers"))['list']
@@ -2936,28 +2914,6 @@ class BrawlStarsCog(commands.Cog):
                 msg += f"**{str(member)}** `{player.trophies}` <:bstrophy:552558722770141204>: {player.club.name} ({len(clubobj.members)}/100)\n"
             else:
                 msg += f"**{str(member)}** `{player.trophies}` <:bstrophy:552558722770141204>: not in a club.\n"
-            if self.config.user(member).alt is not None:
-                tag = await self.config.user(member).alt()
-                if tag is None:
-                    msg += f"**{member.name}**: has no tag saved.\n"
-                try:
-                    player = await self.ofcbsapi.get_player(tag)
-                    await asyncio.sleep(0.2)
-                except brawlstats.errors.RequestError as e:
-                    msg += f"**{member.name}**: request error.\n"
-                    continue
-                except Exception as e:
-                    msg += "Something went wrong."
-                    return
-                player_in_club = "name" in player.raw_data["club"]
-                if len(msg) > 1900:
-                    messages.append(msg)
-                    msg = ""
-                if player_in_club:
-                    clubobj = await self.ofcbsapi.get_club(player.club.tag)
-                    msg += f"**{str(member)}** `{player.trophies}` <:bstrophy:552558722770141204>: {player.club.name} ({len(clubobj.members)}/100)\n"
-                else:
-                    msg += f"**{str(member)}** `{player.trophies}` <:bstrophy:552558722770141204>: not in a club.\n"
         if len(msg) > 0:
             messages.append(msg)
         for m in messages:
