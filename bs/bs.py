@@ -241,8 +241,10 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(embed=embed)
 
         if await self.config.user(member).alt() is not None:
+            tagg = await self.config.user(member).tag()
+            altt = await self.config.user(member).alt()
             prompt = await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
-                                                        title="Which one of the accounts would you like to see?", description=f":one: {self.config.user(member).tag()}\n:two: {self.config.user(member).alt()}"))
+                                                        title="Which one of the accounts would you like to see?", description=f":one: {tagg}\n:two: {altt}"))
             await prompt.add_reaction("<:one1:736684730635780127>")
             await prompt.add_reaction("<:two2:736684762944634891>")
 
@@ -255,6 +257,8 @@ class BrawlStarsCog(commands.Cog):
                 tag = await self.config.user(member).tag()
             elif str(reaction.emoji) == "<:two2:736684762944634891>":
                 tag = await self.config.user(member).alt()
+
+            await prompt.delete()
 
         try:
             player = await self.ofcbsapi.get_player(tag)
