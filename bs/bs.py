@@ -2924,7 +2924,7 @@ class BrawlStarsCog(commands.Cog):
                     clubobj = await self.ofcbsapi.get_club(playeralt.club.tag)
                     msg += f"**{str(member)}'s alt** `{playeralt.trophies}` <:bstrophy:552558722770141204>: {playeralt.club.name} ({len(clubobj.members)}/100)\n"
                 else:
-                    msg += f"**{str(member)}'s alt** `{player.trophies}` <:bstrophy:552558722770141204>: not in a club.\n"
+                    msg += f"**{str(member)}'s alt** `{playeralt.trophies}` <:bstrophy:552558722770141204>: not in a club.\n"
         if len(msg) > 0:
             messages.append(msg)
         for m in messages:
