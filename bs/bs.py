@@ -239,6 +239,23 @@ class BrawlStarsCog(commands.Cog):
                 colour=discord.Colour.red(),
                 description=desc)
             return await ctx.send(embed=embed)
+
+        if await self.config.user(member).alt() is not None:
+            prompt = await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
+                                                        description=f"Which one of the accounts would you like to see?\n:one: {self.config.user(member).tag()}\n:two: {self.config.user(member).alt()}"))
+            await prompt.add_reaction(":one:")
+            await prompt.add_reaction(":two:")
+
+            def check(reaction, user):
+                return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in [":one:", ":two:"]
+
+            reaction, _ = await self.bot.wait_for('reaction_add', check=check)
+
+            if str(reaction.emoji) == ":one:":
+                tag = await self.config.user(member).tag()
+            if str(reaction.emoji) == ":two:":
+                tag = await self.config.user(member).alt()
+
         try:
             player = await self.ofcbsapi.get_player(tag)
 
