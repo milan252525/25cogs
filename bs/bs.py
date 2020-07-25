@@ -23,7 +23,7 @@ class BrawlStarsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=5245652)
-        default_user = {"tag": None}
+        default_user = {"tag": None, "alt": None}
         self.config.register_user(**default_user)
         default_guild = {"clubs": {}}
         self.config.register_guild(**default_guild)
@@ -135,6 +135,29 @@ class BrawlStarsCog(commands.Cog):
         try:
             player = await self.ofcbsapi.get_player(tag)
             await self.config.user(member).tag.set(tag.replace("#", ""))
+            await ctx.send(embed=goodEmbed(f"BS account {player.name} was saved to {member.name}"))
+
+        except brawlstats.errors.NotFoundError:
+            await ctx.send(embed=badEmbed("No player with this tag found, try again!"))
+
+        except brawlstats.errors.RequestError as e:
+            await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+
+        except Exception as e:
+            await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+
+    @commands.command(aliases=['bssave2'])
+    async def savealt(self, ctx, tag, member: discord.Member = None):
+        """Save your second Brawl Stars player tag"""
+        member = ctx.author if member is None else member
+
+        tag = tag.lower().replace('O', '0')
+        if tag.startswith("#"):
+            tag = tag.strip('#')
+
+        try:
+            player = await self.ofcbsapi.get_player(tag)
+            await self.config.user(member).alt.set(tag.replace("#", ""))
             await ctx.send(embed=goodEmbed(f"BS account {player.name} was saved to {member.name}"))
 
         except brawlstats.errors.NotFoundError:
