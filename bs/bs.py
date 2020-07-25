@@ -247,7 +247,7 @@ class BrawlStarsCog(commands.Cog):
             await prompt.add_reaction("<:two2:736684762944634891>")
 
             def check(reaction, user):
-                return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in [":one:", ":two:"]
+                return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in ["<:one1:736684730635780127>", "<:two2:736684762944634891>"]
 
             reaction, _ = await self.bot.wait_for('reaction_add', check=check)
 
