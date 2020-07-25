@@ -204,7 +204,7 @@ class BrawlStarsCog(commands.Cog):
 
     @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command(aliases=['p', 'bsp', 'stats'])
-    async def profile(self, ctx, *, member: Union[discord.Member, str] = None):
+    async def profile(self, ctx, keyword, *, member: Union[discord.Member, str] = None):
         """View player's BS statistics"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
@@ -240,27 +240,8 @@ class BrawlStarsCog(commands.Cog):
                 description=desc)
             return await ctx.send(embed=embed)
 
-        if await self.config.user(member).alt() is not None:
-            tagg = await self.config.user(member).tag()
-            altt = await self.config.user(member).alt()
-            tagg = "#" + tagg
-            altt = "#" + altt
-            prompt = await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
-                                                        title="Which one of the accounts would you like to see?", description=f":one: {tagg.upper()}\n:two: {altt.upper()}"))
-            await prompt.add_reaction("<:one1:736684730635780127>")
-            await prompt.add_reaction("<:two2:736684762944634891>")
-
-            def check(reaction, user):
-                return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in ["<:one1:736684730635780127>", "<:two2:736684762944634891>"]
-
-            reaction, _ = await self.bot.wait_for('reaction_add', check=check)
-
-            if str(reaction.emoji) == "<:one1:736684730635780127>":
-                tag = await self.config.user(member).tag()
-            elif str(reaction.emoji) == "<:two2:736684762944634891>":
-                tag = await self.config.user(member).alt()
-
-            await prompt.delete()
+        if keyword == "alt":
+            tag = await self.config.user(member).alt()
 
         try:
             player = await self.ofcbsapi.get_player(tag)
@@ -397,28 +378,6 @@ class BrawlStarsCog(commands.Cog):
                 colour=discord.Colour.red(),
                 description=desc)
             return await ctx.send(embed=embed)
-
-        if await self.config.user(member).alt() is not None:
-            tagg = await self.config.user(member).tag()
-            altt = await self.config.user(member).alt()
-            tagg = "#" + tagg
-            altt = "#" + altt
-            prompt = await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
-                                                        title="Which one of the accounts would you like to see?", description=f":one: {tagg.upper()}\n:two: {altt.upper()}"))
-            await prompt.add_reaction("<:one1:736684730635780127>")
-            await prompt.add_reaction("<:two2:736684762944634891>")
-
-            def check(reaction, user):
-                return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in ["<:one1:736684730635780127>", "<:two2:736684762944634891>"]
-
-            reaction, _ = await self.bot.wait_for('reaction_add', check=check)
-
-            if str(reaction.emoji) == "<:one1:736684730635780127>":
-                tag = await self.config.user(member).tag()
-            elif str(reaction.emoji) == "<:two2:736684762944634891>":
-                tag = await self.config.user(member).alt()
-
-            await prompt.delete()
 
         try:
             player = await self.ofcbsapi.get_player(tag)
