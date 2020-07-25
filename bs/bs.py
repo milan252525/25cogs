@@ -253,7 +253,10 @@ class BrawlStarsCog(commands.Cog):
             def check(reaction, user):
                 return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in ["<:one1:736684730635780127>", "<:two2:736684762944634891>"]
 
-            reaction, _ = await self.bot.wait_for('reaction_add', check=check, timeout=60)
+            try:
+                reaction, _ = await self.bot.wait_for('reaction_add', check=check, timeout=60)
+            except TimeoutError:
+                return await prompt.delete()
 
             if str(reaction.emoji) == "<:one1:736684730635780127>":
                 tag = await self.config.user(member).tag()
@@ -411,7 +414,10 @@ class BrawlStarsCog(commands.Cog):
             def check(reaction, user):
                 return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in ["<:one1:736684730635780127>", "<:two2:736684762944634891>"]
 
-            reaction, _ = await self.bot.wait_for('reaction_add', check=check, timeout=60)
+            try:
+                reaction, _ = await self.bot.wait_for('reaction_add', check=check, timeout=60)
+            except TimeoutError:
+                return await prompt.delete()
 
             if str(reaction.emoji) == "<:one1:736684730635780127>":
                 tag = await self.config.user(member).tag()
