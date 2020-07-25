@@ -242,9 +242,9 @@ class BrawlStarsCog(commands.Cog):
 
         if await self.config.user(member).alt() is not None:
             prompt = await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
-                                                        description=f"Which one of the accounts would you like to see?\n:one: {self.config.user(member).tag()}\n:two: {self.config.user(member).alt()}"))
-            await prompt.add_reaction(":one:")
-            await prompt.add_reaction(":two:")
+                                                        title="Which one of the accounts would you like to see?", description=f":one: {self.config.user(member).tag()}\n:two: {self.config.user(member).alt()}"))
+            await prompt.add_reaction("1")
+            await prompt.add_reaction("2")
 
             def check(reaction, user):
                 return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in [":one:", ":two:"]
