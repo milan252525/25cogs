@@ -2894,10 +2894,13 @@ class BrawlStarsCog(commands.Cog):
             if whitelist not in member.roles:
                 continue
             tag = await self.config.user(member).tag()
+            alt = await self.config.user(member).alt()
             if tag is None:
                 msg += f"**{member.name}**: has no tag saved.\n"
             try:
                 player = await self.ofcbsapi.get_player(tag)
+                if alt is not None:
+                    playeralt = await self.ofcbsapi.get_player(alt)
                 await asyncio.sleep(0.2)
             except brawlstats.errors.RequestError as e:
                 msg += f"**{member.name}**: request error.\n"
@@ -2906,12 +2909,18 @@ class BrawlStarsCog(commands.Cog):
                 msg += "Something went wrong."
                 return
             player_in_club = "name" in player.raw_data["club"]
+            player_in_club2 = "name" in playeralt.raw_data["club"]
             if len(msg) > 1900:
                 messages.append(msg)
                 msg = ""
             if player_in_club:
                 clubobj = await self.ofcbsapi.get_club(player.club.tag)
                 msg += f"**{str(member)}** `{player.trophies}` <:bstrophy:552558722770141204>: {player.club.name} ({len(clubobj.members)}/100)\n"
+            else:
+                msg += f"**{str(member)}** `{player.trophies}` <:bstrophy:552558722770141204>: not in a club.\n"
+            if player_in_club2:
+                clubobj = await self.ofcbsapi.get_club(playeralt.club.tag)
+                msg += f"**{str(member)}** `{playeralt.trophies}` <:bstrophy:552558722770141204>: {playeralt.club.name} ({len(clubobj.members)}/100)\n"
             else:
                 msg += f"**{str(member)}** `{player.trophies}` <:bstrophy:552558722770141204>: not in a club.\n"
         if len(msg) > 0:
