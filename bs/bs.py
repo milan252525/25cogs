@@ -253,7 +253,7 @@ class BrawlStarsCog(commands.Cog):
 
             if str(reaction.emoji) == "<:one1:736684730635780127>":
                 tag = await self.config.user(member).tag()
-            if str(reaction.emoji) == "<:two2:736684762944634891>":
+            elif str(reaction.emoji) == "<:two2:736684762944634891>":
                 tag = await self.config.user(member).alt()
 
         try:
