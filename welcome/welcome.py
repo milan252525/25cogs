@@ -146,7 +146,7 @@ class Welcome(commands.Cog):
             return await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Something went wrong: {str(e)}"))
 
         player_in_club = "name" in player.raw_data["club"]
-        guilds = await self.config.all_guilds()
+        guilds = await self.bsconfig.all_guilds()
 
         member_role_expected = None
         if player_in_club:
