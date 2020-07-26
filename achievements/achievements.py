@@ -284,7 +284,11 @@ class Achievements(commands.Cog):
             return await ctx.send(embed=badEmbed("You can't use this, sorry."))
 
         try:
-            await self.config.user(member).set_raw(keyword, value=True)
-            return ctx.send(embed=goodEmbed(f"Achievement {keyword.capitalize()} was successfully added to {str(member)}."))
+            if await self.config.user(member).get_raw(keyword):
+                await self.config.user(member).set_raw(keyword, value=False)
+                return await ctx.send(embed=goodEmbed(f"Achievement {keyword.capitalize()} was successfully removed from {str(member)}."))
+            if not await self.config.user(member).get_raw(keyword):
+                await self.config.user(member).set_raw(keyword, value=True)
+                return await ctx.send(embed=goodEmbed(f"Achievement {keyword.capitalize()} was successfully added to {str(member)}."))
         except Exception as e:
             return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
