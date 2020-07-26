@@ -195,7 +195,7 @@ class Welcome(commands.Cog):
             return await ctx.send("Hands off.")
 
         role = ctx.guild.get_role(role)
-        await self.config.user(member).roles.set_raw(keyword, value=role)
+        await self.config.guild(ctx.guild).roles.set_raw(keyword, value=role)
 
         return await ctx.send("Successful.")
 
