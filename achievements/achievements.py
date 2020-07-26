@@ -284,9 +284,9 @@ class Achievements(commands.Cog):
         try:
             if await self.config.user(member).carrier():
                 await self.config.user(member).carrier.set(False)
-                return ctx.send(embed=goodEmbed(f"Carrier successfully removed from {str(member)}."))
+                return await ctx.send(embed=goodEmbed(f"Carrier successfully removed from {str(member)}."))
             elif not await self.config.user(member).carrier():
                 await self.config.user(member).carrier.set(True)
-                return ctx.send(embed=goodEmbed(f"Carrier successfully added to {str(member)}."))
+                return await ctx.send(embed=goodEmbed(f"Carrier successfully added to {str(member)}."))
         except Exception as e:
-            return ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
