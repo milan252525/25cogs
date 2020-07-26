@@ -274,7 +274,7 @@ class Achievements(commands.Cog):
         return await ctx.send(embed=aembed)
 
     @commands.command(aliases=['aa'])
-    async def addachievement(self, ctx, keyword, member: discord.Member):
+    async def addachievement(self, ctx, member: discord.Member, keyword):
         """Add or remove an achievement from a person"""
         if ctx.guild.id != 401883208511389716:
             return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
@@ -292,3 +292,26 @@ class Achievements(commands.Cog):
                 return await ctx.send(embed=goodEmbed(f"Achievement was successfully added to {str(member)}."))
         except Exception as e:
             return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+
+    @commands.command(aliases=['multi'])
+    async def addachievements(self, ctx, member: discord.Member, *, keyword):
+        """Add or remove an achievement from a person"""
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
+
+        rolesna = ctx.guild.get_role(564552111875162112)
+        if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
+            return await ctx.send(embed=badEmbed("You can't use this, sorry."))
+
+        keywords = keyword.split(", ")
+
+        for keyword in keywords:
+            try:
+                if await self.config.user(member).get_raw(keyword):
+                    await self.config.user(member).set_raw(keyword, value=False)
+                    return await ctx.send(embed=goodEmbed(f"Achievement was successfully removed from {str(member)}."))
+                if not await self.config.user(member).get_raw(keyword):
+                    await self.config.user(member).set_raw(keyword, value=True)
+                    return await ctx.send(embed=goodEmbed(f"Achievement was successfully added to {str(member)}."))
+            except Exception as e:
+                return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
