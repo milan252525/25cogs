@@ -110,12 +110,12 @@ class Welcome(commands.Cog):
 
         await ctx.trigger_typing()
 
-        labs = await self.config.guild(ctx.guid).family()
-        guest = await self.config.guild(ctx.guild).guest()
-        newcomer = await self.config.guild(ctx.guild).remove()
-        brawlstars = await self.config.guild(ctx.guild).bs()
-        vp = await self.config.guild(ctx.guild).vp()
-        pres = await self.config.guild(ctx.guild).pres()
+        labs = ctx.guild.get_role(await self.config.guild(ctx.guid).family())
+        guest = ctx.guild.get_role(await self.config.guild(ctx.guild).guest())
+        newcomer = ctx.guild.get_role(await self.config.guild(ctx.guild).remove())
+        brawlstars = ctx.guild.get_role(await self.config.guild(ctx.guild).bs())
+        vp = ctx.guild.get_role(await self.config.guild(ctx.guild).vp())
+        pres = ctx.guild.get_role(await self.config.guild(ctx.guild).pres())
 
         tag = tag.lower().replace('O', '0')
         if tag.startswith("#"):
@@ -194,7 +194,6 @@ class Welcome(commands.Cog):
         if ctx.author.id != 359131399132807178:
             return await ctx.send("Hands off.")
 
-        role = ctx.guild.get_role(role)
         await self.config.guild(ctx.guild).roles.set_raw(keyword, value=role)
 
         return await ctx.send("Successful.")
