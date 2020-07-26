@@ -12,7 +12,7 @@ class Achievements(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=42696969)
+        self.config = Config.get_conf(self, identifier=69424269)
         default_user = {"carrier": False,
                         "teamwork": False,
                         "assassin": False,
@@ -448,3 +448,4 @@ class Achievements(commands.Cog):
                 msg += "Ladder Warrior role removed.\n"
 
         return msg
+
