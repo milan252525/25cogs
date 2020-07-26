@@ -362,4 +362,54 @@ class Achievements(commands.Cog):
                 await member.remove_roles(gh)
                 msg += "Gem Hoarder role removed.\n"
 
+        sm = member.guild.get_role(736972276653883412)
+        if await self.config.user(member).stale() and await self.config.user(member).op() and await self.config.user(member).clutch():
+            if sm not in member.roles:
+                await member.add_roles(sm)
+                msg += f"Siege Machine role added!\n"
+        else:
+            if sm in member.roles:
+                await member.remove_roles(sm)
+                msg += "Siege Machine role removed.\n"
+
+        bb = member.guild.get_role(736972900837490869)
+        if await self.config.user(member).pro() and await self.config.user(member).turbo():
+            if bb not in member.roles:
+                await member.add_roles(bb)
+                msg += f"Brawl Brace role added!\n"
+        else:
+            if bb in member.roles:
+                await member.remove_roles(bb)
+                msg += "Brawl Brace role removed.\n"
+
+        hm = member.guild.get_role(736973167553151066)
+        if await self.config.user(member).thief() and await self.config.user(member).close() and await self.config.user(member).guardian() and await self.config.user(member).deadlock():
+            if hm not in member.roles:
+                await member.add_roles(hm)
+                msg += f"Heist Master role added!\n"
+        else:
+            if hm in member.roles:
+                await member.remove_roles(hm)
+                msg += "Heist Master role removed.\n"
+
+        sc = member.guild.get_role(736973355512627200)
+        if await self.config.user(member).assassin() and await self.config.user(member).bounty() and await self.config.user(member).massacre():
+            if sc not in member.roles:
+                await member.add_roles(sc)
+                msg += f"Star Collector role added!\n"
+        else:
+            if sc in member.roles:
+                await member.remove_roles(sc)
+                msg += "Star Collector role removed.\n"
+
+        hs = member.guild.get_role(736973807352283229)
+        if await self.config.user(member).nailb() and await self.config.user(member).zoned() and await self.config.user(member).domination():
+            if hs not in member.roles:
+                await member.add_roles(hs)
+                msg += f"Hot Shot role added!\n"
+        else:
+            if hs in member.roles:
+                await member.remove_roles(hs)
+                msg += "Hot Shot role removed.\n"
+
         return msg
