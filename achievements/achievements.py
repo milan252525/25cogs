@@ -88,8 +88,8 @@ class Achievements(commands.Cog):
             except ValueError:
                 member = discord.utils.get(ctx.guild.members, name=member)
 
-        aembed = discord.Embed(color=discord.Colour.blue(), title="Achievements", description=f"{str(member)}'s achievements")
-        aembed.set_image(url="https://cdn.discordapp.com/attachments/472117791604998156/736896897872035960/0a00e865c445d42dfb9f64bedfab8cf8.png")
+        aembed = discord.Embed(color=discord.Colour.blue(), title="Achievements", description=f"{str(member)}'s achievements:")
+        aembed.set_thumbnail(url="https://cdn.discordapp.com/attachments/472117791604998156/736896897872035960/0a00e865c445d42dfb9f64bedfab8cf8.png")
 
         gg = ""
         if await self.config.user(member).carrier():
@@ -106,7 +106,7 @@ class Achievements(commands.Cog):
         await ctx.trigger_typing()
 
         try:
-            for k in await self.config.user(member):
+            for k in self.config.user(member):
                 if k == keyword:
                     await self.config.user(member).k.set(True)
 
