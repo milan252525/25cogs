@@ -303,6 +303,8 @@ class Achievements(commands.Cog):
         if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
             return await ctx.send(embed=badEmbed("You can't use this, sorry."))
 
+        await ctx.send(keywords)
+
         for keyword in keywords:
             try:
                 if await self.config.user(member).get_raw(keyword):
