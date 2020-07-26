@@ -418,10 +418,10 @@ class Achievements(commands.Cog):
         for v in values.values():
             if not v:
                 result = False
-        if result:
+        if result and ag not in member.roles:
             await member.add_roles(ag)
             msg += f"Achievement God role added!\n"
-        else:
+        elif not result and ag in member.roles:
             await member.remove_roles(ag)
             msg += "Achievement God role removed.\n"
 
