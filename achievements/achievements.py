@@ -70,6 +70,12 @@ class Achievements(commands.Cog):
                         "ppg": False}
         self.config.register_user(**default_user)
 
+    async def initialize(self):
+        ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
+        if ofcbsapikey["api_key"] is None:
+            raise ValueError("The Official Brawl Stars API key has not been set.")
+        self.ofcbsapi = brawlstats.Client(ofcbsapikey["api_key"], is_async=True)
+
     @commands.command(aliases=['a'])
     async def achievements(self, ctx, *, member: Union[discord.Member, str] = None):
         await ctx.trigger_typing()
