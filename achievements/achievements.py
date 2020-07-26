@@ -1,7 +1,6 @@
 import discord
 
 from redbot.core import commands, Config, checks
-from bs.utils import goodEmbed, badEmbed
 
 import asyncio
 import brawlstats
@@ -76,6 +75,16 @@ class Achievements(commands.Cog):
         if ofcbsapikey["api_key"] is None:
             raise ValueError("The Official Brawl Stars API key has not been set.")
         self.ofcbsapi = brawlstats.Client(ofcbsapikey["api_key"], is_async=True)
+
+    def aemb(text):
+        embed = Embed(color=0x45cafc, description=f"**{text}**")
+        embed.set_author(icon_url="https://i.imgur.com/fSAGoHh.png")
+        return embed
+
+    def badaemb(text):
+        embed = Embed(color=0xff0000, description=f"**{text}**")
+        embed.set_author(icon_url="https://i.imgur.com/dgE1VCm.png")
+        return embed
 
     @commands.command(aliases=['a'])
     async def achievements(self, ctx, *, member: Union[discord.Member, str] = None):
@@ -278,11 +287,11 @@ class Achievements(commands.Cog):
     async def addachievement(self, ctx, member: discord.Member, keyword):
         """Add or remove an achievement from a person"""
         if ctx.guild.id != 401883208511389716 and ctx.channel.id != 555662656736985090 and ctx.channel.id != 472117791604998156:
-            return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
+            return await ctx.send(embed=badaemb("Can't use this here, sorry."))
 
         rolesna = ctx.guild.get_role(564552111875162112)
         if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
-            return await ctx.send(embed=badEmbed("You can't use this, sorry."))
+            return await ctx.send(embed=badaemb("You can't use this, sorry."))
 
         keys = await self.config.user(member).all()
         keyword = process.extract(keyword, keys.keys(), limit=1)
@@ -292,23 +301,23 @@ class Achievements(commands.Cog):
             if await self.config.user(member).get_raw(keyword):
                 await self.config.user(member).set_raw(keyword, value=False)
                 roles = await self.checkforroles(member)
-                return await ctx.send(embed=goodEmbed(f"Achievement {keyword} was successfully removed from {str(member)}.\n{roles}"))
+                return await ctx.send(embed=aemb(f"Achievement {keyword} was successfully removed from {str(member)}.\n{roles}"))
             if not await self.config.user(member).get_raw(keyword):
                 await self.config.user(member).set_raw(keyword, value=True)
                 roles = await self.checkforroles(member)
-                return await ctx.send(embed=goodEmbed(f"Achievement {keyword} was successfully added to {str(member)}.\n{roles}"))
+                return await ctx.send(embed=aemb(f"Achievement {keyword} was successfully added to {str(member)}.\n{roles}"))
         except Exception as e:
-            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+            return await ctx.send(embed=badaemb(f"Something went wrong: {e}."))
 
     @commands.command(aliases=['multi'])
     async def addachievements(self, ctx, member: discord.Member, *keywords):
         """Add or remove an achievement from a person"""
         if ctx.guild.id != 401883208511389716 and ctx.channel.id != 555662656736985090 and ctx.channel.id != 472117791604998156:
-            return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
+            return await ctx.send(embed=badaemb("Can't use this here, sorry."))
 
         rolesna = ctx.guild.get_role(564552111875162112)
         if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
-            return await ctx.send(embed=badEmbed("You can't use this, sorry."))
+            return await ctx.send(embed=badaemb("You can't use this, sorry."))
 
         msg = ""
         for keyword in keywords:
@@ -323,11 +332,11 @@ class Achievements(commands.Cog):
                     await self.config.user(member).set_raw(keyword, value=True)
                     msg += f"Achievement {keyword} was successfully added to {str(member)}.\n"
             except Exception as e:
-                return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+                return await ctx.send(embed=badaemb(f"Something went wrong: {e}."))
 
         roles = await self.checkforroles(member)
 
-        return await ctx.send(embed=goodEmbed(msg + f"{roles}"))
+        return await ctx.send(embed=aemb(msg + f"{roles}"))
 
     async def checkforroles(self, member: discord.Member):
         msg = ""
