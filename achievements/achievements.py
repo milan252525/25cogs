@@ -302,7 +302,7 @@ class Achievements(commands.Cog):
 
     @commands.command(aliases=['multi'])
     async def addachievements(self, ctx, member: discord.Member, *keywords):
-        """Add or remove an achievement from a person"""
+        """Add or remove several achievements from a person"""
         if ctx.guild.id != 401883208511389716 and ctx.channel.id != 555662656736985090 and ctx.channel.id != 472117791604998156:
             return await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description="**Can't use this here, sorry.**"))
 
@@ -327,7 +327,7 @@ class Achievements(commands.Cog):
 
         roles = await self.checkforroles(member)
 
-        return await ctx.send(embed=discord.Embed(color=discord.Colour.green(), description=msg + f"{roles}"))
+        return await ctx.send(embed=discord.Embed(color=discord.Colour.green(), description="**" + msg + f"{roles}**"))
 
     async def checkforroles(self, member: discord.Member):
         msg = ""
