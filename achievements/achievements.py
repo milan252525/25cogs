@@ -78,6 +78,7 @@ class Achievements(commands.Cog):
 
     @commands.command(aliases=['a'])
     async def achievements(self, ctx, *, member: Union[discord.Member, str] = None):
+        """Check yours or other person's achievements"""
         if ctx.guild.id != 401883208511389716:
             return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
 
@@ -100,7 +101,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).teamwork():
             gg = gg + "Teamwork\n"
         if gg != "":
-            aembed.add_field(name="Gem Grab", value=gg)
+            aembed.add_field(name="Gem Grab", value=gg, inline=False)
 
         bounty = ""
         if await self.config.user(member).assassin():
@@ -110,7 +111,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).bounty():
             bounty = bounty + "Bounty Hunter\n"
         if bounty != "":
-            aembed.add_field(name="Bounty", value=bounty)
+            aembed.add_field(name="Bounty", value=bounty, inline=False)
 
         heist = ""
         if await self.config.user(member).thief():
@@ -122,7 +123,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).deadlock():
             heist = heist + "Deadlock\n"
         if heist != "":
-            aembed.add_field(name="Heist", value=heist)
+            aembed.add_field(name="Heist", value=heist, inline=False)
 
         bb = ""
         if await self.config.user(member).turbo():
@@ -130,7 +131,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).pro():
             bb = bb + "Pro Ball\n"
         if bb != "":
-            aembed.add_field(name="Brawl Ball", value=bb)
+            aembed.add_field(name="Brawl Ball", value=bb, inline=False)
 
         siege = ""
         if await self.config.user(member).stale():
@@ -140,7 +141,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).clutch():
             siege = siege + "Clutch\n"
         if siege != "":
-            aembed.add_field(name="Siege", value=siege)
+            aembed.add_field(name="Siege", value=siege, inline=False)
 
         hz = ""
         if await self.config.user(member).nailb():
@@ -150,7 +151,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).domination():
             hz = hz + "Domination\n"
         if hz != "":
-            aembed.add_field(name="Hot Zone", value=hz)
+            aembed.add_field(name="Hot Zone", value=hz, inline=False)
 
         ss = ""
         if await self.config.user(member).trident():
@@ -162,7 +163,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).after():
             ss = ss + "Afterlife\n"
         if ss != "":
-            aembed.add_field(name="Solo Showdown", value=ss)
+            aembed.add_field(name="Solo Showdown", value=ss, inline=False)
 
         ds = ""
         if await self.config.user(member).pinch():
@@ -170,7 +171,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).dynamic():
             ds = ds + "Dynamic Duo\n"
         if ds != "":
-            aembed.add_field(name="Duo Showdown", value=ds)
+            aembed.add_field(name="Duo Showdown", value=ds, inline=False)
 
         events = ""
         if await self.config.user(member).shut():
@@ -182,7 +183,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).city():
             events = events + "City Protector\n"
         if events != "":
-            aembed.add_field(name="Events", value=events)
+            aembed.add_field(name="Events", value=events, inline=False)
 
         misc = ""
         if await self.config.user(member).draw():
@@ -208,7 +209,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).god():
             misc = misc + "God Brawler\n"
         if misc != "":
-            aembed.add_field(name="Miscellaneous", value=misc)
+            aembed.add_field(name="Miscellaneous", value=misc, inline=False)
 
         exp = ""
         if await self.config.user(member).expa():
@@ -218,7 +219,7 @@ class Achievements(commands.Cog):
         elif await self.config.user(member).expg():
             exp = exp + "Exp God\n"
         if exp != "":
-            aembed.add_field(name="Experience Levels", value=exp)
+            aembed.add_field(name="Experience Levels", value=exp, inline=False)
 
         troph = ""
         if await self.config.user(member).trophya():
@@ -228,7 +229,7 @@ class Achievements(commands.Cog):
         elif await self.config.user(member).trophyg():
             troph = troph + "Trophy God\n"
         if troph != "":
-            aembed.add_field(name="Trophies", value=troph)
+            aembed.add_field(name="Trophies", value=troph, inline=False)
 
         tvt = ""
         if await self.config.user(member).tvta():
@@ -238,7 +239,7 @@ class Achievements(commands.Cog):
         elif await self.config.user(member).tvtg():
             tvt = tvt + "3v3 God\n"
         if tvt != "":
-            aembed.add_field(name="3v3 Wins", value=tvt)
+            aembed.add_field(name="3v3 Wins", value=tvt, inline=False)
 
         solo = ""
         if await self.config.user(member).soloa():
@@ -248,7 +249,7 @@ class Achievements(commands.Cog):
         elif await self.config.user(member).solog():
             solo = solo + "Solo God\n"
         if solo != "":
-            aembed.add_field(name="Solo Showdown", value=solo)
+            aembed.add_field(name="Solo Showdown", value=solo, inline=False)
 
         duo = ""
         if await self.config.user(member).duoa():
@@ -258,7 +259,7 @@ class Achievements(commands.Cog):
         elif await self.config.user(member).duog():
             duo = duo + "Duo God\n"
         if duo != "":
-            aembed.add_field(name="Duo Showdown", value=duo)
+            aembed.add_field(name="Duo Showdown", value=duo, inline=False)
 
         pp = ""
         if await self.config.user(member).ppa():
@@ -268,12 +269,13 @@ class Achievements(commands.Cog):
         elif await self.config.user(member).ppg():
             pp = pp + "PowerPlay God\n"
         if pp != "":
-            aembed.add_field(name="Power Play Points", value=pp)
+            aembed.add_field(name="Power Play Points", value=pp, inline=False)
 
         return await ctx.send(embed=aembed)
 
     @commands.command()
     async def carrier(self, ctx, member: discord.Member):
+        """Win Gem Grab with YOU holding 20+ Gems"""
         if ctx.guild.id != 401883208511389716:
             return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
 
@@ -293,6 +295,7 @@ class Achievements(commands.Cog):
 
     @commands.command()
     async def teamwork(self, ctx, member: discord.Member):
+        """Win Gem Grab with each member of your team holding 4+ Gems"""
         if ctx.guild.id != 401883208511389716:
             return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
 
@@ -312,6 +315,7 @@ class Achievements(commands.Cog):
 
     @commands.command()
     async def assassin(self, ctx, member: discord.Member):
+        """Win a match of Bounty with 7 stars on top of ALL brawlers"""
         if ctx.guild.id != 401883208511389716:
             return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
 
@@ -331,6 +335,7 @@ class Achievements(commands.Cog):
 
     @commands.command()
     async def massacre(self, ctx, member: discord.Member):
+        """Win a Bounty match with the enemy team scoring 0 stars"""
         if ctx.guild.id != 401883208511389716:
             return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
 
@@ -350,6 +355,7 @@ class Achievements(commands.Cog):
 
     @commands.command()
     async def bounty(self, ctx, member: discord.Member):
+        """Obtain 50 stars as a team in Bounty"""
         if ctx.guild.id != 401883208511389716:
             return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
 
@@ -364,5 +370,185 @@ class Achievements(commands.Cog):
             elif not await self.config.user(member).bounty():
                 await self.config.user(member).bounty.set(True)
                 return await ctx.send(embed=goodEmbed(f"Bounty Hunter successfully added to {str(member)}."))
+        except Exception as e:
+            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+
+    @commands.command()
+    async def thief(self, ctx, member: discord.Member):
+        """Destroy the safe in Heist in under a minute"""
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
+
+        rolesna = ctx.guild.get_role(564552111875162112)
+        if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
+            return await ctx.send(embed=badEmbed("You can't use this, sorry."))
+
+        try:
+            if await self.config.user(member).thief():
+                await self.config.user(member).thief.set(False)
+                return await ctx.send(embed=goodEmbed(f"Thief successfully removed from {str(member)}."))
+            elif not await self.config.user(member).thief():
+                await self.config.user(member).thief.set(True)
+                return await ctx.send(embed=goodEmbed(f"Thief successfully added to {str(member)}."))
+        except Exception as e:
+            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+
+    @commands.command()
+    async def close(self, ctx, member: discord.Member):
+        """Win a match in Heist with your safe on 1% HP"""
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
+
+        rolesna = ctx.guild.get_role(564552111875162112)
+        if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
+            return await ctx.send(embed=badEmbed("You can't use this, sorry."))
+
+        try:
+            if await self.config.user(member).close():
+                await self.config.user(member).close.set(False)
+                return await ctx.send(embed=goodEmbed(f"Close Call successfully removed from {str(member)}."))
+            elif not await self.config.user(member).close():
+                await self.config.user(member).close.set(True)
+                return await ctx.send(embed=goodEmbed(f"Close Call successfully added to {str(member)}."))
+        except Exception as e:
+            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+
+    @commands.command()
+    async def guardian(self, ctx, member: discord.Member):
+        """Win a game of Heist with 100% safe HP"""
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
+
+        rolesna = ctx.guild.get_role(564552111875162112)
+        if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
+            return await ctx.send(embed=badEmbed("You can't use this, sorry."))
+
+        try:
+            if await self.config.user(member).guardian():
+                await self.config.user(member).guardian.set(False)
+                return await ctx.send(embed=goodEmbed(f"Guardian successfully removed from {str(member)}."))
+            elif not await self.config.user(member).guardian():
+                await self.config.user(member).guardian.set(True)
+                return await ctx.send(embed=goodEmbed(f"Guardian successfully added to {str(member)}."))
+        except Exception as e:
+            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+
+    @commands.command()
+    async def deadlock(self, ctx, member: discord.Member):
+        """Get a draw in Heist"""
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
+
+        rolesna = ctx.guild.get_role(564552111875162112)
+        if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
+            return await ctx.send(embed=badEmbed("You can't use this, sorry."))
+
+        try:
+            if await self.config.user(member).deadlock():
+                await self.config.user(member).deadlock.set(False)
+                return await ctx.send(embed=goodEmbed(f"Deadlock successfully removed from {str(member)}."))
+            elif not await self.config.user(member).deadlock():
+                await self.config.user(member).deadlock.set(True)
+                return await ctx.send(embed=goodEmbed(f"Deadlock successfully added to {str(member)}."))
+        except Exception as e:
+            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+
+    @commands.command()
+    async def turbo(self, ctx, member: discord.Member):
+        """YOU score a goal in Brawl Ball within the first 15 seconds"""
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
+
+        rolesna = ctx.guild.get_role(564552111875162112)
+        if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
+            return await ctx.send(embed=badEmbed("You can't use this, sorry."))
+
+        try:
+            if await self.config.user(member).turbo():
+                await self.config.user(member).turbo.set(False)
+                return await ctx.send(embed=goodEmbed(f"Turbo successfully removed from {str(member)}."))
+            elif not await self.config.user(member).turbo():
+                await self.config.user(member).turbo.set(True)
+                return await ctx.send(embed=goodEmbed(f"Turbo successfully added to {str(member)}."))
+        except Exception as e:
+            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+
+    @commands.command()
+    async def pro(self, ctx, member: discord.Member):
+        """Win a game of Brawl Ball within 30 seconds"""
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
+
+        rolesna = ctx.guild.get_role(564552111875162112)
+        if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
+            return await ctx.send(embed=badEmbed("You can't use this, sorry."))
+
+        try:
+            if await self.config.user(member).pro():
+                await self.config.user(member).pro.set(False)
+                return await ctx.send(embed=goodEmbed(f"Pro Ball successfully removed from {str(member)}."))
+            elif not await self.config.user(member).pro():
+                await self.config.user(member).pro.set(True)
+                return await ctx.send(embed=goodEmbed(f"Pro Ball successfully added to {str(member)}."))
+        except Exception as e:
+            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+
+    @commands.command()
+    async def stale(self, ctx, member: discord.Member):
+        """Get a draw in Siege"""
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
+
+        rolesna = ctx.guild.get_role(564552111875162112)
+        if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
+            return await ctx.send(embed=badEmbed("You can't use this, sorry."))
+
+        try:
+            if await self.config.user(member).stale():
+                await self.config.user(member).stale.set(False)
+                return await ctx.send(embed=goodEmbed(f"Stalemate successfully removed from {str(member)}."))
+            elif not await self.config.user(member).stale():
+                await self.config.user(member).stale.set(True)
+                return await ctx.send(embed=goodEmbed(f"Stalemate successfully added to {str(member)}."))
+        except Exception as e:
+            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+
+    @commands.command()
+    async def op(self, ctx, member: discord.Member):
+        """Get a level 20 bot or higher in Siege"""
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
+
+        rolesna = ctx.guild.get_role(564552111875162112)
+        if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
+            return await ctx.send(embed=badEmbed("You can't use this, sorry."))
+
+        try:
+            if await self.config.user(member).op():
+                await self.config.user(member).op.set(False)
+                return await ctx.send(embed=goodEmbed(f"OP Bot successfully removed from {str(member)}."))
+            elif not await self.config.user(member).op():
+                await self.config.user(member).op.set(True)
+                return await ctx.send(embed=goodEmbed(f"OP Bot successfully added to {str(member)}."))
+        except Exception as e:
+            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+
+    @commands.command()
+    async def clutch(self, ctx, member: discord.Member):
+        """Win a game of Siege with your turret on 1%"""
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
+
+        rolesna = ctx.guild.get_role(564552111875162112)
+        if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
+            return await ctx.send(embed=badEmbed("You can't use this, sorry."))
+
+        try:
+            if await self.config.user(member).clutch():
+                await self.config.user(member).clutch.set(False)
+                return await ctx.send(embed=goodEmbed(f"Clutch successfully removed from {str(member)}."))
+            elif not await self.config.user(member).clutch():
+                await self.config.user(member).clutch.set(True)
+                return await ctx.send(embed=goodEmbed(f"Clutch successfully added to {str(member)}."))
         except Exception as e:
             return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
