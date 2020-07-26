@@ -418,7 +418,7 @@ class Achievements(commands.Cog):
         for v in values:
             if v == "expa" or v == "expp" or v == "trophya" or v == "trophyp" or v == "trioa" or v == "triop" or v == "soloa" or v == "solop" or v == "duoa" or v == "duop" or v == "ppa" or v == "ppp":
                 continue
-            if not v.value():
+            if not await self.config.user(member).get_raw(v):
                 result = False
         if result and ag not in member.roles:
             await member.add_roles(ag)
