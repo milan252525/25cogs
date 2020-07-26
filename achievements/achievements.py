@@ -286,7 +286,7 @@ class Achievements(commands.Cog):
 
         keys = await self.config.user(member).all()
         keyword = process.extract(keyword, keys, limit=1)
-        keyword = keyword[0][2]
+        await ctx.send(keyword)
 
         try:
             if await self.config.user(member).get_raw(keyword):
