@@ -291,10 +291,12 @@ class Achievements(commands.Cog):
         try:
             if await self.config.user(member).get_raw(keyword):
                 await self.config.user(member).set_raw(keyword, value=False)
-                return await ctx.send(embed=goodEmbed(f"Achievement {keyword} was successfully removed from {str(member)}."))
+                roles = await checkforroles(member)
+                return await ctx.send(embed=goodEmbed(f"Achievement {keyword} was successfully removed from {str(member)}.\n{roles}"))
             if not await self.config.user(member).get_raw(keyword):
                 await self.config.user(member).set_raw(keyword, value=True)
-                return await ctx.send(embed=goodEmbed(f"Achievement {keyword} was successfully added to {str(member)}."))
+                roles = await checkforroles(member)
+                return await ctx.send(embed=goodEmbed(f"Achievement {keyword} was successfully added to {str(member)}.\n{roles}"))
         except Exception as e:
             return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
 
@@ -323,14 +325,20 @@ class Achievements(commands.Cog):
             except Exception as e:
                 return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
 
-        return await ctx.send(embed=goodEmbed(msg))
+        roles = await checkforroles(member)
+
+        return await ctx.send(embed=goodEmbed(msg + f"{roles}"))
 
     async def checkforroles(self, member: discord.Member):
+        msg = ""
         dt = member.guild.get_role(736956117518647356)
         if self.config.user(member).pinch() and self.config.user(member).dynamic():
             if dt not in member.roles:
                 await member.add_roles(dt)
+                msg += f"Double Trouble role added!\n"
         else:
             if dt in member.roles:
                 await member.remove_roles(dt)
+                msg += "Double Trouble role removed.\n"
 
+        return msg
