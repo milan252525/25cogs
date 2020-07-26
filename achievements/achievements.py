@@ -5,6 +5,7 @@ from bs.utils import goodEmbed, badEmbed
 
 import asyncio
 import brawlstats
+from typing import Union
 
 class Achievements(commands.Cog):
 
