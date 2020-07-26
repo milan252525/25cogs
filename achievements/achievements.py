@@ -332,7 +332,7 @@ class Achievements(commands.Cog):
     async def checkforroles(self, member: discord.Member):
         msg = ""
         dt = member.guild.get_role(736956117518647356)
-        if self.config.user(member).pinch() and self.config.user(member).dynamic():
+        if await self.config.user(member).pinch() and await self.config.user(member).dynamic():
             if dt not in member.roles:
                 await member.add_roles(dt)
                 msg += f"Double Trouble role added!\n"
