@@ -110,7 +110,7 @@ class Welcome(commands.Cog):
 
         await ctx.trigger_typing()
 
-        labs = ctx.guild.get_role(await self.config.guild(ctx.guid).family())
+        labs = ctx.guild.get_role(await self.config.guild(ctx.guild).family())
         guest = ctx.guild.get_role(await self.config.guild(ctx.guild).guest())
         newcomer = ctx.guild.get_role(await self.config.guild(ctx.guild).remove())
         brawlstars = ctx.guild.get_role(await self.config.guild(ctx.guild).bs())
