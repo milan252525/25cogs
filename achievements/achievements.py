@@ -106,9 +106,7 @@ class Achievements(commands.Cog):
         await ctx.trigger_typing()
 
         try:
-            for k in self.config.user(member):
-                if k == keyword:
-                    await self.config.user(member).k.set(True)
+            await ctx.send(self.config.user(member))
 
             await ctx.send(embed=goodEmbed(f"Achievement {keyword} successfully registered for the user {str(member)}."))
         except Exception as e:
