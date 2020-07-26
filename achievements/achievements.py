@@ -324,3 +324,13 @@ class Achievements(commands.Cog):
                 return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
 
         return await ctx.send(embed=goodEmbed(msg))
+
+    async def checkforroles(self, member: discord.Member):
+        dt = member.guild.get_role(736956117518647356)
+        if self.config.user(member).pinch() and self.config.user(member).dynamic():
+            if dt not in member.roles:
+                await member.add_roles(dt)
+        else:
+            if dt in member.roles:
+                await member.remove_roles(dt)
+
