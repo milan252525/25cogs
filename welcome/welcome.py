@@ -150,14 +150,10 @@ class Welcome(commands.Cog):
 
         member_role_expected = None
         if player_in_club:
-            server = guilds[ctx.guild.id]
-            clubs = server["clubs"]
-            for club in clubs:
-                info = clubs[club]
-                await ctx.send(player.club.tag.lower())
-                await ctx.send("#" + info["tag"])
-                if player.club.tag.lower() == "#" + info["tag"]:
-                    member_role_expected = info["role"]
+            clubs = await self.bsconfig.guild(ctx.guild).clubs()
+            for key in clubs.keys():
+                if "#" + clubs[key]["tag"] == player.club.tag:
+                    member_role_expected = ctx.guild.get_role(clubs[key]["role"])
 
         if not player_in_club:
             msg += await self.removeroleifpresent(member, newcomer)
