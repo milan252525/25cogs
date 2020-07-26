@@ -281,10 +281,7 @@ class Achievements(commands.Cog):
         if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
             return await ctx.send(embed=badEmbed("You can't use this, sorry."))
 
-        try:
-            achievements = self.config.user(member)
-            achievements[keyword] = True
-            self.config.user(member).set(achievements)
-            return await ctx.send(embed=goodEmbed(f"Achievement {keyword.capitalize()} successfully added to {str(member)}."))
-        except Exception as e:
-            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+        achievements = self.config.user(member)
+        achievements[keyword] = True
+        self.config.user(member).set(achievements)
+        return await ctx.send(embed=goodEmbed(f"Achievement {keyword.capitalize()} successfully added to {str(member)}."))
