@@ -331,6 +331,7 @@ class Achievements(commands.Cog):
 
     async def checkforroles(self, member: discord.Member):
         msg = ""
+
         dt = member.guild.get_role(736956117518647356)
         if await self.config.user(member).pinch() and await self.config.user(member).dynamic():
             if dt not in member.roles:
@@ -340,5 +341,25 @@ class Achievements(commands.Cog):
             if dt in member.roles:
                 await member.remove_roles(dt)
                 msg += "Double Trouble role removed.\n"
+
+        ss = member.guild.get_role(736960419922444348)
+        if await self.config.user(member).trident() and await self.config.user(member).over() and await self.config.user(member).survivalist() and await self.config.user(member).after():
+            if ss not in member.roles:
+                await member.add_roles(ss)
+                msg += f"Showdown Showoff role added!\n"
+        else:
+            if ss in member.roles:
+                await member.remove_roles(ss)
+                msg += "Showdown Showoff role removed.\n"
+
+        gh = member.guild.get_role(736961181138419783)
+        if await self.config.user(member).carrier() and await self.config.user(member).teamwork():
+            if gh not in member.roles:
+                await member.add_roles(gh)
+                msg += f"Gem Hoarder role added!\n"
+        else:
+            if gh in member.roles:
+                await member.remove_roles(gh)
+                msg += "Gem Hoarder role removed.\n"
 
         return msg
