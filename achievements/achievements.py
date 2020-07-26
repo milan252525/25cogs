@@ -461,7 +461,7 @@ class Achievements(commands.Cog):
                         value="__**Assassin**__ - Win a match of Bounty with 7 stars on top of ALL brawlers.\n__**Massacre**__ - Win a Bounty match with the enemy team scoring 0 stars.\n__**Bounty Hunter**__ - Obtain 50 stars as a team in Bounty.",
                         inline=False)
         embed.add_field(name="Heist",
-                        value="__**Thief**__ - Destroy the safe in Heist in under a minute.\n__**Close Call**__ - Win a match in Heist with your safe on 1% HP. \n__**Guardian**__ - Win a game of Heist with 100% safe HP.\nDeadlock - Get a draw in Heist.",
+                        value="__**Thief**__ - Destroy the safe in Heist in under a minute.\n__**Close Call**__ - Win a match in Heist with your safe on 1% HP. \n__**Guardian**__ - Win a game of Heist with 100% safe HP.\n__**Deadlock**__ - Get a draw in Heist.",
                         inline=False)
         embed.add_field(name="Brawl Ball",
                         value="__**Turbo**__ - YOU score a goal in Brawl Ball within the first 15 seconds. \n__**Pro Ball**__ - Win a game of Brawl Ball within 30 seconds.",
