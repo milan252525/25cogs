@@ -56,9 +56,9 @@ class Achievements(commands.Cog):
                         "trophya": False,
                         "trophyp": False,
                         "trophyg": False,
-                        "tvta": False,
-                        "tvtp": False,
-                        "tvtg": False,
+                        "trioa": False,
+                        "triop": False,
+                        "triog": False,
                         "soloa": False,
                         "solop": False,
                         "solog": False,
@@ -232,11 +232,11 @@ class Achievements(commands.Cog):
             aembed.add_field(name="Trophies", value=troph, inline=False)
 
         tvt = ""
-        if await self.config.user(member).tvta():
+        if await self.config.user(member).trioa():
             tvt = tvt + "3v3 Amateur\n"
-        elif await self.config.user(member).tvtp():
+        elif await self.config.user(member).triop():
             tvt = tvt + "3v3 Pro\n"
-        elif await self.config.user(member).tvtg():
+        elif await self.config.user(member).triog():
             tvt = tvt + "3v3 God\n"
         if tvt != "":
             aembed.add_field(name="3v3 Wins", value=tvt, inline=False)
@@ -275,7 +275,7 @@ class Achievements(commands.Cog):
 
     @commands.command(aliases=['aa'])
     async def addachievement(self, ctx, keyword, member: discord.Member):
-        """Add an achievement to a person"""
+        """Add or remove an achievement from a person"""
         if ctx.guild.id != 401883208511389716:
             return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
 
