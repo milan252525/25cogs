@@ -272,8 +272,8 @@ class Achievements(commands.Cog):
 
         return await ctx.send(embed=aembed)
 
-    @commands.command()
-    async def carrier(self, ctx, member: discord.Member):
+    @commands.command(aliases=['aa'])
+    async def addachievement(self, ctx, keyword, member: discord.Member):
         if ctx.guild.id != 401883208511389716:
             return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
 
@@ -282,11 +282,9 @@ class Achievements(commands.Cog):
             return await ctx.send(embed=badEmbed("You can't use this, sorry."))
 
         try:
-            if await self.config.user(member).carrier():
-                await self.config.user(member).carrier.set(False)
-                return await ctx.send(embed=goodEmbed(f"Carrier successfully removed from {str(member)}."))
-            elif not await self.config.user(member).carrier():
-                await self.config.user(member).carrier.set(True)
-                return await ctx.send(embed=goodEmbed(f"Carrier successfully added to {str(member)}."))
+            achievements = self.config.user(member)
+            achievements[keyword] = True
+            self.config.user(member).set(achievements)
+            return await ctx.send(embed=goodEmbed(f"Achievement {keyword.capitalize()} successfully added to {str(member)}."))
         except Exception as e:
             return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
