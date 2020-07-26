@@ -276,7 +276,7 @@ class Achievements(commands.Cog):
     @commands.command(aliases=['aa'])
     async def addachievement(self, ctx, member: discord.Member, keyword):
         """Add or remove an achievement from a person"""
-        if ctx.guild.id != 401883208511389716:
+        if ctx.guild.id != 401883208511389716 and ctx.channel.id != 555662656736985090 and ctx.channel.id != 472117791604998156:
             return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
 
         rolesna = ctx.guild.get_role(564552111875162112)
@@ -296,7 +296,7 @@ class Achievements(commands.Cog):
     @commands.command(aliases=['multi'])
     async def addachievements(self, ctx, member: discord.Member, *keywords):
         """Add or remove an achievement from a person"""
-        if ctx.guild.id != 401883208511389716:
+        if ctx.guild.id != 401883208511389716 and ctx.channel.id != 555662656736985090 and ctx.channel.id != 472117791604998156:
             return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
 
         rolesna = ctx.guild.get_role(564552111875162112)
