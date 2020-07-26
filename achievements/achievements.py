@@ -287,11 +287,11 @@ class Achievements(commands.Cog):
     async def addachievement(self, ctx, member: discord.Member, keyword):
         """Add or remove an achievement from a person"""
         if ctx.guild.id != 401883208511389716 and ctx.channel.id != 555662656736985090 and ctx.channel.id != 472117791604998156:
-            return await ctx.send(embed=badaemb("Can't use this here, sorry."))
+            return await ctx.send(embed=self.badaemb("Can't use this here, sorry."))
 
         rolesna = ctx.guild.get_role(564552111875162112)
         if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
-            return await ctx.send(embed=badaemb("You can't use this, sorry."))
+            return await ctx.send(embed=self.badaemb("You can't use this, sorry."))
 
         keys = await self.config.user(member).all()
         keyword = process.extract(keyword, keys.keys(), limit=1)
@@ -301,23 +301,23 @@ class Achievements(commands.Cog):
             if await self.config.user(member).get_raw(keyword):
                 await self.config.user(member).set_raw(keyword, value=False)
                 roles = await self.checkforroles(member)
-                return await ctx.send(embed=aemb(f"Achievement {keyword} was successfully removed from {str(member)}.\n{roles}"))
+                return await ctx.send(embed=self.aemb(f"Achievement {keyword} was successfully removed from {str(member)}.\n{roles}"))
             if not await self.config.user(member).get_raw(keyword):
                 await self.config.user(member).set_raw(keyword, value=True)
                 roles = await self.checkforroles(member)
-                return await ctx.send(embed=aemb(f"Achievement {keyword} was successfully added to {str(member)}.\n{roles}"))
+                return await ctx.send(embed=self.aemb(f"Achievement {keyword} was successfully added to {str(member)}.\n{roles}"))
         except Exception as e:
-            return await ctx.send(embed=badaemb(f"Something went wrong: {e}."))
+            return await ctx.send(embed=self.badaemb(f"Something went wrong: {e}."))
 
     @commands.command(aliases=['multi'])
     async def addachievements(self, ctx, member: discord.Member, *keywords):
         """Add or remove an achievement from a person"""
         if ctx.guild.id != 401883208511389716 and ctx.channel.id != 555662656736985090 and ctx.channel.id != 472117791604998156:
-            return await ctx.send(embed=badaemb("Can't use this here, sorry."))
+            return await ctx.send(embed=self.badaemb("Can't use this here, sorry."))
 
         rolesna = ctx.guild.get_role(564552111875162112)
         if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
-            return await ctx.send(embed=badaemb("You can't use this, sorry."))
+            return await ctx.send(embed=self.badaemb("You can't use this, sorry."))
 
         msg = ""
         for keyword in keywords:
@@ -332,11 +332,11 @@ class Achievements(commands.Cog):
                     await self.config.user(member).set_raw(keyword, value=True)
                     msg += f"Achievement {keyword} was successfully added to {str(member)}.\n"
             except Exception as e:
-                return await ctx.send(embed=badaemb(f"Something went wrong: {e}."))
+                return await ctx.send(embed=self.badaemb(f"Something went wrong: {e}."))
 
         roles = await self.checkforroles(member)
 
-        return await ctx.send(embed=aemb(msg + f"{roles}"))
+        return await ctx.send(embed=self.aemb(msg + f"{roles}"))
 
     async def checkforroles(self, member: discord.Member):
         msg = ""
