@@ -285,8 +285,6 @@ class Achievements(commands.Cog):
             return await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description="**You can't use this, sorry.**"))
 
         keys = await self.config.user(member).all()
-        for k in keys:
-            await ctx.send(k)
         keyword = process.extract(keyword, keys.keys(), limit=1)
         keyword = keyword[0][0]
 
@@ -418,7 +416,7 @@ class Achievements(commands.Cog):
         values = await self.config.user(member).all()
         result = True
         for v in values:
-            if v.key() == "expa" or v.key() == "expp" or v.key() == "trophya" or v.key() == "trophyp" or v.key() == "trioa" or v.key() == "triop" or v.key() == "soloa" or v.key() == "solop" or v.key() == "duoa" or v.key() == "duop" or v.key() == "ppa" or v.key() == "ppp":
+            if v == "expa" or v == "expp" or v == "trophya" or v == "trophyp" or v == "trioa" or v == "triop" or v == "soloa" or v == "solop" or v == "duoa" or v == "duop" or v == "ppa" or v == "ppp":
                 continue
             if not v.value():
                 result = False
