@@ -303,15 +303,13 @@ class Achievements(commands.Cog):
         if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
             return await ctx.send(embed=badEmbed("You can't use this, sorry."))
 
-        await ctx.send(keywords)
-
         for keyword in keywords:
             try:
                 if await self.config.user(member).get_raw(keyword):
                     await self.config.user(member).set_raw(keyword, value=False)
-                    return await ctx.send(embed=goodEmbed(f"Achievement was successfully removed from {str(member)}."))
+                    await ctx.send(embed=goodEmbed(f"Achievement was successfully removed from {str(member)}."))
                 if not await self.config.user(member).get_raw(keyword):
                     await self.config.user(member).set_raw(keyword, value=True)
-                    return await ctx.send(embed=goodEmbed(f"Achievement was successfully added to {str(member)}."))
+                    await ctx.send(embed=goodEmbed(f"Achievement was successfully added to {str(member)}."))
             except Exception as e:
                 return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
