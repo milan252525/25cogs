@@ -291,11 +291,11 @@ class Achievements(commands.Cog):
         try:
             if await self.config.user(member).get_raw(keyword):
                 await self.config.user(member).set_raw(keyword, value=False)
-                roles = await checkforroles(member)
+                roles = await self.checkforroles(member)
                 return await ctx.send(embed=goodEmbed(f"Achievement {keyword} was successfully removed from {str(member)}.\n{roles}"))
             if not await self.config.user(member).get_raw(keyword):
                 await self.config.user(member).set_raw(keyword, value=True)
-                roles = await checkforroles(member)
+                roles = await self.checkforroles(member)
                 return await ctx.send(embed=goodEmbed(f"Achievement {keyword} was successfully added to {str(member)}.\n{roles}"))
         except Exception as e:
             return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
@@ -325,7 +325,7 @@ class Achievements(commands.Cog):
             except Exception as e:
                 return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
 
-        roles = await checkforroles(member)
+        roles = await self.checkforroles(member)
 
         return await ctx.send(embed=goodEmbed(msg + f"{roles}"))
 
