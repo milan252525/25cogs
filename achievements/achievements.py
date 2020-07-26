@@ -449,3 +449,73 @@ class Achievements(commands.Cog):
 
         return msg
 
+    @commands.command()
+    async def aembed(self, ctx):
+        if ctx.author.id != 359131399132807178:
+            return await ctx.send("Hands off.")
+        embed = discord.Embed(color=discord.Color.green(), title="__**Achievements**__")
+        embed.add_field(name="Gem Grab",
+                        value="__**Carrier**__ - Win Gem Grab with YOU holding 20+ Gems.\n__**Teamwork**__ - Win Gem Grab with each member of your team holding 4+ Gems.",
+                        inline=False)
+        embed.add_field(name="Bounty",
+                        value="__**Assassin**__ - Win a match of Bounty with 7 stars on top of ALL brawlers.\n__**Massacre**__ - Win a Bounty match with the enemy team scoring 0 stars.\n__**Bounty Hunter**__ - Obtain 50 stars as a team in Bounty.",
+                        inline=False)
+        embed.add_field(name="Heist",
+                        value="__**Thief**__ - Destroy the safe in Heist in under a minute.\n__**Close Call**__ - Win a match in Heist with your safe on 1% HP. \n__**Guardian**__ - Win a game of Heist with 100% safe HP.\nDeadlock - Get a draw in Heist.",
+                        inline=False)
+        embed.add_field(name="Brawl Ball",
+                        value="__**Turbo**__ - YOU score a goal in Brawl Ball within the first 15 seconds. \n__**Pro Ball**__ - Win a game of Brawl Ball within 30 seconds.",
+                        inline=False)
+        embed.add_field(name="Siege",
+                        value="__**Stalemate**__ - Get a draw in Siege.\n__**OP Bot**__ - Get a level 20 bot or higher in Siege.\n__**Clutch**__ - Win a game of Siege with your turret on 1%.",
+                        inline=False)
+        embed.add_field(name="Hot Zone",
+                        value="__**Nail Biter**__ - Win with a 1% difference.\n__**Zoned Out**__ - Win with the opponents scoring less than 10%.\n__**Domination**__ - Win a game under 1 minute 20 seconds.",
+                        inline=False)
+        embed.add_field(name="Solo Showdown",
+                        value="__**Trident**__ - Win 1st place in Solo Showdown with 1-99HP.\n__**Overload**__ - Come 1st in Solo Showdown holding 20+ powerups.\n__**Survivalist**__ - Win 1st in Solo Showdown having 0 powerups.\n__**Afterlife**__ - You place 1st in solo SD. You and the last player kill eachother, but you get 1st.",
+                        inline=False)
+        embed.add_field(name="Duo Showdown",
+                        value="__**Pinched**__ - Win 1st in Duo Showdown with neither player holding a powerup.\n__**Dynamic Duo**__ - Win 1st in Duo Showdown holding 40+ powerups combined.",
+                        inline=False)
+        embed.add_field(name="Events",
+                        value="__**Shutdown**__ - Defeat the Big Brawler in under 45 seconds.\n__**Robo Destroyer**__ - Clear 'Insane IV' in Boss Fight.\n__**Defender**__ - Clear 'Insane IV' in robo rumble.\n__**City Protector**__ - Clear ‘Insane IV’ in Super City Rampage.",
+                        inline=False)
+        embed.add_field(name="Miscellaneous",
+                        value="__**Draw Star**__ - Get a draw, but you are the star player.\n__**Max Power**__ - Get all your brawlers to level 10.\n__**Brawl Master**__ - Get all of your brawlers to 500 trophies.\n__**Brawl Legend**__ - Get all of your brawlers to 750 trophies, in the same season.\n__**Portrait OG Brawler**__ - Played the game since it was in portrait mode. (Portrait mode image required)\n__**Landscape OG Brawler**__ - Play the game when it was initially released on Android/with the old landscape style. (Original android style)\n__**Global OG Brawler**__ - Play the game when it was first released globally. (Have the Star Shelly Skin)\n__**Bling**__ - Have a 300 gem skin or 10k+ star points skin.\n__**Celebrity**__ - Be featured on Brawl TV.\n__**Beast Brawler**__ - Get a brawler to 500+ on level 1.\n__**God Brawler**__ - Get a brawler to 1000+ trophies.",
+                        inline=False)
+        await ctx.send(embed=embed)
+        pembed = discord.Embed(color=discord.Color.green(), title="__**Progression Achievements**__")
+        pembed.add_field(name="Experience Levels",
+                        value="Level 100 - __**Exp Amateur**__\nLevel 150 - __**Exp Pro**__\nLevel 200 - __**Exp God**__",
+                        inline=False)
+        pembed.add_field(name="Trophies",
+                        value="15,000 - __**Trophy Amateur**__\n18,000 - __**Trophy Pro**__\n22,000 - __**Trophy God**__",
+                        inline=False)
+        pembed.add_field(name="3v3 Wins",
+                        value="2,500 - __**3v3 Amateur**__\n5,000 - __**3v3 Pro**__\n10,000 - __**3v3 God**__",
+                        inline=False)
+        pembed.add_field(name="Solo Showdown",
+                        value="250 wins - __**Solo Amateur**__\n500 wins  - __**Solo Pro**__\n1,000 wins - __**Solo God**__",
+                        inline=False)
+        pembed.add_field(name="Duo Showdown",
+                        value="250 wins - __**Duo Amateur**__\n500 wins - __**Duo Pro**__\n1,000 wins - __**Duo God**__",
+                        inline=False)
+        pembed.add_field(name="Power Play Points",
+                        value="700 - __**PowerPlay Amateur**__\n900 - __**PowerPlay Pro**__\n1100 - __**PowerPlay God**__",
+                        inline=False)
+        await ctx.send(embed=pembed)
+        dt = member.guild.get_role(736956117518647356)
+        ss = member.guild.get_role(736960419922444348)
+        gh = member.guild.get_role(736961181138419783)
+        sm = member.guild.get_role(736972276653883412)
+        bb = member.guild.get_role(736972900837490869)
+        hm = member.guild.get_role(736973167553151066)
+        sc = member.guild.get_role(736973355512627200)
+        hs = member.guild.get_role(736973807352283229)
+        ag = member.guild.get_role(736974837624471583)
+        bl = member.guild.get_role(605758039928078338)
+        lw = member.guild.get_role(736975188369080331)
+        rembed = discord.Embed(color=discord.Color.green(), title="__**Discord Roles**__", description=f"{dt.mention} - Earn all Duo Showdown achievements.\n{ss.mention} - Earn all Solo Showdown achievements.\n{gh.mention} - Earn all Gem Grab achievements.\n{sm.mention} - Earn all Siege achievements.\n{bb.mention} - Earn all Brawl Ball achievements.\n{hm.mention} - Earn all Heist achievements.\n{sc.mention} - Earn all Bounty achievements.\n{hs.mention} - Earn all Hot Zone achievements.\n{ag.mention} - Earn all achievements.\n{bl.mention} - Earn the Brawl Legend achievement.\n{lw.mention} - Earn all god progression and special events achievements. ")
+        await ctx.send(embed=rembed)
+
