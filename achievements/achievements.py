@@ -286,7 +286,7 @@ class Achievements(commands.Cog):
 
         keys = await self.config.user(member).all()
         keyword = process.extract(keyword, keys.keys(), limit=1)
-        await ctx.send(keyword)
+        keyword = keyword[0][0]
 
         try:
             if await self.config.user(member).get_raw(keyword):
@@ -311,8 +311,8 @@ class Achievements(commands.Cog):
         msg = ""
         for keyword in keywords:
             keys = await self.config.user(member).all()
-            keyword = process.extract(keyword, keys, limit=1)
-            keyword = keyword[0][2]
+            keyword = process.extract(keyword, keys.keys(), limit=1)
+            keyword = keyword[0][0]
             try:
                 if await self.config.user(member).get_raw(keyword):
                     await self.config.user(member).set_raw(keyword, value=False)
