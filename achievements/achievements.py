@@ -285,6 +285,7 @@ class Achievements(commands.Cog):
             return await ctx.send(embed=badEmbed("You can't use this, sorry."))
 
         keys = await self.config.user(member).keys()
+        await ctx.send(keys)
         keyword = process.extract(keyword, keys, limit=1)
 
         #try:
