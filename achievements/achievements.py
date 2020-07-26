@@ -308,7 +308,7 @@ class Achievements(commands.Cog):
                 if await self.config.user(member).get_raw(keyword):
                     await self.config.user(member).set_raw(keyword, value=False)
                     await ctx.send(embed=goodEmbed(f"Achievement {keyword} was successfully removed from {str(member)}."))
-                if not await self.config.user(member).get_raw(keyword):
+                elif not await self.config.user(member).get_raw(keyword):
                     await self.config.user(member).set_raw(keyword, value=True)
                     await ctx.send(embed=goodEmbed(f"Achievement {keyword} was successfully added to {str(member)}."))
             except Exception as e:
