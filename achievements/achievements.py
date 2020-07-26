@@ -288,14 +288,14 @@ class Achievements(commands.Cog):
         keyword = process.extract(keyword, keys, limit=1)
         keyword = keyword[0][2]
 
-        #try:
-        if await self.config.user(member).get_raw(keyword):
-            await self.config.user(member).set_raw(keyword, value=False)
-            return await ctx.send(embed=goodEmbed(f"Achievement {keyword} was successfully removed from {str(member)}."))
-        if not await self.config.user(member).get_raw(keyword):
-            await self.config.user(member).set_raw(keyword, value=True)
-            return await ctx.send(embed=goodEmbed(f"Achievement {keyword} was successfully added to {str(member)}."))
-        #except Exception as e:
+        try:
+            if await self.config.user(member).get_raw(keyword):
+                await self.config.user(member).set_raw(keyword, value=False)
+                return await ctx.send(embed=goodEmbed(f"Achievement {keyword} was successfully removed from {str(member)}."))
+            if not await self.config.user(member).get_raw(keyword):
+                await self.config.user(member).set_raw(keyword, value=True)
+                return await ctx.send(embed=goodEmbed(f"Achievement {keyword} was successfully added to {str(member)}."))
+        except Exception as e:
             return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
 
     @commands.command(aliases=['multi'])
@@ -310,8 +310,9 @@ class Achievements(commands.Cog):
 
         msg = ""
         for keyword in keywords:
-            keys = await self.config.user(member).keys()
+            keys = await self.config.user(member).all()
             keyword = process.extract(keyword, keys, limit=1)
+            keyword = keyword[0][2]
             try:
                 if await self.config.user(member).get_raw(keyword):
                     await self.config.user(member).set_raw(keyword, value=False)
