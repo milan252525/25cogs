@@ -154,6 +154,8 @@ class Welcome(commands.Cog):
             clubs = server["clubs"]
             for club in clubs:
                 info = clubs[club]
+                await ctx.send(player.club.tag.lower())
+                await ctx.send("#" + info["tag"])
                 if player.club.tag.lower() == "#" + info["tag"]:
                     member_role_expected = info["role"]
 
