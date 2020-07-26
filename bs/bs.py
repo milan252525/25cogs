@@ -1025,6 +1025,8 @@ class BrawlStarsCog(commands.Cog):
     async def clubs_info(self, ctx, key: str, *, info: str = ""):
         """Edit club info"""
         await ctx.trigger_typing()
+        key = key.lower()
+
         try:
             await self.config.guild(ctx.guild).clubs.set_raw(key, "info", value=info)
             await ctx.send(embed=goodEmbed("Club info successfully edited!"))
@@ -1037,6 +1039,8 @@ class BrawlStarsCog(commands.Cog):
     async def clubs_role(self, ctx, key: str, role: discord.Role = None):
         """Add a role to club"""
         await ctx.trigger_typing()
+        key = key.lower()
+
         try:
             await self.config.guild(ctx.guild).clubs.set_raw(key, "role", value=role.id if role is not None else None)
             name = role.name if role is not None else "None"
