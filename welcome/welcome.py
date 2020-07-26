@@ -190,7 +190,7 @@ class Welcome(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    async def addroletest(self, ctx, keyword, role: str):
+    async def addroletest(self, ctx, keyword, role: int):
         if ctx.author.id != 359131399132807178:
             return await ctx.send("Hands off.")
 
