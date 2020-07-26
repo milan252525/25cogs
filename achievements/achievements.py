@@ -412,4 +412,37 @@ class Achievements(commands.Cog):
                 await member.remove_roles(hs)
                 msg += "Hot Shot role removed.\n"
 
+        ag = member.guild.get_role(736974837624471583)
+        values = await self.config.user(member).all()
+        result = True
+        for v in values.values():
+            if not v:
+                result = False
+        if result:
+            await member.add_roles(ag)
+            msg += f"Achievement God role added!\n"
+        else:
+            await member.remove_roles(ag)
+            msg += "Achievement God role removed.\n"
+
+        bl = member.guild.get_role(605758039928078338)
+        if await self.config.user(member).brawll():
+            if bl not in member.roles:
+                await member.add_roles(bl)
+                msg += f"Brawl Legend role added!\n"
+        else:
+            if bl in member.roles:
+                await member.remove_roles(bl)
+                msg += "Brawl Legend role removed.\n"
+
+        lw = member.guild.get_role(736975188369080331)
+        if await self.config.user(member).trophyg() and await self.config.user(member).triog() and await self.config.user(member).solog() and await self.config.user(member).duog() and await self.config.user(member).ppg() and await self.config.user(member).shut() and await self.config.user(member).robo() and await self.config.user(member).defender() and await self.config.user(member).city():
+            if lw not in member.roles:
+                await member.add_roles(lw)
+                msg += f"Ladder Warrior role added!\n"
+        else:
+            if lw in member.roles:
+                await member.remove_roles(lw)
+                msg += "Ladder Warrior role removed.\n"
+
         return msg
