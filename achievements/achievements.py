@@ -416,6 +416,7 @@ class Achievements(commands.Cog):
         values = await self.config.user(member).all()
         result = True
         for v in values:
+            await ctx.send(v)
             if v.key() == "expa" or v.key() == "expp" or v.key() == "trophya" or v.key() == "trophyp" or v.key() == "trioa" or v.key() == "triop" or v.key() == "soloa" or v.key() == "solop" or v.key() == "duoa" or v.key() == "duop" or v.key() == "ppa" or v.key() == "ppp":
                 continue
             if not v.value():
