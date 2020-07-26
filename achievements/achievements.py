@@ -106,9 +106,9 @@ class Achievements(commands.Cog):
         await ctx.trigger_typing()
 
         try:
-            if keyword == carrier:
+            if keyword == "carrier":
                 await self.config.user(member).carrier.set(True)
-            elif keyword == teamwork:
+            elif keyword == "teamwork":
                 await self.config.user(member).teamwork.set(True)
 
             await ctx.send(embed=goodEmbed(f"Achievement {keyword.capitalize()} successfully registered for the user {str(member)}."))
