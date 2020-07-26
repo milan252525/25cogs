@@ -272,8 +272,8 @@ class Achievements(commands.Cog):
 
         return await ctx.send(embed=aembed)
 
-    @commands.command(aliases=['aa'])
-    async def addachievement(self, ctx, keyword, member: discord.Member):
+    @commands.command()
+    async def carrier(self, ctx, member: discord.Member):
         if ctx.guild.id != 401883208511389716:
             return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
 
@@ -281,7 +281,88 @@ class Achievements(commands.Cog):
         if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
             return await ctx.send(embed=badEmbed("You can't use this, sorry."))
 
-        achievements = self.config.user(member)
-        achievements[keyword] = True
-        self.config.user(member).set(achievements)
-        return await ctx.send(embed=goodEmbed(f"Achievement {keyword.capitalize()} successfully added to {str(member)}."))
+        try:
+            if await self.config.user(member).carrier():
+                await self.config.user(member).carrier.set(False)
+                return await ctx.send(embed=goodEmbed(f"Carrier successfully removed from {str(member)}."))
+            elif not await self.config.user(member).carrier():
+                await self.config.user(member).carrier.set(True)
+                return await ctx.send(embed=goodEmbed(f"Carrier successfully added to {str(member)}."))
+        except Exception as e:
+            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+
+    @commands.command()
+    async def teamwork(self, ctx, member: discord.Member):
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
+
+        rolesna = ctx.guild.get_role(564552111875162112)
+        if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
+            return await ctx.send(embed=badEmbed("You can't use this, sorry."))
+
+        try:
+            if await self.config.user(member).teamwork():
+                await self.config.user(member).teamwork.set(False)
+                return await ctx.send(embed=goodEmbed(f"Teamwork successfully removed from {str(member)}."))
+            elif not await self.config.user(member).teamwork():
+                await self.config.user(member).teamwork.set(True)
+                return await ctx.send(embed=goodEmbed(f"Teamwork successfully added to {str(member)}."))
+        except Exception as e:
+            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+
+    @commands.command()
+    async def assassin(self, ctx, member: discord.Member):
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
+
+        rolesna = ctx.guild.get_role(564552111875162112)
+        if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
+            return await ctx.send(embed=badEmbed("You can't use this, sorry."))
+
+        try:
+            if await self.config.user(member).assassin():
+                await self.config.user(member).assassin.set(False)
+                return await ctx.send(embed=goodEmbed(f"Assassin successfully removed from {str(member)}."))
+            elif not await self.config.user(member).assassin():
+                await self.config.user(member).assassin.set(True)
+                return await ctx.send(embed=goodEmbed(f"Assassin successfully added to {str(member)}."))
+        except Exception as e:
+            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+
+    @commands.command()
+    async def massacre(self, ctx, member: discord.Member):
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
+
+        rolesna = ctx.guild.get_role(564552111875162112)
+        if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
+            return await ctx.send(embed=badEmbed("You can't use this, sorry."))
+
+        try:
+            if await self.config.user(member).massacre():
+                await self.config.user(member).massacre.set(False)
+                return await ctx.send(embed=goodEmbed(f"Massacre successfully removed from {str(member)}."))
+            elif not await self.config.user(member).massacre():
+                await self.config.user(member).massacre.set(True)
+                return await ctx.send(embed=goodEmbed(f"Massacre successfully added to {str(member)}."))
+        except Exception as e:
+            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
+
+    @commands.command()
+    async def bounty(self, ctx, member: discord.Member):
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send(embed=badEmbed("Can't use this here, sorry."))
+
+        rolesna = ctx.guild.get_role(564552111875162112)
+        if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
+            return await ctx.send(embed=badEmbed("You can't use this, sorry."))
+
+        try:
+            if await self.config.user(member).bounty():
+                await self.config.user(member).bounty.set(False)
+                return await ctx.send(embed=goodEmbed(f"Bounty Hunter successfully removed from {str(member)}."))
+            elif not await self.config.user(member).bounty():
+                await self.config.user(member).bounty.set(True)
+                return await ctx.send(embed=goodEmbed(f"Bounty Hunter successfully added to {str(member)}."))
+        except Exception as e:
+            return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
