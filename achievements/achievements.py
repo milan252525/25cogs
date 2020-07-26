@@ -6,6 +6,7 @@ from bs.utils import goodEmbed, badEmbed
 import asyncio
 import brawlstats
 from typing import Union
+from fuzzywuzzy import process
 
 class Achievements(commands.Cog):
 
@@ -283,6 +284,9 @@ class Achievements(commands.Cog):
         if not ctx.author.guild_permissions.kick_members and rolesna not in ctx.author.roles:
             return await ctx.send(embed=badEmbed("You can't use this, sorry."))
 
+        keys = await self.config.user(member).keys()
+        keyword = process.extract(keyword, keys, limit=1)
+
         try:
             if await self.config.user(member).get_raw(keyword):
                 await self.config.user(member).set_raw(keyword, value=False)
@@ -305,6 +309,8 @@ class Achievements(commands.Cog):
 
         msg = ""
         for keyword in keywords:
+            keys = await self.config.user(member).keys()
+            keyword = process.extract(keyword, keys, limit=1)
             try:
                 if await self.config.user(member).get_raw(keyword):
                     await self.config.user(member).set_raw(keyword, value=False)
