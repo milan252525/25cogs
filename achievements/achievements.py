@@ -453,6 +453,20 @@ class Achievements(commands.Cog):
     async def aembed(self, ctx):
         if ctx.author.id != 359131399132807178:
             return await ctx.send("Hands off.")
+        dt = ctx.guild.get_role(736956117518647356)
+        ss = ctx.guild.get_role(736960419922444348)
+        gh = ctx.guild.get_role(736961181138419783)
+        sm = ctx.guild.get_role(736972276653883412)
+        bb = ctx.guild.get_role(736972900837490869)
+        hm = ctx.guild.get_role(736973167553151066)
+        sc = ctx.guild.get_role(736973355512627200)
+        hs = ctx.guild.get_role(736973807352283229)
+        ag = ctx.guild.get_role(736974837624471583)
+        bl = ctx.guild.get_role(605758039928078338)
+        lw = ctx.guild.get_role(736975188369080331)
+        rembed = discord.Embed(color=discord.Color.green(), title="__**Discord Roles**__",
+                               description=f"{dt.mention} - Earn all Duo Showdown achievements.\n{ss.mention} - Earn all Solo Showdown achievements.\n{gh.mention} - Earn all Gem Grab achievements.\n{sm.mention} - Earn all Siege achievements.\n{bb.mention} - Earn all Brawl Ball achievements.\n{hm.mention} - Earn all Heist achievements.\n{sc.mention} - Earn all Bounty achievements.\n{hs.mention} - Earn all Hot Zone achievements.\n{ag.mention} - Earn all achievements.\n{bl.mention} - Earn the Brawl Legend achievement.\n{lw.mention} - Earn all god progression and special events achievements. ")
+        await ctx.send(embed=rembed)
         embed = discord.Embed(color=discord.Color.green(), title="__**Achievements**__")
         embed.add_field(name="Gem Grab",
                         value="__**Carrier**__ - Win Gem Grab with YOU holding 20+ Gems.\n__**Teamwork**__ - Win Gem Grab with each member of your team holding 4+ Gems.",
@@ -505,17 +519,4 @@ class Achievements(commands.Cog):
                         value="700 - __**PowerPlay Amateur**__\n900 - __**PowerPlay Pro**__\n1100 - __**PowerPlay God**__",
                         inline=False)
         await ctx.send(embed=pembed)
-        dt = ctx.guild.get_role(736956117518647356)
-        ss = ctx.guild.get_role(736960419922444348)
-        gh = ctx.guild.get_role(736961181138419783)
-        sm = ctx.guild.get_role(736972276653883412)
-        bb = ctx.guild.get_role(736972900837490869)
-        hm = ctx.guild.get_role(736973167553151066)
-        sc = ctx.guild.get_role(736973355512627200)
-        hs = ctx.guild.get_role(736973807352283229)
-        ag = ctx.guild.get_role(736974837624471583)
-        bl = ctx.guild.get_role(605758039928078338)
-        lw = ctx.guild.get_role(736975188369080331)
-        rembed = discord.Embed(color=discord.Color.green(), title="__**Discord Roles**__", description=f"{dt.mention} - Earn all Duo Showdown achievements.\n{ss.mention} - Earn all Solo Showdown achievements.\n{gh.mention} - Earn all Gem Grab achievements.\n{sm.mention} - Earn all Siege achievements.\n{bb.mention} - Earn all Brawl Ball achievements.\n{hm.mention} - Earn all Heist achievements.\n{sc.mention} - Earn all Bounty achievements.\n{hs.mention} - Earn all Hot Zone achievements.\n{ag.mention} - Earn all achievements.\n{bl.mention} - Earn the Brawl Legend achievement.\n{lw.mention} - Earn all god progression and special events achievements. ")
-        await ctx.send(embed=rembed)
 
