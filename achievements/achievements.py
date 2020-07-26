@@ -106,8 +106,11 @@ class Achievements(commands.Cog):
         await ctx.trigger_typing()
 
         try:
-            await ctx.send(self.config.user(member))
+            if keyword == carrier:
+                await self.config.user(member).carrier.set(True)
+            elif keyword == teamwork:
+                await self.config.user(member).teamwork.set(True)
 
-            await ctx.send(embed=goodEmbed(f"Achievement {keyword} successfully registered for the user {str(member)}."))
+            await ctx.send(embed=goodEmbed(f"Achievement {keyword.capitalize()} successfully registered for the user {str(member)}."))
         except Exception as e:
             await ctx.send(embed=badEmbed(f"An error occurred: {e}."))
