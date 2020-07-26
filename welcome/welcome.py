@@ -190,10 +190,11 @@ class Welcome(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    async def addroletest(self, ctx, keyword, role: discord.Role):
+    async def addroletest(self, ctx, keyword, role: str):
         if ctx.author.id != 359131399132807178:
             return await ctx.send("Hands off.")
 
+        role = ctx.guild.get_role(role)
         await self.config.user(member).roles.set_raw(keyword, value=role)
 
         return await ctx.send("Successful.")
