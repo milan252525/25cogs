@@ -149,21 +149,25 @@ class Welcome(commands.Cog):
         guilds = await self.bsconfig.all_guilds()
 
         member_role_expected = None
+        tags = []
         if player_in_club:
             clubs = await self.bsconfig.guild(ctx.guild).clubs()
+            officialclubs = await self.bsconfig.guild(401883208511389716).clubs()
             for key in clubs.keys():
                 if "#" + clubs[key]["tag"] == player.club.tag:
                     member_role_expected = ctx.guild.get_role(clubs[key]["role"])
+            for ofkey in officialclubs.keys():
+                tags.append(officialclubs[ofkey]["tag"])
 
         if not player_in_club:
             msg += await self.removeroleifpresent(member, newcomer)
             msg += await self.addroleifnotpresent(member, guest, brawlstars)
 
-        if player_in_club and "LA " not in player.club.name:
+        if player_in_club and player.club.tag not in tags:
             msg += await self.removeroleifpresent(member, newcomer)
             msg += await self.addroleifnotpresent(member, guest, brawlstars)
 
-        if player_in_club and "LA " in player.club.name:
+        if player_in_club and player.club.tag in tags:
             if member_role_expected is None:
                 msg += await self.removeroleifpresent(member, newcomer)
                 msg += await self.addroleifnotpresent(member, guest, brawlstars)
