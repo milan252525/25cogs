@@ -449,74 +449,62 @@ class Achievements(commands.Cog):
 
         return msg
 
-    @commands.command()
-    async def aembed(self, ctx):
-        if ctx.author.id != 359131399132807178:
-            return await ctx.send("Hands off.")
-        dt = ctx.guild.get_role(736956117518647356)
-        ss = ctx.guild.get_role(736960419922444348)
-        gh = ctx.guild.get_role(736961181138419783)
-        sm = ctx.guild.get_role(736972276653883412)
-        bb = ctx.guild.get_role(736972900837490869)
-        hm = ctx.guild.get_role(736973167553151066)
-        sc = ctx.guild.get_role(736973355512627200)
-        hs = ctx.guild.get_role(736973807352283229)
-        ag = ctx.guild.get_role(736974837624471583)
-        bl = ctx.guild.get_role(605758039928078338)
-        lw = ctx.guild.get_role(736975188369080331)
-        rembed = discord.Embed(color=discord.Color.green(), title="__**Discord Roles**__",
-                               description=f"{dt.mention}: earn all Duo Showdown achievements.\n{ss.mention}: earn all Solo Showdown achievements.\n{gh.mention}: earn all Gem Grab achievements.\n{sm.mention}: earn all Siege achievements.\n{bb.mention}: earn all Brawl Ball achievements.\n{hm.mention}: earn all Heist achievements.\n{sc.mention}: earn all Bounty achievements.\n{hs.mention}: earn all Hot Zone achievements.\n{ag.mention}: earn all achievements.\n{bl.mention}: earn the Brawl Legend achievement.\n{lw.mention}: earn all god progression and special events achievements. ")
-        await ctx.send(embed=rembed)
-        embed = discord.Embed(color=discord.Color.green(), title="__**Achievements**__")
-        embed.add_field(name="Gem Grab",
-                        value="__**Carrier:**__ win with YOU holding 20+ gems.\n__**Teamwork:**__ win with each member of your team holding 4+ gems.",
-                        inline=False)
-        embed.add_field(name="Bounty",
-                        value="__**Assassin:**__ win with 7 stars on top of ALL brawlers.\n__**Massacre:**__ win with the enemy team scoring 0 stars.\n__**Bounty Hunter:**__ obtain 50 stars as a team.",
-                        inline=False)
-        embed.add_field(name="Heist",
-                        value="__**Thief:**__ destroy the safe in less than a minute.\n__**Close Call:**__ win with your safe on 1% HP. \n__**Guardian:**__ win with 100% safe HP.\n__**Deadlock:**__ get a draw.",
-                        inline=False)
-        embed.add_field(name="Brawl Ball",
-                        value="__**Turbo:**__ YOU score a goal within the first 15 seconds. \n__**Pro Ball:**__ win within 30 seconds.",
-                        inline=False)
-        embed.add_field(name="Siege",
-                        value="__**Stalemate:**__ get a draw.\n__**OP Bot:**__ get a level 20 bot or higher.\n__**Clutch:**__ win with your turret on 1%.",
-                        inline=False)
-        embed.add_field(name="Hot Zone",
-                        value="__**Nail Biter:**__ win with a 1% difference.\n__**Zoned Out:**__ win with the opponents scoring less than 10%.\n__**Domination:**__ win a game under 1 minute 20 seconds.",
-                        inline=False)
-        embed.add_field(name="Solo Showdown",
-                        value="__**Trident:**__ get 1st place with 1-99HP.\n__**Overload:**__ get 1st place while holding 20+ powerups.\n__**Survivalist:**__ get 1st place with 0 powerups.\n__**Afterlife:**__ you place 1st. You and the last player kill eachother, but you get 1st.",
-                        inline=False)
-        embed.add_field(name="Duo Showdown",
-                        value="__**Pinched:**__ get 1st place with neither player holding a powerup.\n__**Dynamic Duo:**__ get 1st place holding 40+ powerups combined.",
-                        inline=False)
-        embed.add_field(name="Events",
-                        value="__**Shutdown:**__ defeat the Big Brawler in under 45 seconds.\n__**Robo Destroyer:**__ clear 'Insane IV' in Boss Fight.\n__**Defender:**__ clear 'Insane IV' in Robo Rumble.\n__**City Protector:**__ clear ‘Insane IV’ in Super City Rampage.",
-                        inline=False)
-        embed.add_field(name="Miscellaneous",
-                        value="__**Draw Star:**__ get a draw, but you are the star player.\n__**Max Power:**__ get all your brawlers to level 10.\n__**Brawl Master:**__ get all of your brawlers to 500 trophies.\n__**Brawl Legend:**__ get all of your brawlers to 750 trophies, in the same season.\n__**Portrait OG Brawler:**__ played the game since it was in portrait mode. (Portrait mode image required)\n__**Landscape OG Brawler:**__ play the game when it was initially released on Android/with the old landscape style. (Original android style)\n__**Global OG Brawler:**__ play the game when it was first released globally. (Have the Star Shelly Skin)\n__**Bling:**__ have a 300 gem skin or 10k+ star points skin.\n__**Celebrity:**__ be featured on Brawl TV.\n__**Beast Brawler:**__ get a brawler to 500+ on level 1.\n__**God Brawler:**__ get a brawler to 1000+ trophies.",
-                        inline=False)
-        await ctx.send(embed=embed)
-        pembed = discord.Embed(color=discord.Color.green(), title="__**Progression Achievements**__")
-        pembed.add_field(name="Experience Levels",
-                        value="__**Exp Amateur:**__ reach level 100\n__**Exp Pro:**__ reach level 150\n__**Exp God:**__ reach level 200",
-                        inline=False)
-        pembed.add_field(name="Trophies",
-                        value="__**Trophy Amateur:**__ reach 15,000 trophies\n__**Trophy Pro:**__ reach 18,000 trophies\n__**Trophy God:**__ reach 22,000 trophies",
-                        inline=False)
-        pembed.add_field(name="3v3 Wins",
-                        value="__**3v3 Amateur:**__ reach 2,500 wins\n__**3v3 Pro:**__ reach 5,000 wins\n__**3v3 God:**__ reach 10,000 wins",
-                        inline=False)
-        pembed.add_field(name="Solo Showdown",
-                        value="__**Solo Amateur:**__ reach 250 wins\n__**Solo Pro:**__ reach 500 wins\n__**Solo God:**__ reach 1,000 wins",
-                        inline=False)
-        pembed.add_field(name="Duo Showdown",
-                        value="__**Duo Amateur:**__ reach 250 wins\n__**Duo Pro:**__ reach 500 wins\n__**Duo God:**__ reach 1,000 wins",
-                        inline=False)
-        pembed.add_field(name="Power Play Points",
-                        value="__**PowerPlay Amateur:**__ earn 700 points\n__**PowerPlay Pro:**__ earn 900 points\n__**PowerPlay God:**__ earn 1100 points",
-                        inline=False)
-        await ctx.send(embed=pembed)
+    @commands.command(aliases=['as'])
+    async def achievementssetup(self, ctx, member: discord.Member = None):
+        await ctx.trigger_typing()
+        prefix = ctx.prefix
+        member = ctx.author if member is None else member
 
+        tag = await self.config.user(member).tag()
+        if tag is None:
+            return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+
+        player = await self.ofcbsapi.get_player(tag)
+
+        if player.exp_level >= 100:
+            await self.config.user(member).expa.set(True)
+            await self.config.user(member).expp.set(False)
+            await self.config.user(member).expg.set(False)
+            msg += f"Achievement Exp Amateur was successfully added to {str(member)}.\n"
+        elif player.exp_level >= 150:
+            await self.config.user(member).expa.set(False)
+            await self.config.user(member).expp.set(True)
+            await self.config.user(member).expg.set(False)
+            msg += f"Achievement Exp Pro was successfully added to {str(member)}.\n"
+        elif player.exp_level >= 200:
+            await self.config.user(member).expa.set(False)
+            await self.config.user(member).expp.set(False)
+            await self.config.user(member).expg.set(True)
+            msg += f"Achievement Exp God was successfully added to {str(member)}.\n"
+
+        if player.trophies >= 15000:
+            await self.config.user(member).trophya.set(True)
+            await self.config.user(member).trophyp.set(False)
+            await self.config.user(member).trophyg.set(False)
+            msg += f"Achievement Trophy Amateur was successfully added to {str(member)}.\n"
+        elif player.trophies >= 18000:
+            await self.config.user(member).trophya.set(False)
+            await self.config.user(member).trophyp.set(True)
+            await self.config.user(member).trophyg.set(False)
+            msg += f"Achievement Trophy Pro was successfully added to {str(member)}.\n"
+        elif player.trophies >= 22000:
+            await self.config.user(member).trophya.set(False)
+            await self.config.user(member).trophyp.set(False)
+            await self.config.user(member).trophyg.set(True)
+            msg += f"Achievement Trophy God was successfully added to {str(member)}.\n"
+
+        if player.raw_data['3vs3Victories'] >= 2500:
+            await self.config.user(member).trioa.set(True)
+            await self.config.user(member).triop.set(False)
+            await self.config.user(member).triog.set(False)
+            msg += f"Achievement 3v3 Amateur was successfully added to {str(member)}.\n"
+        elif player.raw_data['3vs3Victories'] >= 5000:
+            await self.config.user(member).trioa.set(False)
+            await self.config.user(member).triop.set(True)
+            await self.config.user(member).triog.set(False)
+            msg += f"Achievement 3v3 Pro was successfully added to {str(member)}.\n"
+        elif player.raw_data['3vs3Victories'] >= 10000:
+            await self.config.user(member).trioa.set(False)
+            await self.config.user(member).triop.set(False)
+            await self.config.user(member).triog.set(True)
+            msg += f"Achievement 3v3 God was successfully added to {str(member)}.\n"
