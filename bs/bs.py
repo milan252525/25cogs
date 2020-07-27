@@ -1041,11 +1041,14 @@ class BrawlStarsCog(commands.Cog):
         await ctx.trigger_typing()
         key = key.lower()
 
-        if await self.config.guild(ctx.guild).clubs.get_raw(key, "tag") is None:
-            return await ctx.send(embed=badEmbed(f"{key.title()} isn't saved club in this server!"))
-        await self.config.guild(ctx.guild).clubs.set_raw(key, "role", value=role.id if role is not None else None)
-        name = role.name if role is not None else "None"
-        await ctx.send(embed=goodEmbed(f"Club role set to {name}!"))
+        try:
+            if await self.config.guild(ctx.guild).clubs.get_raw(key, "tag") is None:
+                return await ctx.send(embed=badEmbed(f"{key.title()} isn't saved club in this server!"))
+            await self.config.guild(ctx.guild).clubs.set_raw(key, "role", value=role.id if role is not None else None)
+            name = role.name if role is not None else "None"
+            await ctx.send(embed=goodEmbed(f"Club role set to {name}!"))
+        except KeyError:
+            await ctx.send(embed=badEmbed(f"{key.title()} isn't saved club in this server!"))
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
