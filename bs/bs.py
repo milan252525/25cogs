@@ -1041,7 +1041,7 @@ class BrawlStarsCog(commands.Cog):
         await ctx.trigger_typing()
         key = key.lower()
 
-        if await self.config.guild(ctx.guild).club.get_raw(key, "tag") is None:
+        if await self.config.guild(ctx.guild).clubs.get_raw(key, "tag") is None:
             return await ctx.send(embed=badEmbed(f"{key.title()} isn't saved club in this server!"))
         await self.config.guild(ctx.guild).clubs.set_raw(key, "role", value=role.id if role is not None else None)
         name = role.name if role is not None else "None"
