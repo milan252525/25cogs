@@ -292,7 +292,7 @@ class Achievements(commands.Cog):
             try:
                 if await self.config.user(member).get_raw(keyword):
                     await self.config.user(member).set_raw(keyword, value=False)
-                    msg += f"+{keyword}\n"
+                    msg += f"-{keyword}\n"
                 elif not await self.config.user(member).get_raw(keyword):
                     await self.config.user(member).set_raw(keyword, value=True)
                     msg += f"+{keyword}\n"
