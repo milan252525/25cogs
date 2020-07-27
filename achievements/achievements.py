@@ -455,7 +455,7 @@ class Achievements(commands.Cog):
         prefix = ctx.prefix
         member = ctx.author if member is None else member
 
-        tag = await self.config.user(member).tag()
+        tag = await self.bsconfig.user(member).tag()
         if tag is None:
             return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
 
