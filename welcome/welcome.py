@@ -1,6 +1,7 @@
 import discord
 from redbot.core import commands, Config, checks
 from redbot.core.utils.chat_formatting import pagify
+from bs.utils import goodEmbed, badEmbed
 import clashroyale
 import brawlstats
 import asyncio
@@ -12,7 +13,7 @@ class Welcome(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=2536725)
-        default_guild = {'roles': {'pres' : None, 'vp' : None, 'member' : None, 'bs' : None, 'guest' : None, 'leader' : None, 'family' : None,'remove': None}}
+        default_guild = {'roles': {'pres' : None, 'vp' : None, 'member' : None, 'bs' : None, 'guest' : None, 'leader' : None, 'family' : None, 'remove': None}}
         self.config.register_guild(**default_guild)
         self.crconfig = Config.get_conf(None, identifier=2512325, cog_name="ClashRoyaleCog")
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
@@ -81,6 +82,21 @@ class Welcome(commands.Cog):
         text = f"Welcome to **LA** {member.mention}!\nMake sure to read <#713858515135103047> and <#713882338018459729> to familiarise yourself with the server.\nPlease type **/setup cr #your\\_cr\\_tag** or **/setup bs #your\\_bs\\_tag**,\nfor other games type **/setup other** to get verified and see rest of the server!"
         await welcome.send(embed=welcomeEmbed)
         await welcome.send(text)
+
+    @commands.command()
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    async def setrole(self, ctx, key, role: discord.Role = None):
+        await ctx.trigger_typing()
+        key = key.lower()
+
+        try:
+            await self.config.guild(ctx.guild).roles.set_raw(key, value=role.id if role is not None else None)
+            name = role.name if role is not None else "None"
+            await ctx.send(embed=goodEmbed(f"Value {key} set to {name}."))
+        except KeyError:
+            await ctx.send(embed=badEmbed(f"{key.title()} isn't a valid keyword in this server."))
+
 
     @commands.command()
     @commands.guild_only()
