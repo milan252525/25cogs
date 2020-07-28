@@ -648,11 +648,8 @@ class Tools(commands.Cog):
             if channel is None:
                 continue
             if channel.last_message_id != all[channel_id]["last_id"]:
-                try:
-                    old = await channel.fetch_message(all[channel_id]["last_id"])
-                    await old.delete()
-                except (discord.NotFound, discord.HTTPException, discord.Forbidden):
-                    continue
+                old = await channel.fetch_message(all[channel_id]["last_id"])
+                await old.delete()
                 embed = discord.Embed(colour=discord.Colour.blue(), description=all[channel_id]["message"])
                 m = await channel.send(embed=embed)
                 await self.config.channel(channel).last_id.set(m.id)
