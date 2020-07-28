@@ -240,7 +240,7 @@ class BrawlStarsCog(commands.Cog):
                 description=desc)
             return await ctx.send(embed=embed)
 
-        if await self.config.user(member).alt() is not None:
+        if type(member) == discord.Member and await self.config.user(member).alt() is not None:
             tagg = await self.config.user(member).tag()
             altt = await self.config.user(member).alt()
             tagg = "#" + tagg
