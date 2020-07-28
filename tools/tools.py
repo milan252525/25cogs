@@ -25,6 +25,7 @@ class Tools(commands.Cog):
         self.leave_counter = {}
         #self.pf = ProfanityFilter()
         self.updater.start()
+        self.sticky_messages.start()
         
     def cog_unload(self):
         self.updater.stop()
@@ -616,7 +617,6 @@ class Tools(commands.Cog):
         embed = discord.Embed(colour=discord.Colour.blue(), description=discord.utils.escape_mentions(message.content))
         sticky = await ctx.send(embed=embed)
         await self.config.channel(channel).last_id.set(sticky.id)
-        await message.delete()
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
