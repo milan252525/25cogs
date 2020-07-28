@@ -18,8 +18,10 @@ class Tools(commands.Cog):
         self.config = Config.get_conf(self, identifier=2555525)
         default_global = {"countdowns" : {}}
         default_member = {"messages" : 0, "name" : None}
+        default_channel = {"sticky" : False, "message" : None, "last_id" : None}
         self.config.register_global(**default_global)
         self.config.register_member(**default_member)
+        self.config.register_channel(**default_channel)
         self.leave_counter = {}
         #self.pf = ProfanityFilter()
         self.updater.start()
@@ -598,3 +600,62 @@ class Tools(commands.Cog):
         embed.add_field(name="Accepted by:", value=f"{ctx.author.mention} ({ctx.author.top_role})", inline=False)
         embed.add_field(name="Comment by an executor:", value=comment, inline=False)
         await msg.edit(embed=embed)
+
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    @commands.command()
+    async def stick(self, ctx, message_id: int):
+        channel = ctx.channel
+        try:
+            message = await channel.fetch_message(message_id)
+        except (discord.NotFound, discord.HTTPException, discord.Forbidden):
+            return await ctx.send("No message with provided ID found in this channel.")
+
+        await self.config.channel(channel).sticky.set(True)
+        await self.config.channel(channel).message.set(discord.utils.escape_mentions(message.content))
+        embed = discord.Embed(colour=discord.Colour.blue(), description=discord.utils.escape_mentions(message.content))
+        sticky = await ctx.send(embed=embed)
+        await self.config.channel(channel).last_id.set(sticky.id)
+        await message.delete()
+
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    @commands.command()
+    async def unstick(self, ctx):
+        channel = ctx.channel
+
+        if not (await self.config.channel(channel).sticky()):
+            return await ctx.send("No message to remove in this channel.")
+
+        id = await self.config.channel(channel).last_id()
+        try:
+            message = await channel.fetch_message(id)
+            await message.delete()
+        except (discord.NotFound, discord.HTTPException, discord.Forbidden):
+            pass
+
+        await self.config.channel(channel).clear()
+        m = await ctx.send("Sticky message removed successfully.")
+        await m.delete(delay=5)
+
+    @tasks.loop(seconds=15)
+    async def sticky_messages(self):
+        all = await self.config.all_channels()
+        for channel_id in all:
+            if not all[channel_id]["sticky"]:
+                continue
+            channel = self.bot.get_channel(channel_id)
+            if channel is None:
+                continue
+            if channel.last_message_id != all[channel_id]["last_id"]:
+                try:
+                    old = await channel.fetch_message(all[channel_id]["last_id"])
+                    await old.delete()
+                except (discord.NotFound, discord.HTTPException, discord.Forbidden):
+                    continue
+                embed = discord.Embed(colour=discord.Colour.blue(), description=all[channel_id]["message"])
+                await channel.send(embed=embed)
+        
+    @sticky_messages.before_loop
+    async def before_sticky_messages(self):
+        await asyncio.sleep(3)
