@@ -162,6 +162,7 @@ class ClashRoyaleCog(commands.Cog):
         embed.add_field(name="Highest Trophies", value=f"<:nicertrophy:587565339038973963>{player.bestTrophies}")
         embed.add_field(name="Level", value=f"<:level:451064038420381717>{player.expLevel}")
         embed.add_field(name="Arena", value=f"<:training:587566327204544512>{player.arena.name}")
+        embed.add_field(name="Star Points", value=f"<:starpoints:737613015242768397>{player.starPoints}")
         if player.clan is not None:
             clanbadge = discord.utils.get(self.bot.emojis, name = str(player.clan.badgeId))
             embed.add_field(name="Clan", value=f"{clanbadge}{player.clan.name}")
@@ -173,6 +174,8 @@ class ClashRoyaleCog(commands.Cog):
         embed.add_field(name="Clan Cards Collected", value=f"<:cw_cards:449641339580317707>{player.clanCardsCollected}")
         embed.add_field(name="Max Challenge Wins", value=f"<:tournament:587706689357217822>{player.challengeMaxWins}")
         embed.add_field(name="Challenge Cards Won", value=f"<:cardcr:587702597855477770>{player.challengeCardsWon}")
+        embed.add_field(name="Tournament Games Played", value=f"<:swords:449650442033430538>{player.tournamentCardsWon}")
+        embed.add_field(name="Tournament Cards Won", value=f"<:cardcr:587702597855477770>{player.tournamentCardsWon}")
         if player.currentFavouriteCard is not None:
             embed.add_field(name="Favourite Card", value=f"<:epic:587708123087634457>{player.currentFavouriteCard.name}")
         embed.add_field(name="Total Donations", value=f"<:deck:451062749565550602>{player.totalDonations}")
