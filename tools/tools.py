@@ -654,7 +654,8 @@ class Tools(commands.Cog):
                 except (discord.NotFound, discord.HTTPException, discord.Forbidden):
                     continue
                 embed = discord.Embed(colour=discord.Colour.blue(), description=all[channel_id]["message"])
-                await channel.send(embed=embed)
+                m = await channel.send(embed=embed)
+                await self.config.channel(channel).last_id.set(m.id)
         
     @sticky_messages.before_loop
     async def before_sticky_messages(self):
