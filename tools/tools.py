@@ -29,6 +29,7 @@ class Tools(commands.Cog):
         
     def cog_unload(self):
         self.updater.stop()
+        self.sticky_messages.cancel()
         
     @commands.Cog.listener()
     async def on_member_remove(self, member):
@@ -638,7 +639,7 @@ class Tools(commands.Cog):
         m = await ctx.send("Sticky message removed successfully.")
         await m.delete(delay=5)
 
-    @tasks.loop(seconds=15)
+    @tasks.loop(seconds=30)
     async def sticky_messages(self):
         all = await self.config.all_channels()
         for channel_id in all:
