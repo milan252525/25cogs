@@ -174,7 +174,7 @@ class ClashRoyaleCog(commands.Cog):
         embed.add_field(name="Clan Cards Collected", value=f"<:cw_cards:449641339580317707>{player.clanCardsCollected}")
         embed.add_field(name="Max Challenge Wins", value=f"<:tournament:587706689357217822>{player.challengeMaxWins}")
         embed.add_field(name="Challenge Cards Won", value=f"<:cardcr:587702597855477770>{player.challengeCardsWon}")
-        embed.add_field(name="Tournament Games Played", value=f"<:swords:449650442033430538>{player.tournamentCardsWon}")
+        embed.add_field(name="Tournament Games Played", value=f"<:swords:449650442033430538>{player.tournamentBattleCount}")
         embed.add_field(name="Tournament Cards Won", value=f"<:cardcr:587702597855477770>{player.tournamentCardsWon}")
         if player.currentFavouriteCard is not None:
             embed.add_field(name="Favourite Card", value=f"<:epic:587708123087634457>{player.currentFavouriteCard.name}")
