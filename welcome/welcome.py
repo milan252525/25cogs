@@ -159,7 +159,8 @@ class Welcome(commands.Cog):
         localtags = []
         if player_in_club:
             clubs = await self.bsconfig.guild(ctx.guild).clubs()
-            officialclubs = await self.bsconfig.guild(401883208511389716).clubs()
+            labs = self.bot.get_guild(401883208511389716)
+            officialclubs = await self.bsconfig.guild(labs).clubs()
             for key in clubs.keys():
                 if "#" + clubs[key]["tag"] == player.club.tag:
                     member_role_expected = ctx.guild.get_role(clubs[key]["role"])
