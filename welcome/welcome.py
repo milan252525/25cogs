@@ -283,7 +283,8 @@ class Welcome(commands.Cog):
         keys = await self.config.guild(ctx.guild).roles()
         for key in keys.keys():
             role = ctx.guild.get_role(self.config.guild(ctx.guild).roles.get_raw(key))
-            msg += f"{key}: {role.name}\n"
+            if role is not None:
+                msg += f"{key}: {role.name}\n"
         await ctx.send(msg)
 
     @commands.command()
