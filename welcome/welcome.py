@@ -107,7 +107,7 @@ class Welcome(commands.Cog):
                 await member.add_roles(role)
                 if language == "en":
                     msg += f"Added **{str(role)}**\n"
-                elif lanuage == "es":
+                elif language == "es":
                     msg += f"Añadido **{str(role)}**\n"
         return msg
 
