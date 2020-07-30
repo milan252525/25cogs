@@ -132,8 +132,8 @@ class Welcome(commands.Cog):
         vp = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.vp())
         pres = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.pres())
         otherclubs = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.otherclubs())
-        leadership = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.leadership())
-        overlay = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.overlay())
+        leader = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.leader())
+        mmber = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.member())
 
         if member is not None:
             if newcomer in ctx.author.roles:
@@ -208,7 +208,7 @@ class Welcome(commands.Cog):
                 tags.append("#" + officialclubs[ofkey]["tag"])
 
         msg += await self.removeroleifpresent(member, newcomer)
-        msg += await self.addroleifnotpresent(member, overlay)
+        msg += await self.addroleifnotpresent(member, mmber)
 
         if not player_in_club:
             msg += await self.addroleifnotpresent(member, guest, brawlstars)
@@ -236,9 +236,9 @@ class Welcome(commands.Cog):
                 for mem in player_club.members:
                     if mem.tag == player.raw_data['tag']:
                         if mem.role.lower() == 'vicepresident':
-                            msg += await self.addroleifnotpresent(member, vp, leadership)
+                            msg += await self.addroleifnotpresent(member, vp, leader)
                         elif mem.role.lower() == 'president':
-                            msg += await self.addroleifnotpresent(member, pres, leadership)
+                            msg += await self.addroleifnotpresent(member, pres, leader)
                         break
             except brawlstats.errors.RequestError:
                 msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
