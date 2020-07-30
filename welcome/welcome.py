@@ -85,35 +85,43 @@ class Welcome(commands.Cog):
 
     async def removeroleifpresent(self, member: discord.Member, *roles):
         msg = ""
+        language = await self.config.guild(member.guild).roles.language()
         for role in roles:
             if role is None:
                 continue
             if role in member.roles:
                 await member.remove_roles(role)
-                msg += f"Removed **{str(role)}**\n"
+                if language == "en":
+                    msg += f"Removed **{str(role)}**\n"
+                elif lanuage == "es":
+                    msg += f"Eliminado **{str(role)}**\n"
         return msg
 
     async def addroleifnotpresent(self, member: discord.Member, *roles):
         msg = ""
+        language = await self.config.guild(member.guild).roles.language()
         for role in roles:
             if role is None:
                 continue
             if role not in member.roles:
                 await member.add_roles(role)
-                msg += f"Added **{str(role)}**\n"
+                if language == "en":
+                    msg += f"Added **{str(role)}**\n"
+                elif lanuage == "es":
+                    msg += f"Añadido **{str(role)}**\n"
         return msg
 
     @commands.command()
     @commands.guild_only()
     async def newcomertest(self, ctx, tag, member: discord.Member = None):
         staff = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.staff())
-        language = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.language())
+        language = await self.config.guild(ctx.guild).roles.language()
 
         if staff not in ctx.author.roles and not ctx.author.guild_permissions.kick_members and ctx.author.id != 359131399132807178 and ctx.guild.id != 460550486257565697:
             if language == 'en':
                 return await ctx.send("You can't use this command.")
             elif language == 'es':
-                return await ctx.send("You can't use this command.")
+                return await ctx.send("No puedes usar este comando.")
 
         await ctx.trigger_typing()
 
@@ -143,9 +151,7 @@ class Welcome(commands.Cog):
             if language == 'en':
                 cl_name = f"<:bsband:600741378497970177> {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> No club"
             elif language == 'es':
-                cl_name = f"<:bsband:600741378497970177> {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> No club"
-            else:
-                await ctx.send(type(language))
+                cl_name = f"<:bsband:600741378497970177> {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> Sin club"
             msg += f"**{player.name}** <:bstrophy:552558722770141204> {player.trophies} {cl_name}\n"
         except brawlstats.errors.NotFoundError:
             if language == 'en':
@@ -157,7 +163,7 @@ class Welcome(commands.Cog):
             if language == 'en':
                 return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
             elif langauage == 'es':
-                return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+                return await ctx.send(embed=badEmbed(f"BS API está fuera de línea, por favor inténtalo de nuevo más tarde! ({str(e)})"))
 
 
         except Exception as e:
