@@ -280,7 +280,8 @@ class Welcome(commands.Cog):
         await ctx.trigger_typing()
 
         msg = ""
-        for key in self.config.guild(ctx.guild).roles.keys():
+        keys = await self.config.guild(ctx.guild).roles()
+        for key in keys.keys():
             role = ctx.guild.get_role(self.config.guild(ctx.guild).roles.get_raw(key))
             msg += f"{key}: {role.name}\n"
         await ctx.send(msg)
