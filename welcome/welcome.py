@@ -93,7 +93,7 @@ class Welcome(commands.Cog):
                 await member.remove_roles(role)
                 if language == "en":
                     msg += f"Removed **{str(role)}**\n"
-                elif lanuage == "es":
+                elif language == "es":
                     msg += f"Eliminado **{str(role)}**\n"
         return msg
 
@@ -215,8 +215,7 @@ class Welcome(commands.Cog):
             msg += await self.addroleifnotpresent(member, guest, brawlstars)
 
         if player_in_club and player.club.tag in tags and player.club.tag not in localtags:
-            if ctx.guild.id == 460550486257565697:
-                msg += await self.addroleifnotpresent(member, otherclubs, family, brawlstars)
+            msg += await self.addroleifnotpresent(member, otherclubs, family, brawlstars)
 
         if player_in_club and player.club.tag in localtags:
             if member_role_expected is None:
