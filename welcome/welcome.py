@@ -105,7 +105,7 @@ class Welcome(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    async def newcomertest(self, ctx, tag, member: discord.Member):
+    async def newcomertest(self, ctx, tag, member: discord.Member = None):
         staff = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.staff())
 
         if staff not in ctx.author.roles and not ctx.author.guild_permissions.kick_members and ctx.author.id != 359131399132807178:
@@ -128,7 +128,7 @@ class Welcome(commands.Cog):
         msg = ""
         try:
             player = await self.ofcbsapi.get_player(tag)
-            await self.config.user(member).tag.set(tag.replace("#", ""))
+            await self.bsconfig.user(member).tag.set(tag.replace("#", ""))
             cl_name = f"<:bsband:600741378497970177> {player.club.name}" if "name" in player.raw_data[
                 "club"] else "<:noclub:661285120287834122> No club"
             msg += f"**{player.name}** <:bstrophy:552558722770141204> {player.trophies} {cl_name}\n"
