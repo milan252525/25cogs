@@ -110,9 +110,9 @@ class Welcome(commands.Cog):
         language = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.language())
 
         if staff not in ctx.author.roles and not ctx.author.guild_permissions.kick_members and ctx.author.id != 359131399132807178 and ctx.guild.id != 460550486257565697:
-            if language == "en":
+            if language == 'en':
                 return await ctx.send("You can't use this command.")
-            elif language == "es":
+            elif language == 'es':
                 return await ctx.send("You can't use this command.")
 
         await ctx.trigger_typing()
@@ -140,48 +140,46 @@ class Welcome(commands.Cog):
         try:
             player = await self.ofcbsapi.get_player(tag)
             await self.bsconfig.user(member).tag.set(tag.replace("#", ""))
-            if language == "en":
-                cl_name = f"<:bsband:600741378497970177> {player.club.name}" if "name" in player.raw_data[
-                    "club"] else "<:noclub:661285120287834122> No club"
-            elif language == "es":
-                cl_name = f"<:bsband:600741378497970177> {player.club.name}" if "name" in player.raw_data[
-                    "club"] else "<:noclub:661285120287834122> No club"
+            if language == 'en':
+                cl_name = f"<:bsband:600741378497970177> {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> No club"
+            elif language == 'es':
+                cl_name = f"<:bsband:600741378497970177> {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> No club"
             msg += f"**{player.name}** <:bstrophy:552558722770141204> {player.trophies} {cl_name}\n"
         except brawlstats.errors.NotFoundError:
-            if language == "en":
+            if language == 'en':
                 return await ctx.send(embed=badEmbed("No player with this tag found!"))
-            elif language == "es":
+            elif language == 'es':
                 return await ctx.send(embed=badEmbed("¡No se ha encontrado ningún jugador con este tag!"))
 
         except brawlstats.errors.RequestError as e:
-            if language == "en":
+            if language == 'en':
                 return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-            elif langauage == "es":
+            elif langauage == 'es':
                 return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
 
         except Exception as e:
-            if language == "en":
+            if language == 'en':
                 return await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
-            elif language == "es":
+            elif language == 'es':
                 return await ctx.send("**¡Algo ha ido mal, por favor envía un mensaje personal al bot LA Modmail o inténtalo de nuevo!**")
 
         nick = f"{player.name}"
         try:
             await member.edit(nick=nick[:31])
-            if language == "en":
+            if language == 'en':
                 msg += f"New nickname: **{nick[:31]}**\n"
-            elif language == "es":
+            elif language == 'es':
                 msg += f"Nuevo apodo: **{nick[:31]}**\n"
         except discord.Forbidden:
-            if language == "en":
+            if language == 'en':
                 msg += f"I dont have permission to change nickname of this user!\n"
-            elif language == "es":
+            elif language == 'es':
                 msg += f"¡No tengo permisos para cambiar el apodo de este usuario!\n"
         except Exception as e:
-            if language == "en":
+            if language == 'en':
                 return await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Something went wrong: {str(e)}"))
-            elif language == "es":
+            elif language == 'es':
                 return await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"¡Algo ha ido mal: {str(e)}"))
 
         player_in_club = "name" in player.raw_data["club"]
@@ -209,14 +207,15 @@ class Welcome(commands.Cog):
             msg += await self.addroleifnotpresent(member, guest, brawlstars)
 
         if player_in_club and player.club.tag in tags and player.club.tag not in localtags:
-            msg += await self.addroleifnotpresent(member, otherclubs, family, brawlstars)
+            if ctx.guild.id == 460550486257565697:
+                msg += await self.addroleifnotpresent(member, otherclubs, family, brawlstars)
 
         if player_in_club and player.club.tag in localtags:
             if member_role_expected is None:
                 msg += await self.addroleifnotpresent(member, guest, brawlstars)
-                if language == "en":
+                if language == 'en':
                     msg += f"Role for the club {player.club.name} not found.\n"
-                if language == "es":
+                elif language == 'es':
                     msg += f"No se ha encontrado un rol para el club {player.club.name}.\n"
                 return await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
             msg += await self.addroleifnotpresent(member, family, brawlstars, member_role_expected)
