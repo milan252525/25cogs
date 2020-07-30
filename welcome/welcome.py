@@ -108,7 +108,7 @@ class Welcome(commands.Cog):
     async def newcomertest(self, ctx, tag, member: discord.Member = None):
         staff = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.staff())
 
-        if staff not in ctx.author.roles and not ctx.author.guild_permissions.kick_members and ctx.author.id != 359131399132807178:
+        if staff not in ctx.author.roles and not ctx.author.guild_permissions.kick_members and ctx.author.id != 359131399132807178 and ctx.guild.id != 460550486257565697:
             return await ctx.send("You can't use this command.")
 
         await ctx.trigger_typing()
@@ -120,6 +120,12 @@ class Welcome(commands.Cog):
         vp = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.vp())
         pres = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.pres())
         otherclubs = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.otherclubs())
+
+        if member is not None:
+            if newcomer in ctx.author.roles:
+                return
+        elif member is None:
+            member = ctx.author
 
         tag = tag.lower().replace('O', '0')
         if tag.startswith("#"):
