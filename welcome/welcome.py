@@ -144,6 +144,8 @@ class Welcome(commands.Cog):
                 cl_name = f"<:bsband:600741378497970177> {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> No club"
             elif language == 'es':
                 cl_name = f"<:bsband:600741378497970177> {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> No club"
+            else:
+                await ctx.send(type(language))
             msg += f"**{player.name}** <:bstrophy:552558722770141204> {player.trophies} {cl_name}\n"
         except brawlstats.errors.NotFoundError:
             if language == 'en':
