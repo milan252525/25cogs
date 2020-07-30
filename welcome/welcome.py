@@ -248,6 +248,19 @@ class Welcome(commands.Cog):
         except KeyError:
             await ctx.send(embed=badEmbed(f"{key.title()} isn't a valid keyword in this server."))
 
+    @commands.command()
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    async def setlang(self, ctx, lang):
+        await ctx.trigger_typing()
+
+        langs = ["en", "es"]
+
+        if lang not in langs:
+            return await ctx.send("No such language supported.")
+
+        await self.config.guild(ctx.guild).roles.language.set(lang)
+        await ctx.send(embed=goodEmbed(f"Value language set to {lang}."))
 
     @commands.command()
     @commands.guild_only()
