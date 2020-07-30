@@ -111,7 +111,7 @@ class Welcome(commands.Cog):
                     msg += f"Añadido **{str(role)}**\n"
         return msg
 
-    @commands.command()
+    @commands.command(aliases=['nuevorol'])
     @commands.guild_only()
     async def newcomertest(self, ctx, tag, member: discord.Member = None):
         staff = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.staff())
@@ -217,7 +217,10 @@ class Welcome(commands.Cog):
             msg += await self.addroleifnotpresent(member, guest, brawlstars)
 
         if player_in_club and player.club.tag in tags and player.club.tag not in localtags:
-            msg += await self.addroleifnotpresent(member, otherclubs, family, brawlstars)
+            if ctx.guild.id == 460550486257565697:
+                msg += await self.addroleifnotpresent(member, otherclubs, family, brawlstars)
+            else:
+                msg += await self.addroleifnotpresent(member, otherclubs, brawlstars)
 
         if player_in_club and player.club.tag in localtags:
             if member_role_expected is None:
