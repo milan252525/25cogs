@@ -13,7 +13,7 @@ class Welcome(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=2536725)
-        default_guild = {'roles': {'pres' : None, 'vp' : None, 'member' : None, 'bs' : None, 'guest' : None, 'leader' : None, 'family' : None, 'remove': None, "otherclubs": None, "staff": None, "language": None, "leadership": None}}
+        default_guild = {'roles': {'pres' : None, 'vp' : None, 'member' : None, 'bs' : None, 'guest' : None, 'leader' : None, 'family' : None, 'remove': None, "otherclubs": None, "staff": None, "language": None, "leadership": None, "overlay": None}}
         self.config.register_guild(**default_guild)
         self.crconfig = Config.get_conf(None, identifier=2512325, cog_name="ClashRoyaleCog")
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
@@ -133,6 +133,7 @@ class Welcome(commands.Cog):
         pres = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.pres())
         otherclubs = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.otherclubs())
         leadership = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.leadership())
+        overlay = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.overlay())
 
         if member is not None:
             if newcomer in ctx.author.roles:
@@ -207,6 +208,7 @@ class Welcome(commands.Cog):
                 tags.append("#" + officialclubs[ofkey]["tag"])
 
         msg += await self.removeroleifpresent(member, newcomer)
+        msg += await self.addroleifnotpresent(member, overlay)
 
         if not player_in_club:
             msg += await self.addroleifnotpresent(member, guest, brawlstars)
