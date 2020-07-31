@@ -125,17 +125,18 @@ class Welcome(commands.Cog):
 
         await ctx.trigger_typing()
 
-        family = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.family())
-        guest = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.guest())
-        newcomer = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.remove())
-        brawlstars = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.bs())
-        vp = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.vp())
-        pres = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.pres())
-        otherclubs = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.otherclubs())
-        leader = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.leader())
-        mmber = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.member())
-        memberclub = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.memberclub())
-        senior = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.senior())
+        roles_config = await self.config.guild(ctx.guild).roles()
+        family = ctx.guild.get_role(roles['family'])
+        guest = ctx.guild.get_role(roles['guest'])
+        newcomer = ctx.guild.get_role(roles['remove'])
+        brawlstars = ctx.guild.get_role(roles['bs'])
+        vp = ctx.guild.get_role(roles['vp'])
+        pres = ctx.guild.get_role(roles['pres'])
+        otherclubs = ctx.guild.get_role(roles['otherclubs'])
+        leader = ctx.guild.get_role(roles['leader'])
+        mmber = ctx.guild.get_role(roles['member'])
+        memberclub = ctx.guild.get_role(roles['memberclub'])
+        senior = ctx.guild.get_role(roles['senior'])
 
         if member is not None:
             if newcomer in ctx.author.roles:
