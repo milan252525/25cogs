@@ -13,7 +13,7 @@ class Welcome(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=2536725)
-        default_guild = {'roles': {'pres' : None, 'vp' : None, 'member' : None, 'bs' : None, 'guest' : None, 'leader' : None, 'family' : None, 'remove': None, "otherclubs": None, "staff": None, "language": None}}
+        default_guild = {'roles': {'pres' : None, 'vp' : None, 'member' : None, 'bs' : None, 'guest' : None, 'leader' : None, 'family' : None, 'remove': None, "otherclubs": None, "staff": None, "language": None, "memberclub": None}}
         self.config.register_guild(**default_guild)
         self.crconfig = Config.get_conf(None, identifier=2512325, cog_name="ClashRoyaleCog")
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
@@ -111,7 +111,7 @@ class Welcome(commands.Cog):
                     msg += f"Añadido **{str(role)}**\n"
         return msg
 
-    @commands.command(aliases=['nuevorol'])
+    @commands.command(aliases=['nuevorol', 'vincular', 'salvar'])
     @commands.guild_only()
     async def newcomertest(self, ctx, tag, member: discord.Member = None):
         staff = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.staff())
@@ -217,7 +217,7 @@ class Welcome(commands.Cog):
 
         if player_in_club and player.club.tag in tags and player.club.tag not in localtags:
             if ctx.guild.id == 460550486257565697:
-                msg += await self.addroleifnotpresent(member, otherclubs, family, brawlstars)
+                msg += await self.addroleifnotpresent(member, otherclubs, family)
             else:
                 msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
 
