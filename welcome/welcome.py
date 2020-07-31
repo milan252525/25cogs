@@ -111,7 +111,7 @@ class Welcome(commands.Cog):
                     msg += f"Añadido **{str(role)}**\n"
         return msg
 
-    @commands.command(aliases=['nuevorol', 'vincular', 'salvar'])
+    @commands.command(aliases=['nuevorol', 'vincular', 'salvar', 'nc'])
     @commands.guild_only()
     async def newcomertest(self, ctx, tag, member: discord.Member = None):
         staff = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.staff())
@@ -218,7 +218,7 @@ class Welcome(commands.Cog):
             msg += await self.addroleifnotpresent(member, guest, brawlstars)
 
         if player_in_club and player.club.tag in tags and player.club.tag not in localtags:
-            if ctx.guild.id == 460550486257565697:
+            if ctx.guild.id == 460550486257565697 or ctx.guild.id == 593732431551660063:
                 msg += await self.addroleifnotpresent(member, otherclubs, family)
             else:
                 msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
