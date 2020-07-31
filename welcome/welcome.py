@@ -208,7 +208,6 @@ class Welcome(commands.Cog):
                 tags.append("#" + officialclubs[ofkey]["tag"])
 
         msg += await self.removeroleifpresent(member, newcomer)
-        msg += await self.addroleifnotpresent(member, mmber)
 
         if not player_in_club:
             msg += await self.addroleifnotpresent(member, guest, brawlstars)
@@ -220,7 +219,7 @@ class Welcome(commands.Cog):
             if ctx.guild.id == 460550486257565697:
                 msg += await self.addroleifnotpresent(member, otherclubs, family, brawlstars)
             else:
-                msg += await self.addroleifnotpresent(member, otherclubs, brawlstars)
+                msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
 
         if player_in_club and player.club.tag in localtags:
             if member_role_expected is None:
@@ -230,7 +229,7 @@ class Welcome(commands.Cog):
                 elif language == 'es':
                     msg += f"No se ha encontrado un rol para el club {player.club.name}.\n"
                 return await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
-            msg += await self.addroleifnotpresent(member, family, brawlstars, member_role_expected)
+            msg += await self.addroleifnotpresent(member, mmber, family, brawlstars, member_role_expected)
             try:
                 player_club = await self.ofcbsapi.get_club(player.club.tag)
                 for mem in player_club.members:
