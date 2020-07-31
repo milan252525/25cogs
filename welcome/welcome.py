@@ -13,7 +13,7 @@ class Welcome(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=2536725)
-        default_guild = {'roles': {'pres' : None, 'vp' : None, 'member' : None, 'bs' : None, 'guest' : None, 'leader' : None, 'family' : None, 'remove': None, "otherclubs": None, "staff": None, "language": None, "memberclub": None}}
+        default_guild = {'roles': {'pres' : None, 'vp' : None, 'member' : None, 'bs' : None, 'guest' : None, 'leader' : None, 'family' : None, 'remove': None, "otherclubs": None, "staff": None, "language": None, "memberclub": None, "senior": None}}
         self.config.register_guild(**default_guild)
         self.crconfig = Config.get_conf(None, identifier=2512325, cog_name="ClashRoyaleCog")
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
@@ -134,6 +134,8 @@ class Welcome(commands.Cog):
         otherclubs = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.otherclubs())
         leader = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.leader())
         mmber = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.member())
+        memberclub = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.memberclub())
+        senior = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.senior())
 
         if member is not None:
             if newcomer in ctx.author.roles:
@@ -238,6 +240,10 @@ class Welcome(commands.Cog):
                             msg += await self.addroleifnotpresent(member, vp, leader)
                         elif mem.role.lower() == 'president':
                             msg += await self.addroleifnotpresent(member, pres, leader)
+                        elif mem.role.lower() == 'senior':
+                            msg += await self.addroleifnotpresent(member, senior)
+                        elif mem.role.lower() == 'member':
+                            msg += await self.addroleifnotpresent(member, memberclub)
                         break
             except brawlstats.errors.RequestError:
                 msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
