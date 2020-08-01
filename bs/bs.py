@@ -793,6 +793,7 @@ class BrawlStarsCog(commands.Cog):
             embeddescs = []
             desccount = 0
             desc = ""
+            rank = 1
             for mem in club.members:
                 if mem.role.lower() == 'vicepresident':
                     mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag}": "vp"})
@@ -803,12 +804,14 @@ class BrawlStarsCog(commands.Cog):
                 elif mem.role.lower() == 'member':
                     mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag}" : "member"})
                 if desccount == 19:
-                    desc = desc + f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag} <:role:739089429599354921>️{mem.role.capitalize()}\n"
+                    desc = desc + f"**{rank}**{get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} <:role:739089429599354921>️{mem.role.capitalize()}\n"
+                    rank = rank + 1
                     embeddescs.append(desc)
                     desc = ""
                     desccount = 0
                 else:
-                    desc = desc + f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag} <:role:739089429599354921>️{mem.role.capitalize()}\n"
+                    desc = desc + f"**{rank}** {get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} <:role:739089429599354921>️{mem.role.capitalize()}\n"
+                    rank = rank + 1
                     desccount = desccount + 1
 
             senior_count = 0
