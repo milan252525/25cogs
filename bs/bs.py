@@ -872,6 +872,16 @@ class BrawlStarsCog(commands.Cog):
                     else:
                         type = h['data']['type']
                         msg += f"Unrecognized setting type: {type}\n"
+                elif h['type'] == "roles":
+                    if h['data']['promote']:
+                        action = "promoted"
+                    else:
+                        action = "demoted"
+                    name = h['data']['player']['name']
+                    tag = "#" + h['data']['player']['tag']
+                    old = h['data']['old']
+                    new = h['data']['new']
+                    msg += f"**{name} {tag} {action} from {old} to {new}!** {time}\n"
                 else:
                     type = h['type']
                     msg += f"Unrecognized type: {type}\n"
