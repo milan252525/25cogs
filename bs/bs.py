@@ -795,20 +795,20 @@ class BrawlStarsCog(commands.Cog):
             desc = ""
             for mem in club.members:
                 if mem.role.lower() == 'vicepresident':
-                    mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} {mem.tag}": "vp"})
+                    mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag}": "vp"})
                 elif mem.role.lower() == 'president':
-                    mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} {mem.tag}" : "pres"})
+                    mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag}" : "pres"})
                 elif mem.role.lower() == 'senior':
-                    mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} {mem.tag}" : "senior"})
+                    mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag}" : "senior"})
                 elif mem.role.lower() == 'member':
-                    mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} {mem.tag}" : "member"})
+                    mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag}" : "member"})
                 if desccount == 24:
-                    desc = desc + f"{get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} **{mem.tag}** {mem.role.capitalize()}\n"
+                    desc = desc + f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag} {mem.role.capitalize()}\n"
                     embeddescs.append(desc)
                     desc = ""
                     desccount = 0
                 else:
-                    desc = desc + f"{get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} **{mem.tag}** {mem.role.capitalize()}\n"
+                    desc = desc + f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag} {mem.role.capitalize()}\n"
                     desccount = desccount + 1
 
             senior_count = 0
