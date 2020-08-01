@@ -866,15 +866,15 @@ class BrawlStarsCog(commands.Cog):
                     if h['data']['type'] == "description":
                         dold = h['data']['old']
                         dnew = h['data']['new']
-                        msg += f"**Description changed from `{dold}` to `{dnew}`!** {time}\n"
+                        msg += f"🛠️ **Description changed from `{dold}` to `{dnew}`!** {time}\n"
                     elif h['data']['type'] == "requirement":
                         old = h['data']['old']
                         new = h['data']['new']
-                        msg += f"**Requirement changed from `{old}` to `{new}`!** {time}\n"
+                        msg += f"🛠️ **Requirement changed from `{old}` to `{new}`!** {time}\n"
                     elif h['data']['type'] == "status":
                         sold = h['data']['old']
                         snew = h['data']['new']
-                        msg += f"**Status changed from `{sold}` to `{snew}`!** {time}\n"
+                        msg += f"🛠️ **Status changed from `{sold}` to `{snew}`!** {time}\n"
                     else:
                         stype = h['data']['type']
                         msg += f"Unrecognized setting type: {stype}\n"
