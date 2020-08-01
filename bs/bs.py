@@ -821,7 +821,7 @@ class BrawlStarsCog(commands.Cog):
                     else:
                         senior_count_util = senior_count_util + 1
                         senior_value = senior_value + f"{item[0]}"
-                embeddescs.append(f"{name}: {role}")
+                embeddescs.append(f"{item[0]}: {item[1]}")
 
             startingembed.add_field(name="President", value=pres_value)
             startingembed.add_field(name=f"Vice Presidents: {vp_count}", value=vp_value)
