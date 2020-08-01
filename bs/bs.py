@@ -854,7 +854,7 @@ class BrawlStarsCog(commands.Cog):
             if log['status'] != "ok":
                 return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
             msg = ""
-            return await ctx.send(log['history'])
+            return await ctx.send(log['history'][:2000])
             for h in log['history']:
                 time = h['timeFormat']
                 if h['type'] == "members":
