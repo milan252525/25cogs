@@ -802,13 +802,13 @@ class BrawlStarsCog(commands.Cog):
                     mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag}" : "senior"})
                 elif mem.role.lower() == 'member':
                     mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag}" : "member"})
-                if desccount == 24:
-                    desc = desc + f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag} ➡️{mem.role.capitalize()}\n"
+                if desccount == 19:
+                    desc = desc + f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag} <:role:739089429599354921>️{mem.role.capitalize()}\n"
                     embeddescs.append(desc)
                     desc = ""
                     desccount = 0
                 else:
-                    desc = desc + f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag} ➡️{mem.role.capitalize()}\n"
+                    desc = desc + f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag} <:role:739089429599354921>️{mem.role.capitalize()}\n"
                     desccount = desccount + 1
 
             senior_count = 0
