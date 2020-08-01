@@ -849,7 +849,7 @@ class BrawlStarsCog(commands.Cog):
             else:
                 await ctx.send(embed=embedstosend[0])
         elif keyword == "log":
-            url = "https://api.starlist.pro/clublog" + club.tag.replace("#", "")
+            url = "https://api.starlist.pro/clublog/" + club.tag.replace("#", "")
             log = await self.starlist_request(url)
             if log['status'] != "ok":
                 return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
