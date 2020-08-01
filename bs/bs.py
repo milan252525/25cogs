@@ -808,6 +808,7 @@ class BrawlStarsCog(commands.Cog):
             vp_value = ""
             senior_value = ""
             for item in mem.items():
+                return await ctx.send(item[0] + " " + item[1])
                 if item[1] == "pres":
                     pres_value = item[0]
                 elif item[1] == "vp":
