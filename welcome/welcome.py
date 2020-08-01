@@ -145,7 +145,7 @@ class Welcome(commands.Cog):
             member = ctx.author
 
         if ctx.guild.id == 460550486257565697 and member == ctx.author:
-            if remove not in member.roles:
+            if newcomer not in member.roles:
                 return await ctx.send("No puedes usar este comando.")
 
         tag = tag.lower().replace('O', '0')
