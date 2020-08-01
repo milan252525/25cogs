@@ -808,6 +808,7 @@ class BrawlStarsCog(commands.Cog):
             vp_value = ""
             senior_value = ""
             for name, role in mem.items():
+                return await ctx.send(name + " " + role)
                 if role == "pres":
                     pres_value = name
                 elif role == "vp":
@@ -826,8 +827,6 @@ class BrawlStarsCog(commands.Cog):
             startingembed.add_field(name="President", value=pres_value)
             startingembed.add_field(name=f"Vice Presidents: {vp_count}", value=vp_value)
             startingembed.add_field(name=f"Seniors: {senior_count}", value=senior_value, inline=False)
-
-            await ctx.send(pres_value)
         else:
             return await ctx.send(embed=badEmbed(f"There's no such keyword: {keyword}."))
 
