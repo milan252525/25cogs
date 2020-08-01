@@ -695,7 +695,7 @@ class BrawlStarsCog(commands.Cog):
     
     @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command()
-    async def club(self, ctx, key: Union[discord.Member, str] = None):
+    async def club(self, ctx, keyword = None, key: Union[discord.Member, str] = None):
         """View players club or club saved in a server"""
         await ctx.trigger_typing()
         if key is None:
@@ -738,48 +738,95 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
             return
 
-        if club.description is not None:
-            embed = discord.Embed(description=f"```{club.description}```")
+        if keyword is None:
+            if club.description is not None:
+                embed = discord.Embed(description=f"```{club.description}```")
+            else:
+                embed = discord.Embed(description="```None```")
+            embed.set_author(name=f"{club.name} {club.tag}")
+            embed.add_field(
+                name="Total Trophies",
+                value=f"<:bstrophy:552558722770141204> `{club.trophies}`")
+            embed.add_field(
+                name="Required Trophies",
+                value=f"{get_league_emoji(club.required_trophies)} `{club.required_trophies}`")
+            embed.add_field(
+                name="Average Trophies",
+                value=f"<:bstrophy:552558722770141204> `{club.trophies//len(club.members)}`")
+            for m in club.members:
+                if m.role == "president":
+                    embed.add_field(
+                        name="President",
+                        value=f"{get_league_emoji(m.trophies)}`{m.trophies}` {m.name}")
+                    break
+            embed.add_field(
+                name="Members",
+                value=f"<:icon_gameroom:553299647729238016> {len(club.members)}/100")
+            embed.add_field(
+                name="Status",
+                value=f"{club_status[club.type.lower()]['emoji']} {club_status[club.type.lower()]['name']}"
+            )
+            topm = ""
+            for i in range(5):
+                try:
+                    topm += f"{get_league_emoji(club.members[i].trophies)}`{club.members[i].trophies}` {remove_codes(club.members[i].name)}\n"
+                except IndexError:
+                    pass
+            worstm = ""
+            for i in range(5):
+                try:
+                    worstm += f"{get_league_emoji(club.members[len(club.members)-5+i].trophies)}`{club.members[len(club.members)-5+i].trophies}` {remove_codes(club.members[len(club.members)-5+i].name)}\n"
+                except IndexError:
+                    pass
+            embed.add_field(name="Top Members", value=topm, inline=True)
+            embed.add_field(name="Lowest Members", value=worstm, inline=True)
+            return await ctx.send(embed=randomize_colour(embed))
+        elif keyword == "memberlist":
+            colour = choice([discord.Colour.green(),
+                             discord.Colour.blue(),
+                             discord.Colour.purple(),
+                             discord.Colour.orange(),
+                             discord.Colour.red(),
+                             discord.Colour.teal()])
+            startingembed = discord.Embed(colour=colour)
+            mems = {}
+            for mem in club.members:
+                if mem.role.lower() == 'vicepresident':
+                    mems[remove_codes(mem.name) + " " + mem.tag] = "vp"
+                elif mem.role.lower() == 'president':
+                    mems[remove_codes(mem.name) + " " + mem.tag] = "pres"
+                elif mem.role.lower() == 'senior':
+                    mems[remove_codes(mem.name) + " " + mem.tag] = "senior"
+                elif mem.role.lower() == 'member':
+                    mems[remove_codes(mem.name) + " " + mem.tag] = "member"
+
+            senior_count_util = 0
+            senior_count = 0
+            vp_count = 0
+            embeddescs = []
+            for name, role in mem.items():
+                if role == "pres":
+                    pres_value = name
+                elif role == "vp":
+                    vp_count = vp_count + 1
+                    vp_value = vp_value + f"{name}\n"
+                elif role == "senior":
+                    senior_count = senior_count + 1
+                    if senior_count_util == 4:
+                        senior_count_util == 0
+                        senior_value = senior_value + f"{name}\n"
+                    else:
+                        senior_count_util = senior_count_util + 1
+                        senior_value = senior_value + f"{name}"
+                embeddescs.append(f"{name}: {role.capitalize()}")
+
+            startingembed.add_field(name="President", value=pres_value)
+            startingembed.add_field(name=f"Vice Presidents: {vp_count}", value=vp_value)
+            startingembed.add_field(name=f"Seniors: {senior_count}", value=senior_value, inline=False)
+
+            await ctx.send(embed=startingembed)
         else:
-            embed = discord.Embed(description="```None```")
-        embed.set_author(name=f"{club.name} {club.tag}")
-        embed.add_field(
-            name="Total Trophies",
-            value=f"<:bstrophy:552558722770141204> `{club.trophies}`")
-        embed.add_field(
-            name="Required Trophies",
-            value=f"{get_league_emoji(club.required_trophies)} `{club.required_trophies}`")
-        embed.add_field(
-            name="Average Trophies",
-            value=f"<:bstrophy:552558722770141204> `{club.trophies//len(club.members)}`")
-        for m in club.members:
-            if m.role == "president":
-                embed.add_field(
-                    name="President",
-                    value=f"{get_league_emoji(m.trophies)}`{m.trophies}` {m.name}")
-                break
-        embed.add_field(
-            name="Members",
-            value=f"<:icon_gameroom:553299647729238016> {len(club.members)}/100")
-        embed.add_field(
-            name="Status",
-            value=f"{club_status[club.type.lower()]['emoji']} {club_status[club.type.lower()]['name']}"
-        )
-        topm = ""
-        for i in range(5):
-            try:
-                topm += f"{get_league_emoji(club.members[i].trophies)}`{club.members[i].trophies}` {remove_codes(club.members[i].name)}\n"
-            except IndexError:
-                pass
-        worstm = ""
-        for i in range(5):
-            try:
-                worstm += f"{get_league_emoji(club.members[len(club.members)-5+i].trophies)}`{club.members[len(club.members)-5+i].trophies}` {remove_codes(club.members[len(club.members)-5+i].name)}\n"
-            except IndexError:
-                pass
-        embed.add_field(name="Top Members", value=topm, inline=True)
-        embed.add_field(name="Lowest Members", value=worstm, inline=True)
-        return await ctx.send(embed=randomize_colour(embed))
+            return await ctx.send(embed=badEmbed(f"There's no such keyword: {keyword}."))
 
     @commands.cooldown(1, 5, commands.BucketType.guild)
     @commands.guild_only()
