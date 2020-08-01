@@ -848,6 +848,33 @@ class BrawlStarsCog(commands.Cog):
                 await menu(ctx, embedstosend, {"⬆️": prev_page, "⬇️": next_page, }, timeout=2000)
             else:
                 await ctx.send(embed=embedstosend[0])
+        elif keyword == "log":
+            url = "https://api.starlist.pro/clublog" + club.tag.replace("#", "")
+            log = await self.starlist_request(url)
+            if log['status'] != "ok":
+                return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
+            for h in log['history']:
+                time = h['timeFormat']
+                if h['type'] == "members":
+                    name = h['data']['player']['name']
+                    tag = h['data']['player']['tag']
+                    return await ctx.send(f"**{name} {tag} joined!** {time}") if h["data"]["joined"] else await ctx.send(f"**{name} {tag} left!** {time}")
+                elif h['type'] == 'settings':
+                    if h['data']['type'] == "description":
+                        old = h['data']['old']
+                        new = h['data']['new']
+                        return await ctx.send(f"**Description changed from `{old}` to `{new}`!** {time}")
+                    elif h['data']['type'] == "requirement":
+                        old = h['data']['old']
+                        new = h['data']['new']
+                        return await ctx.send(f"**Requirement changed from `{old}` to `{new}`!** {time}")
+                    else:
+                        type = h['data']['type']
+                        return await ctx.send(f"Unrecognized setting type: {type}")
+                else:
+                    type = h['type']
+                    return await ctx.send(f"Unrecognized type: {type}")
+
         else:
             return await ctx.send(embed=badEmbed(f"There's no such keyword: {keyword}."))
 
