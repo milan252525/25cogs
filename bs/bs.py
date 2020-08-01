@@ -695,7 +695,7 @@ class BrawlStarsCog(commands.Cog):
     
     @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command()
-    async def club(self, ctx, keyword = None, key: Union[discord.Member, str] = None):
+    async def club(self, ctx, key: Union[discord.Member, str] = None, keyword = None):
         """View players club or club saved in a server"""
         await ctx.trigger_typing()
         if key is None:
@@ -818,7 +818,7 @@ class BrawlStarsCog(commands.Cog):
                     else:
                         senior_count_util = senior_count_util + 1
                         senior_value = senior_value + f"{name}"
-                embeddescs.append(f"{name}: {role.capitalize()}")
+                embeddescs.append(f"{name}: {role}")
 
             startingembed.add_field(name="President", value=pres_value)
             startingembed.add_field(name=f"Vice Presidents: {vp_count}", value=vp_value)
