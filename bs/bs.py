@@ -790,9 +790,7 @@ class BrawlStarsCog(commands.Cog):
                              discord.Colour.teal()])
             startingembed = discord.Embed(colour=colour, title=f"{club.name} {club.tag}")
             mems = {}
-            embeddescs = []
-            desccount = 0
-            desc = ""
+            embedfields = []
             rank = 1
             for mem in club.members:
                 if mem.role.lower() == 'vicepresident':
@@ -803,16 +801,10 @@ class BrawlStarsCog(commands.Cog):
                     mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag}" : "senior"})
                 elif mem.role.lower() == 'member':
                     mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag}" : "member"})
-                if desccount == 19:
-                    desc = desc + f"**{rank}**{get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} <:role:739089429599354921>️{mem.role.capitalize()}\n"
-                    rank = rank + 1
-                    embeddescs.append(desc)
-                    desc = ""
-                    desccount = 0
-                else:
-                    desc = desc + f"**{rank}** {get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} <:role:739089429599354921>️{mem.role.capitalize()}\n"
-                    rank = rank + 1
-                    desccount = desccount + 1
+                e_name = f"<:role:739089429599354921>  ️{mem.role.capitalize()}"
+                e_value= f"**{rank}** {get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} {mem.tag}"
+                rank = rank + 1
+                embedfields.append([e_name, e_value])
 
             senior_count = 0
             vp_count = 0
@@ -843,8 +835,10 @@ class BrawlStarsCog(commands.Cog):
 
             embedstosend = []
             embedstosend.append(startingembed)
-            for d in embeddescs:
-                embed = discord.Embed(colour=colour, description=d, title=f"{club.name} {club.tag}")
+            for i in range(0, len(embedfields), 20):
+                embed = discord.Embed(color=colour, title=f"{club.name} {club.tag}")
+                for e in embedfields[i:i + 20]:
+                    embed.add_field(name=e[0], value=e[1], inline=false)
                 embedstosend.append(embed)
 
             for i in range(len(embedstosend)):
