@@ -818,8 +818,13 @@ class BrawlStarsCog(commands.Cog):
                 embeddescs.append(f"{item[0]}: {item[1]}")
 
             startingembed.add_field(name="President", value=pres_value)
-            startingembed.add_field(name=f"Vice Presidents: {vp_count}", value=vp_value, inline=False)
-            if len(senior_value) > 1024:
+            if vp_value == "":
+                startingembed.add_field(name=f"Vice Presidents: {vp_count}", value="None", inline=False)
+            else:
+                startingembed.add_field(name=f"Vice Presidents: {vp_count}", value=vp_value, inline=False)
+            if senior_value == "":
+                startingembed.add_field(name=f"Seniors: {senior_count}", value="None", inline=False)
+            elif len(senior_value) > 1024:
                 startingembed.add_field(name=f"Seniors: {senior_count}", value="Too many to show", inline=False)
             else:
                 startingembed.add_field(name=f"Seniors: {senior_count}", value=senior_value, inline=False)
