@@ -807,26 +807,27 @@ class BrawlStarsCog(commands.Cog):
             pres_value = ""
             vp_value = ""
             senior_value = ""
-            for name, role in mem.items():
-                return await ctx.send(name + " " + role)
-                if role == "pres":
-                    pres_value = name
-                elif role == "vp":
+            for item in mem.items():
+                if item[1] == "pres":
+                    pres_value = item[0]
+                elif item[1] == "vp":
                     vp_count = vp_count + 1
-                    vp_value = vp_value + f"{name}\n"
-                elif role == "senior":
+                    vp_value = vp_value + f"{item[0]}\n"
+                elif item[1] == "senior":
                     senior_count = senior_count + 1
                     if senior_count_util == 4:
                         senior_count_util == 0
-                        senior_value = senior_value + f"{name}\n"
+                        senior_value = senior_value + f"{item[0]}\n"
                     else:
                         senior_count_util = senior_count_util + 1
-                        senior_value = senior_value + f"{name}"
+                        senior_value = senior_value + f"{item[0]}"
                 embeddescs.append(f"{name}: {role}")
 
             startingembed.add_field(name="President", value=pres_value)
             startingembed.add_field(name=f"Vice Presidents: {vp_count}", value=vp_value)
             startingembed.add_field(name=f"Seniors: {senior_count}", value=senior_value, inline=False)
+
+            await ctx.send(embed=startingembed)
         else:
             return await ctx.send(embed=badEmbed(f"There's no such keyword: {keyword}."))
 
