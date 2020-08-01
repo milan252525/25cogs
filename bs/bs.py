@@ -792,13 +792,13 @@ class BrawlStarsCog(commands.Cog):
             mems = {}
             for mem in club.members:
                 if mem.role.lower() == 'vicepresident':
-                    mems[remove_codes(mem.name) + " " + mem.tag] = "vp"
+                    mems.update({f"{remove_codes(mem.name)} {mem.tag}": "vp"})
                 elif mem.role.lower() == 'president':
-                    mems[remove_codes(mem.name) + " " + mem.tag] = "pres"
+                    mems.update({f"{remove_codes(mem.name)} {mem.tag}" : "pres"})
                 elif mem.role.lower() == 'senior':
-                    mems[remove_codes(mem.name) + " " + mem.tag] = "senior"
+                    mems.update({f"{remove_codes(mem.name)} {mem.tag}" : "senior"})
                 elif mem.role.lower() == 'member':
-                    mems[remove_codes(mem.name) + " " + mem.tag] = "member"
+                    mems.update({f"{remove_codes(mem.name)} {mem.tag}" : "member"})
 
             senior_count_util = 0
             senior_count = 0
