@@ -864,13 +864,7 @@ class BrawlStarsCog(commands.Cog):
                     if h['data']['type'] == "description":
                         dold = h['data']['old']
                         dnew = h['data']['new']
-                        if len(dold) > len(dnew):
-                            neww = dold.replace(dnew, '')
-                            oldd = dnew.replace(dold, '')
-                        else:
-                            neww = dnew.replace(dold, '')
-                            oldd = dold.replace(dnew, '')
-                        addition = f"🛠️ **Description changed from `{oldd}` to `{neww}`!** {time}\n"
+                        addition = f"🛠️ **Description changed from `{dold}` to `{dnew}`!** {time}\n"
                     elif h['data']['type'] == "requirement":
                         old = h['data']['old']
                         new = h['data']['new']
