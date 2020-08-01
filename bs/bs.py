@@ -826,9 +826,9 @@ class BrawlStarsCog(commands.Cog):
             startingembed.add_field(name="President", value=pres_value)
             startingembed.add_field(name=f"Vice Presidents: {vp_count}", value=vp_value)
             if len(senior_value) > 1024:
-                startingembed.add_field(name=f"Seniors: {senior_count}", value="Too many to show", inline=False)
+                startingembed.add_field(name=f"Seniors: {senior_count}", value="Too many to show")
             else:
-                startingembed.add_field(name=f"Seniors: {senior_count}", value=senior_value, inline=False)
+                startingembed.add_field(name=f"Seniors: {senior_count}", value=senior_value)
 
             await ctx.send(embed=startingembed)
         else:
