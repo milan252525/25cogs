@@ -802,7 +802,7 @@ class BrawlStarsCog(commands.Cog):
                     mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} {mem.tag}" : "senior"})
                 elif mem.role.lower() == 'member':
                     mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} {mem.tag}" : "member"})
-                if desccount == 10:
+                if desccount == 24:
                     desc = desc + f"{get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} {mem.tag} {mem.role.capitalize()}\n"
                     embeddescs.append(desc)
                     desc = ""
