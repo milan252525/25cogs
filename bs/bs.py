@@ -788,8 +788,11 @@ class BrawlStarsCog(commands.Cog):
                              discord.Colour.orange(),
                              discord.Colour.red(),
                              discord.Colour.teal()])
-            startingembed = discord.Embed(colour=colour)
+            startingembed = discord.Embed(colour=colour, title=f"{club.name} {club.tag}")
             mems = {}
+            embeddescs = []
+            desccount = 0
+            desc = ""
             for mem in club.members:
                 if mem.role.lower() == 'vicepresident':
                     mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} {mem.tag}": "vp"})
@@ -799,10 +802,17 @@ class BrawlStarsCog(commands.Cog):
                     mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} {mem.tag}" : "senior"})
                 elif mem.role.lower() == 'member':
                     mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} {mem.tag}" : "member"})
+                if desccount == 10:
+                    desc = desc + f"{get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} {mem.tag} {mem.role.capitalize()}\n"
+                    embeddescs.append(desc)
+                    desc = ""
+                    desccount = 0
+                else:
+                    desc = desc + f"{get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} {mem.tag} {mem.role.capitalize()}\n"
+                    desccount = desccount + 1
 
             senior_count = 0
             vp_count = 0
-            embeddescs = []
             pres_value = ""
             vp_value = ""
             senior_value = ""
@@ -815,7 +825,6 @@ class BrawlStarsCog(commands.Cog):
                 elif item[1] == "senior":
                     senior_count = senior_count + 1
                     senior_value = senior_value + f"{item[0]}\n"
-                embeddescs.append(f"{item[0]}: {item[1]}")
 
             startingembed.add_field(name="President", value=pres_value)
             if vp_value == "":
@@ -829,7 +838,19 @@ class BrawlStarsCog(commands.Cog):
             else:
                 startingembed.add_field(name=f"Seniors: {senior_count}", value=senior_value, inline=False)
 
-            await ctx.send(embed=startingembed)
+            embedstosend = []
+            embedstosend.append(startingembed)
+            for d in embeddescs:
+                embed = discord.Embed(colour=colour, description=d, title=f"{club.name} {club.tag}")
+                embedstosend.append(embed)
+
+            for i in range(len(embedstosend)):
+                embedstosend[i].set_footer(text=f"Page {i + 1}/{len(embedstosend)}\nScroll down for the full member list")
+
+            if len(embedstosend) > 1:
+                await menu(ctx, embedstosend, {"⬆️": prev_page, "⬇️": next_page, }, timeout=2000)
+            else:
+                await ctx.send(embed=embedstosend[0])
         else:
             return await ctx.send(embed=badEmbed(f"There's no such keyword: {keyword}."))
 
