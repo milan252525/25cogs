@@ -853,27 +853,38 @@ class BrawlStarsCog(commands.Cog):
             log = await self.starlist_request(url)
             if log['status'] != "ok":
                 return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
+            msg = ""
             for h in log['history']:
                 time = h['timeFormat']
                 if h['type'] == "members":
                     name = h['data']['player']['name']
-                    tag = h['data']['player']['tag']
-                    return await ctx.send(f"**{name} {tag} joined!** {time}") if h["data"]["joined"] else await ctx.send(f"**{name} {tag} left!** {time}")
+                    tag = "#" + h['data']['player']['tag']
+                    msg += f"**{name} ({tag}) joined!** {time}\n" if h["data"]["joined"] else f"**{name} ({tag}) left!** {time}\n"
                 elif h['type'] == 'settings':
                     if h['data']['type'] == "description":
                         old = h['data']['old']
                         new = h['data']['new']
-                        return await ctx.send(f"**Description changed from `{old}` to `{new}`!** {time}")
+                        msg += f"**Description changed from `{old}` to `{new}`!** {time}\n"
                     elif h['data']['type'] == "requirement":
                         old = h['data']['old']
                         new = h['data']['new']
-                        return await ctx.send(f"**Requirement changed from `{old}` to `{new}`!** {time}")
+                        msg += f"**Requirement changed from `{old}` to `{new}`!** {time}\n"
                     else:
                         type = h['data']['type']
-                        return await ctx.send(f"Unrecognized setting type: {type}")
+                        msg += f"Unrecognized setting type: {type}\n"
                 else:
                     type = h['type']
-                    return await ctx.send(f"Unrecognized type: {type}")
+                    msg += f"Unrecognized type: {type}\n"
+                if len(msg) > 2000:
+                    break
+
+            colour = choice([discord.Colour.green(),
+                             discord.Colour.blue(),
+                             discord.Colour.purple(),
+                             discord.Colour.orange(),
+                             discord.Colour.red(),
+                             discord.Colour.teal()])
+            await ctx.send(embed=discord.Embed(colour=colour, title=f"{club.name} {club.tag}", description=msg))
 
         else:
             return await ctx.send(embed=badEmbed(f"There's no such keyword: {keyword}."))
