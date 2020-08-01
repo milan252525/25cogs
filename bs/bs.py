@@ -855,7 +855,7 @@ class BrawlStarsCog(commands.Cog):
                 return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
             msg = ""
             for h in log['history']:
-                if len(msg) > 1800:
+                if len(msg) > 1700:
                     break
                 time = h['timeFormat']
                 if h['type'] == "members":
@@ -904,6 +904,7 @@ class BrawlStarsCog(commands.Cog):
 
             embed = discord.Embed(colour=colour, title=f"{club.name} {club.tag}", description=msg)
             embed.set_footer(text="Data provided by starlist.pro")
+            await ctx.send(len(msg))
             await ctx.send(embed=embed)
 
         else:
