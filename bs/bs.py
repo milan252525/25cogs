@@ -801,8 +801,8 @@ class BrawlStarsCog(commands.Cog):
                     mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag}" : "senior"})
                 elif mem.role.lower() == 'member':
                     mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag}" : "member"})
-                e_name = f"<:role:739089429599354921>  ️{mem.role.capitalize()}"
-                e_value= f"**{rank}** {get_league_emoji(mem.trophies)}`{mem.trophies}`{remove_codes(mem.name)} {mem.tag}"
+                e_name = f"**{rank}** {remove_codes(mem.name)} {mem.tag}"
+                e_value= f" {get_league_emoji(mem.trophies)}`{mem.trophies}` <:role:739089429599354921>  ️{mem.role.capitalize()}"
                 rank = rank + 1
                 embedfields.append([e_name, e_value])
 
