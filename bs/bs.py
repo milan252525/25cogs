@@ -804,6 +804,9 @@ class BrawlStarsCog(commands.Cog):
             senior_count = 0
             vp_count = 0
             embeddescs = []
+            pres_value = ""
+            vp_value = ""
+            senior_value = ""
             for name, role in mem.items():
                 if role == "pres":
                     pres_value = name
