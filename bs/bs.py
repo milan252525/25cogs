@@ -855,6 +855,8 @@ class BrawlStarsCog(commands.Cog):
                 return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
             msg = ""
             for h in log['history']:
+                if len(msg) > 2000:
+                    break
                 time = h['timeFormat']
                 if h['type'] == "members":
                     name = h['data']['player']['name']
@@ -891,8 +893,6 @@ class BrawlStarsCog(commands.Cog):
                 else:
                     type = h['type']
                     msg += f"Unrecognized type: {type}\n"
-                if len(msg) > 2000:
-                    break
 
             colour = choice([discord.Colour.green(),
                              discord.Colour.blue(),
