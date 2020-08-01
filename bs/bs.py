@@ -856,7 +856,7 @@ class BrawlStarsCog(commands.Cog):
             msg = ""
             for h in log['history']:
                 if h['type'] != "members":
-                    msg += h
+                    msg += str(h) + "\n"
             return await ctx.send(msg[:1999])
             for h in log['history']:
                 time = h['timeFormat']
