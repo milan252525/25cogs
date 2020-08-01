@@ -827,7 +827,7 @@ class BrawlStarsCog(commands.Cog):
             startingembed.add_field(name=f"Vice Presidents: {vp_count}", value=vp_value)
             startingembed.add_field(name=f"Seniors: {senior_count}", value=senior_value, inline=False)
 
-            await ctx.send(embed=startingembed)
+            await ctx.send(mems)
         else:
             return await ctx.send(embed=badEmbed(f"There's no such keyword: {keyword}."))
 
