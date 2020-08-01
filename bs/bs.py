@@ -861,7 +861,7 @@ class BrawlStarsCog(commands.Cog):
                 if h['type'] == "members":
                     name = h['data']['player']['name']
                     tag = "#" + h['data']['player']['tag']
-                    msg += f"<:PepeEnter:730317996127551549> **{name} ({tag}) joined!** {time}\n" if h["data"]["joined"] else f"<:pepeexit:707275210587635812> **{name} ({tag}) left!** {time}\n"
+                    msg += f"<:yesconfirm:595535992329601034> **{name} ({tag}) joined!** {time}\n" if h["data"]["joined"] else f"<:nocancel:595535992199315466> **{name} ({tag}) left!** {time}\n"
                 elif h['type'] == 'settings':
                     if h['data']['type'] == "description":
                         dold = h['data']['old']
