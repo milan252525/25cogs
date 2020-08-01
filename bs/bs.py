@@ -815,8 +815,8 @@ class BrawlStarsCog(commands.Cog):
                     vp_value = vp_value + f"{item[0]}\n"
                 elif item[1] == "senior":
                     senior_count = senior_count + 1
-                    if senior_count_util >= 4:
-                        senior_count_util == 0
+                    if senior_count_util >= 2:
+                        senior_count_util = 0
                         senior_value = senior_value + f"{item[0]}\n"
                     else:
                         senior_count_util = senior_count_util + 1
