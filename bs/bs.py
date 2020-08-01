@@ -903,7 +903,7 @@ class BrawlStarsCog(commands.Cog):
                              discord.Colour.teal()])
 
             embed = discord.Embed(colour=colour, title=f"{club.name} {club.tag}", description=msg)
-            embed.set_footer("Data provided by starlist.pro")
+            embed.set_footer(text="Data provided by starlist.pro")
             await ctx.send(embed=embed)
 
         else:
