@@ -859,33 +859,35 @@ class BrawlStarsCog(commands.Cog):
                 if h['type'] == "members":
                     name = h['data']['player']['name']
                     tag = "#" + h['data']['player']['tag']
-                    msg += f"**{name} ({tag}) joined!** {time}\n" if h["data"]["joined"] else f"**{name} ({tag}) left!** {time}\n"
+                    msg += f"☺️ **{name} ({tag}) joined!** {time}\n" if h["data"]["joined"] else f"😱 **{name} ({tag}) left!** {time}\n"
                 elif h['type'] == 'settings':
                     if h['data']['type'] == "description":
                         dold = h['data']['old']
                         dnew = h['data']['new']
-                        msg += f"**Description changed from `{dold}` to `{dnew}`!** {time}\n"
+                        msg += f"🤔 **Description changed from `{dold}` to `{dnew}`!** {time}\n"
                     elif h['data']['type'] == "requirement":
                         old = h['data']['old']
                         new = h['data']['new']
-                        msg += f"**Requirement changed from `{old}` to `{new}`!** {time}\n"
+                        msg += f"🤔 **Requirement changed from `{old}` to `{new}`!** {time}\n"
                     elif h['data']['type'] == "status":
                         sold = h['data']['old']
                         snew = h['data']['new']
-                        msg += f"**Status changed from `{sold}` to `{snew}`!** {time}\n"
+                        msg += f"🤔 **Status changed from `{sold}` to `{snew}`!** {time}\n"
                     else:
                         stype = h['data']['type']
                         msg += f"Unrecognized setting type: {stype}\n"
                 elif h['type'] == "roles":
                     if h['data']['promote']:
                         action = "promoted"
+                        emoji = "☺"
                     else:
                         action = "demoted"
+                        emoji = "😱"
                     rname = h['data']['player']['name']
                     rtag = "#" + h['data']['player']['tag']
                     rold = h['data']['old']
                     rnew = h['data']['new']
-                    msg += f"**{rname} {rtag} {action} from {rold} to {rnew}!** {time}\n"
+                    msg += f"{emoji} **{rname} {rtag} {action} from {rold} to {rnew}!** {time}\n"
                 else:
                     type = h['type']
                     msg += f"Unrecognized type: {type}\n"
