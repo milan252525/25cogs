@@ -879,6 +879,7 @@ class BrawlStarsCog(commands.Cog):
                         stype = h['data']['type']
                         msg += f"Unrecognized setting type: {stype}\n"
                 elif h['type'] == "roles":
+                    continue
                     if h['data']['promote']:
                         action = "promoted"
                         emoji = "<:upvote:554429793446395904>"
