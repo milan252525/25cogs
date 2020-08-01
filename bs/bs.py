@@ -799,7 +799,6 @@ class BrawlStarsCog(commands.Cog):
                     mems.update({f"{remove_codes(mem.name)} {mem.tag}" : "senior"})
                 elif mem.role.lower() == 'member':
                     mems.update({f"{remove_codes(mem.name)} {mem.tag}" : "member"})
-                return await ctx.send(mems)
 
             senior_count_util = 0
             senior_count = 0
