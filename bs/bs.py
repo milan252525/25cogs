@@ -838,7 +838,7 @@ class BrawlStarsCog(commands.Cog):
             for i in range(0, len(embedfields), 20):
                 embed = discord.Embed(color=colour, title=f"{club.name} {club.tag}")
                 for e in embedfields[i:i + 20]:
-                    embed.add_field(name=e[0], value=e[1], inline=false)
+                    embed.add_field(name=e[0], value=e[1], inline=False)
                 embedstosend.append(embed)
 
             for i in range(len(embedstosend)):
