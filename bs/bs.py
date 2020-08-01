@@ -798,8 +798,6 @@ class BrawlStarsCog(commands.Cog):
                 elif mem.role.lower() == 'senior':
                     mems.update({f"{remove_codes(mem.name)} {mem.tag}" : "senior"})
                 elif mem.role.lower() == 'member':
-                    mems.update({f"{remove_codes(mem.name)} {mem.tag}" : "member"})
-
             senior_count_util = 0
             senior_count = 0
             vp_count = 0
@@ -807,8 +805,7 @@ class BrawlStarsCog(commands.Cog):
             pres_value = ""
             vp_value = ""
             senior_value = ""
-            for item in mem.items():
-                return await ctx.send(item[0] + " " + item[1])
+            for item in mems.items():
                 if item[1] == "pres":
                     pres_value = item[0]
                 elif item[1] == "vp":
