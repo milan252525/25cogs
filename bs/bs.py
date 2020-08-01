@@ -900,6 +900,7 @@ class BrawlStarsCog(commands.Cog):
                              discord.Colour.orange(),
                              discord.Colour.red(),
                              discord.Colour.teal()])
+            await ctx.send(len(msg))
             await ctx.send(embed=discord.Embed(colour=colour, title=f"{club.name} {club.tag}", description=msg))
 
         else:
