@@ -855,10 +855,6 @@ class BrawlStarsCog(commands.Cog):
                 return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
             msg = ""
             for h in log['history']:
-                if h['type'] != "members":
-                    msg += str(h) + "\n"
-            return await ctx.send(msg[:1999])
-            for h in log['history']:
                 time = h['timeFormat']
                 if h['type'] == "members":
                     name = h['data']['player']['name']
@@ -873,6 +869,10 @@ class BrawlStarsCog(commands.Cog):
                         old = h['data']['old']
                         new = h['data']['new']
                         msg += f"**Requirement changed from `{old}` to `{new}`!** {time}\n"
+                    elif h['data']['type'] == "status":
+                        sold = h['data']['old']
+                        snew = h['data']['new']
+                        msg += f"**Status changed from `{sold}` to `{snew}`!** {time}\n"
                     else:
                         stype = h['data']['type']
                         msg += f"Unrecognized setting type: {stype}\n"
