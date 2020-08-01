@@ -855,29 +855,27 @@ class BrawlStarsCog(commands.Cog):
                 return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
             msg = ""
             for h in log['history']:
-                if len(msg) > 1700:
-                    break
                 time = h['timeFormat']
                 if h['type'] == "members":
                     name = h['data']['player']['name']
                     tag = "#" + h['data']['player']['tag']
-                    msg += f"<:yesconfirm:595535992329601034> **{name} ({tag}) joined!** {time}\n" if h["data"]["joined"] else f"<:nocancel:595535992199315466> **{name} ({tag}) left!** {time}\n"
+                    addition = f"<:yesconfirm:595535992329601034> **{name} ({tag}) joined!** {time}\n" if h["data"]["joined"] else f"<:nocancel:595535992199315466> **{name} ({tag}) left!** {time}\n"
                 elif h['type'] == 'settings':
                     if h['data']['type'] == "description":
                         dold = h['data']['old']
                         dnew = h['data']['new']
-                        msg += f"🛠️ **Description changed from `{dold}` to `{dnew}`!** {time}\n"
+                        addition = f"🛠️ **Description changed from `{dold}` to `{dnew}`!** {time}\n"
                     elif h['data']['type'] == "requirement":
                         old = h['data']['old']
                         new = h['data']['new']
-                        msg += f"🛠️ **Requirement changed from `{old}` to `{new}`!** {time}\n"
+                        addition = f"🛠️ **Requirement changed from `{old}` to `{new}`!** {time}\n"
                     elif h['data']['type'] == "status":
                         sold = h['data']['old']
                         snew = h['data']['new']
-                        msg += f"🛠️ **Status changed from `{sold}` to `{snew}`!** {time}\n"
+                        addition = f"🛠️ **Status changed from `{sold}` to `{snew}`!** {time}\n"
                     else:
                         stype = h['data']['type']
-                        msg += f"Unrecognized setting type: {stype}\n"
+                        addition = f"Unrecognized setting type: {stype}\n"
                 elif h['type'] == "roles":
                     continue
                     if h['data']['promote']:
@@ -890,10 +888,13 @@ class BrawlStarsCog(commands.Cog):
                     rtag = "#" + h['data']['player']['tag']
                     rold = h['data']['old']
                     rnew = h['data']['new']
-                    msg += f"{emoji} **{rname} {rtag} {action} from {rold} to {rnew}!** {time}\n"
+                    addition = f"{emoji} **{rname} {rtag} {action} from {rold} to {rnew}!** {time}\n"
                 else:
                     type = h['type']
-                    msg += f"Unrecognized type: {type}\n"
+                    addition = f"Unrecognized type: {type}\n"
+                if len(msg) + len(addition) > 2024:
+                    break
+                msg += addition
 
             colour = choice([discord.Colour.green(),
                              discord.Colour.blue(),
