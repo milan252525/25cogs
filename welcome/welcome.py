@@ -113,7 +113,7 @@ class Welcome(commands.Cog):
 
     @commands.command(aliases=['nuevorol', 'vincular', 'salvar', 'nc'])
     @commands.guild_only()
-    async def newcomertest(self, ctx, tag, member: discord.Member = None):
+    async def newcomer(self, ctx, tag, member: discord.Member = None):
         staff = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.staff())
         language = await self.config.guild(ctx.guild).roles.language()
 
