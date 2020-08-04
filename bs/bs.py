@@ -767,21 +767,15 @@ class BrawlStarsCog(commands.Cog):
                 value=f"{club_status[club.type.lower()]['emoji']} {club_status[club.type.lower()]['name']}"
             )
             topm = ""
-            for i in range(5):
-                try:
-                    topm += f"{get_league_emoji(club.members[i].trophies)}`{club.members[i].trophies}` {remove_codes(club.members[i].name)}\n"
-                except IndexError:
-                    pass
+            for m in club.members[:5]:
+                topm += f"{get_league_emoji(m.trophies)}`{m.trophies}` {remove_codes(m.name)}\n"
             worstm = ""
-            for i in range(5):
-                try:
-                    worstm += f"{get_league_emoji(club.members[len(club.members)-5+i].trophies)}`{club.members[len(club.members)-5+i].trophies}` {remove_codes(club.members[len(club.members)-5+i].name)}\n"
-                except IndexError:
-                    pass
+            for m in club.members[-5:]:
+                worstm += f"{get_league_emoji(m.trophies)}`{m.trophies}` {remove_codes(m.name)}\n"
             embed.add_field(name="Top Members", value=topm, inline=True)
             embed.add_field(name="Lowest Members", value=worstm, inline=True)
             return await ctx.send(embed=randomize_colour(embed))
-        elif keyword == "memberlist":
+        elif keyword in ["memberlist", "members", "list", "m"]:
             colour = choice([discord.Colour.green(),
                              discord.Colour.blue(),
                              discord.Colour.purple(),
