@@ -39,7 +39,7 @@ class Challenges(commands.Cog):
     @commands.guild_only()
     @commands.group(invoke_without_command=True, aliases=['chal', 'chall', 'ch'])
     async def challenge(self, ctx):
-        await ctx.send("Leaderboard: coming soon™")
+        await ctx.send("Leaderboard: <#740676677822185533>")
 
     @commands.guild_only()
     @challenge.command(name="track")
@@ -182,5 +182,5 @@ class Challenges(commands.Cog):
 
             embed = discord.Embed(colour=discord.Colour.green(), title="Green Glitch Leaderboard")
             embed.add_field(name=f"Registered: {len(total)}", value=msg if msg != "" else "-")
-            #lbmsg = await (self.bot.get_channel(726456852249837568)).fetch_message(726471099306737664)
-            #await lbmsg.edit(embed=embed)
+            lbmsg = await (self.bot.get_channel(740676677822185533)).fetch_message(740676852758085641)
+            await lbmsg.edit(embed=embed)
