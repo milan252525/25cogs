@@ -142,9 +142,9 @@ class Challenges(commands.Cog):
                             streak = await self.config.member(user).streak()
                             if "trophies" not in player['brawler']:
                                 continue
-                            if win and player['brawler']['trophies'] >= 400 and battle['battle']['mode'] in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone'):
+                            if win and player['brawler']['trophies'] >= 400 and battle['battle']['mode'] in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone', 'soloShowdown', 'duoShowdown'):
                                 streak = streak + 1
-                            elif win and (player['brawler']['trophies'] < 400 or battle['battle']['mode'] not in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone')):
+                            elif win and (player['brawler']['trophies'] < 400 or battle['battle']['mode'] not in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone', 'soloShowdown', 'duoShowdown')):
                                 streak = streak
                             else:
                                 streak = 0
