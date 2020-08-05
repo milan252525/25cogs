@@ -68,6 +68,7 @@ class Challenges(commands.Cog):
         if not (await self.config.member(member).tracking()):
             return await ctx.send(f"**{member.display_name}** isn't participating yet! (`/ch track`)")
         embed = discord.Embed(colour=discord.Colour.green(), title="Stats")
+        embed.add_field(name="Current streak", value=await self.config.member(member).streak())
         embed.add_field(name="Total entries", value=await self.config.member(member).entries())
         embed.set_footer(
             text=f"Time of last seen battle:  {datetime.strptime(await self.config.member(member).lastBattleTime(), '%Y%m%dT%H%M%S.%fZ')}")
@@ -130,7 +131,7 @@ class Challenges(commands.Cog):
                             if player is None:
                                 await error_ch.send(f"{m}\n```py\n{battle}```")
                                 continue
-                            # CHALLENGE CONDITION HERE
+
                             win = True
                             if "result" in battle['battle'] and battle['battle']['result'] == "draw":
                                 continue
@@ -157,6 +158,9 @@ class Challenges(commands.Cog):
                         streak = 0
                         entries = await self.config.member(user).entries()
                         entries = entries + 1
+                        await self.config.member(user).entries.set(entries)
+                    if entries >= 20:
+                        entries = 20
                         await self.config.member(user).entries.set(entries)
                     await self.config.member(user).streak.set(streak)
                     await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
