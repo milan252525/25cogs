@@ -151,16 +151,20 @@ class Challenges(commands.Cog):
                             await error_ch.send(f"{m}\n```py\n{battle}```")
                             continue
 
-                    if streak >= 5:
-                        streak = 0
-                        entries = await self.config.member(user).entries()
-                        entries = entries + 1
-                        await self.config.member(user).entries.set(entries)
-                    if entries >= 20:
-                        entries = 20
-                        await self.config.member(user).entries.set(entries)
-                    await self.config.member(user).streak.set(streak)
-                    await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
+                    try:
+                        if streak >= 5:
+                            streak = 0
+                            entries = await self.config.member(user).entries()
+                            entries = entries + 1
+                            await self.config.member(user).entries.set(entries)
+                        if entries >= 20:
+                            entries = 20
+                            await self.config.member(user).entries.set(entries)
+                        await self.config.member(user).streak.set(streak)
+                        await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
+                    except Exception as e:
+                        await error_ch.send(f"{m}\n```py\n{e}```")
+                        continue
             members = await self.config.all_members(labs)
             total = []
             for m in members:
