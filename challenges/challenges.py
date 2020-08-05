@@ -140,30 +140,29 @@ class Challenges(commands.Cog):
                                 win = False
 
                             streak = await self.config.member(user).streak()
-                            trophycheck = "True" if player['brawler']['trophies'] >= 400 else "False"
-                            modecheck = "True" if battle['battle']['mode'] in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone') else "False"
-                            await error_ch.send(f"Trophy check: {trophycheck}\nMode check: {modecheck}")
                             if win and player['brawler']['trophies'] >= 400 and battle['battle']['mode'] in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone'):
                                 streak += 1
                             elif win and (player['brawler']['trophies'] < 400 or battle['battle']['mode'] not in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone')):
                                 streak = streak
                             else:
                                 streak = 0
+
+                            entries = await self.config.member(user).entries()
+                            if streak >= 5:
+                                streak = 0
+                                entries = entries + 1
+                                await self.config.member(user).entries.set(entries)
+                            if entries >= 20:
+                                entries = 20
+                                await self.config.member(user).entries.set(entries)
+                            await self.config.member(user).streak.set(streak)
+
                         except Exception as e:
                             await error_ch.send(f"{m}\n```py\n{e}```")
                             await error_ch.send(f"{m}\n```py\n{battle}```")
                             continue
 
                     try:
-                        entries = await self.config.member(user).entries()
-                        if streak >= 5:
-                            streak = 0
-                            entries = entries + 1
-                            await self.config.member(user).entries.set(entries)
-                        if entries >= 20:
-                            entries = 20
-                            await self.config.member(user).entries.set(entries)
-                        await self.config.member(user).streak.set(streak)
                         await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
                     except Exception as e:
                         await error_ch.send(f"{m}\n```py\n{e}```")
