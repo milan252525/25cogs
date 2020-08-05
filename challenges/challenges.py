@@ -120,13 +120,10 @@ class Challenges(commands.Cog):
                                 for t in battle['battle']['teams']:
                                     for p in t:
                                         if p['tag'].replace("#", "") == tag.upper():
-                                            if p['brawler']['trophies'] < 500:
-                                                continue
                                             player = p
                             else:
                                 for p in battle['battle']['players']:
                                     if p['tag'].replace("#", "") == tag.upper():
-
                                         player = p
                             if player is None:
                                 await error_ch.send(f"{m}\n```py\n{battle}```")
