@@ -113,7 +113,7 @@ class Challenges(commands.Cog):
                     for battle in reversed(log):
                         try:
                             b_time = datetime.strptime(battle['battleTime'], '%Y%m%dT%H%M%S.%fZ')
-                            if b_time <= datetime.strptime(members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
+                            if b_time == datetime.strptime(members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
                                 break
                             player = None
                             if "teams" in battle['battle']:
