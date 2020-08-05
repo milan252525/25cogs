@@ -6,18 +6,14 @@ import brawlstats
 import asyncio
 from datetime import datetime
 
+
 class Challenges(commands.Cog):
-    
+
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=25202025)
-        default_member = {'tokens' : 0, 'tracking' : False, 'lastBattleTime' : "20200627T170000.000Z", 'progress' : 0, 'plant' : None, 'wins' : {}, 'loses' : {}}
+        self.config = Config.get_conf(self, identifier=424242696942)
+        default_member = {'tracking': False, 'lastBattleTime': "20200627T170000.000Z", 'entries': 0, 'streak': 0}
         self.config.register_member(**default_member)
-        self.config.register_global(
-            plants = 0,
-            zombies = 0,
-            enabled = False
-        )
         self.labs = 401883208511389716
         self.bsconfig = None
         self.battle_check.start()
@@ -43,35 +39,25 @@ class Challenges(commands.Cog):
     @commands.guild_only()
     @commands.group(invoke_without_command=True, aliases=['chal', 'chall', 'ch'])
     async def challenge(self, ctx):
-        await ctx.send("Leaderboard: <#726456852249837568>")
+        await ctx.send("Leaderboard: coming soon™")
 
     @commands.guild_only()
     @challenge.command(name="track")
-    async def challenge_track(self, ctx, group: str = None):
+    async def challenge_track(self, ctx):
         if await self.config.member(ctx.author).tracking():
-            return await ctx.send("Your progress is already being tracked! Group cannot be changed after registering.")
+            return await ctx.send("Your progress is already being tracked!")
         if not self.labs_check(ctx.guild):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
         labs_mem = ctx.guild.get_role(576028728052809728)
         special = ctx.guild.get_role(706420605309812776)
-        pvzrole = ctx.guild.get_role(726554301090103317)
-        if labs_mem not in ctx.author.roles and special not in ctx.author.roles and pvzrole not in ctx.author.roles:
+        gg = ctx.guild.get_role(740491601280761948)
+        if labs_mem not in ctx.author.roles and special not in ctx.author.roles and gg not in ctx.author.roles:
             return await ctx.send("Only LA members can participate!")
         bs_conf = self.get_bs_config()
         if (await bs_conf.user(ctx.author).tag()) is None:
             return await ctx.send("Save your tag using `/save` first!")
-        if group is None:
-            recommended = "Plants" if (await self.config.plants()) < (await self.config.zombies()) else "Zombies"
-            return await ctx.send(f"Choose your side!\nTo play as a **plant** (Sprout, Spike, Rosa) type `/ch track plant`\nTo play as a **zombie** (EMZ, Frank, Mortis) type `/ch track zombie`\n**Recommended group**: {recommended}")
-        if group.lower() not in ("plant", "zombie"):
-            return await ctx.send("That doesn't look like a valid option.\nOptions: `zombie`, `plant`")
-        await self.config.member(ctx.author).plant.set(group.lower() == "plant")
         await self.config.member(ctx.author).tracking.set(True)
-        if group.lower() == "plant":
-            await self.config.plants.set(await self.config.plants()+1)
-        else:
-            await self.config.zombies.set(await self.config.zombies()+1)
-        return await ctx.send(f"Challenge tracking enabled!\nChosen group: {group.title()}")
+        return await ctx.send(f"Challenge tracking enabled!\n")
 
     @commands.guild_only()
     @challenge.command(name="stats")
@@ -82,20 +68,10 @@ class Challenges(commands.Cog):
         if not (await self.config.member(member).tracking()):
             return await ctx.send(f"**{member.display_name}** isn't participating yet! (`/ch track`)")
         embed = discord.Embed(colour=discord.Colour.green(), title="Stats")
-        embed.add_field(name="Group", value="Plants" if await self.config.member(member).plant() else "Zombies")
-        embed.add_field(name="Total wins", value=await self.config.member(member).progress())
-        wins = await self.config.member(member).wins()
-        loses = await self.config.member(member).loses()
-        brawlers = ("SPIKE", "ROSA", "SPROUT") if await self.config.member(member).plant() else ("MORTIS", "FRANK", "EMZ")
-        for br in brawlers:
-            win = 0 if br not in wins else wins[br]
-            loss = 0 if br not in loses else loses[br]
-            if win + loss == 0:
-                win_rate = 0
-            else:
-                win_rate = int((win / (win + loss)) * 100)
-            embed.add_field(name=br.title(), value=f"{win} ({win_rate}%)")
-        embed.set_footer(text=f"Time of last seen battle:  {datetime.strptime(await self.config.member(member).lastBattleTime(), '%Y%m%dT%H%M%S.%fZ')}")
+        embed.add_field(name="Current streak", value=await self.config.member(member).streak())
+        embed.add_field(name="Total entries", value=await self.config.member(member).entries())
+        embed.set_footer(
+            text=f"Time of last seen battle:  {datetime.strptime(await self.config.member(member).lastBattleTime(), '%Y%m%dT%H%M%S.%fZ')}")
         await ctx.send(embed=embed)
 
     @commands.is_owner()
@@ -118,15 +94,11 @@ class Challenges(commands.Cog):
                 if "tracking" not in members[m]:
                     continue
                 if members[m]['tracking']:
-                    group_plant = members[m]['plant']
-                    progress = 0
                     user = labs.get_member(m)
                     if user is None:
                         await error_ch.send(m)
                         continue
                     tag = tags[user.id]['tag'].replace("o", "0").replace("O", "0")
-                    wins = members[m]['wins']
-                    loses = members[m]['loses']
                     try:
                         log = await self.ofcbsapi.get_battle_logs(tag)
                         await asyncio.sleep(0.1)
@@ -156,7 +128,7 @@ class Challenges(commands.Cog):
                             if player is None:
                                 await error_ch.send(f"{m}\n```py\n{battle}```")
                                 continue
-                            #CHALLENGE CONDITION HERE
+
                             win = True
                             if "result" in battle['battle'] and battle['battle']['result'] == "draw":
                                 continue
@@ -166,69 +138,41 @@ class Challenges(commands.Cog):
                                 win = False
                             if "rank" in battle['battle'] and battle['battle']['mode'] != "soloShowdown" and battle['battle']['rank'] > 2:
                                 win = False
-                            if battle['battle']['mode'].lower().replace('-', '').replace(' ', '') in ('roborumble', 'biggame'):
-                                continue
-                            brawler_name = player['brawler']['name']
-                            if group_plant:
-                                if brawler_name in ("SPIKE", "ROSA", "SPROUT"):
-                                    if win:
-                                        progress += 1
-                                        if brawler_name in wins:
-                                            wins[brawler_name] += 1
-                                        else:
-                                            wins[brawler_name] = 1
-                                    else:
-                                        if brawler_name in loses:
-                                            loses[brawler_name] += 1
-                                        else:
-                                            loses[brawler_name] = 1
+
+                            streak = await self.config.members(user).streak()
+                            if win and player['brawler']['trophies'] >= 500 and battle['battle']['mode'] in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone'):
+                                streak += 1
+                            elif win and (player['brawler']['trophies'] < 500 or battle['battle']['mode'] not in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone')):
+                                streak = streak
                             else:
-                                if brawler_name in ("MORTIS", "FRANK", "EMZ"):
-                                    if win:
-                                        progress += 1
-                                        if brawler_name in wins:
-                                            wins[brawler_name] += 1
-                                        else:
-                                            wins[brawler_name] = 1
-                                    else:
-                                        if brawler_name in loses:
-                                            loses[brawler_name] += 1
-                                        else:
-                                            loses[brawler_name] = 1
+                                streak = 0
                         except Exception as e:
                             await error_ch.send(f"{m}\n```py\n{e}```")
                             await error_ch.send(f"{m}\n```py\n{battle}```")
                             continue
-                    
-                    await self.config.member(user).progress.set(members[m]['progress'] + progress)
-                    await self.config.member(user).set_raw('wins', value=wins)
-                    await self.config.member(user).set_raw('loses', value=loses)
+
+                    if streak >= 5:
+                        streak = 0
+                        entries = await self.config.member(user).entries()
+                        entries = entries + 1
+                        await self.config.member(user).entries.set(entries)
+                    if entries >= 20:
+                        entries = 20
+                        await self.config.member(user).entries.set(entries)
+                    await self.config.member(user).streak.set(streak)
                     await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
             members = await self.config.all_members(labs)
-            plants = []
-            plants_total = 0
-            zombies = []
-            zombies_total = 0
+            total = []
             for m in members:
                 if members[m]['tracking']:
-                    if members[m]['plant']:
-                        plants.append((m, members[m]['progress']))
-                        plants_total += members[m]['progress']
-                    else:
-                        zombies.append((m, members[m]['progress']))
-                        zombies_total += members[m]['progress']
-            plants.sort(key=lambda x: x[1], reverse=True)
-            zombies.sort(key=lambda x: x[1], reverse=True)
-            plants_msg = ""
-            for p in plants[:15]:
-                plants_msg += f"`{p[1]}` {self.bot.get_user(p[0]).display_name}\n"
-            zombies_msg = ""
-            for z in zombies[:15]:
-                zombies_msg += f"`{z[1]}` {self.bot.get_user(z[0]).display_name}\n"
+                    total.append((m, members[m]['entries']))
 
-            embed = discord.Embed(colour=discord.Colour.dark_magenta(), title="Plants vs Zombies Leaderboard")
-            embed.add_field(name=f"🌻 PLANTS Total: {plants_total}", value=plants_msg if plants_msg != "" else "-", inline=False)
-            embed.add_field(name=f"🧟 ZOMBIES Total: {zombies_total}", value=zombies_msg if zombies_msg != "" else "-")
-            embed.set_footer(text=f"Plants: {len(plants)} Zombies: {len(zombies)}")
-            lbmsg = await (self.bot.get_channel(726456852249837568)).fetch_message(726471099306737664)
-            await lbmsg.edit(embed=embed)
+            total.sort(key=lambda x: x[1], reverse=True)
+            msg = ""
+            for t in total[:15]:
+                msg += f"`{t[1]}` {self.bot.get_user(t[0]).display_name}\n"
+
+            embed = discord.Embed(colour=discord.Colour.green(), title="Green Glitch Leaderboard")
+            embed.add_field(name=f"Registered: {len(total)}", value=msg if msg != "" else "-")
+            #lbmsg = await (self.bot.get_channel(726456852249837568)).fetch_message(726471099306737664)
+            #await lbmsg.edit(embed=embed)
