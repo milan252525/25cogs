@@ -144,6 +144,7 @@ class Challenges(commands.Cog):
                                 continue
                             if win and player['brawler']['trophies'] >= 400 and battle['battle']['mode'] in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone'):
                                 streak = streak + 1
+                                await error_ch.send(f"win registered {streak}")
                             elif win and (player['brawler']['trophies'] < 400 or battle['battle']['mode'] not in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone')):
                                 streak = streak
                             else:
