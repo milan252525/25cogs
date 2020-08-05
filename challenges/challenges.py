@@ -182,5 +182,5 @@ class Challenges(commands.Cog):
 
             embed = discord.Embed(colour=discord.Colour.green(), title="Green Glitch Leaderboard")
             embed.add_field(name=f"Registered: {len(total)}", value=msg if msg != "" else "-")
-            lbmsg = await (self.bot.get_channel(740676677822185533)).fetch_message(740676852758085641)
+            lbmsg = await (self.bot.get_channel(740676677822185533)).fetch_message(740677635390308454)
             await lbmsg.edit(embed=embed)
