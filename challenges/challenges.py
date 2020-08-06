@@ -177,7 +177,7 @@ class Challenges(commands.Cog):
 
             total.sort(key=lambda x: x[1], reverse=True)
             msg = ""
-            for t in total[:15]:
+            for t in total[:30]:
                 msg += f"`{t[1]}` {self.bot.get_user(t[0]).display_name}\n"
 
             embed = discord.Embed(colour=discord.Colour.green(), title="Green Glitch Leaderboard")
