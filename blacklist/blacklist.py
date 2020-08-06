@@ -219,9 +219,18 @@ class Blacklist(commands.Cog):
 
                 if player_in_club:
                     if player.club.tag.strip("#") in clubs:
+                        for role in ch.guild.roles:
+                            if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(r'[^\x00-\x7f]', r'',
+                                                                                   player.club.name).strip():
+                                roletoping = role
+                                break
+                        if roletoping is None:
+                            party = f"No se ha encontrado un rol para el club {player.club.name}"
+                        else:
+                            party = role.mention
                         reason = await self.config.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
-                        await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                                   description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
+                        await ch.send(content=f"Club responsable: {party}", embed=discord.Embed(colour=discord.Colour.red(),
+                                                                   description=f"Miembro de la blacklist **{player.name}** con el tag **{player.tag}** se ha unido a **{player.club.name}**!\nCon motivo de blacklist: {reason}"))
         except Exception as e:
             await ch.send(e)
 
@@ -272,8 +281,7 @@ class Blacklist(commands.Cog):
                             else:
                                 party = role.mention
                             reason = await self.config.guild(serverobj).blacklisted.get_raw(tag, "reason", default="")
-                            await ch.send(f"Source: {serverobj.name}\nResponsible party: {party}")
-                            await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                            await ch.send(content=f"Source: {serverobj.name}\nResponsible party: {party}", embed=discord.Embed(colour=discord.Colour.red(),
                                                               description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
         except Exception as e:
             await ch.send(e)
