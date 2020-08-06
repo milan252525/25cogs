@@ -154,9 +154,6 @@ class Challenges(commands.Cog):
                                 streak = 0
                                 entries = entries + 1
                                 await self.config.member(user).entries.set(entries)
-                            if entries >= 20:
-                                entries = 20
-                                await self.config.member(user).entries.set(entries)
                             await self.config.member(user).streak.set(streak)
 
                         except Exception as e:
