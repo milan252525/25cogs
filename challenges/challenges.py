@@ -175,7 +175,7 @@ class Challenges(commands.Cog):
             total.sort(key=lambda x: x[1], reverse=True)
             msg = ""
             for t in total[:30]:
-                msg += f"`{t[1]}` {self.bot.get_user(t[0]).display_name}\n"
+                msg += f"`{t[1]}` {discord.utils.escape_markdown(self.bot.get_user(t[0]).display_name)}\n"
 
             embed = discord.Embed(colour=discord.Colour.green(), title="Green Glitch Leaderboard")
             embed.add_field(name=f"Registered: {len(total)}", value=msg if msg != "" else "-")
