@@ -37,7 +37,7 @@ class Challenges(commands.Cog):
         return guild.id == self.labs
 
     @commands.guild_only()
-    @commands.group(invoke_without_command=True, aliases=['chal', 'chall', 'ch'])
+    @commands.group(invoke_without_command=True, aliases=['glitch'])
     async def challenge(self, ctx):
         await ctx.send("Leaderboard: <#740676677822185533>")
 
