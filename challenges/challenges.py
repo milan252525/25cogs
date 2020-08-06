@@ -66,7 +66,7 @@ class Challenges(commands.Cog):
         if not self.labs_check(ctx.guild):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
         if not (await self.config.member(member).tracking()):
-            return await ctx.send(f"**{member.display_name}** isn't participating yet! (`/ch track`)")
+            return await ctx.send(f"**{member.display_name}** isn't participating yet! (`/glitch track`)")
         embed = discord.Embed(colour=discord.Colour.green(), title="Stats")
         embed.add_field(name="Current streak", value=await self.config.member(member).streak())
         embed.add_field(name="Total entries", value=await self.config.member(member).entries())
