@@ -1,5 +1,6 @@
 import discord
 import coc
+from redbot.core import commands, Config
 
 
 class ClashOfClansCog(commands.Cog):
