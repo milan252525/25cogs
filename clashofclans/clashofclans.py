@@ -12,7 +12,6 @@ class ClashOfClansCog(commands.Cog):
         self.config.register_user(**default_user)
         default_guild = {"clans": {}}
         self.config.register_guild(**default_guild)
-        self.cocapi = coc.login("pazuzu636@gmail.com", "Milanisbae", client=coc.Client)
 
     async def initialize(self):
         cocapilogin = await self.bot.get_shared_api_tokens("coclogin")
