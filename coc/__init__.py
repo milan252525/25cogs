@@ -1,4 +1,4 @@
-from .clashofclans import ClashOfClansCog
+from .coc import ClashOfClansCog
 
 async def setup(bot):
   cog = ClashOfClansCog(bot)

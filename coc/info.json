@@ -4,6 +4,5 @@
   "description": "Clash Of Clans cog",
   "install_msg": "Thank you for installing our Clash Of Clans cog. Set your COC API token with `[p]set api cocapi api_key,YOURAPIKEY`",
   "short": "Clash Of Clans related commands",
-  "requirements" : ["coc.py"],
   "tags": ["Clash Of Clans", "Stats"]
 }
