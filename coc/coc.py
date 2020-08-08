@@ -38,4 +38,4 @@ class ClashOfClansCog(commands.Cog):
         except Exception as e:
             return await ctx.send(e)
 
-        await ctx.send("All went good.")
+        await ctx.send(clan_json['name'])
