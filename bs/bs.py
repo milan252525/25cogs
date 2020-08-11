@@ -33,7 +33,6 @@ class BrawlStarsCog(commands.Cog):
         asyncio.ensure_future(self.start_tasks())
 
     def cog_unload(self):
-        self.sortroles.cancel()
         self.sortrolesasia.cancel()
         self.sortrolesbd.cancel()
         self.sortrolesspain.cancel()
@@ -43,8 +42,6 @@ class BrawlStarsCog(commands.Cog):
         self.sortroleslatam.cancel()
 
     async def start_tasks(self):
-        await asyncio.sleep(3*60)
-        self.sortroles.start()
         await asyncio.sleep(15*60)
         self.sortrolesasia.start()
         await asyncio.sleep(10*60)
@@ -1205,113 +1202,6 @@ class BrawlStarsCog(commands.Cog):
                 await member.add_roles(role)
                 msg += f"Added **{str(role)}**\n"
         return msg
-
-    @tasks.loop(hours=4)
-    async def sortroles(self):
-        ch = self.bot.get_channel(653295573872672810)
-        await ch.trigger_typing()
-        labs = ch.guild.get_role(576028728052809728)
-        guest = ch.guild.get_role(578260960981286923)
-        newcomer = ch.guild.get_role(534461445656543255)
-        brawlstars = ch.guild.get_role(576002604740378629)
-        vp = ch.guild.get_role(536993652648574976)
-        pres = ch.guild.get_role(536993632918568991)
-        error_counter = 0
-
-        for member in ch.guild.members:
-            if member.bot:
-                continue
-            tag = await self.config.user(member).tag()
-            if tag is None:
-                msg = ""
-                if pres in member.roles or vp in member.roles:
-                    msg += "Has President or VP role, no tag saved.\n"
-                    msg += await self.removeroleifpresent(member, vp, pres)
-                    try:
-                        await member.send(f"Hello {member.mention},\nyour (Vice)President role in LA Brawl Stars server has been removed.\nThe reason is you don't have your in-game tag saved at LA bot. You can fix it by saving your tag using `/save #YOURTAG`.\n")
-                    except (discord.HTTPException, discord.Forbidden) as e:
-                        msg += f"Couldn't send a DM with info. {str(e)}\n"
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=msg, title=str(member), timestamp=datetime.datetime.now()))
-                continue
-            try:
-                player = await self.ofcbsapi.get_player(tag)
-                await asyncio.sleep(0.3)
-            except brawlstats.errors.RequestError as e:
-                await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"{str(member)} ({member.id}) #{tag}"))
-                error_counter += 1 
-                if error_counter == 10:
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 10 request errors! Displaying the last one:\n({str(e)})"))
-                    break
-                await asyncio.sleep(1)
-                continue
-            except Exception as e:
-                return await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
-
-            msg = ""
-            player_in_club = "name" in player.raw_data["club"]
-            member_roles = []
-            member_role = None
-            member_role_expected = None
-
-            for role in member.roles:
-                if role.name.startswith('LA '):
-                    member_roles.append(role)
-
-            if len(member_roles) > 1:
-                msg += f"Found more than one club role. (**{', '.join([str(r) for r in member_roles])}**)\n"
-                for role in member_roles:
-                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() != sub(r'[^\x00-\x7f]', r'', player.club.name).strip():
-                        msg += await self.removeroleifpresent(member, role)
-            
-            member_role = None if len(member_roles) < 1 else member_roles[0]
-
-            if not player_in_club:
-                msg += await self.removeroleifpresent(member, labs, vp, pres, newcomer)
-                msg += await self.addroleifnotpresent(member, guest)
-                if member_role is not None:
-                    msg += await self.removeroleifpresent(member, member_role)
-
-            if player_in_club and not player.club.name.startswith("LA "):
-                msg += await self.removeroleifpresent(member, labs, vp, pres, newcomer, member_role)
-                msg += await self.addroleifnotpresent(member, guest, brawlstars)
-
-            if player_in_club and player.club.name.startswith("LA "):
-                for role in ch.guild.roles:
-                    if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(r'[^\x00-\x7f]', r'', player.club.name).strip():
-                        member_role_expected = role
-                        break
-                if member_role_expected is None:
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"Role for the club {player.club.name} not found.", title=str(member), timestamp=datetime.datetime.now()))
-                    continue
-                msg += await self.removeroleifpresent(member, guest, newcomer)
-                msg += await self.addroleifnotpresent(member, labs, brawlstars)
-                if member_role is None:
-                    msg += await self.addroleifnotpresent(member, member_role_expected)
-                elif member_role != member_role_expected:
-                    msg += await self.removeroleifpresent(member, member_role)
-                    msg += await self.addroleifnotpresent(member, member_role_expected)
-                try:
-                    await asyncio.sleep(0.2)
-                    player_club = await self.ofcbsapi.get_club(player.club.tag)
-                    for mem in player_club.members:
-                        if mem.tag == player.raw_data['tag']:
-                            if mem.role.lower() == 'vicepresident':
-                                msg += await self.addroleifnotpresent(member, vp)
-                                msg += await self.removeroleifpresent(member, pres)
-                            elif mem.role.lower() == 'president':
-                                msg += await self.addroleifnotpresent(member, pres)
-                                msg += await self.removeroleifpresent(member, vp)
-                            elif mem.role.lower() == 'member':
-                                msg += await self.removeroleifpresent(member, vp, pres)
-                            break
-                except brawlstats.errors.RequestError:
-                    pass
-            if msg != "":
-                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member), timestamp=datetime.datetime.now()))
-
-    @sortroles.before_loop
-    async def before_sortroles(self):
-        await asyncio.sleep(5)
 
     @tasks.loop(hours=4)
     async def sortrolesasia(self):
