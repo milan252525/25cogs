@@ -267,7 +267,8 @@ class Welcome(commands.Cog):
     @tasks.loop(hours=6)
     async def sortroles(self):
         try:
-            for guild in await self.config.all_guilds():
+            for g in await self.config.all_guilds():
+                guild = self.bot.get_guild(g)
                 if await self.config.guild(guild).roles.autorole():
                     roles_config = await self.config.guild(guild).roles()
                     language = roles_config['language']
