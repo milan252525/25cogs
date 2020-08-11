@@ -96,79 +96,79 @@ class Challenges(commands.Cog):
                 if labs.get_member(m) is None:
                     continue
                 try:
-                if members[m]['tracking']:
-                    user = labs.get_member(m)
-                    if user is None:
-                        await error_ch.send(m)
-                        continue
-                    tag = tags[user.id]['tag'].replace("o", "0").replace("O", "0")
-                    try:
-                        log = await self.ofcbsapi.get_battle_logs(tag)
-                        await asyncio.sleep(0.1)
-                        log = log.raw_data
-                    except brawlstats.errors.RequestError as e:
-                        await error_ch.send(str(e))
-                        break
-                    except Exception as e:
-                        print(e)
-                        await error_ch.send(str(e))
-                        break
-                    for battle in reversed(log):
+                    if members[m]['tracking']:
+                        user = labs.get_member(m)
+                        if user is None:
+                            await error_ch.send(m)
+                            continue
+                        tag = tags[user.id]['tag'].replace("o", "0").replace("O", "0")
                         try:
-                            b_time = datetime.strptime(battle['battleTime'], '%Y%m%dT%H%M%S.%fZ')
-                            if b_time <= datetime.strptime(members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
-                                continue
-                            player = None
-                            if "teams" in battle['battle']:
-                                for t in battle['battle']['teams']:
-                                    for p in t:
+                            log = await self.ofcbsapi.get_battle_logs(tag)
+                            await asyncio.sleep(0.1)
+                            log = log.raw_data
+                        except brawlstats.errors.RequestError as e:
+                            await error_ch.send(str(e))
+                            break
+                        except Exception as e:
+                            print(e)
+                            await error_ch.send(str(e))
+                            break
+                        for battle in reversed(log):
+                            try:
+                                b_time = datetime.strptime(battle['battleTime'], '%Y%m%dT%H%M%S.%fZ')
+                                if b_time <= datetime.strptime(members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
+                                    continue
+                                player = None
+                                if "teams" in battle['battle']:
+                                    for t in battle['battle']['teams']:
+                                        for p in t:
+                                            if p['tag'].replace("#", "") == tag.upper():
+                                                player = p
+                                else:
+                                    for p in battle['battle']['players']:
                                         if p['tag'].replace("#", "") == tag.upper():
                                             player = p
-                            else:
-                                for p in battle['battle']['players']:
-                                    if p['tag'].replace("#", "") == tag.upper():
-                                        player = p
-                            if player is None:
+                                if player is None:
+                                    await error_ch.send(f"{m}\n```py\n{battle}```")
+                                    continue
+
+                                win = True
+                                if "result" in battle['battle'] and battle['battle']['result'] == "draw":
+                                    win = False
+                                if "result" in battle['battle'] and battle['battle']['result'] != "victory":
+                                    win = False
+                                if "rank" in battle['battle'] and battle['battle']['mode'] == "soloShowdown" and battle['battle']['rank'] > 4:
+                                    win = False
+                                if "rank" in battle['battle'] and battle['battle']['mode'] != "soloShowdown" and battle['battle']['rank'] > 2:
+                                    win = False
+
+                                streak = await self.config.member(user).streak()
+                                if "trophies" not in player['brawler']:
+                                    continue
+                                if win and player['brawler']['trophies'] >= 400 and battle['battle']['mode'] in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone', 'heist'):
+                                    streak = streak + 1
+                                elif win and (player['brawler']['trophies'] < 400 or battle['battle']['mode'] not in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone', 'heist')):
+                                    streak = streak
+                                else:
+                                    streak = 0
+
+                                entries = await self.config.member(user).entries()
+                                if streak >= 5:
+                                    streak = 0
+                                    entries = entries + 1
+                                    await self.config.member(user).entries.set(entries)
+                                await self.config.member(user).streak.set(streak)
+
+                            except Exception as e:
+                                await error_ch.send(f"{m}\n```py\n{e}```")
                                 await error_ch.send(f"{m}\n```py\n{battle}```")
                                 continue
 
-                            win = True
-                            if "result" in battle['battle'] and battle['battle']['result'] == "draw":
-                                win = False
-                            if "result" in battle['battle'] and battle['battle']['result'] != "victory":
-                                win = False
-                            if "rank" in battle['battle'] and battle['battle']['mode'] == "soloShowdown" and battle['battle']['rank'] > 4:
-                                win = False
-                            if "rank" in battle['battle'] and battle['battle']['mode'] != "soloShowdown" and battle['battle']['rank'] > 2:
-                                win = False
-
-                            streak = await self.config.member(user).streak()
-                            if "trophies" not in player['brawler']:
-                                continue
-                            if win and player['brawler']['trophies'] >= 400 and battle['battle']['mode'] in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone', 'heist'):
-                                streak = streak + 1
-                            elif win and (player['brawler']['trophies'] < 400 or battle['battle']['mode'] not in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone', 'heist')):
-                                streak = streak
-                            else:
-                                streak = 0
-
-                            entries = await self.config.member(user).entries()
-                            if streak >= 5:
-                                streak = 0
-                                entries = entries + 1
-                                await self.config.member(user).entries.set(entries)
-                            await self.config.member(user).streak.set(streak)
-
+                        try:
+                            await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
                         except Exception as e:
                             await error_ch.send(f"{m}\n```py\n{e}```")
-                            await error_ch.send(f"{m}\n```py\n{battle}```")
                             continue
-
-                    try:
-                        await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
-                    except Exception as e:
-                        await error_ch.send(f"{m}\n```py\n{e}```")
-                        continue
                 except KeyError as e:
                     await error_ch.send(f"keyerror: {m}")
                 except Exception as e:
