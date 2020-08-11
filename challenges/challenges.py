@@ -16,7 +16,6 @@ class Challenges(commands.Cog):
         self.config.register_member(**default_member)
         self.labs = 401883208511389716
         self.bsconfig = None
-        await asyncio.sleep(5)
         self.battle_check.start()
 
     def cog_unload(self):
