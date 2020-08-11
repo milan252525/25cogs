@@ -13,7 +13,7 @@ class Welcome(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=2536725)
-        default_guild = {'roles': {'pres' : None, 'vp' : None, 'member' : None, 'bs' : None, 'guest' : None, 'leader' : None, 'family' : None, 'remove': None, "otherclubs": None, "staff": None, "language": None, "memberclub": None, "senior": None}}
+        default_guild = {'roles': {'pres' : None, 'vp' : None, 'member' : None, 'bs' : None, 'guest' : None, 'leader' : None, 'family' : None, 'remove': None, "otherclubs": None, "staff": None, "language": None, "memberclub": None, "senior": None, "autorole": False, "channel": None}}
         self.config.register_guild(**default_guild)
         self.crconfig = Config.get_conf(None, identifier=2512325, cog_name="ClashRoyaleCog")
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
@@ -170,7 +170,7 @@ class Welcome(commands.Cog):
         except brawlstats.errors.RequestError as e:
             if language == 'en':
                 return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-            elif langauage == 'es':
+            elif language == 'es':
                 return await ctx.send(embed=badEmbed(f"BS API está fuera de línea, por favor inténtalo de nuevo más tarde! ({str(e)})"))
 
 
@@ -282,6 +282,26 @@ class Welcome(commands.Cog):
 
         await self.config.guild(ctx.guild).roles.language.set(lang)
         await ctx.send(embed=goodEmbed(f"Value language set to {lang}."))
+
+    @commands.command()
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    async def autorole(self, ctx):
+        await ctx.trigger_typing()
+
+        autorole = self.config.guild(ctx.guild).roles.autorole()
+        await self.config.guild(ctx.guild).roles.autorole.set(not autorole)
+        await ctx.send(embed=goodEmbed(f"Value language set to {not autorole}."))
+
+    @commands.command()
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    async def autorolech(self, ctx, channel: discord.Channel = None):
+        await ctx.trigger_typing()
+
+        await self.config.guild(ctx.guild).channel.set(channel)
+        name = channel.name if channel is not None else "None"
+        await ctx.send(embed=goodEmbed(f"Autorole channel set to {name}."))
 
     @commands.command()
     @commands.guild_only()
