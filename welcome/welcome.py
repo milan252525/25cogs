@@ -463,7 +463,7 @@ class Welcome(commands.Cog):
         except Exception as e:
             return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
 
-        await self.config.guild(ctx.guild).channel.set(channel)
+        await self.config.guild(ctx.guild).roles.channel.set(channel)
         name = ch.name if channel is not None else "None"
         await ctx.send(embed=goodEmbed(f"Autorole channel set to {name}."))
 
