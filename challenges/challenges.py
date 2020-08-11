@@ -170,7 +170,7 @@ class Challenges(commands.Cog):
             members = await self.config.all_members(labs)
             total = []
             for m in members:
-                mem = self.labs.get_member(m)
+                mem = labs.get_member(m)
                 if mem is None:
                     continue
                 if members[m]['tracking']:
@@ -179,7 +179,7 @@ class Challenges(commands.Cog):
             total.sort(key=lambda x: x[1], reverse=True)
             msg = ""
             for t in total[:30]:
-                mem = self.labs.get_member(t[0])
+                mem = labs.get_member(t[0])
                 msg += f"`{t[1]}` {discord.utils.escape_markdown(mem.display_name)}\n"
 
             embed = discord.Embed(colour=discord.Colour.green(), title="Green Glitch Leaderboard")
