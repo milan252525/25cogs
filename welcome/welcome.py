@@ -299,12 +299,12 @@ class Welcome(commands.Cog):
         await ctx.trigger_typing()
 
         try:
-            self.bot.get_channel(channel)
+            ch = self.bot.get_channel(channel)
         except Exception as e:
             return await ctx.send(embed=badEmbed(f"Something went wrong: {e}."))
 
         await self.config.guild(ctx.guild).channel.set(channel)
-        name = channel.name if channel is not None else "None"
+        name = ch.name if channel is not None else "None"
         await ctx.send(embed=goodEmbed(f"Autorole channel set to {name}."))
 
     @commands.command()
