@@ -291,6 +291,8 @@ class Welcome(commands.Cog):
                         if member.bot:
                             continue
                         tag = await self.bsconfig.user(member).tag()
+                        if tag is None:
+                            continue
                         if tag is None and guild == 401883208511389716:
                             msg = ""
                             if pres in member.roles or vp in member.roles:
