@@ -377,7 +377,7 @@ class Welcome(commands.Cog):
                                     msg += f"Role for the club {player.club.name} not found.\n"
                                 elif language == 'es':
                                     msg += f"No se ha encontrado un rol para el club {player.club.name}.\n"
-                                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg), title=str(member), timestamp=datetime.datetime.now())
+                                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member), timestamp=datetime.datetime.now()))
                                 continue
                             msg += await self.removeroleifpresent(member, newcomer, otherclubs, guest)
                             msg += await self.addroleifnotpresent(member, mmber, family, brawlstars)
