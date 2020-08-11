@@ -176,8 +176,15 @@ class Challenges(commands.Cog):
 
             total.sort(key=lambda x: x[1], reverse=True)
             msg = ""
-            for t in total[:30]:
-                msg += f"`{t[1]}` {discord.utils.escape_markdown(labs.get_member(t[0]).display_name)}\n"
+            count = 30
+            for t in total:
+                mem = labs.get_member(t[0])
+                if mem is None:
+                    continue
+                msg += f"`{t[1]}` {discord.utils.escape_markdown(mem.display_name)}\n"
+                count -= 1
+                if count == 0:
+                    break
 
             embed = discord.Embed(colour=discord.Colour.green(), title="Green Glitch Leaderboard")
             embed.add_field(name=f"Registered: {len(total)}", value=msg if msg != "" else "-")
