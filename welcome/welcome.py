@@ -371,12 +371,13 @@ class Welcome(commands.Cog):
 
                         if player_in_club and player.club.tag in localtags:
                             if member_role_expected is None:
+                                msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, otherclubs, leader, mmber, memberclub, senior, member_role)
                                 msg += await self.addroleifnotpresent(member, guest, brawlstars)
                                 if language == 'en':
                                     msg += f"Role for the club {player.club.name} not found.\n"
                                 elif language == 'es':
                                     msg += f"No se ha encontrado un rol para el club {player.club.name}.\n"
-                                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
+                                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg), title=str(member), timestamp=datetime.datetime.now())
                                 continue
                             msg += await self.removeroleifpresent(member, newcomer, otherclubs, guest)
                             msg += await self.addroleifnotpresent(member, mmber, family, brawlstars)
