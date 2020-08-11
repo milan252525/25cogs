@@ -286,12 +286,11 @@ class Welcome(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
-    async def autorole(self, ctx):
+    async def autorole(self, ctx, status: bool = True):
         await ctx.trigger_typing()
 
-        autorole = self.config.guild(ctx.guild).roles.autorole()
-        await self.config.guild(ctx.guild).roles.autorole.set(not autorole)
-        await ctx.send(embed=goodEmbed(f"Value language set to {not autorole}."))
+        await self.config.guild(ctx.guild).roles.autorole.set(status)
+        await ctx.send(embed=goodEmbed(f"Value autorole set to {status}."))
 
     @commands.command()
     @commands.guild_only()
