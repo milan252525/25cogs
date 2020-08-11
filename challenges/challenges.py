@@ -95,6 +95,7 @@ class Challenges(commands.Cog):
                     continue
                 if labs.get_member(m) is None:
                     continue
+                try:
                 if members[m]['tracking']:
                     user = labs.get_member(m)
                     if user is None:
@@ -168,6 +169,10 @@ class Challenges(commands.Cog):
                     except Exception as e:
                         await error_ch.send(f"{m}\n```py\n{e}```")
                         continue
+                except KeyError as e:
+                    await error_ch.send(f"keyerror: {m}")
+                except Exception as e:
+                    await error_ch.send(f"{m}\n```py\n{e}```")
             members = await self.config.all_members(labs)
             total = []
             for m in members:
