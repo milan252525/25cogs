@@ -167,8 +167,6 @@ class Challenges(commands.Cog):
                         except Exception as e:
                             await error_ch.send(f"{m}\n```py\n{e}```")
                             continue
-                except Exception as e:
-                    await error_ch.send(f"{m}\n```py\n{e}```")
             members = await self.config.all_members(labs)
             total = []
             for m in members:
