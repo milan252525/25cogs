@@ -93,6 +93,8 @@ class Challenges(commands.Cog):
             for m in members:
                 if "tracking" not in members[m]:
                     continue
+                if labs.get_member(m) is None:
+                    continue
                 if members[m]['tracking']:
                     user = labs.get_member(m)
                     if user is None:
@@ -160,22 +162,25 @@ class Challenges(commands.Cog):
                             await error_ch.send(f"{m}\n```py\n{e}```")
                             await error_ch.send(f"{m}\n```py\n{battle}```")
                             continue
-
-                    try:
-                        await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
-                    except Exception as e:
-                        await error_ch.send(f"{m}\n```py\n{e}```")
-                        continue
+                        try:
+                            await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
+                        except Exception as e:
+                            await error_ch.send(f"{m}\n```py\n{e}```")
+                            continue
             members = await self.config.all_members(labs)
             total = []
             for m in members:
+                mem = labs.get_member(m)
+                if mem is None:
+                    continue
                 if members[m]['tracking']:
                     total.append((m, members[m]['entries']))
 
             total.sort(key=lambda x: x[1], reverse=True)
             msg = ""
             for t in total[:30]:
-                msg += f"`{t[1]}` {discord.utils.escape_markdown(self.bot.get_user(t[0]).display_name)}\n"
+                mem = labs.get_member(t[0])
+                msg += f"`{t[1]}` {discord.utils.escape_markdown(mem.display_name)}\n"
 
             embed = discord.Embed(colour=discord.Colour.green(), title="Green Glitch Leaderboard")
             embed.add_field(name=f"Registered: {len(total)}", value=msg if msg != "" else "-")
