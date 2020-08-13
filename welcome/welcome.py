@@ -233,7 +233,7 @@ class Welcome(commands.Cog):
 
         if player_in_club and player.club.tag in tags and player.club.tag not in localtags:
             if ctx.guild.id == 460550486257565697 or ctx.guild.id == 593732431551660063:
-                msg += await self.addroleifnotpresent(member, otherclubs, family)
+                msg += await self.addroleifnotpresent(member, otherclubs, family, brawlstars)
             else:
                 msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
 
@@ -364,7 +364,7 @@ class Welcome(commands.Cog):
                         if player_in_club and player.club.tag in tags and player.club.tag not in localtags:
                             if ch.guild.id == 460550486257565697 or ch.guild.id == 593732431551660063:
                                 msg += await self.removeroleifpresent(member, vp, pres, newcomer, leader, memberclub, senior, member_role, guest)
-                                msg += await self.addroleifnotpresent(member, otherclubs, family)
+                                msg += await self.addroleifnotpresent(member, otherclubs, family, brawlstars)
                             else:
                                 msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, leader, memberclub, senior, member_role, guest)
                                 msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
