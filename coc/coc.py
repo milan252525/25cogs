@@ -57,9 +57,9 @@ class ClashOfClansCog(commands.Cog):
                     if clans[i]['tag'].replace("#", "") == saved_clans[k]['tag']:
                         key = k
 
-                saved_clans[key]['lastMemberCount'] = clan[i]['members']
-                saved_clans[key]['lastRequirement'] = clan[i]['reqiredTrophies']
-                saved_clans[key]['lastPoints'] = clan[i]['clanPoints']
+                saved_clans[key]['lastMemberCount'] = clans[i]['members']
+                saved_clans[key]['lastRequirement'] = clans[i]['reqiredTrophies']
+                saved_clans[key]['lastPoints'] = clans[i]['clanPoints']
                 saved_clans[key]['lastPosition'] = i
                 saved_clans[key]['lastVersusPoints'] = clans[i]['clanVersusPoints']
 
