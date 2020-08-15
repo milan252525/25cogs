@@ -67,7 +67,7 @@ class ClashOfClansCog(commands.Cog):
 
                 e_name = f"<:bsband:600741378497970177> {clans[i]['name']} [{key}] {clans[i]['tag']} {info}"
                 e_value = f"🏆`{clans[i]['clanPoints']}` 🏆`{clans[i]['clanVersusPoints']}`"
-                e_value += f"`{clans[i]['requiredTrophies']}+` <:icon_gameroom:553299647729238016>`{clans[i]['members']}`"
+                e_value += f" `{clans[i]['requiredTrophies']}+` <:icon_gameroom:553299647729238016>`{clans[i]['members']}`"
                 embedFields.append([e_name, e_value])
 
             await self.config.guild(ctx.guild).set_raw("clans", value=saved_clans)
