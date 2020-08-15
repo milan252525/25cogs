@@ -137,7 +137,7 @@ class ClashOfClansCog(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @coc_clans.command(name="remove")
-    async def clubs_remove(self, ctx, key: str):
+    async def coc_clan_remove(self, ctx, key: str):
         await ctx.trigger_typing()
         key = key.lower()
 
