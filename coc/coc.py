@@ -113,10 +113,10 @@ class ClashOfClansCog(commands.Cog):
         await ctx.trigger_typing()
 
         if key in (await self.config.guild(ctx.guild).clans()).keys():
-            return await ctx.send(embed=self.badEmbed("This clan is already saved!"))
+            return await ctx.send(embed=badEmbed("This clan is already saved!"))
 
         try:
-            clan = self.apirequest("clans/" + tag.replace("#", "%23"))
+            clan = self.apirequest("clans/%23" + tag.replace("#", ""))
             result = {
                 "name": clan['name'],
                 "nick": key.title(),
@@ -129,7 +129,21 @@ class ClashOfClansCog(commands.Cog):
             }
             key = key.lower()
             await self.config.guild(ctx.guild).clans.set_raw(key, value=result)
-            await ctx.send(embed=self.goodEmbed(f"{clan['name']} was successfully saved in this server!"))
+            await ctx.send(embed=goodEmbed(f"{clan['name']} was successfully saved in this server!"))
 
         except Exception as e:
             return await ctx.send(f"**Something went wrong: {str(e)}.**")
+
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    @coc_clans.command(name="remove")
+    async def clubs_remove(self, ctx, key: str):
+        await ctx.trigger_typing()
+        key = key.lower()
+
+        try:
+            name = await self.config.guild(ctx.guild).clans.get_raw(key, "name")
+            await self.config.guild(ctx.guild).clans.clear_raw(key)
+            await ctx.send(embed=goodEmbed(f"{name} was successfully removed from this server!"))
+        except KeyError:
+            await ctx.send(embed=badEmbed(f"{key.title()} isn't saved club!"))
