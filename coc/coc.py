@@ -50,8 +50,6 @@ class ClashOfClansCog(commands.Cog):
                 clans.append(clan)
 
             embedFields = []
-
-            clans = sorted(clans, key=lambda sort: (sort['trophies']))
             
             for i in range(len(clans)):
                 key = ""
