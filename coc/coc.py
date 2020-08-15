@@ -157,7 +157,7 @@ class ClashOfClansCog(commands.Cog):
         try:
             player = self.apirequest("players/%23" + tag)
             await self.config.user(member).tag.set(player['tag'].replace("#", ""))
-            await ctx.send(embed=goodEmbed(f"BS account {player.name} was saved to {member.name}"))
+            await ctx.send(embed=goodEmbed(f"BS account {player['name']} was saved to {member.name}"))
 
         except Exception as e:
             await ctx.send(f"Something went wrong: {e}.")
