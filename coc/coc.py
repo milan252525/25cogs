@@ -145,3 +145,25 @@ class ClashOfClansCog(commands.Cog):
             await ctx.send(embed=goodEmbed(f"{name} was successfully removed from this server!"))
         except KeyError:
             await ctx.send(embed=badEmbed(f"{key.title()} isn't saved club!"))
+
+    @commands.command()
+    async def cocsave(self, ctx, tag, member: discord.Member = None):
+        member = ctx.author if member is None else member
+
+        tag = tag.lower().replace('O', '0')
+        if tag.startswith("#"):
+            tag = tag.strip('#')
+
+        try:
+            player = self.apirequest("players/%23" + tag)
+            await self.config.user(member).tag.set(player['tag'].replace("#", ""))
+            await ctx.send(embed=goodEmbed(f"BS account {player.name} was saved to {member.name}"))
+
+        except Exception as e:
+            await ctx.send(f"Something went wrong: {e}.")
+
+    @commands.has_permissions(administrator=True)
+    @commands.command()
+    async def cocunsave(self, ctx, member: discord.Member):
+        await self.config.user(member).clear()
+        await ctx.send("Done.")
