@@ -117,6 +117,8 @@ class Challenges(commands.Cog):
                             b_time = datetime.strptime(battle['battleTime'], '%Y%m%dT%H%M%S.%fZ')
                             if b_time <= datetime.strptime(members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
                                 continue
+                            if battle['battle']['mode'] == "bigGame":
+                                continue
                             player = None
                             if "teams" in battle['battle']:
                                 for t in battle['battle']['teams']:
