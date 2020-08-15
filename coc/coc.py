@@ -54,7 +54,7 @@ class ClashOfClansCog(commands.Cog):
             for i in range(len(clans)):
                 key = ""
                 for k in saved_clans.keys():
-                    if clans[i].tag.replace("#", "") == saved_clans[k]['tag']:
+                    if clans[i]['tag'].replace("#", "") == saved_clans[k]['tag']:
                         key = k
 
                 saved_clans[key]['lastMemberCount'] = clan[i]['members']
