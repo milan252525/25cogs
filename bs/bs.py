@@ -33,16 +33,12 @@ class BrawlStarsCog(commands.Cog):
         asyncio.ensure_future(self.start_tasks())
 
     def cog_unload(self):
-        self.sortrolesbd.cancel()
         self.sortrolesspain.cancel()
         self.sortrolesportugal.cancel()
         self.sortrolesevents.cancel()
         self.sortrolesaquaunited.cancel()
-        self.sortroleslatam.cancel()
 
     async def start_tasks(self):
-        await asyncio.sleep(10*60)
-        self.sortrolesbd.start()
         await asyncio.sleep(10*60)
         self.sortrolesspain.start()
         await asyncio.sleep(10*60)
@@ -51,8 +47,6 @@ class BrawlStarsCog(commands.Cog):
         self.sortrolesevents.start()
         await asyncio.sleep(10*60)
         self.sortrolesaquaunited.start()
-        await asyncio.sleep(10*60)
-        self.sortroleslatam.start()
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
