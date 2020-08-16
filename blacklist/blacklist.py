@@ -289,3 +289,41 @@ class Blacklist(commands.Cog):
     @blacklistalert.before_loop
     async def before_blacklistalert(self):
         await asyncio.sleep(5)
+
+    @tasks.loop(hours=6)
+    async def deruculablacklistjob(self):
+        try:
+            errors = 0
+            ch = self.bot.get_channel(744503291475525733)
+            await ch.trigger_typing()
+            clubs = []
+            saved_clubs = await self.bsconfig.guild(ch.guild).clubs()
+            for key in saved_clubs.keys():
+                club = saved_clubs[key]["tag"]
+                clubs.append(club)
+
+            blacklisted = await self.config.guild(ch.guild).blacklisted()
+            for tag in blacklisted.keys():
+                try:
+                    player = await self.ofcbsapi.get_player(tag)
+                    player_in_club = "name" in player.raw_data["club"]
+                    await asyncio.sleep(1)
+                except brawlstats.errors.RequestError as e:
+                    await asyncio.sleep(5)
+                    errors += 1
+                    if errors == 30:
+                        break
+                except Exception as e:
+                    return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                             description=f"**Algo ha ido mal solicitando {tag}!**\n({str(e)})"))
+
+                if player_in_club:
+                    if player.club.tag.strip("#") in clubs:
+                        reason = await self.config.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
+                        await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Miembro de la blacklist **{player.name}** con el tag **{player.tag}** se ha unido a **{player.club.name}**!\nCon motivo de blacklist: {reason}"))
+        except Exception as e:
+            await ch.send(e)
+
+    @deruculablacklistjob.before_loop
+    async def before_deruculablacklistjob(self):
+        await asyncio.sleep(5)
