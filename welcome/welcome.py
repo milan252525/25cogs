@@ -358,7 +358,7 @@ class Welcome(commands.Cog):
                         if not player_in_club:
                             msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, otherclubs, leader, mmber, memberclub, senior, member_role)
                             msg += await self.addroleifnotpresent(member, guest, brawlstars)
-                        elif player_in_club and player.club.tag not in tags:
+                        elif player_in_club and player.club.tag not in tags and player.club.tag not in localtags:
                             msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, otherclubs, leader, mmber, memberclub, senior, member_role)
                             msg += await self.addroleifnotpresent(member, guest, brawlstars)
                         elif player_in_club and player.club.tag in tags and player.club.tag not in localtags:
