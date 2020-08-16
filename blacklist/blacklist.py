@@ -20,6 +20,7 @@ class Blacklist(commands.Cog):
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
         self.spainblacklistjob.start()
         self.blacklistalert.start()
+        self.deruculablacklistjob.start()
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
@@ -35,6 +36,7 @@ class Blacklist(commands.Cog):
     def cog_unload(self):
         self.spainblacklistjob.cancel()
         self.blacklistalert.cancel()
+        self.deruculablacklistjob.cancel()
 
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
