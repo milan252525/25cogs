@@ -358,20 +358,17 @@ class Welcome(commands.Cog):
                         if not player_in_club:
                             msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, otherclubs, leader, mmber, memberclub, senior, member_role)
                             msg += await self.addroleifnotpresent(member, guest, brawlstars)
-
-                        if player_in_club and player.club.tag not in tags:
+                        elif player_in_club and player.club.tag not in tags:
                             msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, otherclubs, leader, mmber, memberclub, senior, member_role)
                             msg += await self.addroleifnotpresent(member, guest, brawlstars)
-
-                        if player_in_club and player.club.tag in tags and player.club.tag not in localtags:
+                        elif player_in_club and player.club.tag in tags and player.club.tag not in localtags:
                             if ch.guild.id == 460550486257565697 or ch.guild.id == 593732431551660063:
                                 msg += await self.removeroleifpresent(member, vp, pres, newcomer, leader, memberclub, senior, member_role, guest)
                                 msg += await self.addroleifnotpresent(member, otherclubs, family, brawlstars)
                             else:
                                 msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, leader, memberclub, senior, member_role, guest)
                                 msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
-
-                        if player_in_club and player.club.tag in localtags:
+                        elif player_in_club and player.club.tag in localtags:
                             if member_role_expected is None:
                                 msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, otherclubs, leader, mmber, memberclub, senior, member_role)
                                 msg += await self.addroleifnotpresent(member, guest, brawlstars)
