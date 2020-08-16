@@ -349,8 +349,7 @@ class Welcome(commands.Cog):
                         if len(member_roles) > 1:
                             msg += f"Found more than one club role. (**{', '.join([str(r) for r in member_roles])}**)\n"
                             for role in member_roles:
-                                if sub(r'[^\x00-\x7f]', r'', role.name).strip() != sub(r'[^\x00-\x7f]', r'',
-                                                                                       player.club.name).strip():
+                                if role != member_role_expected:
                                     msg += await self.removeroleifpresent(member, role)
 
                         member_role = None if len(member_roles) < 1 else member_roles[0]
