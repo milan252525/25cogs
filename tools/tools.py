@@ -106,8 +106,8 @@ class Tools(commands.Cog):
                 info = f"[**{msg.author.display_name}**] ({message_profanity_prob[0]*100}%) {msg.channel.mention}: *{msg.content}*"
                 await msg.guild.get_channel(664514537004859436).send(info)
 
-        #spamlb LA Asia
-        if not msg.author.bot and isinstance(msg.channel, discord.TextChannel) and msg.channel.id in (663804057848250368, 663804237485965312):
+        #spamlb LA Asia DISABLED
+        if false and not msg.author.bot and isinstance(msg.channel, discord.TextChannel) and msg.channel.id in (663804057848250368, 663804237485965312):
             amount = await self.config.member(msg.author).messages()
             await self.config.member(msg.author).messages.set(amount + 1)
             await self.config.member(msg.author).name.set(msg.author.display_name)
@@ -122,8 +122,8 @@ class Tools(commands.Cog):
         await ctx.send("Done!")
             
     #spamlb LA Asia
-    @commands.guild_only()
-    @commands.command()
+    #@commands.guild_only()
+    #@commands.command()
     async def spamlb(self, ctx):
         if ctx.channel.id != 666655288606195735:
             return await ctx.send("You can't use that here")
