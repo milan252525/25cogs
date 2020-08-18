@@ -107,7 +107,7 @@ class Tools(commands.Cog):
                 await msg.guild.get_channel(664514537004859436).send(info)
 
         #spamlb LA Asia DISABLED
-        if false and not msg.author.bot and isinstance(msg.channel, discord.TextChannel) and msg.channel.id in (663804057848250368, 663804237485965312):
+        if False and not msg.author.bot and isinstance(msg.channel, discord.TextChannel) and msg.channel.id in (663804057848250368, 663804237485965312):
             amount = await self.config.member(msg.author).messages()
             await self.config.member(msg.author).messages.set(amount + 1)
             await self.config.member(msg.author).name.set(msg.author.display_name)
