@@ -5,5 +5,6 @@
   "install_msg": "Thank you for installing our Events cog.",
   "short": "Cog with miscellaneous tools",
   "requirements" : [],
-  "tags": ["events"]
+  "tags": ["events"],
+  "end_user_data_statement" : "Stores progress achieved in events. (Damage dealt in boss fight.)"
 }
