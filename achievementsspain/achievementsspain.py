@@ -30,7 +30,7 @@ class AchievementsSpain(commands.Cog):
                         "destor": False,
                         "chata": False,
                         "into": False,
-                        "all": False,
+                        "alli": False,
                         "conj": False,
                         "lad": False,
                         "apa": False,
@@ -134,7 +134,7 @@ class AchievementsSpain(commands.Cog):
         heist = ""
         if await self.config.user(member).into():
             heist = heist + "Intocable\n"
-        if await self.config.user(member).all():
+        if await self.config.user(member).alli():
             heist = heist + "Al Límite\n"
         if await self.config.user(member).conj():
             heist = heist + "Conjuro Espejo\n"
