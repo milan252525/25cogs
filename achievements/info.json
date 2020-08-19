@@ -5,5 +5,6 @@
   "install_msg": "Thank you for installing our Achievements cog. Set your BS API token with `[p]set api bsapi api_key,YOURAPIKEY`",
   "short": "Achievements for LA BS server",
   "requirements" : ["brawlstats"],
-  "tags": ["achievements"]
+  "tags": ["achievements"],
+  "end_user_data_statement" : "Stores achievements obtained by user."
 }

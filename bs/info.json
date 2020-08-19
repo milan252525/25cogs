@@ -5,5 +5,6 @@
   "install_msg": "Thank you for installing our Brawl Stars cog. Set your BS API token with `[p]set api bsapi api_key,YOURAPIKEY`",
   "short": "Brawl Stars related commands",
   "requirements" : ["brawlstats"],
-  "tags": ["Brawl Stars", "Stats"]
+  "tags": ["Brawl Stars", "Stats"],
+  "end_user_data_statement" : "Stores Brawl Stars in-game tag."
 }

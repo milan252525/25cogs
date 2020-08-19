@@ -188,3 +188,7 @@ class Challenges(commands.Cog):
             embed.add_field(name=f"Registered: {len(total)}", value=msg if msg != "" else "-")
             lbmsg = await (self.bot.get_channel(740676677822185533)).fetch_message(740808025173917717)
             await lbmsg.edit(embed=embed)
+            
+    @battle_check.before_loop
+    async def before_battle_check(self):
+        await asyncio.sleep(10)

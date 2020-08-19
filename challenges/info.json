@@ -5,5 +5,6 @@
   "install_msg": "Thank you for installing our Challenge cog.",
   "short": "Cog for challenges",
   "requirements" : [],
-  "tags": ["challenges"]
+  "tags": ["challenges"],
+  "end_user_data_statement" : "Stores progress in currently active challenge."
 }
