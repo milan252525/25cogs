@@ -332,4 +332,4 @@ class AchievementsSpain(commands.Cog):
             except Exception as e:
                 return await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=f"**Algo a ido mal: {e}.**"))
 
-        return await ctx.send(embed=discord.Embed(title=f"{str(member)}", color=discord.Colour.green(), description="**" + msg + f"{roles}**"))
+        return await ctx.send(embed=discord.Embed(title=f"{str(member)}", color=discord.Colour.green(), description=f"**{msg}**"))
