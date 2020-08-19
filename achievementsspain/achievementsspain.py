@@ -12,7 +12,7 @@ class AchievementsSpain(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=1892347197)
+        self.config = Config.get_conf(self, identifier=18923497197)
         default_user = {"trabajo": False,
                         "carr": False,
                         "joy": False,
