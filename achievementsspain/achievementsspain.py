@@ -52,8 +52,6 @@ class AchievementsSpain(commands.Cog):
                         "derr": False,
                         "crack": False,
                         "vicia": False,
-                        "dios": False,
-                        "ladder": False,
                         "novc": False,
                         "proc": False,
                         "diosc": False,
@@ -238,10 +236,6 @@ class AchievementsSpain(commands.Cog):
             misc = misc + "Crack del push\n"
         if await self.config.user(member).vicia():
             misc = misc + "Viciado\n"
-        if await self.config.user(member).dios():
-            misc = misc + "Dios de los desafíos\n"
-        if await self.config.user(member).ladder():
-            misc = misc + "Ladder Warrior\n"
         if misc != "":
             aembed.add_field(name="Extras", value=misc, inline=False)
 
@@ -332,4 +326,126 @@ class AchievementsSpain(commands.Cog):
             except Exception as e:
                 return await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=f"**Algo a ido mal: {e}.**"))
 
-        return await ctx.send(embed=discord.Embed(title=f"{str(member)}", color=discord.Colour.green(), description=f"**{msg}**"))
+        roles = await self.checkforroles(member)
+
+        return await ctx.send(embed=discord.Embed(title=f"{str(member)}", color=discord.Colour.green(), description=f"**{msg}{roles}**"))
+
+    async def checkforroles(self, member: discord.Member):
+        msg = ""
+
+        dt = member.guild.get_role(704014954956849192)
+        if await self.config.user(member).duoe() and await self.config.user(member).huma():
+            if dt not in member.roles:
+                await member.add_roles(dt)
+                msg += f"Añadido Dúo estelar.\n"
+        else:
+            if dt in member.roles:
+                await member.remove_roles(dt)
+                msg += "Eliminado Dúo estelar.\n"
+
+        ss = member.guild.get_role(745593615950282763)
+        if await self.config.user(member).tri() and await self.config.user(member).dina() and await self.config.user(member).hum() and await self.config.user(member).vict():
+            if ss not in member.roles:
+                await member.add_roles(ss)
+                msg += f"Añadido Último superviviente.\n"
+        else:
+            if ss in member.roles:
+                await member.remove_roles(ss)
+                msg += "Eliminado Último superviviente.\n"
+
+        gh = member.guild.get_role(745592374637363220)
+        if await self.config.user(member).carr() and await self.config.user(member).joy() and await self.config.user(member).trabajo():
+            if gh not in member.roles:
+                await member.add_roles(gh)
+                msg += f"Añadido Minero Expléndido.\n"
+        else:
+            if gh in member.roles:
+                await member.remove_roles(gh)
+                msg += "Eliminado Minero Expléndido.\n"
+
+        sm = member.guild.get_role(745593467446755350)
+        if await self.config.user(member).pro() and await self.config.user(member).ator() and await self.config.user(member).muer() and await self.config.user(member).destor() and await self.config.user(member).chata():
+            if sm not in member.roles:
+                await member.add_roles(sm)
+                msg += f"Añadido Mecánico.\n"
+        else:
+            if sm in member.roles:
+                await member.remove_roles(sm)
+                msg += "Eliminado Mecánico.\n"
+
+        bb = member.guild.get_role(745592148103266365)
+        if await self.config.user(member).goleador() and await self.config.user(member).partida() and await self.config.user(member).ul():
+            if bb not in member.roles:
+                await member.add_roles(bb)
+                msg += f"Añadido Futbolista.\n"
+        else:
+            if bb in member.roles:
+                await member.remove_roles(bb)
+                msg += "Eliminado Futbolista.\n"
+
+        hm = member.guild.get_role(745593106228838451)
+        if await self.config.user(member).into() and await self.config.user(member).alli() and await self.config.user(member).conj() and await self.config.user(member).lad() and await self.config.user(member).apa():
+            if hm not in member.roles:
+                await member.add_roles(hm)
+                msg += f"Añadido Atracador.\n"
+        else:
+            if hm in member.roles:
+                await member.remove_roles(hm)
+                msg += "Eliminado Atracador.\n"
+
+        sc = member.guild.get_role(745593224856338432)
+        if await self.config.user(member).astr() and await self.config.user(member).mas() and await self.config.user(member).caza() and await self.config.user(member).ast() and await self.config.user(member).calc():
+            if sc not in member.roles:
+                await member.add_roles(sc)
+                msg += f"Añadido Cazador Experto.\n"
+        else:
+            if sc in member.roles:
+                await member.remove_roles(sc)
+                msg += "Eliminado Cazador Experto.\n"
+
+        hs = member.guild.get_role(745593528754896946)
+        if await self.config.user(member).control() and await self.config.user(member).igua() and await self.config.user(member).por() and await self.config.user(member).domi():
+            if hs not in member.roles:
+                await member.add_roles(hs)
+                msg += f"Añadido Conquistador.\n"
+        else:
+            if hs in member.roles:
+                await member.remove_roles(hs)
+                msg += "Eliminado Conquistador.\n"
+
+        ag = member.guild.get_role(745594510989459456)
+        values = await self.config.user(member).all()
+        result = True
+        for v in values:
+            if v == "novc" or v == "proc" or v == "novxp" or v == "proxp" or v == "novtr" or v == "protr" or v == "novs" or v == "pros" or v == "novd" or v == "prod" or v == "novr" or v == "pror":
+                continue
+            if not await self.config.user(member).get_raw(v):
+                result = False
+        if result and ag not in member.roles:
+            await member.add_roles(ag)
+            msg += f"Añadido Dios de los desafíos.\n"
+        elif not result and ag in member.roles:
+            await member.remove_roles(ag)
+            msg += "Eliminado Dios de los desafíos.\n"
+
+        bl = member.guild.get_role(714898755220144181)
+        if await self.config.user(member).crack():
+            if bl not in member.roles:
+                await member.add_roles(bl)
+                msg += f"Añadido Crack del push.\n"
+        else:
+            if bl in member.roles:
+                await member.remove_roles(bl)
+                msg += "Eliminado Crack del push.\n"
+
+        lw = member.guild.get_role(745594560582909952)
+        if await self.config.user(member).diosc() and await self.config.user(member).diostr() and await self.config.user(member).dioss() and await self.config.user(member).diosd() and await self.config.user(member).diosr() and await self.config.user(member).destr() and await self.config.user(member).mata() and await self.config.user(member).ases() and await self.config.user(member).cazam():
+            if lw not in member.roles:
+                await member.add_roles(lw)
+                msg += f"Añadido Ladder Warrior.\n"
+        else:
+            if lw in member.roles:
+                await member.remove_roles(lw)
+                msg += "Eliminado Ladder Warrior.\n"
+
+        return msg
