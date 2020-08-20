@@ -217,4 +217,4 @@ class Challenges(commands.Cog):
                 for i in range(entries):
                     names.append(user.display_name)
 
-        await ctx.send(choice(names))
+        await ctx.send(str(names)[:2000])
