@@ -215,6 +215,6 @@ class Challenges(commands.Cog):
                 if entries > 20:
                     entries = 20
                 for i in range(entries):
-                    names.append(user.display_name)
+                    names.append(f"{user.mention}({str(user)})")
 
         await ctx.send(choice(names))
