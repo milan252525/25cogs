@@ -207,10 +207,14 @@ class Challenges(commands.Cog):
         for m in members:
             if "tracking" not in members[m]:
                 continue
-            entries = self.config.member(m).entries()
-            if entries > 20:
-                entries = 20
-            for i in range(entries):
-                names.append(m.display_name)
+            if labs.get_member(m) is None:
+                continue
+            if members[m]['tracking']:
+                user = labs.get_member(m)
+                entries = self.config.member(user).entries()
+                if entries > 20:
+                    entries = 20
+                for i in range(entries):
+                    names.append(user.display_name)
 
         await ctx.send(choice(names))
