@@ -5,7 +5,7 @@ from redbot.core import commands, Config, checks
 import brawlstats
 import asyncio
 from datetime import datetime
-from random import choice
+from random import choice, shuffle
 
 
 class Challenges(commands.Cog):
@@ -217,4 +217,5 @@ class Challenges(commands.Cog):
                 for i in range(entries):
                     names.append(f"{user.mention} ({str(user)})")
 
+        shuffle(names)
         await ctx.send(choice(names))
