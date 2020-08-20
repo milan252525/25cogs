@@ -211,7 +211,7 @@ class Challenges(commands.Cog):
                 continue
             if members[m]['tracking']:
                 user = labs.get_member(m)
-                entries = self.config.member(user).entries()
+                entries = await self.config.member(user).entries()
                 if entries > 20:
                     entries = 20
                 for i in range(entries):
