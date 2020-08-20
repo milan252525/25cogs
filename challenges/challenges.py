@@ -198,7 +198,7 @@ class Challenges(commands.Cog):
     async def glitchwinner(self, ctx):
 
         if ctx.author.id not in (425260327425409028, 359131399132807178, 605132366406615051):
-            await ctx.send("Hands off.")
+            return await ctx.send("Hands off.")
 
         names = []
 
