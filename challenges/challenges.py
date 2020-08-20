@@ -5,6 +5,7 @@ from redbot.core import commands, Config, checks
 import brawlstats
 import asyncio
 from datetime import datetime
+from random import choice
 
 
 class Challenges(commands.Cog):
@@ -192,3 +193,24 @@ class Challenges(commands.Cog):
     @battle_check.before_loop
     async def before_battle_check(self):
         await asyncio.sleep(10)
+
+    @commands.command()
+    async def glitchwinner(self, ctx):
+
+        if ctx.author.id not in (425260327425409028, 359131399132807178, 605132366406615051):
+            await ctx.send("Hands off.")
+
+        names = []
+
+        labs = self.bot.get_guild(self.labs)
+        members = await self.config.all_members(labs)
+        for m in members:
+            if "tracking" not in members[m]:
+                continue
+            entries = self.config.member(m).entries()
+            if entries > 20:
+                entries = 20
+            for i in range(entries):
+                names.append(m.display_name)
+
+        await ctx.send(choice(names))
