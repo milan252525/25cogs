@@ -268,7 +268,7 @@ class Welcome(commands.Cog):
     async def sortroles(self):
         try:
             for g in await self.config.all_guilds():
-                if g != 631139200871432198:
+                if g != 460550486257565697:
                     continue
                 guild = self.bot.get_guild(g)
                 if await self.config.guild(guild).roles.autorole():
