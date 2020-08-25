@@ -38,8 +38,6 @@ class BrawlStarsCog(commands.Cog):
 
     async def start_tasks(self):
         await asyncio.sleep(10*60)
-        self.sortrolesportugal.start()
-        await asyncio.sleep(10*60)
         self.sortrolesevents.start()
 
     async def initialize(self):
@@ -1187,103 +1185,6 @@ class BrawlStarsCog(commands.Cog):
                 await member.add_roles(role)
                 msg += f"Added **{str(role)}**\n"
         return msg
-
-    @tasks.loop(hours=4)
-    async def sortrolesportugal(self):
-        ch = self.bot.get_channel(712394680389599281)
-        await ch.trigger_typing()
-        bibi = ch.guild.get_role(713413824878870568)
-        revolution = ch.guild.get_role(713413515582373921)
-        alpha = ch.guild.get_role(713413699389620305)
-        laportugal = ch.guild.get_role(712288417861599242)
-        elite = ch.guild.get_role(712288829209575515)
-        visitante = ch.guild.get_role(617040783840772241)
-        lamember = ch.guild.get_role(712296400473555085)
-        vp = ch.guild.get_role(616797458944622623)
-        newcomer = ch.guild.get_role(618606684637495306)
-        error_counter = 0
-
-        for member in ch.guild.members:
-            if member.bot:
-                continue
-            tag = await self.config.user(member).tag()
-            if tag is None:
-                continue
-            try:
-                player = await self.ofcbsapi.get_player(tag)
-                await asyncio.sleep(0.3)
-            except brawlstats.errors.RequestError as e:
-                error_counter += 1
-                if error_counter == 5:
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                      description=f"Stopping after 20 request errors! Displaying the last one:\n({str(e)})"))
-                    break
-                await asyncio.sleep(1)
-                continue
-            except Exception as e:
-                return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                         description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
-
-            msg = ""
-            player_in_club = "name" in player.raw_data["club"]
-
-            tags = []
-            guilds = await self.config.all_guilds()
-            portugal = guilds[616673259538350084]
-            clubs = portugal["clubs"]
-            for club in clubs:
-                info = clubs[club]
-                tagn = "#" + info["tag"]
-                tags.append(tagn)
-
-            if not player_in_club:
-                msg += await self.removeroleifpresent(member, laportugal, elite, lamember, vp, newcomer)
-                msg += await self.addroleifnotpresent(member, visitante)
-
-            if player_in_club and "LA " not in player.club.name and player.club.tag not in tags:
-                msg += await self.removeroleifpresent(member, laportugal, elite, lamember, vp, newcomer)
-                msg += await self.addroleifnotpresent(member, visitante)
-
-            if player_in_club and "LA " in player.club.name and player.club.tag not in tags:
-                msg += await self.removeroleifpresent(member, laportugal, elite, visitante, vp, newcomer)
-                msg += await self.addroleifnotpresent(member, lamember)
-
-            if player_in_club and player.club.tag in tags:
-                msg += await self.removeroleifpresent(member, lamember, visitante, newcomer)
-                if player.club.name == "LA Portugal":
-                    msg += await self.removeroleifpresent(member, elite, revolution, bibi, alpha)
-                    msg += await self.addroleifnotpresent(member, laportugal)
-                elif player.club.name == "LA Elite":
-                    msg += await self.removeroleifpresent(member, laportugal, revolution, bibi, alpha)
-                    msg += await self.addroleifnotpresent(member, elite)
-                elif player.club.name == "LA Revolution":
-                    msg += await self.removeroleifpresent(member, elite, laportugal, bibi, alpha)
-                    msg += await self.addroleifnotpresent(member, revolution)
-                elif player.club.name == "LA Bibi":
-                    msg += await self.removeroleifpresent(member, elite, revolution, laportugal, alpha)
-                    msg += await self.addroleifnotpresent(member, bibi)
-                elif player.club.name == "LA Alpha":
-                    msg += await self.removeroleifpresent(member, elite, revolution, bibi, laportugal)
-                    msg += await self.addroleifnotpresent(member, alpha)
-                else:
-                    msg += f"Couldn't find a role for {player.club.name}."
-                try:
-                    player_club = await self.ofcbsapi.get_club(player.club.tag)
-                    for mem in player_club.members:
-                        if mem.tag == player.raw_data['tag']:
-                            if mem.role.lower() == 'vicepresident':
-                                msg += await self.addroleifnotpresent(member, vp)
-                            else:
-                                msg += await self.removeroleifpresent(member, vp)
-                            break
-                except brawlstats.errors.RequestError:
-                    msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
-            if msg != "":
-                await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
-
-    @sortrolesportugal.before_loop
-    async def before_sortrolesportugal(self):
-        await asyncio.sleep(5)
 
     @tasks.loop(hours=8)
     async def sortrolesevents(self):
