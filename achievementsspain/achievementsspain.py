@@ -452,7 +452,7 @@ class AchievementsSpain(commands.Cog):
 
     @commands.command()
     async def aembed(self, ctx):
-        if ctx.author.id != 598962095257681959 and ctx.author.id != 359131399132807178:
+        if ctx.author.id != 598962095257681959 and ctx.author.id != 614138334717149205:
             return await ctx.send("Hands off.")
 
         dt = ctx.author.guild.get_role(704014954956849192)
