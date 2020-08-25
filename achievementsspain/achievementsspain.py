@@ -449,3 +449,76 @@ class AchievementsSpain(commands.Cog):
                 msg += "Eliminado Ladder Warrior.\n"
 
         return msg
+
+    @commands.command()
+    async def aembed(self, ctx):
+        if ctx.author.id != 598962095257681959 and ctx.author.id != 359131399132807178:
+            return await ctx.send("Hands off.")
+
+        dt = ctx.author.guild.get_role(704014954956849192)
+        ss = ctx.author.guild.get_role(745593615950282763)
+        gh = ctx.author.guild.get_role(745592374637363220)
+        sm = ctx.author.guild.get_role(745593467446755350)
+        bb = ctx.author.guild.get_role(745592148103266365)
+        hm = ctx.author.guild.get_role(745593106228838451)
+        sc = ctx.author.guild.get_role(745593224856338432)
+        hs = ctx.author.guild.get_role(745593528754896946)
+        ag = ctx.author.guild.get_role(745594510989459456)
+        bl = ctx.author.guild.get_role(714898755220144181)
+        lw = ctx.author.guild.get_role(745594560582909952)
+
+        embed = discord.Embed(color=discord.Color.green(), title="__**DESAFIOS**__")
+        embed.add_field(name="GEMAS",
+                        value="__**Trabajo en Equipo:**__ ganar una partida y que todos los miembros del equipo tengan 5 gemas o mas.\n__**Carrito:**__ ganar una partida con mas de 20 gemas en tu posesion.\n__**Joyería Express:**__ ganar una partida en menos de 1.25.",
+                        inline=False)
+        embed.add_field(name="CAZA",
+                        value="__**Astrónomo:**__ ganar una partida y que el equipo perdedor tenga 0 estrellas\n__**Masacre:**__ ganar una partida por mas de 40 puntos de diferencia.\n__**Caza Estrellas:**__ ganar una partida y que todos los miembros de el equipo tengan 7 estrellas.\n__**Astronomía Básica:**__ ganar solo con 1 estrella.\n__**Calculado:**__ haz un empate en Caza estelar.",
+                        inline=False)
+        embed.add_field(name="BALÓN",
+                        value="__**Goleador Veloz:**__ mete un gol en los primeros 15 segundos.\n__**Partida Veloz:**__ ganar antes de 25 segundos.\n__**Último Empujón:**__ marca un gol en los últimos 5 segundos de la partida (hay que mandar video de los 10 ultimos segundos) (no cuenta en el tiempo extra).",
+                        inline=False)
+        embed.add_field(name="ASEDIO",
+                        value="__**Protector:**__ ganar con tu torreta intacta.\n__**Chatarrero:**__ ganar con tu torreta a 1% de vida.\n__**Muerte Súbita:**__ hacer un empate.\n__**Destornillador Veloz:**__ ganar en menos de 1 minuto.\n__**Chatarrero:**__ tener un robot de mas de nivel 25.",
+                        inline=False)
+        embed.add_field(name="ATRACO",
+                        value="__**Intocable:**__ ganar una partida con tu caja intacta.\n__**Al límite:**__ ganar una partida con tu caja a 1% de vida.\n__**Conjuro Espejo:**__ hacer un empate.\n__**Ladrón:**__ ganar en menos de 45 segundos.\n__**A Palazos:**__ ganar con mortis y tu caja a mas de 80%.",
+                        inline=False)
+        embed.add_field(name="SOLO SUPERVIVENCIA",
+                        value="__**Tridente:**__ ganar una partida entre 1-100 de vida.\n__**Dinámico:**__ ganar con mas de 20 powerups.\n__**Humildad:**__ ganar sin powerups.\n__**Victoria Invertida:**__ ganar una partida de solo con los controles invertidos (izquierda disparar y súper y a la derecha para moverse)",
+                        inline=False)
+        embed.add_field(name="DUO SUPERVIVENCIA",
+                        value="__**Dúo estelar:**__ ganar con mas de 45 powerups (entre los dos).\n__**Humildad a pares:**__ ganar con 0 powerups.",
+                        inline=False)
+        embed.add_field(name="ZONA RESTRINGIDA ",
+                        value="__**Control Total:**__ ganar una partida en Hot-Zone y que el equipo rival tenga 10% o menos de territorio dominado.\n__**Igualados:**__ queda empate en una partida.\n__**Por los pelos:**__ ganar una partida en Hot-Zone y que el equivo rival tenga un 99% controlado.\n__**Dominación:**__ gana una partida en menos de 1 min y 20 seg.",
+                        inline=False)
+        embed.add_field(name="EVENTOS",
+                        value="__**Destructor de Robots:**__ completa el nivel demencial V en pelea robótica.\n__**Mata Gigantes:**__ completa en nivel demencial V en todos contra uno.\n__**Asesino:**__ mata al brawler gigante en megabrawl en menos de 45 segundos.\n__**Caza Monstruos:**__ completa el nivel Insane III en Irrupción Urbana",
+                        inline=False)
+        embed.add_field(name="OTROS DESAFIOS",
+                        value="__**Jugador Vip:**__ tener el pase de batalla en la temporada actual. (hay que pasar video en el lobby entrando al pase de batalla o foto en el lobby con alguna skin del pase)\n__**Estrella:**__ tener la skin de shelly estrella.\n__**Famoso:**__ salir en Brawl TV con mas de 1000 personas observandote.\n__**Maxeado:**__ tener todos los brawlers a nivel 10.\n__**Brawler Dios:**__ tener un personaje a rango 35.\n__**Ahorrador:**__ tener una skin de 300 gemas, 50.000 puntos estelares o 25.000 de oro.\n__**Empate Estelar:**__ quedar empate en una partida y ser el estelar.\n__**OG:**__ haber jugado antes de el global (Antiguo marco).\n__**Pro Brawler:**__ tener un brawler a 1000 copas o mas.\n__**Derrota Estelar:**__ pierde una partida, pero igualmente se el estelar.\n__**Viciado:**__ sube un brawler a 500 copas fuerza 1.\n__**Rey Supremo:**__ gana un torneos de LA o Bluestacks (no cuentan torneos ya pasados).",
+                        inline=False)
+        await ctx.send(embed=embed)
+        pembed = discord.Embed(color=discord.Color.green(), title="__**DESAFIOS EVOLUTIVOS**__")
+        pembed.add_field(name="COPAS",
+                         value="__**Novato Copas:**__ 17k\n__**Pro Copas:**__ 20k\n__**Dios Copas:**__ 25k",
+                         inline=False)
+        pembed.add_field(name="EXPERIENCIA",
+                         value="__**Novato XP:**__ nivel 100\n__**Pro XP:**__ nivel 150\n__**Dios XP:**__ nivel +200",
+                         inline=False)
+        pembed.add_field(name="LUCHA ESTELAR",
+                         value="__**Novato Rankeds:**__ 700 puntos\n__**Pro Rankeds:**__ 900 puntos\n__**Dios Rankeds:**__ top 999 del mundo o mas",
+                         inline=False)
+        pembed.add_field(name="3vs3",
+                         value="__**Novato 3vs3:**__ 3.000 wins\n__**Pro 3vs3:**__ 6.000 wins\n__**Dios 3vs3:**__ 10.000 wins",
+                         inline=False)
+        pembed.add_field(name="SOLO SUPERVIVENCIA",
+                         value="__**Novato Solo:**__ 300 wins\n__**Pro Solo:**__ 500 wins\n__**Dios Solo:**__ 1000 wins",
+                         inline=False)
+        pembed.add_field(name="DUO SUPERVIVENCIA",
+                         value="__**Novato Dúo:**__ 300 wins\n__**Pro Dúo:**__ 500 wins\n__**Dios Dúo:**__ 1000 wins",
+                         inline=False)
+        await ctx.send(embed=pembed)
+        rembed = discord.Embed(color=discord.Color.green(), title="__**ROLES**__",
+                               description=f"{bb.mention}: completa todos los desafíos de Balón.\n{gh.mention}: completa todos los desafíos de Gemas.\n{hm.mention}: completa todos los desafíos de Atraco.\n{sc.mention}: completa todos los desafíos de Caza.\n{sm.mention}: completa todos los desafíos de Asedio.\n{hs.mention}: completa todos los desafíos de Zona.\n{ss.mention}: completa todos los desafíos de Solo.\n{dt.mention}: completa todos los desafíos de Dúo.\n{ag.mention}: completa todos los desafíos.\n{lw.mention}: consigue todos los logros evolutivos (nivel dios) y eventos especiales (tickets).\n{bl.mention}: sube todos los brawlers a 750 en una misma temporada.")
+        await ctx.send(embed=rembed)
