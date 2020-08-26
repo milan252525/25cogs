@@ -33,7 +33,6 @@ class BrawlStarsCog(commands.Cog):
         asyncio.ensure_future(self.start_tasks())
 
     def cog_unload(self):
-        self.sortrolesportugal.cancel()
         self.sortrolesevents.cancel()
 
     async def start_tasks(self):
