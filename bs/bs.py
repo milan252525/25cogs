@@ -669,7 +669,7 @@ class BrawlStarsCog(commands.Cog):
        
     def get_badge(self, badge_id):
         guild = self.bot.get_guild(717766786019360769)
-        em = discord.utils.get(guild.emojis, name=str(badge_id).rjust(2, "0"))
+        em = discord.utils.get(guild.emojis, name=str(badge_id-8000000).rjust(2, "0"))
         return str(em)
     
     @commands.cooldown(1, 3, commands.BucketType.user)
