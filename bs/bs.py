@@ -667,10 +667,9 @@ class BrawlStarsCog(commands.Cog):
         embed.set_image(url=result_map['url'])
         await ctx.send(embed=embed)
        
-    #some day maybe
     def get_badge(self, badge_id):
         guild = self.bot.get_guild(717766786019360769)
-        em = discord.utils.get(guild.emojis, name=str(badge_id))
+        em = discord.utils.get(guild.emojis, name=str(badge_id).rjust(2, "0"))
         return str(em)
     
     @commands.cooldown(1, 3, commands.BucketType.user)
@@ -985,12 +984,19 @@ class BrawlStarsCog(commands.Cog):
                     for k in saved_clubs.keys():
                         if clubs[i].tag.replace("#", "") == saved_clubs[k]['tag']:
                             key = k
+                                            
+                    badge_id = clubs[i].raw_data['badgeId']
+                    badge_emoji = self.get_badge(badge_id)
+                                            
+                    if badge_emoji is None:
+                        badge_emoji = "<:bsband:600741378497970177>"
                     
                     saved_clubs[key]['lastMemberCount'] = len(clubs[i].members)
                     saved_clubs[key]['lastRequirement'] = clubs[i].required_trophies
                     saved_clubs[key]['lastScore'] = clubs[i].trophies
                     saved_clubs[key]['lastPosition'] = i
                     saved_clubs[key]['lastStatus'] = clubs[i].type
+                    saved_clubs[key]['lastBadge'] = badge_id
                     
                     info = saved_clubs[key]["info"] if "info" in saved_clubs[key] else ""
                     role = ctx.guild.get_role(saved_clubs[key]["role"]) if "role" in saved_clubs[key] else None
@@ -998,7 +1004,7 @@ class BrawlStarsCog(commands.Cog):
                     if low_clubs and len(clubs[i].members) >= 95:
                         continue
 
-                    e_name = f"<:bsband:600741378497970177> {clubs[i].name} [{key}] {clubs[i].tag} {info}"
+                    e_name = f"{badge_emoji} {clubs[i].name} [{key}] {clubs[i].tag} {info}"
                     role_info = f"{role.mention}\n" if roles and role is not None else ""
                     e_value = f"{role_info}{club_status[clubs[i].type.lower()]['emoji']} <:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}"
                     e_value += f"`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
@@ -1011,7 +1017,7 @@ class BrawlStarsCog(commands.Cog):
                 offclubs = []
                 for k in saved_clubs.keys():
                     offclubs.append([saved_clubs[k]['lastPosition'], k])
-                offclubs = sorted(offclubs, key=lambda x: x[0], reverse=not reverse_order)
+                offclubs = sorted(offclubs, key=lambda x: x[0], reverse=reverse_order)
 
                 for club in offclubs:
                     ckey = club[1]
@@ -1022,11 +1028,17 @@ class BrawlStarsCog(commands.Cog):
                     cmembers = saved_clubs[ckey]['lastMemberCount']
                     creq = saved_clubs[ckey]['lastRequirement']
                     ctype = saved_clubs[ckey]['lastStatus']
+                    cbadge = saved_clubs[ckey]['lastBadge']
+                                            
+                    badge_emoji = self.get_badge(cbadge)
 
+                    if badge_emoji is None:
+                        badge_emoji = "<:bsband:600741378497970177>"
+                                           
                     if low_clubs and cmembers >= 95:
                         continue
 
-                    e_name = f"<:bsband:600741378497970177> {cname} [{ckey}] #{ctag} {cinfo}"
+                    e_name = f"{badge_emoji} {cname} [{ckey}] #{ctag} {cinfo}"
                     e_value = f"{club_status[ctype.lower()]['emoji']} <:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` "
                     embedFields.append([e_name, e_value])
 
@@ -1066,7 +1078,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @clubs.command(name="add")
-    async def clans_add(self, ctx, key: str, tag: str):
+    async def clubs_add(self, ctx, key: str, tag: str):
         """
         Add a club to /clubs command
         key - key for the club to be used in other commands
@@ -1090,7 +1102,8 @@ class BrawlStarsCog(commands.Cog):
                 "lastScore": club.trophies,
                 "lastStatus" : club.type,
                 "info": "",
-                "role": None
+                "role": None,
+                "lastBadge" : ""
             }
             key = key.lower()
             await self.config.guild(ctx.guild).clubs.set_raw(key, value=result)
