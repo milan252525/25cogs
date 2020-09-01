@@ -280,16 +280,15 @@ class BrawlStarsCog(commands.Cog):
             name="Unlocked Brawlers",
             value=f"<:brawlers:614518101983232020> {len(player.brawlers)} <:star_power:729732781638156348> {star_powers} <:gadget:716341776608133130> {gadgets}")
         if "tag" in player.raw_data["club"]:
-            embed.add_field(
-                name="Club",
-                value=f"<:bsband:600741378497970177> {player.club.name}")
             try:
                 club = await self.ofcbsapi.get_club(player.club.tag)
+                embed.add_field(name="Club", value=f"{self.get_badge(club.raw_data['badgeId'])} {player.club.name}")
                 for m in club.members:
                     if m.tag == player.raw_data['tag']:
                         embed.add_field(name="Role", value=f"<:role:614520101621989435> {m.role.capitalize()}")
                         break
             except brawlstats.errors.RequestError:
+                embed.add_field(name="Club", value=f"<:bsband:600741378497970177> {player.club.name}")
                 embed.add_field(
                     name="Role",
                     value=f"<:offline:642094554019004416> Error while retrieving role")
