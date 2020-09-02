@@ -37,7 +37,7 @@ class Welcome(commands.Cog):
             await self.do_setup_LABSevent(member)
         if member.guild.id == 631888808224489482 and not member.bot:
             if not await self.bsconfig.user(member).tag() is None:
-                pass #give newcome here
+                await member.add_roles(member.guild.get_role(750569224614969384))
     
     @commands.Cog.listener()
     async def on_member_remove(self, member):
