@@ -267,7 +267,7 @@ class Welcome(commands.Cog):
         if msg != "":
             await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
 
-    @tasks.loop(hours=6)
+    @tasks.loop(hours=3)
     async def sortroles(self):
         try:
             for g in await self.config.all_guilds():
