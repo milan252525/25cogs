@@ -182,7 +182,7 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(f"Something went wrong: {str(e)}")
 
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.command(aliases=['p', 'bsp', 'stats'])
+    @commands.command(aliases=['p', 'bsp'])
     async def profile(self, ctx, *, member: Union[discord.Member, str] = None):
         """View player's BS statistics"""
         await ctx.trigger_typing()
