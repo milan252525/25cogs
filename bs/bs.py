@@ -264,10 +264,10 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
         if main and type(member) == discord.Member:
-            await self.config.member(member).name.set(player.name)
+            await self.config.user(member).name.set(player.name)
             
         if not main and type(member) == discord.Member:
-            await self.config.member(member).altname.set(player.name)
+            await self.config.user(member).altname.set(player.name)
             
         colour = player.name_color if player.name_color is not None else "0xffffffff"
         embed = discord.Embed(color=discord.Colour.from_rgb(
