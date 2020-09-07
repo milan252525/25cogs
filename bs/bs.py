@@ -23,7 +23,7 @@ class BrawlStarsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=5245652)
-        default_user = {"tag": None, "alt": None}
+        default_user = {"tag": None, "alt": None, "name" : "", "altname" : ""}
         self.config.register_user(**default_user)
         default_guild = {"clubs": {}}
         self.config.register_guild(**default_guild)
@@ -218,14 +218,20 @@ class BrawlStarsCog(commands.Cog):
                 colour=discord.Colour.red(),
                 description=desc)
             return await ctx.send(embed=embed)
+        
+        main = True
 
         if type(member) == discord.Member and await self.config.user(member).alt() is not None:
             tagg = await self.config.user(member).tag()
             altt = await self.config.user(member).alt()
-            tagg = "#" + tagg
-            altt = "#" + altt
+            name_main = await self.config.user(member).name()
+            main_text = f" {name_main} " if name_main != "" else ""
+            alt_name = await self.config.user(member).altname()
+            alt_text = f" {alt_name} " if alt_name != "" else ""
+            tagg = main_text + "#" + tagg.upper()
+            altt = alt_text + "#" + altt.upper()
             prompt = await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
-                                                        title="Which one of the accounts would you like to see?", description=f":one: {tagg.upper()}\n:two: {altt.upper()}"))
+                                                        title="Which one of the accounts would you like to see?", description=f":one: {tagg}\n:two: {altt}"))
             await prompt.add_reaction("<:one1:736684730635780127>")
             await prompt.add_reaction("<:two2:736684762944634891>")
 
@@ -241,6 +247,7 @@ class BrawlStarsCog(commands.Cog):
                 tag = await self.config.user(member).tag()
             elif str(reaction.emoji) == "<:two2:736684762944634891>":
                 tag = await self.config.user(member).alt()
+                main = False
 
             await prompt.delete()
 
@@ -256,6 +263,12 @@ class BrawlStarsCog(commands.Cog):
         except Exception as e:
             return await ctx.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
+        if main and type(member) == discord.Member:
+            await self.config.member(member).name.set(player.name)
+            
+        if not main and type(member) == discord.Member:
+            await self.config.member(member).altname.set(player.name)
+            
         colour = player.name_color if player.name_color is not None else "0xffffffff"
         embed = discord.Embed(color=discord.Colour.from_rgb(
             int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
@@ -381,15 +394,19 @@ class BrawlStarsCog(commands.Cog):
         if await self.config.user(member).alt() is not None:
             tagg = await self.config.user(member).tag()
             altt = await self.config.user(member).alt()
-            tagg = "#" + tagg
-            altt = "#" + altt
+            name_main = await self.config.user(member).name()
+            main_text = f" {name_main} " if name_main != "" else ""
+            alt_name = await self.config.user(member).altname()
+            alt_text = f" {alt_name} " if alt_name != "" else ""
+            tagg = main_text + "#" + tagg.upper()
+            altt = alt_text + "#" + altt.upper()
             prompt = await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
-                                                        title="Which one of the accounts would you like to see?", description=f":one: {tagg.upper()}\n:two: {altt.upper()}"))
+                                                        title="Which one of the accounts would you like to see?", description=f":one: {tagg}\n:two: {altt}"))
             await prompt.add_reaction("<:one1:736684730635780127>")
             await prompt.add_reaction("<:two2:736684762944634891>")
 
             def check(reaction, user):
-                return (user == member or user.id == 230947675837562880) and str(reaction.emoji) in ["<:one1:736684730635780127>", "<:two2:736684762944634891>"]
+                return user == ctx.author and str(reaction.emoji) in ["<:one1:736684730635780127>", "<:two2:736684762944634891>"]
 
             try:
                 reaction, _ = await self.bot.wait_for('reaction_add', check=check, timeout=60)
