@@ -228,9 +228,9 @@ class BrawlStarsCog(commands.Cog):
             tagg = await self.config.user(member).tag()
             altt = await self.config.user(member).alt()
             name_main = await self.config.user(member).name()
-            main_text = f" {name_main} " if name_main != "" else ""
+            main_text = f" `{name_main}` " if name_main != "" else ""
             alt_name = await self.config.user(member).altname()
-            alt_text = f" {alt_name} " if alt_name != "" else ""
+            alt_text = f" `{alt_name}` " if alt_name != "" else ""
             tagg = main_text + "#" + tagg.upper()
             altt = alt_text + "#" + altt.upper()
             prompt = await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
@@ -398,9 +398,9 @@ class BrawlStarsCog(commands.Cog):
             tagg = await self.config.user(member).tag()
             altt = await self.config.user(member).alt()
             name_main = await self.config.user(member).name()
-            main_text = f" {name_main} " if name_main != "" else ""
+            main_text = f" `{name_main}` " if name_main != "" else ""
             alt_name = await self.config.user(member).altname()
-            alt_text = f" {alt_name} " if alt_name != "" else ""
+            alt_text = f" `{alt_name}` " if alt_name != "" else ""
             tagg = main_text + "#" + tagg.upper()
             altt = alt_text + "#" + altt.upper()
             prompt = await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
