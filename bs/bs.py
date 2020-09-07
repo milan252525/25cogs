@@ -114,6 +114,7 @@ class BrawlStarsCog(commands.Cog):
         try:
             player = await self.ofcbsapi.get_player(tag)
             await self.config.user(member).tag.set(tag.replace("#", ""))
+            await self.config.user(member).name.set(player.name)
             await ctx.send(embed=goodEmbed(f"BS account {player.name} was saved to {member.name}"))
 
         except brawlstats.errors.NotFoundError:
@@ -137,6 +138,7 @@ class BrawlStarsCog(commands.Cog):
         try:
             player = await self.ofcbsapi.get_player(tag)
             await self.config.user(member).alt.set(tag.replace("#", ""))
+            await self.config.user(member).altname.set(player.name)
             await ctx.send(embed=goodEmbed(f"BS account {player.name} was saved to {member.name}"))
 
         except brawlstats.errors.NotFoundError:
@@ -220,8 +222,9 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(embed=embed)
         
         main = True
+        has_alt = await self.config.user(member).alt()is not None
 
-        if type(member) == discord.Member and await self.config.user(member).alt() is not None:
+        if type(member) == discord.Member and has_alt:
             tagg = await self.config.user(member).tag()
             altt = await self.config.user(member).alt()
             name_main = await self.config.user(member).name()
@@ -263,7 +266,7 @@ class BrawlStarsCog(commands.Cog):
         except Exception as e:
             return await ctx.send("****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
-        if main and type(member) == discord.Member:
+        if main and type(member) == discord.Member and has_alt:
             await self.config.user(member).name.set(player.name)
             
         if not main and type(member) == discord.Member:
