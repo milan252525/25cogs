@@ -230,7 +230,7 @@ class ClashRoyaleCog(commands.Cog):
         
         if keyword is None:
             embed=discord.Embed(description=f"```{clan['description']}```")
-            embed.set_author(name=f"{clan['name']e} {clan['tag']}", icon_url=f"https://www.deckshop.pro/img/badges/{clan['badgeId']}.png")
+            embed.set_author(name=f"{clan['name']} {clan['tag']}", icon_url=f"https://www.deckshop.pro/img/badges/{clan['badgeId']}.png")
             embed.add_field(name="Members", value=f"<:people:449645181826760734> {clan['members']}/50")
             embed.add_field(name="Required Trophies", value= f"<:trophycr:587316903001718789> {str(clan['requiredTrophies'])}")
             embed.add_field(name="Score", value= f"<:crstar:449647025999314954> {str(clan['clanScore'])}")
