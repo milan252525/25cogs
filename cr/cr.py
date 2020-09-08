@@ -370,13 +370,10 @@ class ClashRoyaleCog(commands.Cog):
             embedsToSend.append(embed)
 
         if len(embedsToSend) > 1:
-            await msg.delete()
             await menu(ctx, embedsToSend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
         elif len(embedsToSend) == 1:
-            await msg.delete()
             await ctx.send(embed=embedsToSend[0])
         else:
-            await msg.delete()
             await ctx.send("No clans found!")
           
     @commands.guild_only()
