@@ -198,12 +198,13 @@ class ClashRoyaleCog(commands.Cog):
     async def clan(self, ctx, key: Union[discord.Member, str] = None, keyword = None):
         """View players clan or clan saved in a server"""
         await ctx.trigger_typing()
-        member = ctx.author if member is None else member
+        
+        key = ctx.author if key is None else key
         
         if isinstance(key, discord.Member):
             mtag = await self.config.user(ctx.author).tag()
             if mtag is None:
-                return await ctx.send(embed=badEmbed(f"You have no tag saved! Use {ctx.prefix}crsave <tag>"))
+                return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {ctx.prefix}crsave <tag>"))
             try:
                 player = await self.crapi.get_player(mtag)
                 if player.clan is None:
