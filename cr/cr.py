@@ -147,7 +147,7 @@ class ClashRoyaleCog(commands.Cog):
             chests = await self.crapi.get_player_chests(tag)
             
         except clashroyale.NotFoundError:
-            return await ctx.send(embed = self.badEmbed("No clan with this tag found, try again!"))
+            return await ctx.send(embed = self.badEmbed("No player with this tag found, try again!"))
 
         except clashroyale.RequestError as e:
             return await ctx.send(embed = self.badEmbed(f"CR API is offline, please try again later! ({str(e)})"))
@@ -193,8 +193,63 @@ class ClashRoyaleCog(commands.Cog):
         await ctx.send(embed=randomize_colour(embed))
         
         
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    @commands.command()
+    async def clan(self, ctx, key: Union[discord.Member, str] = None, keyword = None):
+        """View players clan or clan saved in a server"""
+        await ctx.trigger_typing()
+        member = ctx.author if member is None else member
+        
+        if isinstance(key, discord.Member):
+            mtag = await self.config.user(ctx.author).tag()
+            if mtag is None:
+                return await ctx.send(embed=badEmbed(f"You have no tag saved! Use {ctx.prefix}crsave <tag>"))
+            try:
+                player = await self.crapi.get_player(mtag)
+                if player.clan is None:
+                    return await ctx.send(embed = self.badEmbed("This user is not in a clan!"))
+                tag = player.clan.tag
+            except clashroyale.RequestError as e:
+                return await ctx.send(embed = self.badEmbed(f"CR API is offline, please try again later! ({str(e)})"))
+        elif key.startswith("#"):
+            tag = key.upper().replace('O', '0')
+        else:
+            tag = await self.config.guild(ctx.guild).clans.get_raw(key.lower(), "tag", default=None)
+            if tag is None:
+                return await ctx.send(embed=badEmbed(f"{key.title()} isn't saved clan in this server!"))
+            
+        try:
+            clan = await self.crapi.get_clan(tag)
+            clan = clan.raw_data
+            
+        except clashroyale.NotFoundError:
+            return await ctx.send(embed = self.badEmbed("No clan with this tag found, try again!"))
+
+        except clashroyale.RequestError as e:
+            return await ctx.send(embed = self.badEmbed(f"CR API is offline, please try again later! ({str(e)})"))
+        
+        if keyword is None:
+            embed=discord.Embed(description=f"```{clan['description']}```")
+            embed.set_author(name=f"{clan['name']e} {clan['tag']}", icon_url=f"https://www.deckshop.pro/img/badges/{clan['badgeId']}.png")
+            embed.add_field(name="Members", value=f"<:people:449645181826760734> {clan['members']}/50")
+            embed.add_field(name="Required Trophies", value= f"<:trophycr:587316903001718789> {str(clan['requiredTrophies'])}")
+            embed.add_field(name="Score", value= f"<:crstar:449647025999314954> {str(clan['clanScore'])}")
+            embed.add_field(name="Clan War Trophies", value= f"<:cw_trophy:449640114423988234> {str(clan['clanWarTrophies'])}")
+            embed.add_field(name="Type", value= f"<:bslock:552560387279814690> {clan['type'].title()}".replace("only", " Only"))
+            embed.add_field(name="Location", value=f":earth_africa: {clan['location']['name']}")
+            embed.add_field(name="Average Donations Per Week", value= f"<:deck:451062749565550602> {str(clan['donationsPerWeek'])}")
+            topm = ""
+            for m in clan['memberList'][:5]:
+                topm += f"<:trophycr:587316903001718789> `{m['trophies']}` {m.name}\n"
+            worstm = ""
+            for m in clan['memberList'][-5:]:
+                worstm += f"<:trophycr:587316903001718789> `{m['trophies']}` {m.name}\n"
+            embed.add_field(name="Top Members", value=topm, inline=True)
+            embed.add_field(name="Lowest Members", value=worstm, inline=True)
+            return await ctx.send(embed=randomize_colour(embed))  
+        
     @commands.guild_only()
-    @commands.group(aliases=['clan'], invoke_without_command=True)
+    @commands.group(invoke_without_command=True)
     async def clans(self, ctx, key:str=None):
         """View all clans saved in this server"""
         offline = False
