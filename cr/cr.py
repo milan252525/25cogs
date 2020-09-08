@@ -241,10 +241,10 @@ class ClashRoyaleCog(commands.Cog):
             embed.add_field(name="Average Donations Per Week", value= f"<:deck:451062749565550602> {str(clan['donationsPerWeek'])}")
             topm = ""
             for m in clan['memberList'][:5]:
-                topm += f"<:trophycr:587316903001718789> `{m['trophies']}` {m.name}\n"
+                topm += f"<:trophycr:587316903001718789> `{m['trophies']}` {m['name']}\n"
             worstm = ""
             for m in clan['memberList'][-5:]:
-                worstm += f"<:trophycr:587316903001718789> `{m['trophies']}` {m.name}\n"
+                worstm += f"<:trophycr:587316903001718789> `{m['trophies']}` {m['name']}\n"
             embed.add_field(name="Top Members", value=topm, inline=True)
             embed.add_field(name="Lowest Members", value=worstm, inline=True)
             return await ctx.send(embed=randomize_colour(embed))  
