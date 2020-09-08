@@ -238,7 +238,7 @@ class ClashRoyaleCog(commands.Cog):
             embed.add_field(name="Clan War Trophies", value= f"<:cw_trophy:449640114423988234> {str(clan['clanWarTrophies'])}")
             embed.add_field(name="Type", value= f"<:bslock:552560387279814690> {clan['type'].title()}".replace("only", " Only"))
             embed.add_field(name="Location", value=f":earth_africa: {clan['location']['name']}")
-            embed.add_field(name="Average Donations Per Week", value= f"<:deck:451062749565550602> {str(clan['donationsPerWeek'])}")
+            embed.add_field(name="Average Donations Per Week", value= f"<:deck:451062749565550602> {str(clan['donationsPerWeek'])}", inline=False)
             topm = ""
             for m in clan['memberList'][:5]:
                 topm += f"<:trophycr:587316903001718789> `{m['trophies']}` {m['name']}\n"
