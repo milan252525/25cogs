@@ -281,22 +281,21 @@ class ClashRoyaleCog(commands.Cog):
             return await ctx.send(embed = self.badEmbed(f"This server has no clans saved. Save a clan by using {ctx.prefix}clans add!"))
                             
         saved_clans = await self.config.guild(ctx.guild).clans()
-                            
-        try:    
-            clans = []
-            for key in saved_clans.keys():
-                if offline:
+                             
+        clans = []
+        for key in saved_clans.keys():
+            if offline:
+                break
+            try:
+                clan = await self.crapi.get_clan(daved_clans[key, "tag"])
+            except clashroyale.RequestError as e:
+                if skip_errors:
+                    continue
+                else:
+                    offline = True
                     break
-                try:
-                    clan = await self.crapi.get_clan(daved_clans[key, "tag"])
-                except clashroyale.RequestError as e:
-                    if skip_errors:
-                        continue
-                    else:
-                        offline = True
-                        break
-                clans.append(clan.raw_data)
-
+            clans.append(clan.raw_data)
+                            
         embedFields = []
 
         if not offline:
