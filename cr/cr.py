@@ -287,7 +287,7 @@ class ClashRoyaleCog(commands.Cog):
             if offline:
                 break
             try:
-                clan = await self.crapi.get_clan(saved_clans[key, "tag"])
+                clan = await self.crapi.get_clan(saved_clans[key]["tag"])
             except clashroyale.RequestError as e:
                 if skip_errors:
                     continue
