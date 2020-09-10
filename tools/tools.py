@@ -26,6 +26,8 @@ class Tools(commands.Cog):
         #self.pf = ProfanityFilter()
         self.updater.start()
         self.sticky_messages.start()
+        #allow mentions on start
+        self.bot.allowed_mentions = discord.AllowedMentions(roles=True)
         
     def cog_unload(self):
         self.updater.stop()
