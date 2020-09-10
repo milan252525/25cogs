@@ -188,6 +188,8 @@ def get_brawler_emoji(name : str):
         return "<:nani:718555376340959242>"
     elif name == "SURGE":
         return "<:surge:729632664218238986>"
+    elif name == "COLETTE":
+        return "<:colette:753659575424516287>"
     else:
         return ""
     
