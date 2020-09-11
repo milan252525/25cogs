@@ -258,6 +258,7 @@ class ClashRoyaleCog(commands.Cog):
         low_clubs = False
         skip_errors = False
         reverse_order = False
+        war = False
         await ctx.trigger_typing()
         await ctx.trigger_typing()
 
@@ -276,6 +277,13 @@ class ClashRoyaleCog(commands.Cog):
         if "reverse" in keyword:
             reverse_order = True
             keyword = keyword.replace("reverse", "").strip()
+                            
+        if "war" in keyword:
+            war = True
+            keyword = keyword.replace("war", "").strip()
+        
+        if war and offline:
+            return await ctx.send(embed = self.badEmbed(f"Can't combine war and offline keywords"))
 
         if len((await self.config.guild(ctx.guild).clans()).keys()) < 1:
             return await ctx.send(embed = self.badEmbed(f"This server has no clans saved. Save a clan by using {ctx.prefix}clans add!"))
@@ -287,7 +295,11 @@ class ClashRoyaleCog(commands.Cog):
             if offline:
                 break
             try:
-                clan = await self.crapi.get_clan(saved_clans[key]["tag"])
+                if not war:
+                    clan = await self.crapi.get_clan(saved_clans[key]["tag"])
+                else:
+                    url = f"https://api.clashroyale.com/v1/clans/%23{saved_clans[key]['tag'].strip("#")}/currentriverrace"
+                    clan = await self.crapi._get_model(url, timeout=10)
             except clashroyale.RequestError as e:
                 if skip_errors:
                     continue
@@ -299,33 +311,48 @@ class ClashRoyaleCog(commands.Cog):
         embedFields = []
 
         if not offline:
-            clans = sorted(clans, key=lambda sort: (sort['requiredTrophies'], sort['clanScore']), reverse=not reverse_order)
+            if not war:
+                clans = sorted(clans, key=lambda sort: (sort['requiredTrophies'], sort['clanScore']), reverse=not reverse_order)
 
-            for i in range(len(clans)):   
-                key = ""
-                for k in saved_clans.keys():
-                    if clans[i]['tag'].replace("#", "") == saved_clans[k]["tag"]:
-                        key = k
-                            
-                cemoji = discord.utils.get(self.bot.emojis, name = str(clans[i]['badgeId']))
-                            
-                saved_clans[key]['lastMemberCount'] = clans[i]['members']
-                saved_clans[key]['lastRequirement'] = clans[i]['requiredTrophies']
-                saved_clans[key]['lastScore'] = clans[i]['clanScore']
-                saved_clans[key]['lastPosition'] = i
-                saved_clans[key]['lastBadgeId'] = clans[i]['badgeId']
-                saved_clans[key]['warTrophies'] = clans[i]['clanWarTrophies']
-                            
-                info = saved_clans[key]['info'] if "info" in saved_clans[key] else ""
-                            
-                if low_clubs and len(clubs[i].members) >= 45:
-                    continue
+                for i in range(len(clans)):   
+                    key = ""
+                    for k in saved_clans.keys():
+                        if clans[i]['tag'].replace("#", "") == saved_clans[k]["tag"]:
+                            key = k
 
-                e_name = f"{str(cemoji)} {clans[i]['name']} [{key}] ({clans[i]['tag']}) {info}"
-                e_value = f"<:people:449645181826760734>`{clans[i]['members']}` <:trophycr:587316903001718789>`{clans[i]['requiredTrophies']}+` <:crstar:449647025999314954>`{clans[i]['clanScore']}` <:cw_trophy:449640114423988234>`{clans[i]['clanWarTrophies']}`"
-                embedFields.append([e_name, e_value])
+                    cemoji = discord.utils.get(self.bot.emojis, name = str(clans[i]['badgeId']))
+
+                    saved_clans[key]['lastMemberCount'] = clans[i]['members']
+                    saved_clans[key]['lastRequirement'] = clans[i]['requiredTrophies']
+                    saved_clans[key]['lastScore'] = clans[i]['clanScore']
+                    saved_clans[key]['lastPosition'] = i
+                    saved_clans[key]['lastBadgeId'] = clans[i]['badgeId']
+                    saved_clans[key]['warTrophies'] = clans[i]['clanWarTrophies']
+
+                    info = saved_clans[key]['info'] if "info" in saved_clans[key] else ""
+
+                    if low_clubs and len(clubs[i].members) >= 45:
+                        continue
+
+                    e_name = f"{str(cemoji)} {clans[i]['name']} [{key}] ({clans[i]['tag']}) {info}"
+                    e_value = f"<:people:449645181826760734>`{clans[i]['members']}` <:trophycr:587316903001718789>`{clans[i]['requiredTrophies']}+` <:crstar:449647025999314954>`{clans[i]['clanScore']}` <:cw_trophy:449640114423988234>`{clans[i]['clanWarTrophies']}`"
+                    embedFields.append([e_name, e_value])
+
+                await self.config.guild(ctx.guild).set_raw("clans", value=saved_clans)
+            else:
+                clans = sorted(clans, key=lambda sort: (sort['clan']['fame'], sort['clan']['repairPoints']), reverse=not reverse_order)
                             
-            await self.config.guild(ctx.guild).set_raw("clans", value=saved_clans)
+                for i in range(len(clans)):   
+                    clan = clans[i]['clan']
+                    key = ""
+                    for k in saved_clans.keys():
+                        if clan['tag'].replace("#", "") == saved_clans[k]["tag"]:
+                            key = k
+
+                    cemoji = discord.utils.get(self.bot.emojis, name = str(clan['badgeId']))
+                    e_name = f"{str(cemoji)} {clan['name']} [{key}] ({clan['tag']})"
+                    e_value = f"<:cwfame:753891694608646214>`{clan['fame']}` <:cwrepair:753891694956773447>`{clan['repairPoints']}+` <:people:449645181826760734>`{len(clan['participants'])}`"
+                    embedFields.append([e_name, e_value])
 
         else:
             offclans = []
