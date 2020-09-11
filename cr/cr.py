@@ -298,7 +298,7 @@ class ClashRoyaleCog(commands.Cog):
                 if not war:
                     clan = await self.crapi.get_clan(saved_clans[key]["tag"])
                 else:
-                    url = f"https://api.clashroyale.com/v1/clans/%23{saved_clans[key]['tag'].strip("#")}/currentriverrace"
+                    url = f"https://api.clashroyale.com/v1/clans/%23{saved_clans[key]['tag'].strip('#')}/currentriverrace"
                     clan = await self.crapi._get_model(url, timeout=10)
             except clashroyale.RequestError as e:
                 if skip_errors:
