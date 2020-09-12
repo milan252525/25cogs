@@ -94,7 +94,8 @@ class Achievements(commands.Cog):
             except ValueError:
                 member = discord.utils.get(ctx.guild.members, name=member)
 
-        aembed = discord.Embed(color=discord.Colour.blue(), title="Achievements", description=f"{str(member)}'s achievements:")
+        aembed = discord.Embed(color=discord.Colour.blue())
+        aembed.set_author(icon_url=member.avatar_url, name=f"{member.display_name}'s achievements")
         aembed.set_thumbnail(url="https://cdn.discordapp.com/attachments/472117791604998156/736896897872035960/0a00e865c445d42dfb9f64bedfab8cf8.png")
 
         gg = ""
