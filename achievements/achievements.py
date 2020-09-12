@@ -48,7 +48,7 @@ class Achievements(commands.Cog):
                         "landscape": False,
                         "globalog": False,
                         "bling": False,
-                        "slook" : False,
+                        "shiny" : False,
                         "celeb": False,
                         "beast": False,
                         "god": False,
@@ -104,7 +104,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).teamwork():
             gg = gg + "Teamwork\n"
         if gg != "":
-            aembed.add_field(name="Gem Grab", value=gg, inline=False)
+            aembed.add_field(name="<:GemGrab:729650153388114002> Gem Grab", value=gg, inline=False)
 
         bounty = ""
         if await self.config.user(member).assassin():
@@ -114,7 +114,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).bounty():
             bounty = bounty + "Bounty Hunter\n"
         if bounty != "":
-            aembed.add_field(name="Bounty", value=bounty, inline=False)
+            aembed.add_field(name="<:Bounty:729650154638016532> Bounty", value=bounty, inline=False)
 
         heist = ""
         if await self.config.user(member).thief():
@@ -126,7 +126,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).deadlock():
             heist = heist + "Deadlock\n"
         if heist != "":
-            aembed.add_field(name="Heist", value=heist, inline=False)
+            aembed.add_field(name="<:Heist:729650154139025449> Heist", value=heist, inline=False)
 
         bb = ""
         if await self.config.user(member).turbo():
@@ -134,7 +134,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).pro():
             bb = bb + "Pro Ball\n"
         if bb != "":
-            aembed.add_field(name="Brawl Ball", value=bb, inline=False)
+            aembed.add_field(name="<:BrawlBall:729650154919034882> Brawl Ball", value=bb, inline=False)
 
         siege = ""
         if await self.config.user(member).stale():
@@ -144,7 +144,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).clutch():
             siege = siege + "Clutch\n"
         if siege != "":
-            aembed.add_field(name="Siege", value=siege, inline=False)
+            aembed.add_field(name="<:Siege:729650155673878558> Siege", value=siege, inline=False)
 
         hz = ""
         if await self.config.user(member).nailb():
@@ -154,7 +154,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).domination():
             hz = hz + "Domination\n"
         if hz != "":
-            aembed.add_field(name="Hot Zone", value=hz, inline=False)
+            aembed.add_field(name="<:HotZone:729650153723789413> Hot Zone", value=hz, inline=False)
 
         ss = ""
         if await self.config.user(member).trident():
@@ -166,7 +166,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).after():
             ss = ss + "Afterlife\n"
         if ss != "":
-            aembed.add_field(name="Solo Showdown", value=ss, inline=False)
+            aembed.add_field(name="<:Showdown:729650153669132359> Solo Showdown", value=ss, inline=False)
 
         ds = ""
         if await self.config.user(member).pinch():
@@ -174,7 +174,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).dynamic():
             ds = ds + "Dynamic Duo\n"
         if ds != "":
-            aembed.add_field(name="Duo Showdown", value=ds, inline=False)
+            aembed.add_field(name="<:DuoShowdown:729650154092625970> Duo Showdown", value=ds, inline=False)
 
         events = ""
         if await self.config.user(member).shut():
@@ -186,7 +186,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).city():
             events = events + "City Protector\n"
         if events != "":
-            aembed.add_field(name="Events", value=events, inline=False)
+            aembed.add_field(name="<:RoboRumble:729650158106574898> Events", value=events, inline=False)
 
         misc = ""
         if await self.config.user(member).draw():
@@ -205,7 +205,7 @@ class Achievements(commands.Cog):
             misc = misc + "Global OG\n"
         if await self.config.user(member).bling():
             misc = misc + "Bling\n"
-        if await self.config.user(member).slook():
+        if await self.config.user(member).shiny():
             misc = misc + "Shiny Looks\n"
         if await self.config.user(member).celeb():
             misc = misc + "Celebrity\n"
@@ -214,7 +214,7 @@ class Achievements(commands.Cog):
         if await self.config.user(member).god():
             misc = misc + "God Brawler\n"
         if misc != "":
-            aembed.add_field(name="Miscellaneous", value=misc, inline=False)
+            aembed.add_field(name="<:LoneStar:729650156491767849> Miscellaneous", value=misc, inline=False)
 
         exp = ""
         if await self.config.user(member).expa():
@@ -224,7 +224,7 @@ class Achievements(commands.Cog):
         elif await self.config.user(member).expg():
             exp = exp + "Exp God\n"
         if exp != "":
-            aembed.add_field(name="Experience Levels", value=exp, inline=False)
+            aembed.add_field(name="<:exp:614517287809974405> Experience Levels", value=exp, inline=False)
 
         troph = ""
         if await self.config.user(member).trophya():
@@ -234,7 +234,7 @@ class Achievements(commands.Cog):
         elif await self.config.user(member).trophyg():
             troph = troph + "Trophy God\n"
         if troph != "":
-            aembed.add_field(name="Trophies", value=troph, inline=False)
+            aembed.add_field(name="<:bstrophy:552558722770141204> Trophies", value=troph, inline=False)
 
         tvt = ""
         if await self.config.user(member).trioa():
@@ -244,7 +244,7 @@ class Achievements(commands.Cog):
         elif await self.config.user(member).triog():
             tvt = tvt + "3v3 God\n"
         if tvt != "":
-            aembed.add_field(name="3v3 Wins", value=tvt, inline=False)
+            aembed.add_field(name="<:3v3:754367572048216094> 3v3 Wins", value=tvt, inline=False)
 
         solo = ""
         if await self.config.user(member).soloa():
@@ -254,7 +254,7 @@ class Achievements(commands.Cog):
         elif await self.config.user(member).solog():
             solo = solo + "Solo God\n"
         if solo != "":
-            aembed.add_field(name="Solo Showdown", value=solo, inline=False)
+            aembed.add_field(name="<:Showdown:729650153669132359> Solo Showdown", value=solo, inline=False)
 
         duo = ""
         if await self.config.user(member).duoa():
@@ -264,7 +264,7 @@ class Achievements(commands.Cog):
         elif await self.config.user(member).duog():
             duo = duo + "Duo God\n"
         if duo != "":
-            aembed.add_field(name="Duo Showdown", value=duo, inline=False)
+            aembed.add_field(name="<:DuoShowdown:729650154092625970> Duo Showdown", value=duo, inline=False)
 
         pp = ""
         if await self.config.user(member).ppa():
@@ -274,7 +274,7 @@ class Achievements(commands.Cog):
         elif await self.config.user(member).ppg():
             pp = pp + "PowerPlay God\n"
         if pp != "":
-            aembed.add_field(name="Power Play Points", value=pp, inline=False)
+            aembed.add_field(name="<:powertrophies:661266876235513867> Power Play Points", value=pp, inline=False)
 
         return await ctx.send(embed=aembed)
 
@@ -304,8 +304,11 @@ class Achievements(commands.Cog):
                 return await ctx.send(embed=discord.Embed(color=discord.Colour.red(), description=f"**Something went wrong: {e}.**"))
 
         roles = await self.checkforroles(member)
-
-        return await ctx.send(embed=discord.Embed(title=f"{str(member)}", color=discord.Colour.green(), description="**" + msg + f"{roles}**"))
+        
+        embed = discord.Embed(color=discord.Colour.green(), description="**" + msg + f"{roles}**")
+        embed.set_author(icon_url=member.avatar_url, name=f"{member.display_name}'s achievements")
+        
+        return await ctx.send(embed=embed)
 
     async def checkforroles(self, member: discord.Member):
         msg = ""
