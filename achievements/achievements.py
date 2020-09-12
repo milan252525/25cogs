@@ -48,6 +48,7 @@ class Achievements(commands.Cog):
                         "landscape": False,
                         "globalog": False,
                         "bling": False,
+                        "slook" : False,
                         "celeb": False,
                         "beast": False,
                         "god": False,
@@ -203,6 +204,8 @@ class Achievements(commands.Cog):
             misc = misc + "Global OG\n"
         if await self.config.user(member).bling():
             misc = misc + "Bling\n"
+        if await self.config.user(member).slook():
+            misc = misc + "Shiny Looks\n"
         if await self.config.user(member).celeb():
             misc = misc + "Celebrity\n"
         if await self.config.user(member).beast():
