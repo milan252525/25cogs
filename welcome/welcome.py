@@ -271,6 +271,8 @@ class Welcome(commands.Cog):
     async def sortroles(self):
         try:
             for g in await self.config.all_guilds():
+                 if g != 741561391193784372:
+                    continue
                 guild = self.bot.get_guild(g)
                 if await self.config.guild(guild).roles.autorole():
                     roles_config = await self.config.guild(guild).roles()
@@ -410,7 +412,7 @@ class Welcome(commands.Cog):
                         if msg != "":
                             await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
                                                               timestamp=datetime.datetime.now()))
-                await asyncio.sleep(600)
+                #await asyncio.sleep(600)
         except Exception as e:
             ch = self.bot.get_channel(472117791604998156)
             await ch.send(f"{e}")
