@@ -409,8 +409,7 @@ class Welcome(commands.Cog):
                                         break
                             except brawlstats.errors.RequestError:
                                 msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
-                        if msg != "":
-                            await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
+                        await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
                                                               timestamp=datetime.datetime.now()))
                 #await asyncio.sleep(600)
         except Exception as e:
