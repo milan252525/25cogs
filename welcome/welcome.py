@@ -525,10 +525,10 @@ class Welcome(commands.Cog):
 
                 if "name" in player.raw_data["club"] and "LA " in player.club.name:
                     try:
-                        await member.add_roles(roleBSMember, roleLAclan)
-                        msg += f"Assigned roles: {roleBSMember.name}, {roleLAclan.name}\n"
+                        await member.add_roles(roleBSMember)
+                        msg += f"Assigned roles: {roleBSMember.name}\n"
                     except discord.Forbidden:
-                        msg += f":exclamation:Couldn't add {roleBSMember.name}, {roleLAclan.name})\n"
+                        msg += f":exclamation:Couldn't add {roleBSMember.name})\n"
                 else:
                     try:
                         await member.add_roles(roleGuest)
