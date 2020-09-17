@@ -492,6 +492,7 @@ class Welcome(commands.Cog):
         roleCRMember = member.guild.get_role(475043204861788171)
         roleCR = member.guild.get_role(523444129221312522)
         roleBS = member.guild.get_role(523444501096824947)
+        roleLAclan = member.guild.get_role(752220510632542219)
         roleGuest = member.guild.get_role(472632693461614593)
 
         msg = ""
@@ -524,7 +525,7 @@ class Welcome(commands.Cog):
 
                 if "name" in player.raw_data["club"] and "LA " in player.club.name:
                     try:
-                        await member.add_roles(roleBSMember)
+                        await member.add_roles(roleBSMember, roleLAclan)
                         msg += f"Assigned roles: {roleBSMember.name}\n"
                     except discord.Forbidden:
                         msg += f":exclamation:Couldn't add {roleBSMember.name})\n"
@@ -579,7 +580,7 @@ class Welcome(commands.Cog):
 
                 if la_clan:
                     try:
-                        await member.add_roles(roleCRMember)
+                        await member.add_roles(roleCRMember, roleLAclan)
                         msg += f"Assigned roles: {roleCRMember.name}\n"
                     except discord.Forbidden:
                         msg += f":exclamation:Couldn't add {roleCRMember.name})\n"
