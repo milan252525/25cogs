@@ -575,7 +575,7 @@ class Welcome(commands.Cog):
                 if player.club is not None:
                     clans = await self.crconfig.guild(ctx.guild).clans()
                     for k in clans.keys():
-                        if player.club.tag.replace("#", "") == clans[k]["tag"]:
+                        if player.clan.tag.replace("#", "") == clans[k]["tag"]:
                             la_clan = True
 
                 if la_clan:
