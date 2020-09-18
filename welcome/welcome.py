@@ -458,9 +458,9 @@ class Welcome(commands.Cog):
                     await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                       description=f"CR: {str(member)} ({member.id}) #{crtag}"))
                     continue
-                #except Exception as e:
-                    #return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                             #description=f"**Something went wrong while requesting BS:{bstag}, CR:{crtag}!**\n({str(e)})"))
+                except Exception as e:
+                    return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                             description=f"**Something went wrong while requesting BS:{bstag}, CR:{crtag}!**\n({str(e)})"))
 
                 msg = ""
                 bstags = []
@@ -476,7 +476,7 @@ class Welcome(commands.Cog):
                     if crplayer.clan is not None:
                         clubs = await self.crconfig.guild(ch.guild).clans()
                         for key in clubs.keys():
-                            crtags.append("#" + clubs[key]["tag"])
+                            crtags.append(clubs[key]["tag"])
 
                 if bsplayer is not None and crplayer is not None:
                     if not player_in_club and crplayer.clan is None:
@@ -504,9 +504,8 @@ class Welcome(commands.Cog):
                         msg += await self.addroleifnotpresent(member, roleCR, roleVerifiedMember, roleCRMember)
 
 
-                await ch.send(
-                        embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
-                                            timestamp=datetime.datetime.now()))
+                if msg != "":
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member), timestamp=datetime.datetime.now()))
         except Exception as e:
             await ch.send(traceback.format_exc())
 
