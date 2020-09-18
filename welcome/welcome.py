@@ -572,7 +572,7 @@ class Welcome(commands.Cog):
                     msg += f":exclamation:Couldn't add {newcomer.name}\n"
 
                 la_clan = False
-                if player.club is not None:
+                if player.clan is not None:
                     clans = await self.crconfig.guild(ctx.guild).clans()
                     for k in clans.keys():
                         if player.clan.tag.replace("#", "") == clans[k]["tag"]:
