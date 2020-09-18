@@ -78,7 +78,7 @@ class Achievements(commands.Cog):
             raise ValueError("The Official Brawl Stars API key has not been set.")
         self.ofcbsapi = brawlstats.Client(ofcbsapikey["api_key"], is_async=True)
 
-    @commands.command(aliases=['a'])
+    @commands.command(aliases=['ach'])
     async def achievements(self, ctx, *, member: Union[discord.Member, str] = None):
         """Check yours or other person's achievements"""
         if ctx.guild.id != 401883208511389716:
@@ -99,122 +99,171 @@ class Achievements(commands.Cog):
         aembed.set_thumbnail(url="https://cdn.discordapp.com/attachments/472117791604998156/736896897872035960/0a00e865c445d42dfb9f64bedfab8cf8.png")
 
         gg = ""
+        ggcount = 0
         if await self.config.user(member).carrier():
+            ggcount = ggcount + 1
             gg = gg + "Carrier\n"
         if await self.config.user(member).teamwork():
+            ggcount = ggcount + 1
             gg = gg + "Teamwork\n"
         if gg != "":
-            aembed.add_field(name="<:GemGrab:729650153388114002> Gem Grab", value=gg, inline=False)
+            aembed.add_field(name=f"<:GemGrab:729650153388114002> Gem Grab ({ggcount}/2)", value=gg, inline=False)
 
         bounty = ""
+        bountycount = 0
         if await self.config.user(member).assassin():
+            bountycount = bountycount + 1
             bounty = bounty + "Assassin\n"
         if await self.config.user(member).massacre():
+            bountycount = bountycount + 1
             bounty = bounty + "Massacre\n"
         if await self.config.user(member).bounty():
+            bountycount = bountycount + 1
             bounty = bounty + "Bounty Hunter\n"
         if bounty != "":
-            aembed.add_field(name="<:Bounty:729650154638016532> Bounty", value=bounty, inline=False)
+            aembed.add_field(name=f"<:Bounty:729650154638016532> Bounty ({bountycount}/3)", value=bounty, inline=False)
 
         heist = ""
+        heistcount = 0
         if await self.config.user(member).thief():
+            heistcount = heistcount + 1
             heist = heist + "Thief\n"
         if await self.config.user(member).close():
+            heistcount = heistcount + 1
             heist = heist + "Close Call\n"
         if await self.config.user(member).guardian():
+            heistcount = heistcount + 1
             heist = heist + "Guardian\n"
         if await self.config.user(member).deadlock():
+            heistcount = heistcount + 1
             heist = heist + "Deadlock\n"
         if heist != "":
-            aembed.add_field(name="<:Heist:729650154139025449> Heist", value=heist, inline=False)
+            aembed.add_field(name=f"<:Heist:729650154139025449> Heist ({heistcount}/4)", value=heist, inline=False)
 
         bb = ""
+        bbcount = 0
         if await self.config.user(member).turbo():
+            bbcount = bbcount + 1
             bb = bb + "Turbo\n"
         if await self.config.user(member).pro():
+            bbcount = bbcount + 1
             bb = bb + "Pro Ball\n"
         if bb != "":
-            aembed.add_field(name="<:BrawlBall:729650154919034882> Brawl Ball", value=bb, inline=False)
+            aembed.add_field(name=f"<:BrawlBall:729650154919034882> Brawl Ball ({bbcount}/2)", value=bb, inline=False)
 
         siege = ""
+        siegecount = 0
         if await self.config.user(member).stale():
+            siegecount = siegecount + 1
             siege = siege + "Stalemate\n"
         if await self.config.user(member).op():
+            siegecount = siegecount + 1
             siege = siege + "OP Bot\n"
         if await self.config.user(member).clutch():
+            siegecount = siegecount + 1
             siege = siege + "Clutch\n"
         if siege != "":
-            aembed.add_field(name="<:Siege:729650155673878558> Siege", value=siege, inline=False)
+            aembed.add_field(name=f"<:Siege:729650155673878558> Siege ({siegecount}/3)", value=siege, inline=False)
 
         hz = ""
+        hzcount = 0
         if await self.config.user(member).nailb():
+            hzcount = hzcount + 1
             hz = hz + "Nail Biter\n"
         if await self.config.user(member).zoned():
+            hzcount = hzcount + 1
             hz = hz + "Zoned Out\n"
         if await self.config.user(member).domination():
+            hzcount = hzcount + 1
             hz = hz + "Domination\n"
         if hz != "":
-            aembed.add_field(name="<:HotZone:729650153723789413> Hot Zone", value=hz, inline=False)
+            aembed.add_field(name=f"<:HotZone:729650153723789413> Hot Zone ({hzcount}/3)", value=hz, inline=False)
 
         ss = ""
+        sscount = 0
         if await self.config.user(member).trident():
+            sscount = sscount + 1
             ss = ss + "Trident\n"
         if await self.config.user(member).over():
+            sscount = sscount + 1
             ss = ss + "Overload\n"
         if await self.config.user(member).survivalist():
+            sscount = sscount + 1
             ss = ss + "Survivalist\n"
         if await self.config.user(member).after():
+            sscount = sscount + 1
             ss = ss + "Afterlife\n"
         if ss != "":
-            aembed.add_field(name="<:Showdown:729650153669132359> Solo Showdown", value=ss, inline=False)
+            aembed.add_field(name=f"<:Showdown:729650153669132359> Solo Showdown ({sscount}/4)", value=ss, inline=False)
 
         ds = ""
+        dscount = 0
         if await self.config.user(member).pinch():
+            dscount = dscount + 1
             ds = ds + "Pinched\n"
         if await self.config.user(member).dynamic():
+            dscount = dscount + 1
             ds = ds + "Dynamic Duo\n"
         if ds != "":
-            aembed.add_field(name="<:DuoShowdown:729650154092625970> Duo Showdown", value=ds, inline=False)
+            aembed.add_field(name=f"<:DuoShowdown:729650154092625970> Duo Showdown ({dscount}/2)", value=ds, inline=False)
 
         events = ""
+        eventscount = 0
         if await self.config.user(member).shut():
+            eventscount = eventscount + 1
             events = events + "Shutdown\n"
         if await self.config.user(member).robo():
+            eventscount = eventscount + 1
             events = events + "Robo Destroyer\n"
         if await self.config.user(member).defender():
+            eventscount = eventscount + 1
             events = events + "Defender\n"
         if await self.config.user(member).city():
+            eventscount = eventscount + 1
             events = events + "City Protector\n"
         if events != "":
-            aembed.add_field(name="<:RoboRumble:729650158106574898> Events", value=events, inline=False)
+            aembed.add_field(name=f"<:RoboRumble:729650158106574898> Events ({eventscount}/4)", value=events, inline=False)
 
         misc = ""
+        misccount = 0
         if await self.config.user(member).draw():
+            misccount = misccount + 1
             misc = misc + "Draw Star\n"
         if await self.config.user(member).max():
+            misccount = misccount + 1
             misc = misc + "Max Power\n"
         if await self.config.user(member).brawlm():
+            misccount = misccount + 1
             misc = misc + "Brawl Master\n"
         if await self.config.user(member).brawll():
+            misccount = misccount + 1
             misc = misc + "Brawl Legend\n"
         if await self.config.user(member).portrait():
+            misccount = misccount + 1
             misc = misc + "Portrait OG\n"
         if await self.config.user(member).landscape():
+            misccount = misccount + 1
             misc = misc + "Landscape OG\n"
         if await self.config.user(member).globalog():
+            misccount = misccount + 1
             misc = misc + "Global OG\n"
         if await self.config.user(member).bling():
+            misccount = misccount + 1
             misc = misc + "Bling\n"
         if await self.config.user(member).shiny():
+            misccount = misccount + 1
             misc = misc + "Shiny Looks\n"
         if await self.config.user(member).celeb():
+            misccount = misccount + 1
             misc = misc + "Celebrity\n"
         if await self.config.user(member).beast():
+            misccount = misccount + 1
             misc = misc + "Beast Brawler\n"
         if await self.config.user(member).god():
+            misccount = misccount + 1
             misc = misc + "God Brawler\n"
         if misc != "":
-            aembed.add_field(name="<:LoneStar:729650156491767849> Miscellaneous", value=misc, inline=False)
+            aembed.add_field(name=f"<:LoneStar:729650156491767849> Miscellaneous ({misccount}/12)", value=misc, inline=False)
 
         exp = ""
         if await self.config.user(member).expa():
