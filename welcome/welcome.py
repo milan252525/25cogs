@@ -5,6 +5,7 @@ from bs.utils import goodEmbed, badEmbed
 from discord.ext import tasks
 from random import choice
 from re import sub
+import traceback
 
 import datetime
 import clashroyale
@@ -498,7 +499,7 @@ class Welcome(commands.Cog):
                         embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
                                             timestamp=datetime.datetime.now()))
         except Exception as e:
-            await ch.send(e)
+            await ch.send(traceback.format_exc())
 
     @mainsortroles.before_loop
     async def before_mainsortroles(self):
