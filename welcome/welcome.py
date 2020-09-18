@@ -443,7 +443,7 @@ class Welcome(commands.Cog):
                     continue
                 try:
                     bsplayer = await self.ofcbsapi.get_player(bstag)
-                    crplayer = await self.crapi.get_player("#" + crtag)
+                    crplayer = await self.crapi.get_player(crtag)
                     await asyncio.sleep(0.3)
                 except brawlstats.errors.RequestError as e:
                     await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
