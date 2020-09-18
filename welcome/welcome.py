@@ -463,40 +463,45 @@ class Welcome(commands.Cog):
                                                              #description=f"**Something went wrong while requesting BS:{bstag}, CR:{crtag}!**\n({str(e)})"))
 
                 msg = ""
-                player_in_club = "name" in bsplayer.raw_data["club"]
                 bstags = []
-                if player_in_club:
-                    labs = self.bot.get_guild(401883208511389716)
-                    officialclubs = await self.bsconfig.guild(labs).clubs()
-                    for ofkey in officialclubs.keys():
-                        bstags.append("#" + officialclubs[ofkey]["tag"])
+                if bsplayer is not None:
+                    player_in_club = "name" in bsplayer.raw_data["club"]
+                    if player_in_club:
+                        labs = self.bot.get_guild(401883208511389716)
+                        officialclubs = await self.bsconfig.guild(labs).clubs()
+                        for ofkey in officialclubs.keys():
+                            bstags.append("#" + officialclubs[ofkey]["tag"])
                 crtags = []
-                if crplayer.clan is not None:
-                    clubs = await self.crconfig.guild(ch.guild).clubs()
-                    for key in clubs.keys():
-                        crtags.append("#" + clubs[key]["tag"])
+                if crplayer is not None:
+                    if crplayer.clan is not None:
+                        clubs = await self.crconfig.guild(ch.guild).clubs()
+                        for key in clubs.keys():
+                            crtags.append("#" + clubs[key]["tag"])
 
-                if not player_in_club and crplayer.clan is None:
-                    msg += await self.removeroleifpresent(member, roleBSMember, roleCRMember, roleCR, roleBS, newcomer)
-                    msg += await self.addroleifnotpresent(member, roleGuest, roleVerifiedMember)
-                    if msg != "":
-                        await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
-                                                          timestamp=datetime.datetime.now()))
-                        continue
+                if bsplayer is not None and crplayer is not None:
+                    if not player_in_club and crplayer.clan is None:
+                        msg += await self.removeroleifpresent(member, roleBSMember, roleCRMember, roleCR, roleBS, newcomer)
+                        msg += await self.addroleifnotpresent(member, roleGuest, roleVerifiedMember)
+                        if msg != "":
+                            await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
+                                                              timestamp=datetime.datetime.now()))
+                            continue
 
-                if player_in_club and bsplayer.club.tag not in bstags:
-                    msg += await self.removeroleifpresent(member, roleBSMember, newcomer)
-                    msg += await self.addroleifnotpresent(member, roleBS, roleGuest, roleVerifiedMember)
-                elif player_in_club and bsplayer.club.tag in bstags:
-                    msg += await self.removeroleifpresent(member, roleGuest, newcomer)
-                    msg += await self.addroleifnotpresent(member, roleBS, roleVerifiedMember, roleBSMember)
+                if bsplayer is not None:
+                    if player_in_club and bsplayer.club.tag not in bstags:
+                        msg += await self.removeroleifpresent(member, roleBSMember, newcomer)
+                        msg += await self.addroleifnotpresent(member, roleBS, roleGuest, roleVerifiedMember)
+                    elif player_in_club and bsplayer.club.tag in bstags:
+                        msg += await self.removeroleifpresent(member, roleGuest, newcomer)
+                        msg += await self.addroleifnotpresent(member, roleBS, roleVerifiedMember, roleBSMember)
 
-                if crplayer.clan is not None and crplayer.clan.tag.replace("#", "") not in crtags():
-                    msg += await self.removeroleifpresent(member, roleCRMember, newcomer)
-                    msg += await self.addroleifnotpresent(member, roleCR, roleGuest, roleVerifiedMember)
-                elif crplayer.clan is not None and crplayer.clan.tag in crtags:
-                    msg += await self.removeroleifpresent(member, roleGuest, newcomer)
-                    msg += await self.addroleifnotpresent(member, roleCR, roleVerifiedMember, roleCRMember)
+                if crplayer is not None:
+                    if crplayer.clan is not None and crplayer.clan.tag.replace("#", "") not in crtags():
+                        msg += await self.removeroleifpresent(member, roleCRMember, newcomer)
+                        msg += await self.addroleifnotpresent(member, roleCR, roleGuest, roleVerifiedMember)
+                    elif crplayer.clan is not None and crplayer.clan.tag in crtags:
+                        msg += await self.removeroleifpresent(member, roleGuest, newcomer)
+                        msg += await self.addroleifnotpresent(member, roleCR, roleVerifiedMember, roleCRMember)
 
 
                 await ch.send(
