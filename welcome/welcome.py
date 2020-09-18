@@ -474,7 +474,7 @@ class Welcome(commands.Cog):
                 crtags = []
                 if crplayer is not None:
                     if crplayer.clan is not None:
-                        clubs = await self.crconfig.guild(ch.guild).clubs()
+                        clubs = await self.crconfig.guild(ch.guild).clans()
                         for key in clubs.keys():
                             crtags.append("#" + clubs[key]["tag"])
 
