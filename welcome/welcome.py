@@ -423,79 +423,82 @@ class Welcome(commands.Cog):
 
     @tasks.loop(hours=3)
     async def mainsortroles(self):
-        ch = self.bot.get_channel(756486248675147776)
-        await ch.trigger_typing()
-        newcomer = ch.guild.get_role(597767307397169173)
-        roleVerifiedMember = ch.guild.get_role(597768235324145666)
-        roleBSMember = ch.guild.get_role(514642403278192652)
-        roleCRMember = ch.guild.get_role(475043204861788171)
-        roleCR = ch.guild.get_role(523444129221312522)
-        roleBS = ch.guild.get_role(523444501096824947)
-        roleGuest = ch.guild.get_role(472632693461614593)
+        try:
+            ch = self.bot.get_channel(756486248675147776)
+            await ch.trigger_typing()
+            newcomer = ch.guild.get_role(597767307397169173)
+            roleVerifiedMember = ch.guild.get_role(597768235324145666)
+            roleBSMember = ch.guild.get_role(514642403278192652)
+            roleCRMember = ch.guild.get_role(475043204861788171)
+            roleCR = ch.guild.get_role(523444129221312522)
+            roleBS = ch.guild.get_role(523444501096824947)
+            roleGuest = ch.guild.get_role(472632693461614593)
 
-        for member in ch.guild.members:
-            if member.bot:
-                continue
-            bstag = await self.bsconfig.user(member).tag()
-            crtag = await self.crconfig.user(member).tag()
-            if crtag is None and bstag is None:
-                continue
-            try:
-                bsplayer = await self.ofcbsapi.get_player(bstag)
-                crplayer = await self.crapi.get_player("#" + crtag)
-                await asyncio.sleep(0.3)
-            except brawlstats.errors.RequestError as e:
-                await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                  description=f"BS: {str(member)} ({member.id}) #{bstag}"))
-                continue
-            except clashroyale.RequestError as e:
-                await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                  description=f"CR: {str(member)} ({member.id}) #{crtag}"))
-                continue
-            except Exception as e:
-                return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                         description=f"**Something went wrong while requesting BS:{bstag}, CR:{crtag}!**\n({str(e)})"))
-
-            msg = ""
-            player_in_club = "name" in bsplayer.raw_data["club"]
-            bstags = []
-            if player_in_club:
-                labs = self.bot.get_guild(401883208511389716)
-                officialclubs = await self.bsconfig.guild(labs).clubs()
-                for ofkey in officialclubs.keys():
-                    bstags.append("#" + officialclubs[ofkey]["tag"])
-            crtags = []
-            if crplayer.clan is not None:
-                clubs = await self.crconfig.guild(ch.guild).clubs()
-                for key in clubs.keys():
-                    crtags.append("#" + clubs[key]["tag"])
-
-            if not player_in_club and crplayer.clan is None:
-                msg += await self.removeroleifpresent(member, roleBSMember, roleCRMember, roleCR, roleBS, newcomer)
-                msg += await self.addroleifnotpresent(member, roleGuest, roleVerifiedMember)
-                if msg != "":
-                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
-                                                      timestamp=datetime.datetime.now()))
+            for member in ch.guild.members:
+                if member.bot:
                     continue
+                bstag = await self.bsconfig.user(member).tag()
+                crtag = await self.crconfig.user(member).tag()
+                if crtag is None and bstag is None:
+                    continue
+                try:
+                    bsplayer = await self.ofcbsapi.get_player(bstag)
+                    crplayer = await self.crapi.get_player("#" + crtag)
+                    await asyncio.sleep(0.3)
+                except brawlstats.errors.RequestError as e:
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                      description=f"BS: {str(member)} ({member.id}) #{bstag}"))
+                    continue
+                except clashroyale.RequestError as e:
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                      description=f"CR: {str(member)} ({member.id}) #{crtag}"))
+                    continue
+                except Exception as e:
+                    return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                             description=f"**Something went wrong while requesting BS:{bstag}, CR:{crtag}!**\n({str(e)})"))
 
-            if player_in_club and bsplayer.club.tag not in bstags:
-                msg += await self.removeroleifpresent(member, roleBSMember, newcomer)
-                msg += await self.addroleifnotpresent(member, roleBS, roleGuest, roleVerifiedMember)
-            elif player_in_club and bsplayer.club.tag in bstags:
-                msg += await self.removeroleifpresent(member, roleGuest, newcomer)
-                msg += await self.addroleifnotpresent(member, roleBS, roleVerifiedMember, roleBSMember)
+                msg = ""
+                player_in_club = "name" in bsplayer.raw_data["club"]
+                bstags = []
+                if player_in_club:
+                    labs = self.bot.get_guild(401883208511389716)
+                    officialclubs = await self.bsconfig.guild(labs).clubs()
+                    for ofkey in officialclubs.keys():
+                        bstags.append("#" + officialclubs[ofkey]["tag"])
+                crtags = []
+                if crplayer.clan is not None:
+                    clubs = await self.crconfig.guild(ch.guild).clubs()
+                    for key in clubs.keys():
+                        crtags.append("#" + clubs[key]["tag"])
 
-            if crplayer.clan is not None and crplayer.clan.tag.replace("#", "") not in crtags():
-                msg += await self.removeroleifpresent(member, roleCRMember, newcomer)
-                msg += await self.addroleifnotpresent(member, roleCR, roleGuest, roleVerifiedMember)
-            elif crplayer.clan is not None and crplayer.clan.tag in crtags:
-                msg += await self.removeroleifpresent(member, roleGuest, newcomer)
-                msg += await self.addroleifnotpresent(member, roleCR, roleVerifiedMember, roleCRMember)
+                if not player_in_club and crplayer.clan is None:
+                    msg += await self.removeroleifpresent(member, roleBSMember, roleCRMember, roleCR, roleBS, newcomer)
+                    msg += await self.addroleifnotpresent(member, roleGuest, roleVerifiedMember)
+                    if msg != "":
+                        await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
+                                                          timestamp=datetime.datetime.now()))
+                        continue
 
-            if msg != "":
+                if player_in_club and bsplayer.club.tag not in bstags:
+                    msg += await self.removeroleifpresent(member, roleBSMember, newcomer)
+                    msg += await self.addroleifnotpresent(member, roleBS, roleGuest, roleVerifiedMember)
+                elif player_in_club and bsplayer.club.tag in bstags:
+                    msg += await self.removeroleifpresent(member, roleGuest, newcomer)
+                    msg += await self.addroleifnotpresent(member, roleBS, roleVerifiedMember, roleBSMember)
+
+                if crplayer.clan is not None and crplayer.clan.tag.replace("#", "") not in crtags():
+                    msg += await self.removeroleifpresent(member, roleCRMember, newcomer)
+                    msg += await self.addroleifnotpresent(member, roleCR, roleGuest, roleVerifiedMember)
+                elif crplayer.clan is not None and crplayer.clan.tag in crtags:
+                    msg += await self.removeroleifpresent(member, roleGuest, newcomer)
+                    msg += await self.addroleifnotpresent(member, roleCR, roleVerifiedMember, roleCRMember)
+
+
                 await ch.send(
-                    embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
-                                        timestamp=datetime.datetime.now()))
+                        embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
+                                            timestamp=datetime.datetime.now()))
+        except Exception as e:
+            await ch.send(e)
 
     @mainsortroles.before_loop
     async def before_mainsortroles(self):
