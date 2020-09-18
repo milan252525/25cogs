@@ -22,10 +22,12 @@ class Welcome(commands.Cog):
         self.crconfig = Config.get_conf(None, identifier=2512325, cog_name="ClashRoyaleCog")
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
         self.sortroles.start()
+        self.mainsortroles.start()
 
 
     def cog_unload(self):
         self.sortroles.cancel()
+        self.mainsortroles.cancel()
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -419,6 +421,86 @@ class Welcome(commands.Cog):
     async def before_sortroles(self):
         await asyncio.sleep(5)
 
+    @tasks.loop(hours=3)
+    async def mainsortroles(self):
+        ch = self.bot.get_channel(756486248675147776)
+        await ch.trigger_typing()
+        newcomer = ch.guild.get_role(597767307397169173)
+        roleVerifiedMember = ch.guild.get_role(597768235324145666)
+        roleBSMember = ch.guild.get_role(514642403278192652)
+        roleCRMember = ch.guild.get_role(475043204861788171)
+        roleCR = ch.guild.get_role(523444129221312522)
+        roleBS = ch.guild.get_role(523444501096824947)
+        roleGuest = ch.guild.get_role(472632693461614593)
+
+        for member in ch.guild.members:
+            if member.bot:
+                continue
+            bstag = await self.bsconfig.user(member).tag()
+            crtag = await self.crconfig.user(member).tag()
+            if crtag is None and bstag is None:
+                continue
+            try:
+                bsplayer = await self.ofcbsapi.get_player(bstag)
+                crplayer = await self.crapi.get_player("#" + crtag)
+                await asyncio.sleep(0.3)
+            except brawlstats.errors.RequestError as e:
+                await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                  description=f"BS: {str(member)} ({member.id}) #{bstag}"))
+                continue
+            except clashroyale.RequestError as e:
+                await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                  description=f"CR: {str(member)} ({member.id}) #{crtag}"))
+                continue
+            except Exception as e:
+                return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                         description=f"**Something went wrong while requesting BS:{bstag}, CR:{crtag}!**\n({str(e)})"))
+
+            msg = ""
+            player_in_club = "name" in bsplayer.raw_data["club"]
+            bstags = []
+            if player_in_club:
+                labs = self.bot.get_guild(401883208511389716)
+                officialclubs = await self.bsconfig.guild(labs).clubs()
+                for ofkey in officialclubs.keys():
+                    bstags.append("#" + officialclubs[ofkey]["tag"])
+            crtags = []
+            if crplayer.clan is not None:
+                clubs = await self.crconfig.guild(ch.guild).clubs()
+                for key in clubs.keys():
+                    crtags.append("#" + clubs[key]["tag"])
+
+            if not player_in_club and crplayer.clan is None:
+                msg += await self.removeroleifpresent(member, roleBSMember, roleCRMember, roleCR, roleBS, newcomer)
+                msg += await self.addroleifnotpresent(member, roleGuest, roleVerifiedMember)
+                if msg != "":
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
+                                                      timestamp=datetime.datetime.now()))
+                    continue
+
+            if player_in_club and bsplayer.club.tag not in bstags:
+                msg += await self.removeroleifpresent(member, roleBSMember, newcomer)
+                msg += await self.addroleifnotpresent(member, roleBS, roleGuest, roleVerifiedMember)
+            elif player_in_club and bsplayer.club.tag in bstags:
+                msg += await self.removeroleifpresent(member, roleGuest, newcomer)
+                msg += await self.addroleifnotpresent(member, roleBS, roleVerifiedMember, roleBSMember)
+
+            if crplayer.clan is not None and crplayer.clan.tag.replace("#", "") not in crtags():
+                msg += await self.removeroleifpresent(member, roleCRMember, newcomer)
+                msg += await self.addroleifnotpresent(member, roleCR, roleGuest, roleVerifiedMember)
+            elif crplayer.clan is not None and crplayer.clan.tag in crtags:
+                msg += await self.removeroleifpresent(member, roleGuest, newcomer)
+                msg += await self.addroleifnotpresent(member, roleCR, roleVerifiedMember, roleCRMember)
+
+            if msg != "":
+                await ch.send(
+                    embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
+                                        timestamp=datetime.datetime.now()))
+
+    @mainsortroles.before_loop
+    async def before_mainsortroles(self):
+        await asyncio.sleep(5)
+
     @commands.command()
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
@@ -492,7 +574,6 @@ class Welcome(commands.Cog):
         roleCRMember = member.guild.get_role(475043204861788171)
         roleCR = member.guild.get_role(523444129221312522)
         roleBS = member.guild.get_role(523444501096824947)
-        roleLAclan = member.guild.get_role(752220510632542219)
         roleGuest = member.guild.get_role(472632693461614593)
 
         msg = ""
@@ -580,10 +661,10 @@ class Welcome(commands.Cog):
 
                 if la_clan:
                     try:
-                        await member.add_roles(roleCRMember, roleLAclan)
-                        msg += f"Assigned roles: {roleCRMember.name}, {roleLAclan.name}\n"
+                        await member.add_roles(roleCRMember)
+                        msg += f"Assigned roles: {roleCRMember.name}\n"
                     except discord.Forbidden:
-                        msg += f":exclamation:Couldn't add {roleCRMember.name}, {roleLAclan.name})\n"
+                        msg += f":exclamation:Couldn't add {roleCRMember.name})\n"
                 else:
                     try:
                         await member.add_roles(roleGuest)
