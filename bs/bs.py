@@ -222,7 +222,7 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(embed=embed)
         
         main = True
-        has_alt = await self.config.user(member).alt()is not None
+        has_alt = (await self.config.user(member).alt() is not None) if type(member) == discord.Member else False
 
         if type(member) == discord.Member and has_alt:
             tagg = await self.config.user(member).tag()
