@@ -453,9 +453,9 @@ class Welcome(commands.Cog):
                     await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
                                                       description=f"CR: {str(member)} ({member.id}) #{crtag}"))
                     continue
-                except Exception as e:
-                    return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                             description=f"**Something went wrong while requesting BS:{bstag}, CR:{crtag}!**\n({str(e)})"))
+                #except Exception as e:
+                    #return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                             #description=f"**Something went wrong while requesting BS:{bstag}, CR:{crtag}!**\n({str(e)})"))
 
                 msg = ""
                 player_in_club = "name" in bsplayer.raw_data["club"]
