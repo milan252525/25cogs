@@ -489,16 +489,16 @@ class Welcome(commands.Cog):
 
                 if bsplayer is not None:
                     if player_in_club and bsplayer.club.tag not in bstags:
-                        msg += await self.removeroleifpresent(member, roleBSMember, newcomer)
-                        msg += await self.addroleifnotpresent(member, roleBS, roleGuest, roleVerifiedMember)
+                        msg += await self.removeroleifpresent(member, roleBSMember, roleGuest, newcomer)
+                        msg += await self.addroleifnotpresent(member, roleBS, roleVerifiedMember)
                     elif player_in_club and bsplayer.club.tag in bstags:
                         msg += await self.removeroleifpresent(member, roleGuest, newcomer)
                         msg += await self.addroleifnotpresent(member, roleBS, roleVerifiedMember, roleBSMember)
 
                 if crplayer is not None:
                     if crplayer.clan is not None and crplayer.clan.tag.replace("#", "") not in crtags:
-                        msg += await self.removeroleifpresent(member, roleCRMember, newcomer)
-                        msg += await self.addroleifnotpresent(member, roleCR, roleGuest, roleVerifiedMember)
+                        msg += await self.removeroleifpresent(member, roleCRMember, roleGuest, newcomer)
+                        msg += await self.addroleifnotpresent(member, roleCR, roleVerifiedMember)
                     elif crplayer.clan is not None and crplayer.clan.tag in crtags:
                         msg += await self.removeroleifpresent(member, roleGuest, newcomer)
                         msg += await self.addroleifnotpresent(member, roleCR, roleVerifiedMember, roleCRMember)
