@@ -496,7 +496,7 @@ class Welcome(commands.Cog):
                         msg += await self.addroleifnotpresent(member, roleBS, roleVerifiedMember, roleBSMember)
 
                 if crplayer is not None:
-                    if crplayer.clan is not None and crplayer.clan.tag.replace("#", "") not in crtags():
+                    if crplayer.clan is not None and crplayer.clan.tag.replace("#", "") not in crtags:
                         msg += await self.removeroleifpresent(member, roleCRMember, newcomer)
                         msg += await self.addroleifnotpresent(member, roleCR, roleGuest, roleVerifiedMember)
                     elif crplayer.clan is not None and crplayer.clan.tag in crtags:
