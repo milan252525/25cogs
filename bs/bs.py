@@ -855,7 +855,7 @@ class BrawlStarsCog(commands.Cog):
                 if h['type'] == "members":
                     name = discord.utils.escape_markdown(h['data']['player']['name'])
                     tag = "#" + h['data']['player']['tag']
-                    addition = f"<:yesconfirm:595535992329601034>[{time}] **{name}** ({tag}) **joined**\n" if h["data"]["joined"] else f"<:nocancel:595535992199315466>[{time}] **{name}** ({tag}) **left**\n"
+                    addition = f"🟢[{time}] **{name}** ({tag}) **joined**\n" if h["data"]["joined"] else f"🔴[{time}] **{name}** ({tag}) **left**\n"
                 elif h['type'] == 'settings':
                     if h['data']['type'] == "description":
                         dold = h['data']['old'].replace('`','')
@@ -877,15 +877,15 @@ class BrawlStarsCog(commands.Cog):
                 elif h['type'] == "roles":
                     if h['data']['promote']:
                         action = "promoted"
-                        emoji = "<:upvote:554429793446395904>"
+                        emoji = "🔺"
                     else:
                         action = "demoted"
-                        emoji = "<:downvote:554429867752685569>"
+                        emoji = "🔻"
                     rname = discord.utils.escape_markdown(h['data']['player']['name'])
                     rtag = "#" + h['data']['player']['tag']
                     rold = h['data']['old']
                     rnew = h['data']['new']
-                    addition = f"{emoji} **{rname}** {rtag} **{action}** from {rold} to {rnew}! {time}\n"
+                    addition = f"{emoji}[{time}] **{rname}** {rtag} **{action}** from {rold} to {rnew}!\n"
                 else:
                     type = h['type']
                     addition = f"Unrecognized type: {type}\n"
