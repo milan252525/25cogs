@@ -739,7 +739,7 @@ class BrawlStarsCog(commands.Cog):
 
         if keyword is None:
             if club.description is not None:
-                embed = discord.Embed(description=f"```{club.description}```")
+                embed = discord.Embed(description=f"```{discord.utils.escape_markdown(club.description)}```")
             else:
                 embed = discord.Embed(description="```None```")
             embed.set_author(name=f"{club.name} {club.tag}", icon_url=f"https://cdn.starlist.pro/club/{club.raw_data['badgeId']}.png?v=1")
@@ -757,7 +757,7 @@ class BrawlStarsCog(commands.Cog):
                 if m.role == "president":
                     embed.add_field(
                         name="President",
-                        value=f"{get_league_emoji(m.trophies)}`{m.trophies}` {m.name}")
+                        value=f"{get_league_emoji(m.trophies)}`{m.trophies}` {discord.utils.escape_markdown(m.name)}")
                     break
             embed.add_field(
                 name="Members",
@@ -768,10 +768,10 @@ class BrawlStarsCog(commands.Cog):
             )
             topm = ""
             for m in club.members[:5]:
-                topm += f"{get_league_emoji(m.trophies)}`{m.trophies}` {remove_codes(m.name)}\n"
+                topm += f"{get_league_emoji(m.trophies)}`{m.trophies}` {discord.utils.escape_markdown(m.name)}\n"
             worstm = ""
             for m in club.members[-5:]:
-                worstm += f"{get_league_emoji(m.trophies)}`{m.trophies}` {remove_codes(m.name)}\n"
+                worstm += f"{get_league_emoji(m.trophies)}`{m.trophies}` {discord.utils.escape_markdown(m.name)}\n"
             embed.add_field(name="Top Members", value=topm, inline=True)
             embed.add_field(name="Lowest Members", value=worstm, inline=True)
             return await ctx.send(embed=randomize_colour(embed))
@@ -853,13 +853,13 @@ class BrawlStarsCog(commands.Cog):
             for h in log['history']:
                 time = h['timeFormat']
                 if h['type'] == "members":
-                    name = h['data']['player']['name']
+                    name = discord.utils.escape_markdown(h['data']['player']['name'])
                     tag = "#" + h['data']['player']['tag']
                     addition = f"<:yesconfirm:595535992329601034> **{name} ({tag}) joined!** {time}\n" if h["data"]["joined"] else f"<:nocancel:595535992199315466> **{name} ({tag}) left!** {time}\n"
                 elif h['type'] == 'settings':
                     if h['data']['type'] == "description":
-                        dold = h['data']['old']
-                        dnew = h['data']['new']
+                        dold = discord.utils.escape_markdown(h['data']['old'])
+                        dnew = discord.utils.escape_markdown(h['data']['new'])
                         addition = f"🛠️ **Description changed from `{dold}` to `{dnew}`!** {time}\n"
                     elif h['data']['type'] == "requirement":
                         old = h['data']['old']
@@ -879,7 +879,7 @@ class BrawlStarsCog(commands.Cog):
                     else:
                         action = "demoted"
                         emoji = "<:downvote:554429867752685569>"
-                    rname = h['data']['player']['name']
+                    rname = discord.utils.escape_markdown(h['data']['player']['name'])
                     rtag = "#" + h['data']['player']['tag']
                     rold = h['data']['old']
                     rnew = h['data']['new']
