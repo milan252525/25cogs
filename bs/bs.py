@@ -859,8 +859,10 @@ class BrawlStarsCog(commands.Cog):
                 elif h['type'] == 'settings':
                     if h['data']['type'] == "description":
                         dold = h['data']['old'].replace('`','').replace('*','')
+                        dold = "empty" if dold == "" else dold
                         dnew = h['data']['new'].replace('`','').replace('*','')
-                        addition = f"🛠️ **Description** changed from\n```{dold}```\nto\n```{dnew}```\n{time}\n"
+                        dnew = "empty" if dnew == "" else dnew    
+                        addition = f"🛠️ **Description** changed ({time}) from```{dold}```to```{dnew}```\n"
                     elif h['data']['type'] == "requirement":
                         old = h['data']['old']
                         new = h['data']['new']
