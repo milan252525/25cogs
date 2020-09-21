@@ -855,7 +855,7 @@ class BrawlStarsCog(commands.Cog):
                 if h['type'] == "members":
                     name = discord.utils.escape_markdown(h['data']['player']['name'])
                     tag = "#" + h['data']['player']['tag']
-                    addition = f"🟢[{time}] **{name}** ({tag}) **joined**\n" if h["data"]["joined"] else f"🔴[{time}] **{name}** ({tag}) **left**\n"
+                    addition = f"🟢[{time}] **{name}** {tag} **joined**\n" if h["data"]["joined"] else f"🔴[{time}] **{name}** {tag} **left**\n"
                 elif h['type'] == 'settings':
                     if h['data']['type'] == "description":
                         dold = h['data']['old'].replace('`','')
@@ -885,7 +885,7 @@ class BrawlStarsCog(commands.Cog):
                     rtag = "#" + h['data']['player']['tag']
                     rold = h['data']['old']
                     rnew = h['data']['new']
-                    addition = f"{emoji}[{time}] **{rname}** {rtag} **{action}** from {rold} to {rnew}!\n"
+                    addition = f"{emoji}[{time}] **{rname}** {rtag} **{action}** from `{rold}` to `{rnew}`!\n"
                 else:
                     type = h['type']
                     addition = f"Unrecognized type: {type}\n"
