@@ -845,8 +845,10 @@ class BrawlStarsCog(commands.Cog):
         elif keyword == "log":
             url = "https://api.starlist.pro/clublog/" + club.tag.replace("#", "")
             log = await self.starlist_request(url)
+            if log['status'] == "trackingDisabled":
+                return await ctx.send(embed=badEmbed(f"Tracking for this club isn't enabled on starlist.pro website!"))
             if log['status'] != "ok":
-                return await ctx.send(embed=badEmbed(f"Something went wrong. Please try again later! ({log['status']})"))
+                return await ctx.send(embed=badEmbed(f"Something went wrong. Please try again later! (Status: {log['status']})"))
             msg = ""
             for h in log['history']:
                 time = h['timeFormat']
@@ -871,7 +873,6 @@ class BrawlStarsCog(commands.Cog):
                         stype = h['data']['type']
                         addition = f"Unrecognized setting type: {stype}\n"
                 elif h['type'] == "roles":
-                    continue
                     if h['data']['promote']:
                         action = "promoted"
                         emoji = "<:upvote:554429793446395904>"
