@@ -862,7 +862,7 @@ class BrawlStarsCog(commands.Cog):
                         dold = "empty" if dold == "" else dold
                         dnew = h['data']['new'].replace('`','')
                         dnew = "empty" if dnew == "" else dnew    
-                        addition = f"🛠️[{time}] **Description** changed to ```{dnew}```\n"
+                        addition = f"🛠️[{time}] **Description** changed to ```{dnew}```"
                     elif h['data']['type'] == "requirement":
                         old = h['data']['old']
                         new = h['data']['new']
