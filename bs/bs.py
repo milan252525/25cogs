@@ -858,8 +858,8 @@ class BrawlStarsCog(commands.Cog):
                     addition = f"<:yesconfirm:595535992329601034> **{name} ({tag}) joined!** {time}\n" if h["data"]["joined"] else f"<:nocancel:595535992199315466> **{name} ({tag}) left!** {time}\n"
                 elif h['type'] == 'settings':
                     if h['data']['type'] == "description":
-                        dold = discord.utils.escape_markdown(h['data']['old'])
-                        dnew = discord.utils.escape_markdown(h['data']['new'])
+                        dold = h['data']['old'].replace('`','')
+                        dnew = h['data']['new'].replace('`','')
                         addition = f"🛠️ **Description changed from `{dold}` to `{dnew}`!** {time}\n"
                     elif h['data']['type'] == "requirement":
                         old = h['data']['old']
