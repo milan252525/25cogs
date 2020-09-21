@@ -394,7 +394,9 @@ class BrawlStarsCog(commands.Cog):
                 description=desc)
             return await ctx.send(embed=embed)
 
-        if await self.config.user(member).alt() is not None:
+        has_alt = (await self.config.user(member).alt() is not None) if type(member) == discord.Member else False
+
+        if type(member) == discord.Member and has_alt:
             tagg = await self.config.user(member).tag()
             altt = await self.config.user(member).alt()
             name_main = await self.config.user(member).name()
