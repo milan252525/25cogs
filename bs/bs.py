@@ -855,25 +855,25 @@ class BrawlStarsCog(commands.Cog):
                 if h['type'] == "members":
                     name = discord.utils.escape_markdown(h['data']['player']['name'])
                     tag = "#" + h['data']['player']['tag']
-                    addition = f"<:yesconfirm:595535992329601034> **{name} ({tag}) joined!** {time}\n" if h["data"]["joined"] else f"<:nocancel:595535992199315466> **{name} ({tag}) left!** {time}\n"
+                    addition = f"<:yesconfirm:595535992329601034>[{time}] **{name}** ({tag}) **joined**\n" if h["data"]["joined"] else f"<:nocancel:595535992199315466>[{time}] **{name}** ({tag}) **left**\n"
                 elif h['type'] == 'settings':
                     if h['data']['type'] == "description":
                         dold = h['data']['old'].replace('`','')
                         dold = "empty" if dold == "" else dold
                         dnew = h['data']['new'].replace('`','')
                         dnew = "empty" if dnew == "" else dnew    
-                        addition = f"🛠️ **Description** changed ({time}) to ```{dnew}```\n"
+                        addition = f"🛠️[{time}] **Description** changed to ```{dnew}```\n"
                     elif h['data']['type'] == "requirement":
                         old = h['data']['old']
                         new = h['data']['new']
-                        addition = f"🛠️ **Requirement** changed from `{old}` to `{new}`! {time}\n"
+                        addition = f"🛠️[{time}] **Requirement** changed from `{old}` to `{new}`\n"
                     elif h['data']['type'] == "status":
                         sold = h['data']['old']
                         snew = h['data']['new']
-                        addition = f"🛠️ **Status** changed from `{sold}` to `{snew}`! {time}\n"
+                        addition = f"🛠️[{time}] **Status** changed from `{sold}` to `{snew}`\n"
                     else:
                         stype = h['data']['type']
-                        addition = f"Unrecognized setting type: {stype}\n"
+                        addition = f"Unrecognized setting type: `{stype}`\n"
                 elif h['type'] == "roles":
                     if h['data']['promote']:
                         action = "promoted"
@@ -885,7 +885,7 @@ class BrawlStarsCog(commands.Cog):
                     rtag = "#" + h['data']['player']['tag']
                     rold = h['data']['old']
                     rnew = h['data']['new']
-                    addition = f"{emoji} **{rname} {rtag} {action} from {rold} to {rnew}!** {time}\n"
+                    addition = f"{emoji} **{rname}** {rtag} **{action}** from {rold} to {rnew}! {time}\n"
                 else:
                     type = h['type']
                     addition = f"Unrecognized type: {type}\n"
