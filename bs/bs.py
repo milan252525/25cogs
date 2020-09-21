@@ -846,7 +846,7 @@ class BrawlStarsCog(commands.Cog):
             url = "https://api.starlist.pro/clublog/" + club.tag.replace("#", "")
             log = await self.starlist_request(url)
             if log['status'] != "ok":
-                return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
+                return await ctx.send(embed=badEmbed(f"Something went wrong. Please try again later! ({log['status']})"))
             msg = ""
             for h in log['history']:
                 time = h['timeFormat']
