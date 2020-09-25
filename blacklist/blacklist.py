@@ -190,7 +190,7 @@ class Blacklist(commands.Cog):
             await self.config.guild(ctx.guild).blacklisted.clear_raw(tag)
             await ctx.send(embed=goodEmbed(f"{ign} was successfully removed from this server's blacklist!"))
         except KeyError:
-            await ctx.send(embed=badEmbed(f"{ign} isn't blacklisted in this server!"))
+            await ctx.send(embed=badEmbed(f"#{tag} isn't blacklisted in this server!"))
 
     @tasks.loop(hours=4)
     async def spainblacklistjob(self):
