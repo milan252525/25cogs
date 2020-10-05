@@ -288,7 +288,7 @@ class Tools(commands.Cog):
                 continue
             role = None
             for r in ctx.guild.roles:
-                if r.name.startswith(settings[i + 1]):
+                if r.name.lower().startswith(settings[i + 1]):
                     role = r
             if role is None:
                 return await ctx.send(embed=badEmbed(f"{settings[i + 1]} doesn't look like a valid role."))
