@@ -8,6 +8,7 @@ from random import choice
 import random
 from typing import Union
 import asyncio
+from bs.utils import badEmbed
 #from profanity_check import predict, predict_prob
 #from profanityfilter import ProfanityFilter
 
@@ -275,6 +276,35 @@ class Tools(commands.Cog):
             m = m.replace('*', '\\*')
             m = m.replace('~', '\\~')
             await ctx.send(embed=discord.Embed(title=role.name, description=m, colour=discord.Colour.green()))
+
+    @commands.command()
+    async def membersadvanced(self, ctx, *, settings):
+        settings = settings.split(" ")
+        if len(settings) % 2 != 0:
+            return await ctx.send(badEmbed("Looks like you entered the settings incorrectly."))
+        people = []
+        for i in range(len(settings)):
+            if i % 2 != 0:
+                continue
+            role = None
+            for r in ctx.guild.roles:
+                if r.name.startswith(settings[i + 1]):
+                    role = r
+            if role is None:
+                return await ctx.send(badEmbed(f"{settings[i + 1]} doesn't look like a valid role."))
+            if settings[i] == "-r":
+                for m in ctx.guild.members:
+                    if role in m.roles:
+                        people.remove(m)
+            elif settings[i] == "-a":
+                for m in ctx.guild.members:
+                    if role in m.roles:
+                        people.append(m)
+        msg = ""
+        for p in people:
+            msg = msg + f"{str(p)}\n"
+        await ctx.send(embed=discord.Embed(colour=discord.Colour.orange(), description=msg, title="Members:"))
+
 
     @commands.guild_only()
     @commands.command()
