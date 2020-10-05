@@ -281,7 +281,7 @@ class Tools(commands.Cog):
     async def membersadvanced(self, ctx, *, settings):
         settings = settings.split(" ")
         if len(settings) % 2 != 0:
-            return await ctx.send(badEmbed("Looks like you entered the settings incorrectly."))
+            return await ctx.send(embed=badEmbed("Looks like you entered the settings incorrectly."))
         people = []
         for i in range(len(settings)):
             if i % 2 != 0:
@@ -291,7 +291,7 @@ class Tools(commands.Cog):
                 if r.name.startswith(settings[i + 1]):
                     role = r
             if role is None:
-                return await ctx.send(badEmbed(f"{settings[i + 1]} doesn't look like a valid role."))
+                return await ctx.send(embed=badEmbed(f"{settings[i + 1]} doesn't look like a valid role."))
             if settings[i] == "-r":
                 for m in ctx.guild.members:
                     if role in m.roles:
