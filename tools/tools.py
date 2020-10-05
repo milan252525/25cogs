@@ -295,7 +295,8 @@ class Tools(commands.Cog):
             if settings[i] == "-r":
                 for m in ctx.guild.members:
                     if role in m.roles:
-                        people.remove(m)
+                        if m in people:
+                            people.remove(m)
             elif settings[i] == "-a":
                 for m in ctx.guild.members:
                     if role in m.roles:
