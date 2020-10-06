@@ -295,6 +295,7 @@ class Welcome(commands.Cog):
                     mmber = ch.guild.get_role(roles_config['member'])
                     memberclub = ch.guild.get_role(roles_config['memberclub'])
                     senior = ch.guild.get_role(roles_config['senior'])
+                    notifications = ch.guild.get_role(roles_config['notifications'])
                     error_counter = 0
 
                     for member in ch.guild.members:
@@ -361,6 +362,8 @@ class Welcome(commands.Cog):
                                     msg += await self.removeroleifpresent(member, role)
 
                         member_role = None if len(member_roles) < 1 else member_roles[0]
+
+                        msg += await self.addroleifnotpresent(member, notifications)
 
                         if not player_in_club:
                             msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, otherclubs, leader, mmber, memberclub, senior, member_role)
