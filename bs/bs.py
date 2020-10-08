@@ -1693,9 +1693,10 @@ class BrawlStarsCog(commands.Cog):
             if player_in_club:
                 if player.club.tag == clubtag:
                     msg += f"**{str(member)}** `{player.trophies}` {player.name}\n"
-            if player_in_club2:
-                if playeralt.club.tag == clubtag:
-                    msg += f"**{str(member)}'s alt** `{playeralt.trophies}` {playeralt.name}\n"
+            if alt is not None:
+                if player_in_club2:
+                    if playeralt.club.tag == clubtag:
+                        msg += f"**{str(member)}'s alt** `{playeralt.trophies}` {playeralt.name}\n"
 
         await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=msg))
 
