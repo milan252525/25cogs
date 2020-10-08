@@ -1639,6 +1639,6 @@ class BrawlStarsCog(commands.Cog):
 
         embed = discord.Embed(colour=discord.Colour.green())
         for club, count in clubs.items():
-            embed.add_field(name=f"{club}:", value=count, inline=False)
+            embed.add_field(name=f"{club}:", value=count, inline=True)
 
         await ctx.send(embed=embed)
