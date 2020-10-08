@@ -1581,7 +1581,7 @@ class BrawlStarsCog(commands.Cog):
 
     @commands.cooldown(1, 20, commands.BucketType.user)
     @commands.guild_only()
-    @whitelist.command(name="stats")
+    @whitelistbs.command(name="stats")
     async def whiteliststats(self, ctx):
         """Show general whitelists' stats"""
         if ctx.guild.id != 401883208511389716:
