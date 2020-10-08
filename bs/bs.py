@@ -1637,7 +1637,11 @@ class BrawlStarsCog(commands.Cog):
             tags.append("#" + officialclubs[ofkey]["tag"])
 
         msg = ""
+        messages = []
         for club, count in clubs.items():
+            if len(msg) > 1800:
+                messages.append(msg)
+                msg = ""
             if club == None:
                 msg += f"<:bstrophy:552558722770141204> Not in club: {count}\n"
             else:
@@ -1645,4 +1649,8 @@ class BrawlStarsCog(commands.Cog):
                     msg += f"<:bstrophy:552558722770141204> {club.name}: {count}, not an LA club\n"
                 else:
                     msg += f"<:bstrophy:552558722770141204> {club.name}: {count}\n"
-        await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=msg))
+
+        if len(msg) > 0:
+            messages.append(msg)
+        for m in messages:
+            await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=msg))
