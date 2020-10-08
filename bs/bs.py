@@ -1611,14 +1611,20 @@ class BrawlStarsCog(commands.Cog):
             player_in_club = "name" in player.raw_data["club"]
             if alt is not None:
                 player_in_club2 = "name" in playeralt.raw_data["club"]
-            clubobj = await self.ofcbsapi.get_club(player.club.tag)
+            if player_in_club:
+                clubobj = await self.ofcbsapi.get_club(player.club.tag)
+            else:
+                clubobj = None
             try:
                 current = clubs[clubobj]
                 clubs[clubobj] = current + 1
             except KeyError:
                 clubs[clubobj] = 1
             if alt is not None:
-                clubobj = await self.ofcbsapi.get_club(playeralt.club.tag)
+                if player_in_club2:
+                    clubobj = await self.ofcbsapi.get_club(playeralt.club.tag)
+                else:
+                    clubobj = None
                 try:
                     current = clubs[clubobj]
                     clubs[clubobj] = current + 1
