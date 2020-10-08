@@ -217,7 +217,7 @@ class Blacklist(commands.Cog):
             try:
                 tags = await self.config.guild(serverobj).blacklisted.get(tag)
                 blacklisted = True
-                name = tags["ign"]
+                name = await self.config.guild(serverobj).blacklisted.get_raw(tag, "ign")
                 guild = server
             except KeyError:
                 continue
