@@ -1528,7 +1528,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.cooldown(1, 20, commands.BucketType.user)
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
-    async def whitelist(self, ctx):
+    async def whitelistbs(self, ctx):
         """Show whitelists' clubs"""
         if ctx.guild.id != 401883208511389716:
             return await ctx.send("This command can only be used in LA Gaming - Brawl Stars.")
