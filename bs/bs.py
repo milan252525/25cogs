@@ -1632,7 +1632,7 @@ class BrawlStarsCog(commands.Cog):
                     clubs[clubobj] = 1
 
         tags = []
-        officialclubs = await self.bsconfig.guild(ctx.guild).clubs()
+        officialclubs = await self.config.guild(ctx.guild).clubs()
         for ofkey in officialclubs.keys():
             tags.append("#" + officialclubs[ofkey]["tag"])
 
