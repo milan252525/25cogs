@@ -224,7 +224,7 @@ class Blacklist(commands.Cog):
         if blacklisted:
             await ctx.send(embed=goodEmbed(f"{name} is indeed blacklisted on {guild}!"))
         else:
-            await ctx.send(embed=badEmbed(f"Looks like {name} isn't blacklisted anywhere!"))
+            await ctx.send(embed=badEmbed(f"Looks like this tag isn't blacklisted anywhere!"))
 
     @tasks.loop(hours=4)
     async def spainblacklistjob(self):
