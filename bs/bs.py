@@ -1646,10 +1646,10 @@ class BrawlStarsCog(commands.Cog):
             if len(msg) > 1800:
                 messages.append(msg)
                 msg = ""
-            if club.startswith("LA"):
-                msg = msg + f"<:bstrophy:552558722770141204> {club}: {count}\n"
+            if club.startswith("LA") or club == "No club":
+                msg = msg + f"<:bstrophy:552558722770141204> **{club}**: {count}\n"
             else:
-                msg = msg + f"<:bstrophy:552558722770141204> {club}: {count}, doesn't look like an LA club\n"
+                msg = msg + f"<:bstrophy:552558722770141204> **{club}**: {count}, doesn't look like an LA club\n"
 
         if len(msg) > 0:
             messages.append(msg)
