@@ -215,10 +215,9 @@ class Blacklist(commands.Cog):
         for server in servers:
             serverobj = self.bot.get_guild(server)
             try:
-                tags = await self.config.guild(serverobj).blacklisted.get(tag)
-                blacklisted = True
-                name = await self.config.guild(serverobj).blacklisted.get_raw(tag, "ign")
+                name = await self.config.guild(ctx.guild).blacklisted.get_raw(tag, "ign")
                 guild = server
+                blacklisted = True
             except KeyError:
                 continue
 
