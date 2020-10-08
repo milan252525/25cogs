@@ -1638,8 +1638,64 @@ class BrawlStarsCog(commands.Cog):
                         clubs["No club"] = 1
 
         embed = discord.Embed(colour=discord.Colour.green())
-        await ctx.send(len(clubs))
-        for club, count in clubs.items():
-            embed.add_field(name=f"<:bstrophy:552558722770141204> {club}:", value=count, inline=True)
 
-        await ctx.send(embed=embed)
+        messages = []
+        msg = ""
+
+        for club, count in clubs.items():
+            if len(msg) > 1800:
+                messages.append(msg)
+                msg = ""
+            if club.startswith("LA"):
+                msg = msg + f"<:bstrophy:552558722770141204> {club}: {count}"
+            else:
+                msg = msg + f"<:bstrophy:552558722770141204> {club}: {count}, doesn't look like an LA club"
+
+        if len(msg) > 0:
+            messages.append(msg)
+        for m in messages:
+            await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=m))
+
+    @commands.cooldown(1, 20, commands.BucketType.user)
+    @commands.guild_only()
+    @whitelistbs.command(name="club")
+    async def whitelistclub(self, ctx, clubtag):
+        """Show whitelist members in a certain club"""
+        if ctx.guild.id != 401883208511389716:
+            return await ctx.send("This command can only be used in LA Gaming - Brawl Stars.")
+
+        await ctx.trigger_typing()
+
+        clubtag = clubtag.replace("#", "").trim()
+
+        whitelist = ctx.guild.get_role(693659561747546142)
+
+        msg = ""
+        for member in ctx.guild.members:
+            if whitelist not in member.roles:
+                continue
+            tag = await self.config.user(member).tag()
+            alt = await self.config.user(member).alt()
+            if tag is None:
+                continue
+            try:
+                player = await self.ofcbsapi.get_player(tag)
+                if alt is not None:
+                    playeralt = await self.ofcbsapi.get_player(alt)
+                await asyncio.sleep(0.2)
+            except brawlstats.errors.RequestError as e:
+                continue
+            except Exception as e:
+                return
+            player_in_club = "name" in player.raw_data["club"]
+            if alt is not None:
+                player_in_club2 = "name" in playeralt.raw_data["club"]
+            if player_in_club:
+                if player.club.tag == clubtag:
+                    msg += f"**{str(member)}** `{player.trophies}` {player.name}"
+            if player_in_club2:
+                if playeralt.club.tag == clubtag:
+                    msg += f"**{str(member)}'s alt** `{playeralt.trophies}` {playeralt.name}"
+
+        await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=msg))
+
