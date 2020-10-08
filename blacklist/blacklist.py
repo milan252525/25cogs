@@ -192,6 +192,41 @@ class Blacklist(commands.Cog):
         except KeyError:
             await ctx.send(embed=badEmbed(f"#{tag} isn't blacklisted in this server!"))
 
+    @blacklisted.command(name="check")
+    async def blacklist_check(self, ctx, tag: str):
+        """
+        Check whether a person is blacklisted
+        """
+        await ctx.trigger_typing()
+
+        if ctx.guild.id == 460550486257565697 and not ctx.author.guild_permissions.administrator:
+            return await ctx.send("You can't use this command.")
+        if ctx.guild.id != 460550486257565697 and not ctx.author.guild_permissions.kick_members:
+            return await ctx.send("You can't use this command.")
+
+        tag = tag.lower().replace('O', '0')
+        if tag.startswith("#"):
+            tag = tag.strip('#')
+
+        blacklisted = False
+        guild = ""
+        name = ""
+        servers = await self.config.all_guilds()
+        for server in servers:
+            serverobj = self.bot.get_guild(server)
+            try:
+                tags = await self.config.guild(serverobj).blacklisted.get(tag)
+                blacklisted = True
+                name = tags['ign']
+                guild = server
+            except KeyError:
+                continue
+
+        if blacklisted:
+            await ctx.send(embed=goodEmbed(f"{name} is indeed blacklisted on {guild}!"))
+        else:
+            await ctx.send(embed=badEmbed(f"Looks like {name} isn't blacklisted anywhere!"))
+
     @tasks.loop(hours=4)
     async def spainblacklistjob(self):
         try:
@@ -329,3 +364,5 @@ class Blacklist(commands.Cog):
     @deruculablacklistjob.before_loop
     async def before_deruculablacklistjob(self):
         await asyncio.sleep(5)
+
+
