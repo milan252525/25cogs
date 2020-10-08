@@ -1637,15 +1637,8 @@ class BrawlStarsCog(commands.Cog):
                     except KeyError:
                         clubs["No club"] = 1
 
-        msg = ""
-        messages = []
+        embed = discord.Embed(colour=discord.Colour.green())
         for club, count in clubs.items():
-            if len(msg) > 1800:
-                messages.append(msg)
-                msg = ""
-            msg += f"<:bstrophy:552558722770141204> {club}: {count}\n"
+            embed.add_field(name=f"{club}:", value=count, inline=False)
 
-        if len(msg) > 0:
-            messages.append(msg)
-        for m in messages:
-            await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=msg))
+        await ctx.send(embed=embed)
