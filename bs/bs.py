@@ -1612,29 +1612,30 @@ class BrawlStarsCog(commands.Cog):
             if alt is not None:
                 player_in_club2 = "name" in playeralt.raw_data["club"]
             if player_in_club:
-                clubobj = await self.ofcbsapi.get_club(player.club.tag)
+                try:
+                    current = clubs[player.club.name]
+                    clubs[player.club.name] = current + 1
+                except KeyError:
+                    clubs[player.club.name] = 1
             else:
-                clubobj = None
-            try:
-                current = clubs[clubobj]
-                clubs[clubobj] = current + 1
-            except KeyError:
-                clubs[clubobj] = 1
+                try:
+                    current = clubs["No club"]
+                    clubs["No club"] = current + 1
+                except KeyError:
+                    clubs["No club"] = 1
             if alt is not None:
                 if player_in_club2:
-                    clubobj = await self.ofcbsapi.get_club(playeralt.club.tag)
+                    try:
+                        current = clubs[playeralt.club.name]
+                        clubs[playeralt.club.name] = current + 1
+                    except KeyError:
+                        clubs[playeralt.club.name] = 1
                 else:
-                    clubobj = None
-                try:
-                    current = clubs[clubobj]
-                    clubs[clubobj] = current + 1
-                except KeyError:
-                    clubs[clubobj] = 1
-
-        tags = []
-        officialclubs = await self.config.guild(ctx.guild).clubs()
-        for ofkey in officialclubs.keys():
-            tags.append("#" + officialclubs[ofkey]["tag"])
+                    try:
+                        current = clubs["No club"]
+                        clubs["No club"] = current + 1
+                    except KeyError:
+                        clubs["No club"] = 1
 
         msg = ""
         messages = []
@@ -1642,13 +1643,7 @@ class BrawlStarsCog(commands.Cog):
             if len(msg) > 1800:
                 messages.append(msg)
                 msg = ""
-            if club == None:
-                msg += f"<:bstrophy:552558722770141204> Not in club: {count}\n"
-            else:
-                if club.tag not in tags:
-                    msg += f"<:bstrophy:552558722770141204> {club.name}: {count}, not an LA club\n"
-                else:
-                    msg += f"<:bstrophy:552558722770141204> {club.name}: {count}\n"
+            msg += f"<:bstrophy:552558722770141204> {club}: {count}\n"
 
         if len(msg) > 0:
             messages.append(msg)
