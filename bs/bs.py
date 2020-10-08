@@ -1666,7 +1666,10 @@ class BrawlStarsCog(commands.Cog):
 
         await ctx.trigger_typing()
 
-        clubtag = clubtag.replace("#", "").strip()
+        if "#" not in clubtag:
+            clubtag = "#" + clubtag
+
+        clubtag = clubtag.strip()
 
         whitelist = ctx.guild.get_role(693659561747546142)
 
