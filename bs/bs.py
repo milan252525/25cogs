@@ -1647,9 +1647,9 @@ class BrawlStarsCog(commands.Cog):
                 messages.append(msg)
                 msg = ""
             if club.startswith("LA"):
-                msg = msg + f"<:bstrophy:552558722770141204> {club}: {count}"
+                msg = msg + f"<:bstrophy:552558722770141204> {club}: {count}\n"
             else:
-                msg = msg + f"<:bstrophy:552558722770141204> {club}: {count}, doesn't look like an LA club"
+                msg = msg + f"<:bstrophy:552558722770141204> {club}: {count}, doesn't look like an LA club\n"
 
         if len(msg) > 0:
             messages.append(msg)
@@ -1666,7 +1666,7 @@ class BrawlStarsCog(commands.Cog):
 
         await ctx.trigger_typing()
 
-        clubtag = clubtag.replace("#", "").trim()
+        clubtag = clubtag.replace("#", "").strip()
 
         whitelist = ctx.guild.get_role(693659561747546142)
 
@@ -1692,10 +1692,10 @@ class BrawlStarsCog(commands.Cog):
                 player_in_club2 = "name" in playeralt.raw_data["club"]
             if player_in_club:
                 if player.club.tag == clubtag:
-                    msg += f"**{str(member)}** `{player.trophies}` {player.name}"
+                    msg += f"**{str(member)}** `{player.trophies}` {player.name}\n"
             if player_in_club2:
                 if playeralt.club.tag == clubtag:
-                    msg += f"**{str(member)}'s alt** `{playeralt.trophies}` {playeralt.name}"
+                    msg += f"**{str(member)}'s alt** `{playeralt.trophies}` {playeralt.name}\n"
 
         await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=msg))
 
