@@ -129,19 +129,19 @@ def get_brawler_emoji(name : str):
     elif name == "EL PRIMO":
         return "<:primo:664235742758830135>"
     elif name == "POCO":
-        return "<:poco:664235668393689099>"
+        return "<:poco:769133920784482324>"
     elif name == "PIPER":
         return "<:piper:664235622998867971>"
     elif name == "PENNY":
         return "<:penny:664235535094644737>"
     elif name == "PAM":
-        return "<:pam:664235599804235786>"
+        return "<:pam:769132131552854018>"
     elif name == "NITA":
         return "<:nita:664235795959513088>"
     elif name == "MORTIS":
         return "<:mortis:664235717693800468>"
     elif name == "MAX":
-        return "<:max:664235224762155073>"
+        return "<:max:769131218125586442>"
     elif name == "LEON":
         return "<:leon:664235430530514964>"
     elif name == "JESSIE":
@@ -155,7 +155,7 @@ def get_brawler_emoji(name : str):
     elif name == "DYNAMIKE":
         return "<:dynamike:664235766620094464>"
     elif name == "DARRYL":
-        return "<:darryl:664235555877290008>"
+        return "<:darryl:769133920783826944>"
     elif name == "CROW":
         return "<:crow:664235693064716291>"
     elif name == "COLT":
@@ -190,6 +190,8 @@ def get_brawler_emoji(name : str):
         return "<:surge:729632664218238986>"
     elif name == "COLETTE":
         return "<:colette:753659575424516287>"
+    elif name == "AMBER":
+        return "<:amber:769131126773907498>"
     else:
         return ""
     
