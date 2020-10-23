@@ -95,8 +95,9 @@ class Achievements(commands.Cog):
                 member = discord.utils.get(ctx.guild.members, name=member)
                 
         roles = await self.checkforroles(member)
-        rembed = discord.Embed(color=discord.Colour.green(), description=f"**{roles}**")
-        await ctx.send(embed=rembed)
+        if roles != "":
+            rembed = discord.Embed(color=discord.Colour.green(), description=f"**{roles}**")
+            await ctx.send(embed=rembed)
 
         aembed = discord.Embed(color=discord.Colour.blue())
         aembed.set_author(icon_url=member.avatar_url, name=f"{member.display_name}'s achievements")
