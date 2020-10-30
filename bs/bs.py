@@ -461,7 +461,7 @@ class BrawlStarsCog(commands.Cog):
         
         embedstosend = []
         for i in range(0, len(embedfields), 15):
-            embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}/39):")
+            embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}/40):")
             embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
             for e in embedfields[i:i + 15]:
                 embed.add_field(name=e[0], value=e[1], inline=True)
@@ -582,7 +582,8 @@ class BrawlStarsCog(commands.Cog):
         if events['status'] != "ok":
             return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
         time_now = datetime.datetime.now()
-        embed = discord.Embed(title="EVENTS", colour=discord.Colour.green())
+        embed1 = discord.Embed(title="ACTIVE EVENTS", colour=discord.Colour.green())
+        embed2 = discord.Embed(title="UPCOMING EVENTS", colour=discord.Colour.green())
         active = ""
         for ev in events['active']:
             if ev['slot']['name'] == "Duo Showdown":
@@ -594,7 +595,7 @@ class BrawlStarsCog(commands.Cog):
             if ev['modifier'] is not None:
                 modifier = f"↳ Modifier: {ev['modifier']['name']}\n"
             active += f"**{powerplay}{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n{modifier}"
-        embed.add_field(name="ACTIVE", value=active, inline=False)
+        embed1.description = active
         upcoming = ""
         for ev in events['upcoming']:
             if ev['slot']['name'] == "Duo Showdown":
@@ -608,9 +609,10 @@ class BrawlStarsCog(commands.Cog):
             start = datetime.datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
             diff = self.time_left((start - time_now).total_seconds())
             upcoming += f"**{powerplay}{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n↳ Starts in: {diff}\n{modifier}"
-        embed.add_field(name="UPCOMING", value=upcoming, inline=False)
-        embed.set_footer(text="Data provided by starlist.pro")
-        await ctx.send(embed=embed)
+        embed2.description = upcoming
+        embed2.set_footer(text="Data provided by starlist.pro")
+        await ctx.send(embed=embed1)
+        await ctx.send(embed=embed2)
                         
     @commands.command(aliases=['m'])
     async def map(self, ctx, *, map_name: str):
