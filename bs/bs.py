@@ -602,13 +602,16 @@ class BrawlStarsCog(commands.Cog):
                 continue
             modifier = ""
             powerplay = ""
+            challenge = ""
             if ev['slot']['name'] == "Power Play":
                 powerplay = "<:powertrophies:661266876235513867> "
+            if "challenge" in ev['slot']['name'].lower():
+                challenge = "<:totaltrophies:614517396111097866> "
             if ev['modifier'] is not None:
                 modifier = f"↳ Modifier: {ev['modifier']['name']}\n"
             start = datetime.datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
             diff = self.time_left((start - time_now).total_seconds())
-            upcoming += f"**{powerplay}{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n↳ Starts in: {diff}\n{modifier}"
+            upcoming += f"**{challenge}{powerplay}{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n↳ Starts in: {diff}\n{modifier}"
         embed2.description = upcoming
         embed2.set_footer(text="Data provided by starlist.pro")
         await ctx.send(embed=embed1)
