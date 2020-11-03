@@ -923,6 +923,7 @@ class BrawlStarsCog(commands.Cog):
         roles = False
         skip_errors = False
         reverse_order = False
+        regions = False
         await ctx.trigger_typing()
         if "offline" in keyword:
             offline = True
@@ -935,6 +936,10 @@ class BrawlStarsCog(commands.Cog):
         if "roles" in keyword:
             roles = True
             keyword = keyword.replace("roles", "").strip()
+                                      
+        if "regions" in keyword:
+            regions = True
+            keyword = keyword.replace("regions", "").strip()
 
         if "skiperrors" in keyword:
             skip_errors = True
@@ -1032,13 +1037,14 @@ class BrawlStarsCog(commands.Cog):
                     
                     info = saved_clubs[key]["info"] if "info" in saved_clubs[key] else ""
                     role = ctx.guild.get_role(saved_clubs[key]["role"]) if "role" in saved_clubs[key] else None
+                    region = saved_clubs[key]["family"] if "family" in saved_clubs[key] else ""
 
                     if low_clubs and len(clubs[i].members) >= 95:
                         continue
 
                     e_name = f"{badge_emoji} {clubs[i].name} [{key}] {clubs[i].tag} {info}"
                     role_info = f"{role.mention}\n" if roles and role is not None else ""
-                    e_value = f"{role_info}{club_status[clubs[i].type.lower()]['emoji']} <:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}"
+                    e_value = f"{role_info}{region}{club_status[clubs[i].type.lower()]['emoji']} <:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}"
                     e_value += f"`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
                     embedFields.append([e_name, e_value])
 
@@ -1202,13 +1208,13 @@ class BrawlStarsCog(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @clubs.command(name="family")
-    async def clubs_family(self, ctx, key: str, *, family: str = ""):
-        """Edit club's family"""
+    async def clubs_region(self, ctx, key: str, *, family: str = ""):
+        """Edit club's region"""
         await ctx.trigger_typing()
         key = key.lower()
         try:
             await self.config.guild(ctx.guild).clubs.set_raw(key, "family", value=family)
-            await ctx.send(embed=goodEmbed("Club family successfully edited!"))
+            await ctx.send(embed=goodEmbed("Club region successfully edited!"))
         except KeyError:
             await ctx.send(embed=badEmbed(f"{key.title()} isn't saved club in this server!"))
 
