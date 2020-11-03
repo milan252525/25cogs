@@ -1207,7 +1207,7 @@ class BrawlStarsCog(commands.Cog):
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
-    @clubs.command(name="family")
+    @clubs.command(name="region")
     async def clubs_region(self, ctx, key: str, *, family: str = ""):
         """Edit club's region"""
         await ctx.trigger_typing()
