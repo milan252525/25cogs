@@ -1037,7 +1037,7 @@ class BrawlStarsCog(commands.Cog):
                     
                     info = saved_clubs[key]["info"] if "info" in saved_clubs[key] else ""
                     role = ctx.guild.get_role(saved_clubs[key]["role"]) if "role" in saved_clubs[key] else None
-                    region = saved_clubs[key]["family"] if "family" in saved_clubs[key] else ""
+                    region = (saved_clubs[key]["family"] + '\n') if ("family" in saved_clubs[key] and regions) else ""
 
                     if low_clubs and len(clubs[i].members) >= 95:
                         continue
