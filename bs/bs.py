@@ -972,7 +972,10 @@ class BrawlStarsCog(commands.Cog):
                     clubs.append(club)
                 elif keyword != "":
                     if "family" in saved_clubs[key] and saved_clubs[key]['family'] == keyword:
-                        club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
+                        try:
+                            club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
+                        except brawlstats.errors.RequestError as e:
+                             return await ctx.send(embed=badEmbed(f"Can't return family clubs, API is offline"))
                         clubs.append(club)
                 if not offline:
                     if 0 <= ind / len(keys) <= 0.25:
@@ -1202,6 +1205,7 @@ class BrawlStarsCog(commands.Cog):
     async def clubs_family(self, ctx, key: str, *, family: str = ""):
         """Edit club's family"""
         await ctx.trigger_typing()
+        key = key.lower()
         try:
             await self.config.guild(ctx.guild).clubs.set_raw(key, "family", value=family)
             await ctx.send(embed=goodEmbed("Club family successfully edited!"))
