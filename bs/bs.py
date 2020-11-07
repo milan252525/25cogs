@@ -909,9 +909,11 @@ class BrawlStarsCog(commands.Cog):
             embed.set_footer(text="Data provided by starlist.pro")
 
             await ctx.send(embed=embed)
-
+        elif keyword == "link":
+            return await ctx.send(f"https://laclubs.net/club?tag={club.tag.strip('#').upper()}")                    
         else:
             return await ctx.send(embed=badEmbed(f"There's no such keyword: {keyword}."))
+        
 
     @commands.cooldown(1, 5, commands.BucketType.guild)
     @commands.guild_only()
