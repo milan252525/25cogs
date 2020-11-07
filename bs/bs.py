@@ -743,10 +743,11 @@ class BrawlStarsCog(commands.Cog):
             return
 
         if keyword is None:
+            url = f"https://laclubs.net/club?tag={club.tag.strip('#').upper()}"
             if club.description is not None:
-                embed = discord.Embed(description=f"```{discord.utils.escape_markdown(club.description)}```")
+                embed = discord.Embed(description=f"```{discord.utils.escape_markdown(club.description)}```", url=url)
             else:
-                embed = discord.Embed(description="```None```")
+                embed = discord.Embed(description="```None```", url=url)
             embed.set_author(name=f"{club.name} {club.tag}", icon_url=f"https://cdn.starlist.pro/club/{club.raw_data['badgeId']}.png?v=1")
             embed.add_field(
                 name="Total Trophies",
