@@ -745,10 +745,10 @@ class BrawlStarsCog(commands.Cog):
         if keyword is None:
             url = f"https://laclubs.net/club?tag={club.tag.strip('#').upper()}"
             if club.description is not None:
-                embed = discord.Embed(description=f"```{discord.utils.escape_markdown(club.description)}```", url=url)
+                embed = discord.Embed(description=f"```{discord.utils.escape_markdown(club.description)}```")
             else:
-                embed = discord.Embed(description="```None```", url=url)
-            embed.set_author(name=f"{club.name} {club.tag}", icon_url=f"https://cdn.starlist.pro/club/{club.raw_data['badgeId']}.png?v=1")
+                embed = discord.Embed(description="```None```")
+            embed.set_author(name=f"{club.name} {club.tag}", icon_url=f"https://cdn.starlist.pro/club/{club.raw_data['badgeId']}.png?v=1", url=url)
             embed.add_field(
                 name="Total Trophies",
                 value=f"<:bstrophy:552558722770141204> `{club.trophies}`")
@@ -1041,6 +1041,8 @@ class BrawlStarsCog(commands.Cog):
                     info = saved_clubs[key]["info"] if "info" in saved_clubs[key] else ""
                     role = ctx.guild.get_role(saved_clubs[key]["role"]) if "role" in saved_clubs[key] else None
                     region = (saved_clubs[key]["family"] + '\n') if ("family" in saved_clubs[key] and regions) else ""
+                                  
+                    url = f"https://laclubs.net/club?tag={clubs[i].tag.strip('#').upper()}"
 
                     if low_clubs and len(clubs[i].members) >= 95:
                         continue
@@ -1048,7 +1050,7 @@ class BrawlStarsCog(commands.Cog):
                     e_name = f"{badge_emoji} {clubs[i].name} [{key}] {clubs[i].tag} {info}"
                     role_info = f"{role.mention}\n" if roles and role is not None else ""
                     e_value = f"{role_info}{region}{club_status[clubs[i].type.lower()]['emoji']} <:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}"
-                    e_value += f"`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
+                    e_value += f"`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}` [🔗]({url})"
                     embedFields.append([e_name, e_value])
 
                 await self.config.guild(ctx.guild).set_raw("clubs", value=saved_clubs)
@@ -1075,12 +1077,14 @@ class BrawlStarsCog(commands.Cog):
 
                     if badge_emoji is None:
                         badge_emoji = "<:bsband:600741378497970177>"
+                                  
+                    url = f"https://laclubs.net/club?tag={ctag.strip('#').upper()}"
                                            
                     if low_clubs and cmembers >= 95:
                         continue
 
                     e_name = f"{badge_emoji} {cname} [{ckey}] #{ctag} {cinfo}"
-                    e_value = f"{club_status[ctype.lower()]['emoji']} <:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` "
+                    e_value = f"{club_status[ctype.lower()]['emoji']} <:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` [🔗]({url})"
                     embedFields.append([e_name, e_value])
 
             colour = choice([discord.Colour.green(),
