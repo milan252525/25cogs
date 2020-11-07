@@ -1050,7 +1050,7 @@ class BrawlStarsCog(commands.Cog):
                     e_name = f"{badge_emoji} {clubs[i].name} [{key}] {clubs[i].tag} {info}"
                     role_info = f"{role.mention}\n" if roles and role is not None else ""
                     e_value = f"{role_info}{region}{club_status[clubs[i].type.lower()]['emoji']} <:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}"
-                    e_value += f"`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}` [🔗]({url})"
+                    e_value += f"`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}` [\\🔗]({url})"
                     embedFields.append([e_name, e_value])
 
                 await self.config.guild(ctx.guild).set_raw("clubs", value=saved_clubs)
@@ -1084,7 +1084,7 @@ class BrawlStarsCog(commands.Cog):
                         continue
 
                     e_name = f"{badge_emoji} {cname} [{ckey}] #{ctag} {cinfo}"
-                    e_value = f"{club_status[ctype.lower()]['emoji']} <:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` [🔗]({url})"
+                    e_value = f"{club_status[ctype.lower()]['emoji']} <:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` [\\🔗]({url})"
                     embedFields.append([e_name, e_value])
 
             colour = choice([discord.Colour.green(),
