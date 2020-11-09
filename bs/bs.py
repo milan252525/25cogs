@@ -696,11 +696,42 @@ class BrawlStarsCog(commands.Cog):
         guild = self.bot.get_guild(717766786019360769)
         em = discord.utils.get(guild.emojis, name=str(badge_id-8000000).rjust(2, "0"))
         return str(em)
-    
+                                   
+    @commands.command()
+    async def lblink(self, ctx, key: Union[discord.Member, str] = None):
+        """Get LA clubs website leaderboard link"""
+        await ctx.trigger_typing()
+        prefix = ctx.prefix
+        tag = ""
+
+        member = ctx.author if member is None else member
+
+        if isinstance(member, discord.Member):
+            tag = await self.config.user(member).tag()
+            if tag is None:
+                return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+        elif member.startswith("#"):
+            tag = member.upper().replace('O', '0')
+        else:
+            try:
+                member = self.bot.get_user(int(member))
+                if member is not None:
+                    tag = await self.config.user(member).tag()
+                    if tag is None:
+                        return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+            except ValueError:
+                member = discord.utils.get(ctx.guild.members, name=member)
+                if member is not None:
+                    tag = await self.config.user(member).tag()
+                    if tag is None:
+                        return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+                                            
+        return await ctx.send(f"https://laclubs.net/lb#{tag.strip('#')")                    
+                                            
     @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command()
     async def club(self, ctx, key: Union[discord.Member, str] = None, keyword = None):
-        """View players club or club saved in a server"""
+        """View player's club or club saved in a server"""
         await ctx.trigger_typing()
         if key is None:
             mtag = await self.config.user(ctx.author).tag()
