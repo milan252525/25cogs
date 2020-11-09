@@ -698,7 +698,7 @@ class BrawlStarsCog(commands.Cog):
         return str(em)
                                    
     @commands.command()
-    async def lblink(self, ctx, key: Union[discord.Member, str] = None):
+    async def lblink(self, ctx, *, member: Union[discord.Member, str] = None):
         """Get LA clubs website leaderboard link"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
