@@ -726,7 +726,7 @@ class BrawlStarsCog(commands.Cog):
                     if tag is None:
                         return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
                                             
-        return await ctx.send(f"https://laclubs.net/lb#{tag.strip('#')")                    
+        return await ctx.send(f"https://laclubs.net/lb#{tag.strip('#')}")                    
                                             
     @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command()
