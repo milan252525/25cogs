@@ -61,7 +61,7 @@ class Challenges(commands.Cog):
             return await ctx.send("Save your tag using `/save` first!")
         if group is None:
             recommended = "Pirates" if (await self.config.pirates()) < (await self.config.retro()) else "Retro"
-            return await ctx.send(f"Choose your side!\nTo play as a **Pirates** (Penny, Tick, Darryl) type `/ch track pirate`\nTo play as a **Retropolis Trio** (Bull, Bibi, Crow) type `/ch track retro`\n**Recommended group**: {recommended}")
+            return await ctx.send(f"Choose your side!\nTo play as **Pirates** (Penny, Tick, Darryl) type `/ch track pirate`\nTo play as **Retropolis Trio** (Bull, Bibi, Crow) type `/ch track retro`\n**Recommended group**: {recommended}")
         if group.lower() not in ("pirate", "retro"):
             return await ctx.send("That doesn't look like a valid option.\nOptions: `pirate`, `retro`")
         await self.config.member(ctx.author).pirate.set(group.lower() == "pirate")
@@ -228,8 +228,8 @@ class Challenges(commands.Cog):
                 retro_msg += f"`{z[1]}` {self.bot.get_user(z[0]).display_name}\n"
 
             embed = discord.Embed(colour=discord.Colour.dark_magenta(), title="Attack on Retropolis Leaderboard")
-            embed.add_field(name=f"🌻 PIRATES Total: {pirates_total}", value=pirates_msg if pirates_msg != "" else "-", inline=False)
-            embed.add_field(name=f"🧟 RETRO Total: {retro_total}", value=retro_msg if retro_msg != "" else "-")
+            embed.add_field(name=f"<:pirate_tick:776870272367853568> PIRATES Total: {pirates_total}", value=pirates_msg if pirates_msg != "" else "-", inline=False)
+            embed.add_field(name=f"<:bull:664235934006378509> RETRO Total: {retro_total}", value=retro_msg if retro_msg != "" else "-")
             embed.set_footer(text=f"Pirates: {len(pirates)} Retropolis Defenders: {len(retro)}")
             lbmsg = await (self.bot.get_channel(722486276288282744)).fetch_message(776855494580633620)
             await lbmsg.edit(embed=embed)
