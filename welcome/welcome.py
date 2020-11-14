@@ -272,7 +272,7 @@ class Welcome(commands.Cog):
         if msg != "":
             await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
 
-        if await roles_config['ping']:
+        if roles_config['ping']:
             pingch = self.bot.get_channel(roles_config['pingchannel'])
             message = roles_config['pingmessage']
             await pingch.send(member.mention + message)
