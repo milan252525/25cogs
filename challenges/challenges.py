@@ -156,6 +156,16 @@ class Challenges(commands.Cog):
                                 await error_ch.send(f"{m}\n```py\n{battle}```")
                                 continue
                             #CHALLENGE CONDITION HERE
+
+                            if "trophies" not in player['brawler']:
+                                continue
+                            if player['brawler']['trophies'] < 500:
+                                continue
+
+                            if "entry" in battle['event']['mode']:
+                                await error_ch.send(f"{m}\n```py\n{battle}```")
+                                continue
+
                             win = True
                             if "type" in battle['battle'] and battle['battle']['type'] == "friendly":
                                 continue
@@ -169,6 +179,7 @@ class Challenges(commands.Cog):
                                 win = False
                             if battle['battle']['mode'].lower().replace('-', '').replace(' ', '') in ('roborumble', 'biggame'):
                                 continue
+                        
                             brawler_name = player['brawler']['name']
                             if group_pirate:
                                 if brawler_name in ("PENNY", "TICK", "DARRYL"):
