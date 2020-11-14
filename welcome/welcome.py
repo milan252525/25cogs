@@ -273,8 +273,9 @@ class Welcome(commands.Cog):
             await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
 
         if await self.config.guild(ctx.guild).roles.ping():
-            pingch = self.bot.get_channel(self.config.guild(ctx.guild).pingchannel())
-            await pingch.send(member.mention + self.config.guild(ctx.guild).pingmessage())
+            pingch = self.bot.get_channel(await self.config.guild(ctx.guild).pingchannel())
+            message = await self.config.guild(ctx.guild).pingmessage()
+            await pingch.send(member.mention + message)
 
 
     @tasks.loop(hours=3)
