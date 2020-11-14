@@ -48,6 +48,8 @@ class Challenges(commands.Cog):
     @commands.guild_only()
     @challenge.command(name="track")
     async def challenge_track(self, ctx, group: str = None):
+        if not await self.config.enabled():
+            return await ctx.send("Registering is currently disabled.")
         if await self.config.member(ctx.author).tracking():
             return await ctx.send("Your progress is already being tracked! Group cannot be changed after registering.")
         if not self.labs_check(ctx.guild):
@@ -105,7 +107,7 @@ class Challenges(commands.Cog):
         await self.config.enabled.set(not enabled)
         await ctx.send(f"Challenge enabled: {not enabled}")
 
-    @tasks.loop(minutes=15)
+    @tasks.loop(minutes=10)
     async def battle_check(self):
         if await self.config.enabled():
             error_ch = self.bot.get_channel(722486276288282744)
@@ -240,7 +242,7 @@ class Challenges(commands.Cog):
 
             embed = discord.Embed(colour=discord.Colour.purple(), title="Attack on Retropolis Leaderboard")
             embed.add_field(name=f"<:pirate_tick:776870272367853568> PIRATES Total: {pirates_total}", value=pirates_msg if pirates_msg != "" else "-", inline=False)
-            embed.add_field(name=f"<:bull:664235934006378509> RETRO Total: {retro_total}", value=retro_msg if retro_msg != "" else "-")
+            embed.add_field(name=f"<:bull:664235934006378509> RETROPOLIS Total: {retro_total}", value=retro_msg if retro_msg != "" else "-")
             embed.set_footer(text=f"Pirates: {len(pirates)} Retropolis Defenders: {len(retro)}")
             lbmsg = await (self.bot.get_channel(777231183926526013)).fetch_message(777232421531025419)
             await lbmsg.edit(embed=embed)
