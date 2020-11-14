@@ -461,7 +461,7 @@ class BrawlStarsCog(commands.Cog):
         
         embedstosend = []
         for i in range(0, len(embedfields), 15):
-            embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}/39):")
+            embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}/40):")
             embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
             for e in embedfields[i:i + 15]:
                 embed.add_field(name=e[0], value=e[1], inline=True)
@@ -582,7 +582,8 @@ class BrawlStarsCog(commands.Cog):
         if events['status'] != "ok":
             return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
         time_now = datetime.datetime.now()
-        embed = discord.Embed(title="EVENTS", colour=discord.Colour.green())
+        embed1 = discord.Embed(title="ACTIVE EVENTS", colour=discord.Colour.green())
+        embed2 = discord.Embed(title="UPCOMING EVENTS", colour=discord.Colour.green())
         active = ""
         for ev in events['active']:
             if ev['slot']['name'] == "Duo Showdown":
@@ -594,23 +595,27 @@ class BrawlStarsCog(commands.Cog):
             if ev['modifier'] is not None:
                 modifier = f"↳ Modifier: {ev['modifier']['name']}\n"
             active += f"**{powerplay}{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n{modifier}"
-        embed.add_field(name="ACTIVE", value=active, inline=False)
+        embed1.description = active
         upcoming = ""
         for ev in events['upcoming']:
             if ev['slot']['name'] == "Duo Showdown":
                 continue
             modifier = ""
             powerplay = ""
+            challenge = ""
             if ev['slot']['name'] == "Power Play":
                 powerplay = "<:powertrophies:661266876235513867> "
+            if "challenge" in ev['slot']['name'].lower():
+                challenge = "<:totaltrophies:614517396111097866> "
             if ev['modifier'] is not None:
                 modifier = f"↳ Modifier: {ev['modifier']['name']}\n"
             start = datetime.datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
             diff = self.time_left((start - time_now).total_seconds())
-            upcoming += f"**{powerplay}{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n↳ Starts in: {diff}\n{modifier}"
-        embed.add_field(name="UPCOMING", value=upcoming, inline=False)
-        embed.set_footer(text="Data provided by starlist.pro")
-        await ctx.send(embed=embed)
+            upcoming += f"**{challenge}{powerplay}{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n↳ Starts in: {diff}\n{modifier}"
+        embed2.description = upcoming
+        embed2.set_footer(text="Data provided by starlist.pro")
+        await ctx.send(embed=embed1)
+        await ctx.send(embed=embed2)
                         
     @commands.command(aliases=['m'])
     async def map(self, ctx, *, map_name: str):
@@ -691,11 +696,42 @@ class BrawlStarsCog(commands.Cog):
         guild = self.bot.get_guild(717766786019360769)
         em = discord.utils.get(guild.emojis, name=str(badge_id-8000000).rjust(2, "0"))
         return str(em)
-    
+                                   
+    @commands.command()
+    async def lblink(self, ctx, *, member: Union[discord.Member, str] = None):
+        """Get LA clubs website leaderboard link"""
+        await ctx.trigger_typing()
+        prefix = ctx.prefix
+        tag = ""
+
+        member = ctx.author if member is None else member
+
+        if isinstance(member, discord.Member):
+            tag = await self.config.user(member).tag()
+            if tag is None:
+                return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+        elif member.startswith("#"):
+            tag = member.upper().replace('O', '0')
+        else:
+            try:
+                member = self.bot.get_user(int(member))
+                if member is not None:
+                    tag = await self.config.user(member).tag()
+                    if tag is None:
+                        return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+            except ValueError:
+                member = discord.utils.get(ctx.guild.members, name=member)
+                if member is not None:
+                    tag = await self.config.user(member).tag()
+                    if tag is None:
+                        return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
+                                            
+        return await ctx.send(f"https://laclubs.net/lb#{tag.strip('#')}")                    
+                                            
     @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command()
     async def club(self, ctx, key: Union[discord.Member, str] = None, keyword = None):
-        """View players club or club saved in a server"""
+        """View player's club or club saved in a server"""
         await ctx.trigger_typing()
         if key is None:
             mtag = await self.config.user(ctx.author).tag()
@@ -738,11 +774,12 @@ class BrawlStarsCog(commands.Cog):
             return
 
         if keyword is None:
+            url = f"https://laclubs.net/club?tag={club.tag.strip('#').upper()}"
             if club.description is not None:
                 embed = discord.Embed(description=f"```{discord.utils.escape_markdown(club.description)}```")
             else:
                 embed = discord.Embed(description="```None```")
-            embed.set_author(name=f"{club.name} {club.tag}", icon_url=f"https://cdn.starlist.pro/club/{club.raw_data['badgeId']}.png?v=1")
+            embed.set_author(name=f"{club.name} {club.tag}", icon_url=f"https://cdn.starlist.pro/club/{club.raw_data['badgeId']}.png?v=1", url=url)
             embed.add_field(
                 name="Total Trophies",
                 value=f"<:bstrophy:552558722770141204> `{club.trophies}`")
@@ -904,9 +941,11 @@ class BrawlStarsCog(commands.Cog):
             embed.set_footer(text="Data provided by starlist.pro")
 
             await ctx.send(embed=embed)
-
+        elif keyword == "link":
+            return await ctx.send(f"https://laclubs.net/club?tag={club.tag.strip('#').upper()}")                    
         else:
             return await ctx.send(embed=badEmbed(f"There's no such keyword: {keyword}."))
+        
 
     @commands.cooldown(1, 5, commands.BucketType.guild)
     @commands.guild_only()
@@ -918,6 +957,7 @@ class BrawlStarsCog(commands.Cog):
         roles = False
         skip_errors = False
         reverse_order = False
+        regions = False
         await ctx.trigger_typing()
         if "offline" in keyword:
             offline = True
@@ -930,6 +970,10 @@ class BrawlStarsCog(commands.Cog):
         if "roles" in keyword:
             roles = True
             keyword = keyword.replace("roles", "").strip()
+                                      
+        if "regions" in keyword:
+            regions = True
+            keyword = keyword.replace("regions", "").strip()
 
         if "skiperrors" in keyword:
             skip_errors = True
@@ -967,7 +1011,10 @@ class BrawlStarsCog(commands.Cog):
                     clubs.append(club)
                 elif keyword != "":
                     if "family" in saved_clubs[key] and saved_clubs[key]['family'] == keyword:
-                        club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
+                        try:
+                            club = await self.ofcbsapi.get_club(saved_clubs[key]['tag'])
+                        except brawlstats.errors.RequestError as e:
+                             return await ctx.send(embed=badEmbed(f"Can't return family clubs, API is offline"))
                         clubs.append(club)
                 if not offline:
                     if 0 <= ind / len(keys) <= 0.25:
@@ -1024,14 +1071,17 @@ class BrawlStarsCog(commands.Cog):
                     
                     info = saved_clubs[key]["info"] if "info" in saved_clubs[key] else ""
                     role = ctx.guild.get_role(saved_clubs[key]["role"]) if "role" in saved_clubs[key] else None
+                    region = (saved_clubs[key]["family"] + '\n') if ("family" in saved_clubs[key] and regions) else ""
+                                  
+                    url = f"https://laclubs.net/club?tag={clubs[i].tag.strip('#').upper()}"
 
                     if low_clubs and len(clubs[i].members) >= 95:
                         continue
 
                     e_name = f"{badge_emoji} {clubs[i].name} [{key}] {clubs[i].tag} {info}"
                     role_info = f"{role.mention}\n" if roles and role is not None else ""
-                    e_value = f"{role_info}{club_status[clubs[i].type.lower()]['emoji']} <:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}"
-                    e_value += f"`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}`"
+                    e_value = f"{role_info}{region}{club_status[clubs[i].type.lower()]['emoji']} <:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}"
+                    e_value += f"`{clubs[i].required_trophies}+` <:icon_gameroom:553299647729238016>`{len(clubs[i].members)}` [🔗]({url})"
                     embedFields.append([e_name, e_value])
 
                 await self.config.guild(ctx.guild).set_raw("clubs", value=saved_clubs)
@@ -1058,12 +1108,14 @@ class BrawlStarsCog(commands.Cog):
 
                     if badge_emoji is None:
                         badge_emoji = "<:bsband:600741378497970177>"
+                                  
+                    url = f"https://laclubs.net/club?tag={ctag.strip('#').upper()}"
                                            
                     if low_clubs and cmembers >= 95:
                         continue
 
                     e_name = f"{badge_emoji} {cname} [{ckey}] #{ctag} {cinfo}"
-                    e_value = f"{club_status[ctype.lower()]['emoji']} <:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` "
+                    e_value = f"{club_status[ctype.lower()]['emoji']} <:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` [🔗]({url})"
                     embedFields.append([e_name, e_value])
 
             colour = choice([discord.Colour.green(),
@@ -1193,13 +1245,14 @@ class BrawlStarsCog(commands.Cog):
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
-    @clubs.command(name="family")
-    async def clubs_family(self, ctx, key: str, *, family: str = ""):
-        """Edit club's family"""
+    @clubs.command(name="region")
+    async def clubs_region(self, ctx, key: str, *, family: str = ""):
+        """Edit club's region"""
         await ctx.trigger_typing()
+        key = key.lower()
         try:
             await self.config.guild(ctx.guild).clubs.set_raw(key, "family", value=family)
-            await ctx.send(embed=goodEmbed("Club family successfully edited!"))
+            await ctx.send(embed=goodEmbed("Club region successfully edited!"))
         except KeyError:
             await ctx.send(embed=badEmbed(f"{key.title()} isn't saved club in this server!"))
 

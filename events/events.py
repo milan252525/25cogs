@@ -16,7 +16,7 @@ class Events(commands.Cog):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=2567124825)
         self.config.register_global(
-            boss_hp=5000
+            boss_hp=10000
         )
         default_user = {"boss_fight": {"damage" : 0, "participated" : 0}}
         self.config.register_member(**default_user)

@@ -93,6 +93,11 @@ class Achievements(commands.Cog):
                 member = self.bot.get_user(int(member))
             except ValueError:
                 member = discord.utils.get(ctx.guild.members, name=member)
+                
+        roles = await self.checkforroles(member)
+        if roles != "":
+            rembed = discord.Embed(color=discord.Colour.green(), description=f"**{roles}**")
+            await ctx.send(embed=rembed)
 
         aembed = discord.Embed(color=discord.Colour.blue())
         aembed.set_author(icon_url=member.avatar_url, name=f"{member.display_name}'s achievements")
@@ -371,6 +376,16 @@ class Achievements(commands.Cog):
             if dt in member.roles:
                 await member.remove_roles(dt)
                 msg += "Double Trouble role removed.\n"
+                
+        sps = member.guild.get_role(768414683119747093)
+        if await self.config.user(member).shut() and await self.config.user(member).robo() and await self.config.user(member).defender() and await self.config.user(member).city():
+            if sps not in member.roles:
+                await member.add_roles(sps)
+                msg += f"Special Star role added!\n"
+        else:
+            if sps in member.roles:
+                await member.remove_roles(sps)
+                msg += "Special Star role removed.\n"
 
         ss = member.guild.get_role(736960419922444348)
         if await self.config.user(member).trident() and await self.config.user(member).over() and await self.config.user(member).survivalist() and await self.config.user(member).after():

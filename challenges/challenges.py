@@ -5,16 +5,19 @@ from redbot.core import commands, Config, checks
 import brawlstats
 import asyncio
 from datetime import datetime
-from random import choice, shuffle
-
 
 class Challenges(commands.Cog):
-
+    
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=424242696942)
-        default_member = {'tracking': False, 'lastBattleTime': "20200627T170000.000Z", 'entries': 0, 'streak': 0}
+        self.config = Config.get_conf(self, identifier=25202025)
+        default_member = {'tracking' : False, 'lastBattleTime' : "20201113T170000.000Z", 'progress' : 0, 'pirate' : None, 'wins' : {}, 'loses' : {}}
         self.config.register_member(**default_member)
+        self.config.register_global(
+            pirates = 0,
+            retro = 0,
+            enabled = False
+        )
         self.labs = 401883208511389716
         self.bsconfig = None
         self.battle_check.start()
@@ -38,27 +41,38 @@ class Challenges(commands.Cog):
         return guild.id == self.labs
 
     @commands.guild_only()
-    @commands.group(invoke_without_command=True, aliases=['glitch'])
+    @commands.group(invoke_without_command=True, aliases=['chal', 'chall', 'ch'])
     async def challenge(self, ctx):
-        await ctx.send("Leaderboard: <#740676677822185533>")
+        await ctx.send("Leaderboard: <#777231183926526013>")
 
     @commands.guild_only()
     @challenge.command(name="track")
-    async def challenge_track(self, ctx):
+    async def challenge_track(self, ctx, group: str = None):
+        if not await self.config.enabled():
+            return await ctx.send("Registering is currently disabled.")
         if await self.config.member(ctx.author).tracking():
-            return await ctx.send("Your progress is already being tracked!")
+            return await ctx.send("Your progress is already being tracked! Group cannot be changed after registering.")
         if not self.labs_check(ctx.guild):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
         labs_mem = ctx.guild.get_role(576028728052809728)
         special = ctx.guild.get_role(706420605309812776)
-        gg = ctx.guild.get_role(740491601280761948)
-        if labs_mem not in ctx.author.roles and special not in ctx.author.roles and gg not in ctx.author.roles:
+        if labs_mem not in ctx.author.roles and special not in ctx.author.roles:
             return await ctx.send("Only LA members can participate!")
         bs_conf = self.get_bs_config()
         if (await bs_conf.user(ctx.author).tag()) is None:
             return await ctx.send("Save your tag using `/save` first!")
+        if group is None:
+            recommended = "Pirates" if (await self.config.pirates()) < (await self.config.retro()) else "Retro"
+            return await ctx.send(f"Choose your side!\nTo play as **Pirates** (Penny, Tick, Darryl) type `/ch track pirate`\nTo play as **Retropolis Trio** (Bull, Bibi, Crow) type `/ch track retro`\n**RECOMMENDED GROUP**: {recommended}")
+        if group.lower() not in ("pirate", "retro"):
+            return await ctx.send("That doesn't look like a valid option.\nOptions: `pirate`, `retro`")
+        await self.config.member(ctx.author).pirate.set(group.lower() == "pirate")
         await self.config.member(ctx.author).tracking.set(True)
-        return await ctx.send(f"Challenge tracking enabled!\n")
+        if group.lower() == "pirate":
+            await self.config.pirates.set(await self.config.pirates()+1)
+        else:
+            await self.config.retro.set(await self.config.retro()+1)
+        return await ctx.send(f"Challenge tracking enabled!\nChosen group: {group.title()}")
 
     @commands.guild_only()
     @challenge.command(name="stats")
@@ -67,12 +81,22 @@ class Challenges(commands.Cog):
         if not self.labs_check(ctx.guild):
             return await ctx.send("This can only be used in LA Brawl Stars server.")
         if not (await self.config.member(member).tracking()):
-            return await ctx.send(f"**{member.display_name}** isn't participating yet! (`/glitch track`)")
+            return await ctx.send(f"**{member.display_name}** isn't participating yet! (`/ch track`)")
         embed = discord.Embed(colour=discord.Colour.green(), title="Stats")
-        embed.add_field(name="Current streak", value=await self.config.member(member).streak())
-        embed.add_field(name="Total entries", value=await self.config.member(member).entries())
-        embed.set_footer(
-            text=f"Time of last seen battle:  {datetime.strptime(await self.config.member(member).lastBattleTime(), '%Y%m%dT%H%M%S.%fZ')}")
+        embed.add_field(name="Group", value="Pirates" if await self.config.member(member).pirate() else "Retropolis Defenders")
+        embed.add_field(name="Total wins", value=await self.config.member(member).progress())
+        wins = await self.config.member(member).wins()
+        loses = await self.config.member(member).loses()
+        brawlers = ("PENNY", "TICK", "DARRYL") if await self.config.member(member).pirate() else ("BULL", "BIBI", "CROW")
+        for br in brawlers:
+            win = 0 if br not in wins else wins[br]
+            loss = 0 if br not in loses else loses[br]
+            if win + loss == 0:
+                win_rate = 0
+            else:
+                win_rate = int((win / (win + loss)) * 100)
+            embed.add_field(name=br.title(), value=f"{win} ({win_rate}%)")
+        embed.set_footer(text=f"Time of last seen battle:  {datetime.strptime(await self.config.member(member).lastBattleTime(), '%Y%m%dT%H%M%S.%fZ')}")
         await ctx.send(embed=embed)
 
     @commands.is_owner()
@@ -83,7 +107,7 @@ class Challenges(commands.Cog):
         await self.config.enabled.set(not enabled)
         await ctx.send(f"Challenge enabled: {not enabled}")
 
-    @tasks.loop(minutes=15)
+    @tasks.loop(minutes=10)
     async def battle_check(self):
         if await self.config.enabled():
             error_ch = self.bot.get_channel(722486276288282744)
@@ -94,14 +118,16 @@ class Challenges(commands.Cog):
             for m in members:
                 if "tracking" not in members[m]:
                     continue
-                if labs.get_member(m) is None:
-                    continue
                 if members[m]['tracking']:
+                    group_pirate = members[m]['pirate']
+                    progress = 0
                     user = labs.get_member(m)
                     if user is None:
                         await error_ch.send(m)
                         continue
                     tag = tags[user.id]['tag'].replace("o", "0").replace("O", "0")
+                    wins = members[m]['wins']
+                    loses = members[m]['loses']
                     try:
                         log = await self.ofcbsapi.get_battle_logs(tag)
                         await asyncio.sleep(0.1)
@@ -113,13 +139,11 @@ class Challenges(commands.Cog):
                         print(e)
                         await error_ch.send(str(e))
                         break
-                    for battle in reversed(log):
+                    for battle in log:
                         try:
                             b_time = datetime.strptime(battle['battleTime'], '%Y%m%dT%H%M%S.%fZ')
                             if b_time <= datetime.strptime(members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
-                                continue
-                            if battle['battle']['mode'] == "bigGame":
-                                continue
+                                break
                             player = None
                             if "teams" in battle['battle']:
                                 for t in battle['battle']['teams']:
@@ -133,89 +157,92 @@ class Challenges(commands.Cog):
                             if player is None:
                                 await error_ch.send(f"{m}\n```py\n{battle}```")
                                 continue
+                            #CHALLENGE CONDITION HERE
+
+                            if "trophies" not in player['brawler']:
+                                continue
+                            if player['brawler']['trophies'] < 500:
+                                continue
+
+                            if "entry" in battle['event']['mode']:
+                                await error_ch.send(f"{m}\n```py\n{battle}```")
+                                continue
 
                             win = True
+                            if "type" in battle['battle'] and battle['battle']['type'] == "friendly":
+                                continue
                             if "result" in battle['battle'] and battle['battle']['result'] == "draw":
-                                win = False
+                                continue
                             if "result" in battle['battle'] and battle['battle']['result'] != "victory":
                                 win = False
                             if "rank" in battle['battle'] and battle['battle']['mode'] == "soloShowdown" and battle['battle']['rank'] > 4:
                                 win = False
                             if "rank" in battle['battle'] and battle['battle']['mode'] != "soloShowdown" and battle['battle']['rank'] > 2:
                                 win = False
-
-                            streak = await self.config.member(user).streak()
-                            if "trophies" not in player['brawler']:
+                            if battle['battle']['mode'].lower().replace('-', '').replace(' ', '') in ('roborumble', 'biggame'):
                                 continue
-                            if win and player['brawler']['trophies'] >= 400 and battle['battle']['mode'] in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone', 'heist'):
-                                streak = streak + 1
-                            elif win and (player['brawler']['trophies'] < 400 or battle['battle']['mode'] not in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone', 'heist')):
-                                streak = streak
+                        
+                            brawler_name = player['brawler']['name']
+                            if group_pirate:
+                                if brawler_name in ("PENNY", "TICK", "DARRYL"):
+                                    if win:
+                                        progress += 1
+                                        if brawler_name in wins:
+                                            wins[brawler_name] += 1
+                                        else:
+                                            wins[brawler_name] = 1
+                                    else:
+                                        if brawler_name in loses:
+                                            loses[brawler_name] += 1
+                                        else:
+                                            loses[brawler_name] = 1
                             else:
-                                streak = 0
-
-                            entries = await self.config.member(user).entries()
-                            if streak >= 5:
-                                streak = 0
-                                entries = entries + 1
-                                await self.config.member(user).entries.set(entries)
-                            await self.config.member(user).streak.set(streak)
-
+                                if brawler_name in ("BULL", "BIBI", "CROW"):
+                                    if win:
+                                        progress += 1
+                                        if brawler_name in wins:
+                                            wins[brawler_name] += 1
+                                        else:
+                                            wins[brawler_name] = 1
+                                    else:
+                                        if brawler_name in loses:
+                                            loses[brawler_name] += 1
+                                        else:
+                                            loses[brawler_name] = 1
                         except Exception as e:
                             await error_ch.send(f"{m}\n```py\n{e}```")
                             await error_ch.send(f"{m}\n```py\n{battle}```")
                             continue
-                        try:
-                            await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
-                        except Exception as e:
-                            await error_ch.send(f"{m}\n```py\n{e}```")
-                            continue
+                    
+                    await self.config.member(user).progress.set(members[m]['progress'] + progress)
+                    await self.config.member(user).set_raw('wins', value=wins)
+                    await self.config.member(user).set_raw('loses', value=loses)
+                    await self.config.member(user).lastBattleTime.set(log[0]['battleTime'])
             members = await self.config.all_members(labs)
-            total = []
+            pirates = []
+            pirates_total = 0
+            retro = []
+            retro_total = 0
             for m in members:
-                mem = labs.get_member(m)
-                if mem is None:
-                    continue
                 if members[m]['tracking']:
-                    total.append((m, members[m]['entries']))
+                    if members[m]['pirate']:
+                        pirates.append((m, members[m]['progress']))
+                        pirates_total += members[m]['progress']
+                    else:
+                        retro.append((m, members[m]['progress']))
+                        retro_total += members[m]['progress']
+            pirates.sort(key=lambda x: x[1], reverse=True)
+            retro.sort(key=lambda x: x[1], reverse=True)
+            pirates_msg = ""
+            for p in pirates[:15]:
+                pirates_msg += f"`{p[1]}` {self.bot.get_user(p[0]).display_name}\n"
+            retro_msg = ""
+            for z in retro[:15]:
+                retro_msg += f"`{z[1]}` {self.bot.get_user(z[0]).display_name}\n"
 
-            total.sort(key=lambda x: x[1], reverse=True)
-            msg = ""
-            for t in total[:30]:
-                mem = labs.get_member(t[0])
-                msg += f"`{t[1]}` {discord.utils.escape_markdown(mem.display_name)}\n"
-
-            embed = discord.Embed(colour=discord.Colour.green(), title="Green Glitch Leaderboard")
-            embed.add_field(name=f"Registered: {len(total)}", value=msg if msg != "" else "-")
-            lbmsg = await (self.bot.get_channel(740676677822185533)).fetch_message(740808025173917717)
+            embed = discord.Embed(colour=discord.Colour.purple(), title="Attack on Retropolis Leaderboard")
+            embed.add_field(name=f"<:pirate_tick:776870272367853568> PIRATES Total: {pirates_total}", value=pirates_msg if pirates_msg != "" else "-", inline=False)
+            embed.add_field(name=f"<:bull:664235934006378509> RETROPOLIS Total: {retro_total}", value=retro_msg if retro_msg != "" else "-")
+            embed.set_footer(text=f"Pirates: {len(pirates)} Retropolis Defenders: {len(retro)}")
+            lbmsg = await (self.bot.get_channel(777231183926526013)).fetch_message(777232421531025419)
             await lbmsg.edit(embed=embed)
-            
-    @battle_check.before_loop
-    async def before_battle_check(self):
-        await asyncio.sleep(10)
-
-    @commands.command()
-    async def glitchwinner(self, ctx):
-
-        if ctx.author.id not in (425260327425409028, 359131399132807178, 605132366406615051):
-            return await ctx.send("Hands off.")
-
-        names = []
-
-        labs = self.bot.get_guild(self.labs)
-        members = await self.config.all_members(labs)
-        for m in members:
-            if "tracking" not in members[m]:
-                continue
-            if labs.get_member(m) is None:
-                continue
-            if members[m]['tracking']:
-                user = labs.get_member(m)
-                entries = await self.config.member(user).entries()
-                if entries > 20:
-                    entries = 20
-                for i in range(entries):
-                    names.append(f"{user.mention} ({str(user)})")
-
-        shuffle(names)
-        await ctx.send(choice(names))
