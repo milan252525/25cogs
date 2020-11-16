@@ -29,6 +29,7 @@ class BrawlStarsCog(commands.Cog):
         self.config.register_guild(**default_guild)
         self.blacklist_conf = Config.get_conf(None, identifier=42424269, cog_name="Blacklist")
         self.maps = None
+        self.icons = None
         self.aiohttp_session = aiohttp.ClientSession()
         asyncio.ensure_future(self.start_tasks())
 
@@ -276,11 +277,18 @@ class BrawlStarsCog(commands.Cog):
         embed = discord.Embed(color=discord.Colour.from_rgb(
             int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
         player_icon_id = player.raw_data["icon"]["id"]
-        icons = await self.starlist_request("https://api.starlist.pro/icons")
-        player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
+        if self.icons is None:
+            try:
+                self.icons = await self.starlist_request("https://api.starlist.pro/icons")
+            except ContentTypeError:
+                self.icons = None
+        if icons['status'] == 'ok' and self.icons is not None:
+            player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
+        else:
+            player_icon = member.avatar_url
         embed.set_author(
             name=f"{player.name} {player.raw_data['tag']}",
-            icon_url=player_icon if icons['status'] == 'ok' else member.avatar_url)
+            icon_url=player_icon)
         embed.add_field(
             name="Trophies",
             value=f"{get_league_emoji(player.trophies)} {player.trophies} (<:starpoint:661265872891150346> {calculate_starpoints(player)})")
@@ -441,8 +449,15 @@ class BrawlStarsCog(commands.Cog):
         colour = player.name_color if player.name_color is not None else "0xffffffff"
 
         player_icon_id = player.raw_data["icon"]["id"]
-        icons = await self.starlist_request("https://api.starlist.pro/icons")
-        player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
+        if self.icons is None:
+            try:
+                self.icons = await self.starlist_request("https://api.starlist.pro/icons")
+            except ContentTypeError:
+                self.icons = None
+        if icons['status'] == 'ok' and self.icons is not None:
+            player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
+        else:
+            player_icon = member.avatar_url
 
         brawlers = player.raw_data['brawlers']
         brawlers.sort(key=itemgetter('trophies'), reverse=True)
@@ -461,7 +476,7 @@ class BrawlStarsCog(commands.Cog):
         
         embedstosend = []
         for i in range(0, len(embedfields), 15):
-            embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}/40):")
+            embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}/41):")
             embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
             for e in embedfields[i:i + 15]:
                 embed.add_field(name=e[0], value=e[1], inline=True)
