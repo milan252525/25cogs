@@ -63,7 +63,7 @@ class Challenges(commands.Cog):
             return await ctx.send("Save your tag using `/save` first!")
         if group is None:
             recommended = "Pirates" if (await self.config.pirates()) < (await self.config.retro()) else "Retro"
-            return await ctx.send(f"Choose your side!\nTo play as **Pirates** (Penny, Tick, Darryl) type `/ch track pirate`\nTo play as **Retropolis Trio** (Bull, Bibi, Crow) type `/ch track retro`\n**RECOMMENDED GROUP**: {recommended}")
+            return await ctx.send(f"Choose your side!\n**RECOMMENDED GROUP:** {recommended.title()}\nTo play as **Pirates** (Penny, Tick, Darryl) type `/ch track pirate`\nTo play as **Retropolis Trio** (Bull, Bibi, Crow) type `/ch track retro`")
         if group.lower() not in ("pirate", "retro"):
             return await ctx.send("That doesn't look like a valid option.\nOptions: `pirate`, `retro`")
         await self.config.member(ctx.author).pirate.set(group.lower() == "pirate")
