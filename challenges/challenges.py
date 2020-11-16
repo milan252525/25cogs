@@ -11,7 +11,7 @@ class Challenges(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=25202025)
-        default_member = {'tracking' : False, 'lastBattleTime' : "20201113T170000.000Z", 'progress' : 0, 'pirate' : None, 'wins' : {}, 'loses' : {}}
+        default_member = {'tracking' : False, 'lastBattleTime' : "20201116T080000.000Z", 'progress' : 0, 'pirate' : None, 'wins' : {}, 'loses' : {}}
         self.config.register_member(**default_member)
         self.config.register_global(
             pirates = 0,
