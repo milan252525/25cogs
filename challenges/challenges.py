@@ -123,7 +123,6 @@ class Challenges(commands.Cog):
                     progress = 0
                     user = labs.get_member(m)
                     if user is None:
-                        await error_ch.send(m)
                         continue
                     tag = tags[user.id]['tag'].replace("o", "0").replace("O", "0")
                     wins = members[m]['wins']
@@ -235,10 +234,14 @@ class Challenges(commands.Cog):
             retro.sort(key=lambda x: x[1], reverse=True)
             pirates_msg = ""
             for p in pirates[:15]:
-                pirates_msg += f"`{p[1]}` {self.bot.get_user(p[0]).display_name}\n"
+                mem = labs.get_member(p[0])
+                if mem is not None:
+                    pirates_msg += f"`{p[1]}` {mem.display_name}\n"
             retro_msg = ""
             for z in retro[:15]:
-                retro_msg += f"`{z[1]}` {self.bot.get_user(z[0]).display_name}\n"
+                mem = labs.get_member(z[0])
+                if mem is not None:
+                    retro_msg += f"`{z[1]}` {mem.display_name}\n"
 
             embed = discord.Embed(colour=discord.Colour.purple(), title="Attack on Retropolis Leaderboard")
             embed.add_field(name=f"<:pirate_tick:776870272367853568> PIRATES Total: {pirates_total}", value=pirates_msg if pirates_msg != "" else "-", inline=False)
