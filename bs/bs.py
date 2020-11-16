@@ -53,7 +53,10 @@ class BrawlStarsCog(commands.Cog):
     async def starlist_request(self, url):
         header = {"Authorization": f"Bearer {self.starlist_key}"}
         async with self.aiohttp_session.get(url, headers=header) as resp:
-            return await resp.json()
+            if resp.ok:
+                return await resp.json()
+            else:
+                return {'status': str(resp.status) + " " + resp.reason}
 
     def get_blacklist_config(self):
         if self.blacklist_conf is None:
@@ -278,13 +281,11 @@ class BrawlStarsCog(commands.Cog):
             int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
         player_icon_id = player.raw_data["icon"]["id"]
         if self.icons is None:
-            try:
-                self.icons = await self.starlist_request("https://api.starlist.pro/icons")
-            except ContentTypeError:
-                self.icons = None
+            self.icons = await self.starlist_request("https://api.starlist.pro/icons")
         if icons['status'] == 'ok' and self.icons is not None:
             player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
         else:
+            self.icons = None
             player_icon = member.avatar_url
         embed.set_author(
             name=f"{player.name} {player.raw_data['tag']}",
@@ -450,13 +451,11 @@ class BrawlStarsCog(commands.Cog):
 
         player_icon_id = player.raw_data["icon"]["id"]
         if self.icons is None:
-            try:
-                self.icons = await self.starlist_request("https://api.starlist.pro/icons")
-            except ContentTypeError:
-                self.icons = None
+            self.icons = await self.starlist_request("https://api.starlist.pro/icons")
         if icons['status'] == 'ok' and self.icons is not None:
             player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
         else:
+            self.icons = None
             player_icon = member.avatar_url
 
         brawlers = player.raw_data['brawlers']
