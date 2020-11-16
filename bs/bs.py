@@ -282,8 +282,8 @@ class BrawlStarsCog(commands.Cog):
         player_icon_id = player.raw_data["icon"]["id"]
         if self.icons is None:
             self.icons = await self.starlist_request("https://api.starlist.pro/icons")
-        if icons['status'] == 'ok' and self.icons is not None:
-            player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
+        if self.icons['status'] == 'ok' and self.icons is not None:
+            player_icon = self.icons['player'][str(player_icon_id)]['imageUrl2']
         else:
             self.icons = None
             player_icon = member.avatar_url
@@ -452,8 +452,8 @@ class BrawlStarsCog(commands.Cog):
         player_icon_id = player.raw_data["icon"]["id"]
         if self.icons is None:
             self.icons = await self.starlist_request("https://api.starlist.pro/icons")
-        if icons['status'] == 'ok' and self.icons is not None:
-            player_icon = icons['player'][str(player_icon_id)]['imageUrl2']
+        if self.icons['status'] == 'ok' and self.icons is not None:
+            player_icon = self.icons['player'][str(player_icon_id)]['imageUrl2']
         else:
             self.icons = None
             player_icon = member.avatar_url
