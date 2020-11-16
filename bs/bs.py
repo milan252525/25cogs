@@ -53,7 +53,7 @@ class BrawlStarsCog(commands.Cog):
     async def starlist_request(self, url):
         header = {"Authorization": f"Bearer {self.starlist_key}"}
         async with self.aiohttp_session.get(url, headers=header) as resp:
-            if resp.ok:
+            if resp.status == 200:
                 return await resp.json()
             else:
                 return {'status': str(resp.status) + " " + resp.reason}
