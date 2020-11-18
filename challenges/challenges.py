@@ -144,6 +144,16 @@ class Challenges(commands.Cog):
                             b_time = datetime.strptime(battle['battleTime'], '%Y%m%dT%H%M%S.%fZ')
                             if b_time <= datetime.strptime(members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
                                 break
+                         
+                            if "id" in battle['event'] and battle['event']['id'] == 0:
+                                continue
+                            if "type" in battle['battle'] and battle['battle']['type'] == "friendly":
+                                continue
+                            if "result" in battle['battle'] and battle['battle']['result'] == "draw":
+                                continue
+                            if battle['battle']['mode'].lower().replace('-', '').replace(' ', '') in ('roborumble', 'biggame'):
+                                continue
+                         
                             player = None
                             if "teams" in battle['battle']:
                                 for t in battle['battle']['teams']:
@@ -164,23 +174,17 @@ class Challenges(commands.Cog):
                             if player['brawler']['trophies'] < 500:
                                 continue
 
-                            if "entry" in battle['event']['mode']:
-                                await error_ch.send(f"{m}\n```py\n{battle}```")
-                                continue
-
+                            
+                            
+                         
                             win = True
-                            if "type" in battle['battle'] and battle['battle']['type'] == "friendly":
-                                continue
-                            if "result" in battle['battle'] and battle['battle']['result'] == "draw":
-                                continue
                             if "result" in battle['battle'] and battle['battle']['result'] != "victory":
                                 win = False
                             if "rank" in battle['battle'] and battle['battle']['mode'] == "soloShowdown" and battle['battle']['rank'] > 4:
                                 win = False
                             if "rank" in battle['battle'] and battle['battle']['mode'] != "soloShowdown" and battle['battle']['rank'] > 2:
                                 win = False
-                            if battle['battle']['mode'].lower().replace('-', '').replace(' ', '') in ('roborumble', 'biggame'):
-                                continue
+                            
                         
                             brawler_name = player['brawler']['name']
                             if group_pirate:
