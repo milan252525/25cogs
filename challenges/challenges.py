@@ -145,7 +145,7 @@ class Challenges(commands.Cog):
                             if b_time <= datetime.strptime(members[m]['lastBattleTime'], '%Y%m%dT%H%M%S.%fZ'):
                                 break
                          
-                            if "id" in battle['event'] and battle['event']['id'] == 0 and 'result' not in battle['battle']:
+                            if "id" in battle['event'] and battle['event']['id'] == 0 and ("type" not in battle['battle'] or battle['battle']['type'] != "ranked"):
                                 continue
                             if "type" in battle['battle'] and battle['battle']['type'] == "friendly":
                                 continue
