@@ -18,16 +18,19 @@ class Website(commands.Cog):
             "region": region.upper(),
             "country": country.upper()
         }
-        self.db['tracked_clubs'].update_one(
+        update = self.db['tracked_clubs'].update_one(
             {'tag': tag.upper().strip("#")},
             {'$set': club},
             upsert=True
         )
+        return await ctx.send("Done. (" + update.modified_count + ")")
+
 
     @commands.command()
     async def delclub(self, ctx, tag:str):
         if ctx.author.id not in (230947675837562880, 425260327425409028):
             return
-        self.db['tracked_clubs'].delete_one(
+        delete = self.db['tracked_clubs'].delete_one(
             {'tag': tag.upper().strip("#")}
         )
+        return await ctx.send("Done. (" + delete.deleted_count + ")")
