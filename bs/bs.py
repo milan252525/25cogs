@@ -27,7 +27,6 @@ class BrawlStarsCog(commands.Cog):
         self.config.register_user(**default_user)
         default_guild = {"clubs": {}}
         self.config.register_guild(**default_guild)
-        self.blacklist_conf = Config.get_conf(None, identifier=42424269, cog_name="Blacklist")
         self.maps = None
         self.icons = None
         self.aiohttp_session = aiohttp.ClientSession()
@@ -57,27 +56,6 @@ class BrawlStarsCog(commands.Cog):
                 return await resp.json()
             else:
                 return {'status': str(resp.status) + " " + resp.reason}
-
-    def get_blacklist_config(self):
-        if self.blacklist_conf is None:
-            self.blacklist_conf = Config.get_conf(None, identifier=42424269, cog_name="Blacklist")
-        return self.blacklist_conf
-        
-    @commands.Cog.listener()
-    async def on_message(self, msg):
-        if msg.channel.id == 680113859759308910 and msg.author.id != 599286708911210557:
-            try:
-                id = int(msg.content)
-                user = self.bot.get_user(int(msg.content))
-                if user is None:
-                    await (self.bot.get_channel(680113859759308910)).send(".")
-                tag = await self.config.user(user).tag()
-                if tag is None:
-                    await (self.bot.get_channel(680113859759308910)).send(".")
-                else:
-                    await (self.bot.get_channel(680113859759308910)).send(tag.upper())
-            except ValueError:
-                pass
             
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -959,7 +937,6 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(f"https://laclubs.net/club?tag={club.tag.strip('#').upper()}")                    
         else:
             return await ctx.send(embed=badEmbed(f"There's no such keyword: {keyword}."))
-        
 
     @commands.cooldown(1, 5, commands.BucketType.guild)
     @commands.guild_only()
