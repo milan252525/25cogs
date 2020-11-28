@@ -33,4 +33,7 @@ class Website(commands.Cog):
         delete = self.db['tracked_clubs'].delete_one(
             {'tag': tag.upper().strip("#")}
         )
-        return await ctx.send("Done. (Deleted: " + str(delete.deleted_count) + ")")
+        delete_data = self.db['laclubs'].delete_one(
+            {'tag': tag.upper().strip("#")}
+        )
+        return await ctx.send("Done. (Deleted: " + str(delete.deleted_count) + ", " + str(delete_data.deleted_count) + ")")
