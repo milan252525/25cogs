@@ -23,7 +23,7 @@ class Website(commands.Cog):
             {'$set': club},
             upsert=True
         )
-        return await ctx.send("Done. (" + str(update.modified_count) + ")")
+        return await ctx.send("Done. (Updated: " + str(update.modified_count) + ")")
 
 
     @commands.command()
@@ -33,4 +33,4 @@ class Website(commands.Cog):
         delete = self.db['tracked_clubs'].delete_one(
             {'tag': tag.upper().strip("#")}
         )
-        return await ctx.send("Done. (" + str(delete.deleted_count) + ")")
+        return await ctx.send("Done. (Deleted: " + str(delete.deleted_count) + ")")
