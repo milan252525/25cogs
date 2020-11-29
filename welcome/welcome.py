@@ -6,6 +6,7 @@ from discord.ext import tasks
 from random import choice
 from re import sub
 import traceback
+import textwrap 
 
 import datetime
 import clashroyale
@@ -25,36 +26,9 @@ class Welcome(commands.Cog):
         self.sortroles.start()
         self.mainsortroles.start()
 
-
     def cog_unload(self):
         self.sortroles.cancel()
         self.mainsortroles.cancel()
-
-    @commands.Cog.listener()
-    async def on_member_join(self, member):
-        if member.guild.id == 440960893916807188 and not member.bot:
-            await self.do_setup(member)
-        if member.guild.id == 593248015729295360 and not member.bot:
-            await self.do_setup_LAFC(member)
-        if member.guild.id == 654334199494606848 and not member.bot:
-            await self.do_setup_LABSevent(member)
-        if member.guild.id == 631888808224489482 and not member.bot:
-            if not await self.bsconfig.user(member).tag() is None:
-                await member.add_roles(member.guild.get_role(750569224614969384))
-    
-    @commands.Cog.listener()
-    async def on_member_remove(self, member):
-        if member.guild.id == 593248015729295360 and not member.bot:
-            welcomeCategory = discord.utils.get(member.guild.categories, id=602906519100719115)
-            for ch in welcomeCategory.channels:
-                if ch.topic == str(member.id):
-                    await ch.delete(reason="User left.")
-        if member.guild.id == 654334199494606848 and not member.bot:
-            welcomeCategory = discord.utils.get(member.guild.categories, id=654334199993466880)
-            for ch in welcomeCategory.channels:
-                if ch.topic == str(member.id):
-                    await ch.delete(reason="User left.")
-
 
     async def initialize(self):
         crapikey = await self.bot.get_shared_api_tokens("crapi")
@@ -71,26 +45,21 @@ class Welcome(commands.Cog):
         if self.bsconfig is None:
             self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
         return self.bsconfig
+    
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        #if member.guild.id == 440960893916807188 and not member.bot:
+        #    await self.do_setup(member)
+        if member.guild.id == 593248015729295360 and not member.bot:
+            await self.do_setup_LAFC(member)
+        if member.guild.id == 654334199494606848 and not member.bot:
+            await self.do_setup_LABSevent(member)
+        if member.guild.id == 631888808224489482 and not member.bot:
+            if not await self.bsconfig.user(member).tag() is None:
+                await member.add_roles(member.guild.get_role(750569224614969384))
 
-    # @commands.command(hidden=True)
-    # async def detect(self, ctx):
-    #     try:
-    #         att = ctx.message.attachments[0]
-    #         if att.filename[-3:] == "png":
-    #             name = "todetect.png"
-    #         elif att.filename[-3:] == "jpg":
-    #             name = "todetect.jpg"
-    #         elif att.filename[-4:] == "jpeg":
-    #             name = "todetect.jpeg"
-    #         await att.save(name)
-    #         text = pytesseract.image_to_data(Image.open(name))
-    #         print(text)
-    #     except IndexError:
-    #         await ctx.send("No image.")
-
+    #DISABLED
     async def do_setup(self, member):
-        newcomer = member.guild.get_role(597767307397169173)
-        await member.add_roles(newcomer)
         welcome = self.bot.get_channel(674348799673499671)
         welcomeEmbed = discord.Embed(colour=discord.Colour.blue())
         welcomeEmbed.set_image(url="https://i.imgur.com/wwhgP4f.png")
@@ -276,7 +245,24 @@ class Welcome(commands.Cog):
             pingch = self.bot.get_channel(roles_config['pingchannel'])
             message = roles_config['pingmessage']
             await pingch.send(member.mention + message)
+            
+    async def send_error(self, error):
+        str_error = traceback.format_exception(type(error), error, error.__traceback__)
 
+        wrapper = textwrap.TextWrapper(width=1000, max_lines=5, expand_tabs=False, replace_whitespace=False)
+        messages = wrapper.wrap("".join(str_error))
+
+        embed = discord.Embed(colour=discord.Color.red())
+
+        for i, m in enumerate(messages[:5], start=1):
+            embed.add_field(
+                name=f"Part {i}",
+                value="```py\n" + m + "```",
+                inline=False
+            )
+            
+        error_channel = bot.get_channel(472117791604998156)
+        await error_channel.send(embed=embed)
 
     @tasks.loop(hours=3)
     async def sortroles(self):
@@ -426,8 +412,7 @@ class Welcome(commands.Cog):
                                                               timestamp=datetime.datetime.now()))
                 await asyncio.sleep(600)
         except Exception as e:
-            ch = self.bot.get_channel(472117791604998156)
-            await ch.send(f"{e}")
+            await self.send_error(e)
 
     @sortroles.before_loop
     async def before_sortroles(self):
@@ -609,8 +594,9 @@ class Welcome(commands.Cog):
         await self.config.guild(ctx.guild).roles.pingmessage.set(message)
         await ctx.send(embed=goodEmbed(f"Value pingmessage set to {message}."))
 
-    @commands.command()
-    @commands.guild_only()
+    #DISABLED
+    #@commands.command()
+    #@commands.guild_only()
     async def setup(self, ctx, game, tag = "", member: discord.Member = None):
         if ctx.channel.id != 674348799673499671:
             return await ctx.send(embed=discord.Embed(description="This command can't be used in this channel.", colour=discord.Colour.red()))
