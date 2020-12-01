@@ -261,7 +261,7 @@ class Welcome(commands.Cog):
                 inline=False
             )
             
-        error_channel = bot.get_channel(472117791604998156)
+        error_channel = self.bot.get_channel(472117791604998156)
         await error_channel.send(embed=embed)
 
     @tasks.loop(hours=3)
