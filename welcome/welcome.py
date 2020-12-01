@@ -539,7 +539,7 @@ class Welcome(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    @commands.has_permissions(administrator=True)
+    @commands.is_owner()
     async def autorole(self, ctx, status: bool = True):
         await ctx.trigger_typing()
 
@@ -548,7 +548,7 @@ class Welcome(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    @commands.has_permissions(administrator=True)
+    @commands.is_owner()
     async def autorolech(self, ctx, channel: int):
         await ctx.trigger_typing()
 
@@ -563,7 +563,7 @@ class Welcome(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    @commands.has_permissions(administrator=True)
+    @commands.is_owner()
     async def pingswitch(self, ctx, status: bool = True):
         await ctx.trigger_typing()
 
@@ -572,7 +572,7 @@ class Welcome(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    @commands.has_permissions(administrator=True)
+    @commands.is_owner()
     async def pingch(self, ctx, channel: int):
         await ctx.trigger_typing()
 
@@ -587,7 +587,7 @@ class Welcome(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    @commands.has_permissions(administrator=True)
+    @commands.is_owner()
     async def pingmessage(self, ctx, *, message):
         await ctx.trigger_typing()
 
