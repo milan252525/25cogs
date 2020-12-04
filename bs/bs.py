@@ -1077,8 +1077,10 @@ class BrawlStarsCog(commands.Cog):
                         continue
 
                     if trophy_range:
+                        await ctx.send(clubs[i].required_trophies)
+                        await ctx.send(trange)
                         if clubs[i].required_trophies > trange:
-                            continue
+                            return
 
                     e_name = f"{badge_emoji} {clubs[i].name} [{key}] {clubs[i].tag} {info}"
                     role_info = f"{role.mention}\n" if roles and role is not None else ""
