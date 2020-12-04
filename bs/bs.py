@@ -977,9 +977,12 @@ class BrawlStarsCog(commands.Cog):
 
         if "icanjoin" in keyword:
             if len(keyword.split(" ")) > 3:
-                return await ctx.send(embed=badEmbed(f"Incorrect arguments! Try /clubs icanjoin *your-trophies*."))
+                return await ctx.send(embed=badEmbed(f"Incorrect arguments! Try /clubs icanjoin *your-trophies* *your-region*."))
             trophy_range = True
-            trange = int(keyword.split(" ")[1])
+            try:
+                trange = int(keyword.split(" ")[1])
+            except ValueError:
+                return await ctx.send(embed=badEmbed(f"Incorrect arguments! Try /clubs icanjoin *your-trophies* *your-region*."))
             keyword = keyword.replace("icanjoin", "").replace(str(trange), "").strip()
 
         if len((await self.config.guild(ctx.guild).clubs()).keys()) < 1:
