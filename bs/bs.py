@@ -980,6 +980,7 @@ class BrawlStarsCog(commands.Cog):
                 return await ctx.send(embed=badEmbed(f"Incorrect arguments! Try /clubs icanjoin *your-trophies*."))
             trophy_range = True
             trange = int(keyword.split(" ")[1])
+            keyword = ""
 
         if len((await self.config.guild(ctx.guild).clubs()).keys()) < 1:
             return await ctx.send(
@@ -1077,10 +1078,8 @@ class BrawlStarsCog(commands.Cog):
                         continue
 
                     if trophy_range:
-                        await ctx.send(clubs[i].required_trophies)
-                        await ctx.send(trange)
                         if clubs[i].required_trophies > trange:
-                            return
+                            continue
 
                     e_name = f"{badge_emoji} {clubs[i].name} [{key}] {clubs[i].tag} {info}"
                     role_info = f"{role.mention}\n" if roles and role is not None else ""
