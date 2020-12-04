@@ -979,8 +979,7 @@ class BrawlStarsCog(commands.Cog):
             if len(keyword.split(" ")) != 2:
                 return await ctx.send(embed=badEmbed(f"Incorrect arguments! Try /clubs icanjoin *your-trophies*."))
             trophy_range = True
-            await ctx.send(keyword[1])
-            range = int(keyword[1])
+            range = int(keyword.split(" ")[1])
 
         if len((await self.config.guild(ctx.guild).clubs()).keys()) < 1:
             return await ctx.send(
