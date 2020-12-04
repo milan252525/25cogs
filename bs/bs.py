@@ -949,6 +949,7 @@ class BrawlStarsCog(commands.Cog):
         skip_errors = False
         reverse_order = False
         regions = False
+        trophy_range = False
         await ctx.trigger_typing()
         if "offline" in keyword:
             offline = True
@@ -973,6 +974,12 @@ class BrawlStarsCog(commands.Cog):
         if "reverse" in keyword:
             reverse_order = True
             keyword = keyword.replace("reverse", "").strip()
+
+        if "icanjoin" in keyword:
+            if len(keyword.split(" ")) != 2:
+                return await ctx.send(embed=badEmbed(f"Incorrect arguments! Try /clubs icanjoin *your-trophies*."))
+            trophy_range = True
+            range = int(keyword[1])
 
         if len((await self.config.guild(ctx.guild).clubs()).keys()) < 1:
             return await ctx.send(
@@ -1069,6 +1076,10 @@ class BrawlStarsCog(commands.Cog):
                     if low_clubs and len(clubs[i].members) >= 95:
                         continue
 
+                    if trophy_range:
+                        if clubs[i].required_trophies > range:
+                            continue
+
                     e_name = f"{badge_emoji} {clubs[i].name} [{key}] {clubs[i].tag} {info}"
                     role_info = f"{role.mention}\n" if roles and role is not None else ""
                     e_value = f"{role_info}{region}{club_status[clubs[i].type.lower()]['emoji']} <:bstrophy:552558722770141204>`{clubs[i].trophies}` {get_league_emoji(clubs[i].required_trophies)}"
@@ -1104,6 +1115,10 @@ class BrawlStarsCog(commands.Cog):
                                            
                     if low_clubs and cmembers >= 95:
                         continue
+
+                    if trophy_range:
+                        if creq > range:
+                            continue
 
                     e_name = f"{badge_emoji} {cname} [{ckey}] #{ctag} {cinfo}"
                     e_value = f"{club_status[ctype.lower()]['emoji']} <:bstrophy:552558722770141204>`{cscore}` {get_league_emoji(creq)}`{creq}+` <:icon_gameroom:553299647729238016>`{cmembers}` [🔗]({url})"
