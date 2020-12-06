@@ -246,13 +246,13 @@ class Welcome(commands.Cog):
             message = roles_config['pingmessage']
             await pingch.send(member.mention + message)
             
-    async def send_error(self, error):
+    async def send_error(self, error, id):
         str_error = traceback.format_exception(type(error), error, error.__traceback__)
 
         wrapper = textwrap.TextWrapper(width=1000, max_lines=5, expand_tabs=False, replace_whitespace=False)
         messages = wrapper.wrap("".join(str_error))
 
-        embed = discord.Embed(colour=discord.Color.red())
+        embed = discord.Embed(colour=discord.Color.red(), description=str(id))
 
         for i, m in enumerate(messages[:5], start=1):
             embed.add_field(
@@ -414,7 +414,7 @@ class Welcome(commands.Cog):
                                                               timestamp=datetime.datetime.now()))
                 #await asyncio.sleep(600)
         except Exception as e:
-            await self.send_error(e)
+            await self.send_error(e, g)
 
     @sortroles.before_loop
     async def before_sortroles(self):
