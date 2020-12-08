@@ -16,16 +16,10 @@ class Statistics(commands.Cog):
         self.config = Config.get_conf(self, identifier=42424269)
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
         self.crconfig = Config.get_conf(None, identifier=2512325, cog_name="ClashRoyaleCog")
-        self.lbrenewallabs.start()
-        self.lbrenewalasia.start()
         self.lbrenewalbd.start()
-        self.lbrenewalspain.start()
 
     def cog_unload(self):
-        self.lbrenewallabs.cancel()
-        self.lbrenewalasia.cancel()
         self.lbrenewalbd.cancel()
-        self.lbrenewalspain.cancel()
 
     async def initialize(self):
         crapikey = await self.bot.get_shared_api_tokens("crapi")
