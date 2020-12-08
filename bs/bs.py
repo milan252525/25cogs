@@ -337,7 +337,8 @@ class BrawlStarsCog(commands.Cog):
             "Have you seen all our clubs? No? Do /clubs!",
             "You can see stats of other players by typing /p @user.",
             "You can display player's stats by using his tag! /p #TAG",
-            "Did you know LA Bot can display CR stats as well? /crp"
+            "Did you know LA Bot can display CR stats as well? /crp",
+            "Check www.laclubs.net to see all our clubs!"
         ]
         embed.set_footer(text=choice(texts))
         await ctx.send(embed=embed)
