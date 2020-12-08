@@ -976,14 +976,18 @@ class BrawlStarsCog(commands.Cog):
             keyword = keyword.replace("reverse", "").strip()
 
         if "icanjoin" in keyword:
-            if len(keyword.split(" ")) > 3:
-                return await ctx.send(embed=badEmbed(f"Incorrect arguments! Try /clubs icanjoin *your-trophies* *your-region*."))
             trophy_range = True
-            try:
-                trange = int(keyword.split(" ")[1])
-            except ValueError:
-                return await ctx.send(embed=badEmbed(f"Incorrect arguments! Try /clubs icanjoin *your-trophies* *your-region*."))
-            keyword = keyword.replace("icanjoin", "").replace(str(trange), "").strip()
+            trange = None
+            for k in keyword.split(" ").strip():
+                if k.isdigit():
+                    trange = int(k)
+            if trange is None:
+                tag = await self.config.user(ctx.author).tag()
+                player = await self.ofcbsapi.get_player(tag)
+                trange = player.trophies
+                keyword = keyword.replace("icanjoin", "").strip()
+            elif trange is not None:
+                keyword = keyword.replace("icanjoin", "").replace(str(trange), "").strip()
 
         if len((await self.config.guild(ctx.guild).clubs()).keys()) < 1:
             return await ctx.send(
