@@ -1737,7 +1737,7 @@ class BrawlStarsCog(commands.Cog):
         if "#" not in clubtag:
             clubtag = "#" + clubtag
 
-        clubtag = clubtag.strip()
+        clubtag = clubtag.strip().upper()
 
         whitelist = ctx.guild.get_role(693659561747546142)
 
@@ -1769,7 +1769,10 @@ class BrawlStarsCog(commands.Cog):
                     if playeralt.club.tag == clubtag:
                         msg += f"**{str(member)}'s alt** `{playeralt.trophies}` {playeralt.name}\n"
 
-        await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=msg))
+        if msg != "":
+            await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=msg))
+        else:
+            await ctx.send(embed=badEmbed("Looks like no one's in this club."))
 
     @commands.cooldown(1, 20, commands.BucketType.user)
     @commands.command()
