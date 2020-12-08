@@ -1771,3 +1771,8 @@ class BrawlStarsCog(commands.Cog):
 
         await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=msg))
 
+    @commands.cooldown(1, 20, commands.BucketType.user)
+    @commands.command()
+    async def trophylb(self, ctx):
+        await ctx.send("Looks like this command was deleted. Refer to https://laclubs.net/lb for an up-to-date trophy leaderboard!")
+

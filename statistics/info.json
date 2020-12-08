@@ -1,9 +1,0 @@
-{
-  "author": ["milan_25"],
-  "name" : "Statistics",
-  "description": "Cog with club statistics",
-  "install_msg": "Thank you for installing our Statistic cog.",
-  "short": "Cog with club statistics",
-  "requirements" : [],
-  "tags": ["statistics"]
-}
