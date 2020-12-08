@@ -978,8 +978,8 @@ class BrawlStarsCog(commands.Cog):
         if "icanjoin" in keyword:
             trophy_range = True
             trange = None
-            for k in keyword.split(" ").strip():
-                if k.isdigit():
+            for k in keyword.split(" "):
+                if k.strip().isdigit():
                     trange = int(k)
             if trange is None:
                 tag = await self.config.user(ctx.author).tag()
