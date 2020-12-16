@@ -84,6 +84,8 @@ class Tools(commands.Cog):
                 
         #message redirection
         if not msg.author.bot and isinstance(msg.channel, discord.abc.PrivateChannel) and not (msg.author.id == 230947675837562880):
+            if (self.bot.get_cog("Events").bf_active):
+                return
             embed = discord.Embed(description = "Someone DMed me!", colour = discord.Colour.teal())
             embed.add_field(name="From: ", value=msg.author.name, inline=False)
             embed.add_field(name="ID: ", value=msg.author.id, inline=False)
