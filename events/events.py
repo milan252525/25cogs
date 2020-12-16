@@ -22,7 +22,8 @@ class Events(commands.Cog):
         self.config.register_member(**default_user)
         self.DAMAGE_PER_CHALL = 200
         self.START_WAIT_TIME = 60
-        self.DAMAGE_EMOJI = "<:damage:643539221428174849>"
+        #self.DAMAGE_EMOJI = "<:damage:643539221428174849>"
+        self.DAMAGE_EMOJI = "💥"
         self.HP_EMOJI = "<:health:688109898508009611>"
         self.LOG_EMOJI = "<:log:688112584368586779>"
         self.WAITING_EMOJI = "<:dyna:688120749323845637>"
@@ -46,10 +47,10 @@ class Events(commands.Cog):
             chall = choice(("word", "math", "geo", "trivia", "brawl"))
             
             chance = randint(0, 100)
-            only_first_three = False
-            if chance < 15:
-                only_first_three = True
-                embed = discord.Embed(title="BOSS GOT ANGRY", description=f"Next challenge accepts only first **3** right answers!", colour=discord.Color.red())
+            only_first_five = False
+            if chance < 20:
+                only_first_five = True
+                embed = discord.Embed(title="BOSS GOT ANGRY", description=f"Next challenge accepts only first **5** right answers!", colour=discord.Color.red())
                 embed.set_footer(text="Be quick!")
                 message = await self.bf_data["channel"].send(embed=embed)
                 await sleep(5)
@@ -57,7 +58,7 @@ class Events(commands.Cog):
 
             boss_kill = False
             dead = []
-            if not only_first_three and chance < 30 and len(self.bf_data["players"]) > 0:
+            if not only_first_five and chance < 30 and len(self.bf_data["players"]) > 0:
                 hit = ""
                 boss_kill = True
                 for _ in range(randint(1, (len(self.bf_data["players"])//5)+2)):
@@ -84,8 +85,8 @@ class Events(commands.Cog):
                 res = await self.brawler_chall()
             
             #process results
-            if only_first_three:
-                res = res[:3]
+            if only_first_five:
+                res = res[:5]
             if boss_kill:
                 for d in dead:
                     to_kill = self.bot.get_user(d)
@@ -102,7 +103,7 @@ class Events(commands.Cog):
                     self.bf_data["players"][m.id] = dealt
                 else:
                     self.bf_data["players"][m.id]  += dealt
-                dealt = (dealt - 5) if dealt > 100 else dealt
+                dealt = (dealt - 5) if dealt > 150 else dealt
             log = "Noone was successful!" if log == "" else log
             self.bf_data['hp_left'] -= damage
             #update action log
@@ -131,7 +132,7 @@ class Events(commands.Cog):
         msg = ""
         messages = []
         for p in final:
-            if len(msg) > 1800:
+            if len(msg) > 1850:
                 messages.append(msg)
                 msg = ""
             u = self.bf_data["channel"].guild.get_member(p[0])
@@ -146,7 +147,7 @@ class Events(commands.Cog):
         self.bf_active = False
             
     async def math_chall(self):
-        limit = 15
+        limit = 60
         start = time()
         op = choice(("+", "-", "*", "/"))
         if op == "+":
@@ -170,10 +171,10 @@ class Events(commands.Cog):
             result = num1 // num2
                                
         embed = discord.Embed(title="MATH CHALLENGE", description=f"You have {limit} seconds to write a result of:\n\n`{num1} {op} {num2}`", colour=discord.Color.magenta())
-        embed.set_footer(text="Do not use calculator!")
+        embed.set_footer(text="ANSWER IN DM. Do not use calculator!")
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
-            return not m.author.bot and str(result) in m.content.lower() and m.channel == self.bf_data["channel"]
+            return not m.author.bot and str(result) in m.content.lower() and isinstance(m.channel, discord.abc.PrivateChannel) and m.author in self.bf_data["channel"].guild.members
         success = []
         while time() - start < limit:
             try:
@@ -188,13 +189,13 @@ class Events(commands.Cog):
         
     async def word_chall(self):
         word = choice(self.longwords)
-        limit = 10
+        limit = 60
         start = time()
         embed = discord.Embed(title="TYPING CHALLENGE", description=f"You have {limit} seconds to type:\n\n`{word.upper()}`", colour=discord.Color.blue())
-        embed.set_footer(text="Letter case doesn't matter. NO COPY PASTING!")
+        embed.set_footer(text="ANSWER IN DM.")
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
-            return not m.author.bot and word in m.content.lower() and m.channel == self.bf_data["channel"]
+            return not m.author.bot and word in m.content.lower() and isinstance(m.channel, discord.abc.PrivateChannel) and m.author in self.bf_data["channel"].guild.members
         success = []
         while time() - start < limit:
             try:
@@ -207,18 +208,18 @@ class Events(commands.Cog):
         return success
  
     async def geo_chall(self):
-        limit = 10
+        limit = 60
         start = time()
         question = choice(list(self.geo_questions.keys()))
         imgreg = re.search("https.*png", question)
         answers = [str(x).lower() for x in self.geo_questions[question]]
         embed = discord.Embed(title="GEOGRAPHY CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`{question.replace(imgreg.group(), '') if imgreg else question}`", colour=discord.Color.teal())
-        embed.set_footer(text="Letter case doesn't matter.")
+        embed.set_footer(text="ANSWER IN DM.")
         if imgreg:
             embed.set_image(url=imgreg.group())
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
-            return not m.author.bot and m.content.lower() in answers and m.channel == self.bf_data["channel"]
+            return not m.author.bot and m.content.lower() in answers and isinstance(m.channel, discord.abc.PrivateChannel) and m.author in self.bf_data["channel"].guild.members
         success = []
         while time() - start < limit:
             try:
@@ -232,15 +233,15 @@ class Events(commands.Cog):
         return success
                             
     async def trivia_chall(self):
-        limit = 15
+        limit = 60
         start = time()
         question = choice(list(self.trivia_questions.keys()))
         answers = [str(x).lower() for x in self.trivia_questions[question]]
         embed = discord.Embed(title="TRIVIA CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`{question}`", colour=discord.Color.orange())
-        embed.set_footer(text="Letter case doesn't matter.")
+        embed.set_footer(text="ANSWER IN DM. Letter case doesn't matter.")
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
-            return not m.author.bot and m.content.lower() in answers and m.channel == self.bf_data["channel"]
+            return not m.author.bot and m.content.lower() in answers and isinstance(m.channel, discord.abc.PrivateChannel) and m.author in self.bf_data["channel"].guild.members
         success = []
         while time() - start < limit:
             try:
@@ -254,17 +255,17 @@ class Events(commands.Cog):
         return success
 
     async def brawler_chall(self):
-        limit = 10
+        limit = 30
         start = time()
         brawler = choice(self.brawlers['list'])
         key = choice(("starPowers", "gadgets"))
         to_guess = choice(brawler[key])
         answer = brawler['name']
         embed = discord.Embed(title="BRAWL CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`What brawler has Star Power/Gadget called {to_guess['name']}?`", colour=discord.Color.green())
-        embed.set_footer(text="Letter case doesn't matter.")
+        embed.set_footer(text="ANSWER IN DM. Letter case doesn't matter.")
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
-            return not m.author.bot and answer.lower() in m.content.lower() and m.channel == self.bf_data["channel"]
+            return not m.author.bot and answer.lower() in m.content.lower() and isinstance(m.channel, discord.abc.PrivateChannel) and m.author in self.bf_data["channel"].guild.members
         success = []
         while time() - start < limit:
             try:
@@ -277,8 +278,8 @@ class Events(commands.Cog):
         await message.delete(delay=5)
         return success
     
-    @commands.Cog.listener()
-    async def on_message(self, message):
+    #@commands.Cog.listener()
+    async def disabled_on_message(self, message):
         if not message.author.bot and self.bf_active and message.channel == self.bf_data["channel"]:
             await message.delete()
     
