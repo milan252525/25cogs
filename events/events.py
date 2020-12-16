@@ -118,9 +118,10 @@ class Events(commands.Cog):
             embed = self.bf_data["embed"]
             embed.set_field_at(0, name=f"{self.HP_EMOJI} HP Left", value=f"{self.bf_data['hp_left']}/{await self.config.boss_hp()}", inline=False)
             embed.set_field_at(1, name=f"{self.LOG_EMOJI} Action log:", value=log)
+            embed.set_footer(text="Send answers to LA Bot as a direct message")
             await self.bf_data["message"].edit(embed=embed)
             if self.bf_data['hp_left'] > 0:
-                await sleep(randint(10, 20))
+                await sleep(15)
 
         #finish
         embed = self.bf_data["embed"]
@@ -190,7 +191,7 @@ class Events(commands.Cog):
             except TimeoutError:
                 pass
         await message.edit(embed=discord.Embed(title="MATH CHALLENGE", description=f"The right answer was `{result}`", colour=discord.Color.dark_magenta()))
-        await message.delete(delay=5)
+        await message.delete(delay=10)
         return success
         
     async def word_chall(self):
@@ -198,7 +199,7 @@ class Events(commands.Cog):
         shuffled = ''.join(sample(word, len(word)))
         limit = 15
         start = time()
-        embed = discord.Embed(title="UNSCRAMBLE CHALLENGE", description=f"You have {limit} seconds to unscramble:\n\n`{shuffled.upper()}`", colour=discord.Color.blue())
+        embed = discord.Embed(title="UNSCRAMBLE CHALLENGE", description=f"You have {limit} seconds to unscramble:\n(Brawl Stars Themed)\n`{shuffled.upper()}`", colour=discord.Color.blue())
         embed.set_footer(text="ANSWER IN DM.")
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
@@ -211,7 +212,8 @@ class Events(commands.Cog):
                     success.append(msg.author)
             except TimeoutError:
                 pass
-        await message.delete() 
+        await message.edit(embed=discord.Embed(title="UNSCRAMBLE CHALLENGE", description=f"The right answer was `{word}`", colour=discord.Color.blue()))
+        await message.delete(delay=10) 
         return success
  
     async def geo_chall(self):
@@ -236,7 +238,7 @@ class Events(commands.Cog):
             except TimeoutError:
                 pass
         await message.edit(embed=discord.Embed(title="GEOGRAPHY CHALLENGE", description=f"The right answer was `{answers[0].upper()}`", colour=discord.Color.dark_teal()))
-        await message.delete(delay=5) 
+        await message.delete(delay=10) 
         return success
                             
     async def trivia_chall(self):
@@ -258,7 +260,7 @@ class Events(commands.Cog):
             except TimeoutError:
                 pass
         await message.edit(embed=discord.Embed(title="TRIVIA CHALLENGE", description=f"The right answer was `{answers[0].upper()}`", colour=discord.Color.dark_orange()))
-        await message.delete(delay=5) 
+        await message.delete(delay=10) 
         return success
 
     async def brawler_chall(self):
@@ -268,7 +270,7 @@ class Events(commands.Cog):
         key = choice(("starPowers", "gadgets"))
         to_guess = choice(brawler[key])
         answer = brawler['name']
-        embed = discord.Embed(title="BRAWL CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`What brawler has Star Power/Gadget called {to_guess['name']}?`", colour=discord.Color.green())
+        embed = discord.Embed(title="BRAWLER CHALLENGE", description=f"You have {limit} seconds to answer the following question:\n\n`What brawler has Star Power/Gadget called {to_guess['name']}?`", colour=discord.Color.green())
         embed.set_footer(text="ANSWER IN DM. Letter case doesn't matter.")
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
@@ -282,7 +284,7 @@ class Events(commands.Cog):
             except TimeoutError:
                 pass
         await message.edit(embed=discord.Embed(title="BRAWL CHALLENGE", description=f"The right answer was `{answer}`", colour=discord.Color.dark_green ()))
-        await message.delete(delay=5)
+        await message.delete(delay=10)
         return success
     
     #@commands.Cog.listener()
