@@ -3,7 +3,7 @@ from redbot.core import commands, Config, checks
 from redbot.core.data_manager import cog_data_path
 from discord.ext import tasks
 from asyncio import sleep, TimeoutError, ensure_future, get_event_loop
-from random import choice, randint
+from random import choice, randint, sample
 from copy import copy
 from time import time
 import yaml
@@ -33,11 +33,17 @@ class Events(commands.Cog):
             self.geo_questions = yaml.load(file, Loader=yaml.FullLoader)
         with open(str(cog_data_path(self)).replace("Events", r"CogManager/cogs/events/trivia.yaml")) as file:
             self.trivia_questions = yaml.load(file, Loader=yaml.FullLoader)
-        with open(str(cog_data_path(self)).replace("Events", r"CogManager/cogs/events/longwords.txt")) as file:
-            self.longwords = []
+        # with open(str(cog_data_path(self)).replace("Events", r"CogManager/cogs/events/longwords.txt")) as file:
+        #     self.longwords = []
+        #     line = file.readline()
+        #     while line != "":
+        #         self.longwords.append(line.replace("\n", ""))
+        #         line = file.readline()
+        with open(str(cog_data_path(self)).replace("Events", r"CogManager/cogs/events/shufflewords.txt")) as file:
+            self.shufflewords = []
             line = file.readline()
             while line != "":
-                self.longwords.append(line.replace("\n", ""))
+                self.shufflewords.append(line.replace("\n", ""))
                 line = file.readline()
         self.bscog = bot.get_cog("BrawlStarsCog")
         self.brawlers = None
@@ -147,7 +153,7 @@ class Events(commands.Cog):
         self.bf_active = False
             
     async def math_chall(self):
-        limit = 60
+        limit = 15
         start = time()
         op = choice(("+", "-", "*", "/"))
         if op == "+":
@@ -188,10 +194,11 @@ class Events(commands.Cog):
         return success
         
     async def word_chall(self):
-        word = choice(self.longwords)
-        limit = 60
+        word = choice(self.shufflewords)
+        shuffled = ''.join(sample(word, len(word)))
+        limit = 15
         start = time()
-        embed = discord.Embed(title="TYPING CHALLENGE", description=f"You have {limit} seconds to type:\n\n`{word.upper()}`", colour=discord.Color.blue())
+        embed = discord.Embed(title="UNSCRAMBLE CHALLENGE", description=f"You have {limit} seconds to unscramble:\n\n`{shuffled.upper()}`", colour=discord.Color.blue())
         embed.set_footer(text="ANSWER IN DM.")
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
@@ -208,7 +215,7 @@ class Events(commands.Cog):
         return success
  
     async def geo_chall(self):
-        limit = 60
+        limit = 15
         start = time()
         question = choice(list(self.geo_questions.keys()))
         imgreg = re.search("https.*png", question)
@@ -233,7 +240,7 @@ class Events(commands.Cog):
         return success
                             
     async def trivia_chall(self):
-        limit = 60
+        limit = 15
         start = time()
         question = choice(list(self.trivia_questions.keys()))
         answers = [str(x).lower() for x in self.trivia_questions[question]]
@@ -255,7 +262,7 @@ class Events(commands.Cog):
         return success
 
     async def brawler_chall(self):
-        limit = 30
+        limit = 15
         start = time()
         brawler = choice(self.brawlers['list'])
         key = choice(("starPowers", "gadgets"))
