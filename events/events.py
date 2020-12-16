@@ -50,7 +50,7 @@ class Events(commands.Cog):
 
     async def main_loop(self):
         while self.bf_data['hp_left'] > 0:
-            chall = choice(("word", "math", "geo", "trivia", "brawl"))
+            chall = choice(("word", "math", "geo", "trivia", "brawl", "word", "math", "brawl"))
             
             chance = randint(0, 100)
             only_first_five = False
@@ -199,8 +199,8 @@ class Events(commands.Cog):
         shuffled = ''.join(sample(word, len(word)))
         limit = 15
         start = time()
-        embed = discord.Embed(title="UNSCRAMBLE CHALLENGE", description=f"You have {limit} seconds to unscramble:\n(Brawl Stars Themed)\n`{shuffled.upper()}`", colour=discord.Color.blue())
-        embed.set_footer(text="ANSWER IN DM.")
+        embed = discord.Embed(title="UNSCRAMBLE CHALLENGE", description=f"You have {limit} seconds to unscramble:\n\n`{shuffled.upper()}`", colour=discord.Color.blue())
+        embed.set_footer(text="ANSWER IN DM. Words are BS themed.")
         message = await self.bf_data["channel"].send(embed=embed)
         def check(m):
             return not m.author.bot and word in m.content.lower() and isinstance(m.channel, discord.abc.PrivateChannel) and m.author in self.bf_data["channel"].guild.members
