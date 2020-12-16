@@ -548,7 +548,7 @@ class BrawlStarsCog(commands.Cog):
                         owned = True
             emoji = "<:star_power:729732781638156348>" if owned else "<:sp_locked:729751963549302854>"
             starpowers += f"{emoji} {star['name']}\n`{star['description']}`\n"
-        embed.add_field(name="Star Powers", value=starpowers)
+        embed.add_field(name="Star Powers", value=starpowers if starpowers != "" else "No data available")
         
         for gadget in data['gadgets']:
             owned = False
@@ -558,7 +558,7 @@ class BrawlStarsCog(commands.Cog):
                         owned = True
             emoji = "<:gadget:716341776608133130>" if owned else "<:ga_locked:729752493793476759>"
             gadgets += f"{emoji} {gadget['name']}\n`{gadget['description']}`\n"
-        embed.add_field(name="Gadgets", value=gadgets)
+        embed.add_field(name="Gadgets", value=gadgets if gadgets != "" else "No data available")
         await ctx.send(embed=embed)
     
     def time_left(self, seconds):
