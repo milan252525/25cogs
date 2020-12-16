@@ -216,21 +216,21 @@ class BrawlStarsCog(commands.Cog):
             tagg = main_text + "#" + tagg.upper()
             altt = alt_text + "#" + altt.upper()
             prompt = await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
-                                                        title="Which one of the accounts would you like to see?", description=f":one: {tagg}\n:two: {altt}"))
-            await prompt.add_reaction("<:one1:736684730635780127>")
-            await prompt.add_reaction("<:two2:736684762944634891>")
+                                                        title="Which one of the accounts would you like to see?", description=f"2️⃣ {tagg}\n2️⃣ {altt}"))
+            await prompt.add_reaction("1️⃣")
+            await prompt.add_reaction("2️⃣")
 
             def check(reaction, user):
-                return user == ctx.author and str(reaction.emoji) in ["<:one1:736684730635780127>", "<:two2:736684762944634891>"]
+                return user == ctx.author and str(reaction.emoji) in ["1️⃣", "2️⃣"]
 
             try:
                 reaction, _ = await self.bot.wait_for('reaction_add', check=check, timeout=60)
             except asyncio.TimeoutError:
                 return await prompt.delete()
 
-            if str(reaction.emoji) == "<:one1:736684730635780127>":
+            if str(reaction.emoji) == "1️⃣":
                 tag = await self.config.user(member).tag()
-            elif str(reaction.emoji) == "<:two2:736684762944634891>":
+            elif str(reaction.emoji) == "2️⃣":
                 tag = await self.config.user(member).alt()
                 main = False
 
@@ -394,21 +394,21 @@ class BrawlStarsCog(commands.Cog):
             tagg = main_text + "#" + tagg.upper()
             altt = alt_text + "#" + altt.upper()
             prompt = await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
-                                                        title="Which one of the accounts would you like to see?", description=f":one: {tagg}\n:two: {altt}"))
-            await prompt.add_reaction("<:one1:736684730635780127>")
-            await prompt.add_reaction("<:two2:736684762944634891>")
+                                                        title="Which one of the accounts would you like to see?", description=f"1️⃣ {tagg}\n2️⃣ {altt}"))
+            await prompt.add_reaction("1️⃣")
+            await prompt.add_reaction("2️⃣")
 
             def check(reaction, user):
-                return user == ctx.author and str(reaction.emoji) in ["<:one1:736684730635780127>", "<:two2:736684762944634891>"]
+                return user == ctx.author and str(reaction.emoji) in ["1️⃣", "2️⃣"]
 
             try:
                 reaction, _ = await self.bot.wait_for('reaction_add', check=check, timeout=60)
             except asyncio.TimeoutError:
                 return await prompt.delete()
 
-            if str(reaction.emoji) == "<:one1:736684730635780127>":
+            if str(reaction.emoji) == "1️⃣":
                 tag = await self.config.user(member).tag()
-            elif str(reaction.emoji) == "<:two2:736684762944634891>":
+            elif str(reaction.emoji) == "2️⃣":
                 tag = await self.config.user(member).alt()
 
             await prompt.delete()
@@ -464,7 +464,7 @@ class BrawlStarsCog(commands.Cog):
             embedstosend[i].set_footer(text=f"Page {i+1}/{len(embedstosend)}\n/brawler <name> for more stats")
 
         if len(embedstosend) > 1:
-            await menu(ctx, embedstosend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
+            await menu(ctx, embedstosend, {"⬅": prev_page, "➡": next_page}, timeout=2000)
         else:
             await ctx.send(embed=embedstosend[0])
 
@@ -1156,7 +1156,7 @@ class BrawlStarsCog(commands.Cog):
 
             if len(embedsToSend) > 1:
                 await msg.delete()
-                await menu(ctx, embedsToSend, {"⬅": prev_page, "➡": next_page, }, timeout=2000)
+                await menu(ctx, embedsToSend, {"⬅": prev_page, "➡": next_page}, timeout=2000)
             elif len(embedsToSend) == 1:
                 await msg.delete()
                 await ctx.send(embed=embedsToSend[0])
