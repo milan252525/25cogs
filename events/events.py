@@ -283,7 +283,7 @@ class Events(commands.Cog):
                     success.append(msg.author)
             except TimeoutError:
                 pass
-        await message.edit(embed=discord.Embed(title="BRAWL CHALLENGE", description=f"The right answer was `{answer}`", colour=discord.Color.dark_green ()))
+        await message.edit(embed=discord.Embed(title="BRAWLER CHALLENGE", description=f"The right answer was `{answer}`", colour=discord.Color.dark_green ()))
         await message.delete(delay=10)
         return success
     
