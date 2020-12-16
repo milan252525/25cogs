@@ -253,6 +253,7 @@ class Blacklist(commands.Cog):
 
                 if player_in_club:
                     if player.club.tag.strip("#") in clubs:
+                        roletoping = None
                         for role in ch.guild.roles:
                             if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(r'[^\x00-\x7f]', r'',
                                                                                    player.club.name).strip():
@@ -306,6 +307,7 @@ class Blacklist(commands.Cog):
 
                     if player_in_club:
                         if player.club.tag.strip("#") in clubs:
+                            roletoping = None
                             for role in ch.guild.roles:
                                 if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(r'[^\x00-\x7f]', r'', player.club.name).strip():
                                     roletoping = role
