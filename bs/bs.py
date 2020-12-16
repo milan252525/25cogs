@@ -617,7 +617,7 @@ class BrawlStarsCog(commands.Cog):
             all_maps = await self.starlist_request("https://api.starlist.pro/maps")
             for m in all_maps['list']:
                 hash_ = m['hash'] + "-old" if m['disabled'] else m['hash']
-                final[m['hash']] = {'url': m['imageUrl'], 'name': m['name'], 
+                final[hash_] = {'url': m['imageUrl'], 'name': m['name'], 
                                    'disabled': m['disabled'], 'link': m['link'],
                                    'gm_url': m['gameMode']['imageUrl'], 'id': m['id']}
             self.maps = final
