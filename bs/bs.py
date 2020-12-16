@@ -216,7 +216,7 @@ class BrawlStarsCog(commands.Cog):
             tagg = main_text + "#" + tagg.upper()
             altt = alt_text + "#" + altt.upper()
             prompt = await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
-                                                        title="Which one of the accounts would you like to see?", description=f"2️⃣ {tagg}\n2️⃣ {altt}"))
+                                                        title="Which one of the accounts would you like to see?", description=f"1️⃣ {tagg}\n2️⃣ {altt}"))
             await prompt.add_reaction("1️⃣")
             await prompt.add_reaction("2️⃣")
 
