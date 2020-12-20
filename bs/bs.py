@@ -59,30 +59,17 @@ class BrawlStarsCog(commands.Cog):
             
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        if member.guild.id == 401883208511389716:
+        guilds = (401883208511389716, 616673259538350084, 674348799673499671, 663716223258984496)
+        channels = (547087959015292929, 616696393729441849, 674348799673499671, 663803544276828171)
+        if member.guild.id in guilds:
             tag = await self.config.user(member).tag()
             if tag is not None:
-                ch = member.guild.get_channel(547087959015292929)
+                ch = member.guild.get_channel(channels[guilds.index(member.guild.id)])
                 embed = discord.Embed(colour=discord.Colour.blue(), description=f"#{tag.upper()}")
                 embed.set_author(name=member.display_name, icon_url=member.avatar_url)
                 await asyncio.sleep(3)
                 await ch.send(embed=embed)
-        elif member.guild.id == 616673259538350084:
-            tag = await self.config.user(member).tag()
-            if tag is not None:
-                ch = member.guild.get_channel(616696393729441849)
-                embed = discord.Embed(colour=discord.Colour.blue(), description=f"#{tag.upper()}")
-                embed.set_author(name=member.display_name, icon_url=member.avatar_url)
-                await asyncio.sleep(3)
-                await ch.send(embed=embed)
-        elif member.guild.id == 674348799673499671:
-            tag = await self.config.user(member).tag()
-            if tag is not None:
-                ch = member.guild.get_channel(674348799673499671)
-                embed = discord.Embed(colour=discord.Colour.blue(), description=f"#{tag.upper()}")
-                embed.set_author(name=member.display_name, icon_url=member.avatar_url)
-                await asyncio.sleep(3)
-                await ch.send(embed=embed)
+
 
     @commands.command(aliases=['bssave'])
     async def save(self, ctx, tag, member: discord.Member = None):
