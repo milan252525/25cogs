@@ -261,10 +261,6 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(
             name="Highest Trophies",
             value=f"{get_league_emoji(player.highest_trophies)} {player.highest_trophies}")
-        reset = reset_trophies(player) - player.trophies
-        embed.add_field(
-            name="Season Reset",
-            value=f"<:bstrophy:552558722770141204> {reset} <:starpoint:661265872891150346> {calculate_starpoints(player)}")
         embed.add_field(
             name="Level",
             value=f"<:exp:614517287809974405> {player.exp_level}")
@@ -319,6 +315,10 @@ class BrawlStarsCog(commands.Cog):
         else:
             embed.add_field(name=f"PP Points{title_extra}",
                             value=f"<:powertrophies:661266876235513867> 0 {value_extra}")
+        reset = reset_trophies(player) - player.trophies
+        embed.add_field(
+            name="Season Reset",
+            value=f"<:bstrophy:552558722770141204> {reset} <:starpoint:661265872891150346> {calculate_starpoints(player)}")
         #championship gone for now
         #emo = "<:good:450013422717763609> Qualified" if player.raw_data['isQualifiedFromChampionshipChallenge'] else "<:bad:450013438756782081> Not qualified"
         #embed.add_field(name="Championship", value=f"{emo}")
