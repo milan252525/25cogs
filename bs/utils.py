@@ -210,40 +210,70 @@ def remove_codes(text : str):
 def calculate_starpoints(player : brawlstats.models.Player):
     total = 0
     for b in player.raw_data['brawlers']:
-        if 550 <= b.get('trophies') <= 599:
-            total = total + 70
-        elif 600 <= b.get('trophies') <= 649:
-            total = total + 120
-        elif 650 <= b.get('trophies') <= 699:
-            total = total + 160
-        elif 700 <= b.get('trophies') <= 749:
-            total = total + 200
-        elif 750 <= b.get('trophies') <= 799:
-            total = total + 220
-        elif 800 <= b.get('trophies') <= 849:
-            total = total + 240
-        elif 850 <= b.get('trophies') <= 899:
-            total = total + 260
-        elif 900 <= b.get('trophies') <= 949:
-            total = total + 280
-        elif 950 <= b.get('trophies') <= 999:
-            total = total + 300
-        elif 1000 <= b.get('trophies') <= 1049:
-            total = total + 320
-        elif 1050 <= b.get('trophies') <= 1099:
-            total = total + 340
-        elif 1100 <= b.get('trophies') <= 1149:
-            total = total + 360
-        elif 1150 <= b.get('trophies') <= 1199:
-            total = total + 380
-        elif 1200 <= b.get('trophies') <= 1249:
-            total = total + 400
-        elif 1250 <= b.get('trophies') <= 1299:
-            total = total + 420
-        elif 1300 <= b.get('trophies') <= 1349:
-            total = total + 440
-        elif 1350 <= b.get('trophies') <= 1399:
-            total = total + 460
-        elif 1400 <= b.get('trophies'):
-            total = total + 480
+        trophies = b['trophies']
+        if trophies <= 500:
+            total += 0
+        elif trophies < 525:
+            total += 20
+        elif trophies < 550:
+            total += 50
+        elif trophies < 575:
+            total += 70
+        elif trophies < 600:
+            total += 80        
+        elif trophies < 625:
+            total += 90        
+        elif trophies < 650:
+            total += 100  
+        elif trophies < 675:
+            total += 110        
+        elif trophies < 700:
+            total += 120       
+        elif trophies < 725:
+            total += 130        
+        elif trophies < 750:
+            total += 140        
+        elif trophies < 775:
+            total += 150       
+        elif trophies < 800:
+            total += 160
+        elif trophies < 825:
+            total += 170
+        elif trophies < 850:
+            total += 180
+        elif trophies < 875:
+            total += 190
+        elif trophies < 900:
+            total += 200
+        elif trophies < 925:
+            total += 210
+        elif trophies < 950:
+            total += 220
+        elif trophies < 975:
+            total += 230
+        elif trophies < 1000:
+            total += 240
+        elif trophies < 1050:
+            total += 250
+        elif trophies < 1100:
+            total += 260
+        elif trophies < 1150:
+            total += 270
+        elif trophies < 1200:
+            total += 280
+        elif trophies < 1250:
+            total += 290
+        elif trophies < 1300:
+            total += 300
+        elif trophies < 1350:
+            total += 310
+        elif trophies < 1400:
+            total += 320
+        elif trophies < 1450:
+            total += 330
+        elif trophies < 1500:
+            total += 340
+        else:
+            total += 350
+            
     return total
