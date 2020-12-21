@@ -275,5 +275,75 @@ def calculate_starpoints(player : brawlstats.models.Player):
             total += 340
         else:
             total += 350
-            
+    return total
+
+
+def reset_trophies(player : brawlstats.models.Player):
+    total = 0
+    for b in player.raw_data['brawlers']:
+        trophies = b['trophies']
+        if trophies <= 500:
+            total += trophies
+        elif trophies < 525:
+            total += 500
+        elif trophies < 550:
+            total += 524
+        elif trophies < 575:
+            total += 549
+        elif trophies < 600:
+            total += 574       
+        elif trophies < 625:
+            total += 599        
+        elif trophies < 650:
+            total += 624  
+        elif trophies < 675:
+            total += 649        
+        elif trophies < 700:
+            total += 674       
+        elif trophies < 725:
+            total += 699        
+        elif trophies < 750:
+            total += 724        
+        elif trophies < 775:
+            total += 749       
+        elif trophies < 800:
+            total += 774
+        elif trophies < 825:
+            total += 799
+        elif trophies < 850:
+            total += 824
+        elif trophies < 875:
+            total += 849
+        elif trophies < 900:
+            total += 874
+        elif trophies < 925:
+            total += 885
+        elif trophies < 950:
+            total += 900
+        elif trophies < 975:
+            total += 920
+        elif trophies < 1000:
+            total += 940
+        elif trophies < 1050:
+            total += 960
+        elif trophies < 1100:
+            total += 980
+        elif trophies < 1150:
+            total += 1000
+        elif trophies < 1200:
+            total += 1020
+        elif trophies < 1250:
+            total += 1040
+        elif trophies < 1300:
+            total += 1060
+        elif trophies < 1350:
+            total += 1080
+        elif trophies < 1400:
+            total += 1100
+        elif trophies < 1450:
+            total += 1120
+        elif trophies < 1500:
+            total += 1140
+        else:
+            total += 1150
     return total

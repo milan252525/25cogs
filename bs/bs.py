@@ -4,7 +4,7 @@ from redbot.core.utils.embed import randomize_colour
 from redbot.core.utils.menus import menu, prev_page, next_page
 from discord.ext import tasks
 
-from .utils import badEmbed, goodEmbed, get_league_emoji, get_rank_emoji, get_brawler_emoji
+from .utils import badEmbed, goodEmbed, get_league_emoji, get_rank_emoji, get_brawler_emoji, reset_trophies
 from .utils import remove_codes, calculate_starpoints, get_gamemode_id, get_gamemode_emoji, club_status
 
 from random import choice
@@ -257,10 +257,14 @@ class BrawlStarsCog(commands.Cog):
             icon_url=player_icon)
         embed.add_field(
             name="Trophies",
-            value=f"{get_league_emoji(player.trophies)} {player.trophies} (<:starpoint:661265872891150346> {calculate_starpoints(player)})")
+            value=f"{get_league_emoji(player.trophies)} {player.trophies}")
         embed.add_field(
             name="Highest Trophies",
             value=f"{get_league_emoji(player.highest_trophies)} {player.highest_trophies}")
+        reset = reset_trophies(player) - player.trophies
+        embed.add_field(
+            name="Season Reset",
+            value=f"<:bstrophy:552558722770141204> {reset} <:starpoint:661265872891150346> {calculate_starpoints(player)}")
         embed.add_field(
             name="Level",
             value=f"<:exp:614517287809974405> {player.exp_level}")
