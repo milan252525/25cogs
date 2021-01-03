@@ -54,9 +54,12 @@ class Welcome(commands.Cog):
             await self.do_setup_LAFC(member)
         if member.guild.id == 654334199494606848 and not member.bot:
             await self.do_setup_LABSevent(member)
-        #if member.guild.id == 631888808224489482 and not member.bot:
-            #if not await self.bsconfig.user(member).tag() is None:
-                #await member.add_roles(member.guild.get_role(750569224614969384))
+        if member.guild.id == 631888808224489482 and not member.bot:
+            if not await self.bsconfig.user(member).tag() is None:
+                await member.add_roles(member.guild.get_role(750569224614969384))
+        if member.guild.id == 704457125295947887 and not member.bot:
+            await member.add_roles(member.guild.get_role(785243512199184395))
+
 
     #DISABLED
     async def do_setup(self, member):
