@@ -57,6 +57,8 @@ class Welcome(commands.Cog):
         if member.guild.id == 631888808224489482 and not member.bot:
             if not await self.bsconfig.user(member).tag() is None:
                 await member.add_roles(member.guild.get_role(750569224614969384))
+        if member.guild.id == 704457125295947887 and not member.bot: #newcomer autorole fix for LA NA
+            await member.add_roles(member.guild.get_role(785243512199184395))
 
     #DISABLED
     async def do_setup(self, member):
