@@ -969,12 +969,27 @@ class BrawlStarsCog(commands.Cog):
             reverse_order = True
             keyword = keyword.replace("reverse", "").strip()
 
+        if "members" in keyword:
+            membersforhawk = True
+            membersnumber = None
+            for k in keyword.split(" "):
+                if k.strip().isdigit():
+                    membersnumber = int(k)
+                    break
+            if membersnumber is None:
+                await ctx.send(embed=badEmbed(f"Looks like you didn't enter a valid member count!"))
+                keyword = keyword.replace("members", "").strip()
+            elif membersnumber is not None:
+                keyword = keyword.replace("members", "").replace(str(membersnumber), "").strip()
+
+
         if "icanjoin" in keyword:
             trophy_range = True
             trange = None
             for k in keyword.split(" "):
                 if k.strip().isdigit():
                     trange = int(k)
+                    break
             if trange is None:
                 tag = await self.config.user(ctx.author).tag()
                 player = await self.ofcbsapi.get_player(tag)
@@ -1078,6 +1093,10 @@ class BrawlStarsCog(commands.Cog):
                     if low_clubs and len(clubs[i].members) >= 95:
                         continue
 
+                    if membersforhawk:
+                        if len(clubs[i].members) != membersnumber:
+                            continue
+
                     if trophy_range:
                         if clubs[i].required_trophies > trange:
                             continue
@@ -1117,6 +1136,10 @@ class BrawlStarsCog(commands.Cog):
                                            
                     if low_clubs and cmembers >= 95:
                         continue
+
+                    if membersforhawk:
+                        if len(clubs[i].members) != membersnumber:
+                            continue
 
                     if trophy_range:
                         if creq > trange:
