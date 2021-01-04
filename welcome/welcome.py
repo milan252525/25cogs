@@ -19,7 +19,30 @@ class Welcome(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=2536725)
-        default_guild = {'roles': {'pres' : None, 'vp' : None, 'member' : None, 'bs' : None, 'guest' : None, 'leader' : None, 'family' : None, 'remove': None, "otherclubs": None, "staff": None, "language": None, "memberclub": None, "senior": None, "autorole": False, "channel": None, "notifications": None, "ping": None, "pingchannel": None, "pingmessage": None}}
+        default_guild = {
+            "roles": {
+                "pres" : None, 
+                "vp" : None, 
+                "member" : None, 
+                "bs" : None, 
+                "guest" : None, 
+                "leader" : None, 
+                "family" : None, 
+                "remove": None, 
+                "otherclubs": None, 
+                "staff": None, 
+                "language": None, 
+                "memberclub": None, 
+                "senior": None, 
+                "autorole": False, 
+                "channel": None, 
+                "notifications": None, 
+                "ping": None, 
+                "pingchannel": None, 
+                "pingmessage": None,
+                "invisible_roles": []
+                }
+            }
         self.config.register_guild(**default_guild)
         self.crconfig = Config.get_conf(None, identifier=2512325, cog_name="ClashRoyaleCog")
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
@@ -100,6 +123,11 @@ class Welcome(commands.Cog):
                     msg += f"Añadido **{str(role)}**\n"
         return msg
 
+    def get_badge(self, badge_id):
+        guild = self.bot.get_guild(717766786019360769)
+        em = discord.utils.get(guild.emojis, name=str(badge_id-8000000).rjust(2, "0"))
+        return str(em)
+
     @commands.command(aliases=['nuevorol', 'vincular', 'salvar', 'nc'])
     @commands.guild_only()
     async def newcomer(self, ctx, tag, member: discord.Member = None):
@@ -145,11 +173,21 @@ class Welcome(commands.Cog):
         msg = ""
         try:
             player = await self.ofcbsapi.get_player(tag)
+            player_in_club = "tag" in player.raw_data["club"]
+            player_club = None
+
             await self.bsconfig.user(member).tag.set(tag.replace("#", ""))
+
+            if player_in_club:
+                try:
+                    player_club = await self.ofcbsapi.get_club(player.club.tag)
+                    badge = self.get_badge(player_club.raw_data['badgeId'])
+                except brawlstats.errors.RequestError:
+                    badge = "<:bsband:600741378497970177>"
             if language == 'en':
-                cl_name = f"<:bsband:600741378497970177> {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> No club"
+                cl_name = f"{badge} {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> No club"
             elif language == 'es':
-                cl_name = f"<:bsband:600741378497970177> {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> Sin club"
+                cl_name = f"{badge} {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> Sin club"
             msg += f"**{player.name}** <:bstrophy:552558722770141204> {player.trophies} {cl_name}\n"
         except brawlstats.errors.NotFoundError:
             if language == 'en':
@@ -228,8 +266,8 @@ class Welcome(commands.Cog):
                     msg += f"No se ha encontrado un rol para el club {player.club.name}.\n"
                 return await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
             msg += await self.addroleifnotpresent(member, mmber, family, brawlstars, member_role_expected)
-            try:
-                player_club = await self.ofcbsapi.get_club(player.club.tag)
+
+            if player_club is not None:
                 for mem in player_club.members:
                     if mem.tag == player.raw_data['tag']:
                         if mem.role.lower() == 'vicepresident':
@@ -241,10 +279,15 @@ class Welcome(commands.Cog):
                         elif mem.role.lower() == 'member':
                             msg += await self.addroleifnotpresent(member, memberclub)
                         break
-            except brawlstats.errors.RequestError:
+            else:
                 msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
+
         if msg != "":
             await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
+
+        if len(roles_config['invisible_roles']) > 0:
+            for role_id in roles_config['invisible_roles']:
+                await self.addroleifnotpresent(member, ctx.guild.get_role(role_id))
 
         if roles_config['ping']:
             pingch = self.bot.get_channel(roles_config['pingchannel'])
