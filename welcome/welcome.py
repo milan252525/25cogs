@@ -158,15 +158,11 @@ class Welcome(commands.Cog):
         senior = ctx.guild.get_role(roles_config['senior'])
         notifications = ctx.guild.get_role(roles_config['notifications'])
 
-        if member is not None:
+        if member is not None and member != ctx.author:
             if newcomer in ctx.author.roles:
                 return
         elif member is None:
             member = ctx.author
-
-        if ctx.guild.id == 460550486257565697 and member == ctx.author:
-            if newcomer not in member.roles:
-                return await ctx.send("No puedes usar este comando.")
 
         tag = tag.lower().replace('O', '0')
         if tag.startswith("#"):
