@@ -134,7 +134,9 @@ class Welcome(commands.Cog):
         staff = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.staff())
         language = await self.config.guild(ctx.guild).roles.language()
 
-        if staff not in ctx.author.roles and not ctx.author.guild_permissions.kick_members and not ctx.author.guild_permissions.manage_messages and ctx.author.id != 781512318760255488 and ctx.guild.id != 460550486257565697:
+        owners = (781512318760255488, 230947675837562880)
+
+        if staff not in ctx.author.roles and not ctx.author.guild_permissions.kick_members and not ctx.author.guild_permissions.manage_messages and ctx.author.id not in owners and ctx.guild.id != 460550486257565697:
             if language == 'en':
                 return await ctx.send("You can't use this command.")
             elif language == 'es':
