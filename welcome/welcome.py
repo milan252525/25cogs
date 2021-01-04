@@ -464,7 +464,7 @@ class Welcome(commands.Cog):
 
     @sortroles.before_loop
     async def before_sortroles(self):
-        await asyncio.sleep(5)
+        await asyncio.sleep(10)
 
     @tasks.loop(hours=3)
     async def mainsortroles(self):
@@ -555,7 +555,7 @@ class Welcome(commands.Cog):
 
     @mainsortroles.before_loop
     async def before_mainsortroles(self):
-        await asyncio.sleep(5)
+        await asyncio.sleep(300)
 
     @commands.command()
     @commands.guild_only()
