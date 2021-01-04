@@ -57,8 +57,10 @@ class Welcome(commands.Cog):
         if member.guild.id == 631888808224489482 and not member.bot:
             if not await self.bsconfig.user(member).tag() is None:
                 await member.add_roles(member.guild.get_role(750569224614969384))
-        if member.guild.id == 704457125295947887 and not member.bot:
+        if member.guild.id == 704457125295947887 and not member.bot: #LA NA unverified autorole
             await member.add_roles(member.guild.get_role(785243512199184395))
+        if member.guild.id == 585075868188278784 and not member.bot: #LA Asia unverified autorole
+            await member.add_roles(member.guild.get_role(795641413126586408))
 
 
     #DISABLED
@@ -271,6 +273,8 @@ class Welcome(commands.Cog):
     async def sortroles(self):
         try:
             for g in await self.config.all_guilds():
+                if g != 585075868188278784:
+                    continue
                 guild = self.bot.get_guild(g)
                 if await self.config.guild(guild).roles.autorole():
                     roles_config = await self.config.guild(guild).roles()
@@ -413,7 +417,7 @@ class Welcome(commands.Cog):
                         if msg != "":
                             await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
                                                               timestamp=datetime.datetime.now()))
-                await asyncio.sleep(600)
+                #await asyncio.sleep(600)
         except Exception as e:
             await self.send_error(e, g)
 
