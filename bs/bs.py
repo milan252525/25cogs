@@ -1758,6 +1758,8 @@ class BrawlStarsCog(commands.Cog):
 
         whitelist = ctx.guild.get_role(693659561747546142)
 
+        club = await self.ofcbsapi.get_club(clubtag)
+
         msg = ""
         for member in ctx.guild.members:
             if whitelist not in member.roles:
@@ -1766,25 +1768,12 @@ class BrawlStarsCog(commands.Cog):
             alt = await self.config.user(member).alt()
             if tag is None:
                 continue
-            try:
-                player = await self.ofcbsapi.get_player(tag)
+            for m in club.members:
+                if m.tag == "#" + tag.upper():
+                    msg += f"**{str(member)}** `{m.trophies}` {m.name}\n"
                 if alt is not None:
-                    playeralt = await self.ofcbsapi.get_player(alt)
-                await asyncio.sleep(0.2)
-            except brawlstats.errors.RequestError as e:
-                continue
-            except Exception as e:
-                return
-            player_in_club = "name" in player.raw_data["club"]
-            if alt is not None:
-                player_in_club2 = "name" in playeralt.raw_data["club"]
-            if player_in_club:
-                if player.club.tag == clubtag:
-                    msg += f"**{str(member)}** `{player.trophies}` {player.name}\n"
-            if alt is not None:
-                if player_in_club2:
-                    if playeralt.club.tag == clubtag:
-                        msg += f"**{str(member)}'s alt** `{playeralt.trophies}` {playeralt.name}\n"
+                    if m.tag == "#" + alt.upper():
+                            msg += f"**{str(member)}'s alt** `{m.trophies}` {m.name}\n"
 
         if msg != "":
             await ctx.send(embed=discord.Embed(colour=discord.Colour.green(), description=msg))
