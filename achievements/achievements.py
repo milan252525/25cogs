@@ -70,7 +70,8 @@ class Achievements(commands.Cog):
             "duog": False,
             "ppa": False,
             "ppp": False,
-            "ppg": False
+            "ppg": False,
+            "divine": False
         }
         self.config.register_user(**default_user)
 
@@ -269,8 +270,11 @@ class Achievements(commands.Cog):
         if await self.config.user(member).god():
             misccount = misccount + 1
             misc = misc + "God Brawler\n"
+        if await self.config.user(member).divine():
+            misccount = misccount + 1
+            misc = misc + "Divine Brawler\n"
         if misc != "":
-            aembed.add_field(name=f"<:LoneStar:729650156491767849> Miscellaneous ({misccount}/12)", value=misc, inline=False)
+            aembed.add_field(name=f"<:LoneStar:729650156491767849> Miscellaneous ({misccount}/13)", value=misc, inline=False)
 
         exp = ""
         if await self.config.user(member).expa():
