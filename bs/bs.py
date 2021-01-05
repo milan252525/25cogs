@@ -943,6 +943,7 @@ class BrawlStarsCog(commands.Cog):
         skip_errors = False
         reverse_order = False
         regions = False
+        membersforhawk = False
         trophy_range = False
         await ctx.trigger_typing()
         if "offline" in keyword:
