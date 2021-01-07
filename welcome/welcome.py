@@ -262,9 +262,9 @@ class Welcome(commands.Cog):
                     for mem in player_club.members:
                         if mem.tag == player.raw_data['tag']:
                             if mem.role.lower() == 'vicepresident':
-                                msg += await self.addroleifnotpresent(member, lavp)
+                                msg += await self.addroleifnotpresent(member, lavp, leader)
                             elif mem.role.lower() == 'president':
-                                msg += await self.addroleifnotpresent(member, lapres)
+                                msg += await self.addroleifnotpresent(member, lapres, leader)
                             break
                 else:
                     msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
@@ -441,14 +441,14 @@ class Welcome(commands.Cog):
                                         if mem.tag == player.raw_data['tag']:
                                             if mem.role.lower() == 'vicepresident':
                                                 msg += await self.removeroleifpresent(member, lapres)
-                                                msg += await self.addroleifnotpresent(member, lavp)
+                                                msg += await self.addroleifnotpresent(member, lavp, leader)
                                             elif mem.role.lower() == 'president':
                                                 msg += await self.removeroleifpresent(member, lavp)
-                                                msg += await self.addroleifnotpresent(member, lapres)
+                                                msg += await self.addroleifnotpresent(member, lapres, leader)
                                             elif mem.role.lower() == 'senior':
-                                                msg += await self.removeroleifpresent(member, lavp, lapres)
+                                                msg += await self.removeroleifpresent(member, lavp, lapres, leader)
                                             elif mem.role.lower() == 'member':
-                                                msg += await self.removeroleifpresent(member, lavp, lapres)
+                                                msg += await self.removeroleifpresent(member, lavp, lapres, leader)
                                             break
                                 except brawlstats.errors.RequestError:
                                     msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
