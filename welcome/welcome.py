@@ -40,7 +40,9 @@ class Welcome(commands.Cog):
                 "ping": None, 
                 "pingchannel": None, 
                 "pingmessage": None,
-                "invisible_roles": []
+                "invisible_roles": [],
+                "lapres": None,
+                "lavp": None
                 }
             }
         self.config.register_guild(**default_guild)
@@ -157,6 +159,8 @@ class Welcome(commands.Cog):
         memberclub = ctx.guild.get_role(roles_config['memberclub'])
         senior = ctx.guild.get_role(roles_config['senior'])
         notifications = ctx.guild.get_role(roles_config['notifications'])
+        lapres = ctx.guild.get_role(roles_config['lapres'])
+        lavp = ctx.guild.get_role(roles_config['lavp'])
 
         if member is not None and member != ctx.author:
             if newcomer in ctx.author.roles:
@@ -254,6 +258,16 @@ class Welcome(commands.Cog):
                 msg += await self.addroleifnotpresent(member, otherclubs, family, brawlstars)
             else:
                 msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
+                if player_club is not None:
+                    for mem in player_club.members:
+                        if mem.tag == player.raw_data['tag']:
+                            if mem.role.lower() == 'vicepresident':
+                                msg += await self.addroleifnotpresent(member, lavp)
+                            elif mem.role.lower() == 'president':
+                                msg += await self.addroleifnotpresent(member, lapres)
+                            break
+                else:
+                    msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
 
         if player_in_club and player.club.tag in localtags:
             if member_role_expected is None:
@@ -334,6 +348,8 @@ class Welcome(commands.Cog):
                     memberclub = ch.guild.get_role(roles_config['memberclub'])
                     senior = ch.guild.get_role(roles_config['senior'])
                     notifications = ch.guild.get_role(roles_config['notifications'])
+                    lapres = ch.guild.get_role(roles_config['lapres'])
+                    lavp = ch.guild.get_role(roles_config['lavp'])
                     error_counter = 0
 
                     for member in ch.guild.members:
@@ -416,6 +432,24 @@ class Welcome(commands.Cog):
                             else:
                                 msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, leader, memberclub, senior, member_role, guest)
                                 msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
+                                try:
+                                    await asyncio.sleep(0.2)
+                                    player_club = await self.ofcbsapi.get_club(player.club.tag)
+                                    for mem in player_club.members:
+                                        if mem.tag == player.raw_data['tag']:
+                                            if mem.role.lower() == 'vicepresident':
+                                                msg += await self.removeroleifpresent(member, lapres)
+                                                msg += await self.addroleifnotpresent(member, lavp)
+                                            elif mem.role.lower() == 'president':
+                                                msg += await self.removeroleifpresent(member, lavp)
+                                                msg += await self.addroleifnotpresent(member, lapres)
+                                            elif mem.role.lower() == 'senior':
+                                                msg += await self.removeroleifpresent(member, lavp, lapres)
+                                            elif mem.role.lower() == 'member':
+                                                msg += await self.removeroleifpresent(member, lavp, lapres)
+                                            break
+                                except brawlstats.errors.RequestError:
+                                    msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
                         elif player_in_club and player.club.tag in localtags:
                             if member_role_expected is None:
                                 msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, otherclubs, leader, mmber, memberclub, senior, member_role)
