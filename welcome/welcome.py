@@ -256,7 +256,7 @@ class Welcome(commands.Cog):
         if player_in_club and player.club.tag in tags and player.club.tag not in localtags:
             if ctx.guild.id == 460550486257565697 or ctx.guild.id == 593732431551660063:
                 msg += await self.addroleifnotpresent(member, otherclubs, family, brawlstars)
-            else:
+            elif ctx.guild.id == 683612536482168914:
                 msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
                 if player_club is not None:
                     for mem in player_club.members:
@@ -268,6 +268,8 @@ class Welcome(commands.Cog):
                             break
                 else:
                     msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
+            else:
+                msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
 
         if player_in_club and player.club.tag in localtags:
             if member_role_expected is None:
@@ -429,8 +431,8 @@ class Welcome(commands.Cog):
                             if ch.guild.id == 460550486257565697 or ch.guild.id == 593732431551660063:
                                 msg += await self.removeroleifpresent(member, vp, pres, newcomer, leader, memberclub, senior, member_role, guest)
                                 msg += await self.addroleifnotpresent(member, otherclubs, family, brawlstars)
-                            else:
-                                msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, leader, memberclub, senior, member_role, guest)
+                            elif ch.guild.id == 683612536482168914:
+                                msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, memberclub, senior, member_role, guest)
                                 msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
                                 try:
                                     await asyncio.sleep(0.2)
@@ -450,6 +452,9 @@ class Welcome(commands.Cog):
                                             break
                                 except brawlstats.errors.RequestError:
                                     msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
+                            else:
+                                msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, leader, memberclub, senior, member_role, guest)
+                                msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
                         elif player_in_club and player.club.tag in localtags:
                             if member_role_expected is None:
                                 msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, otherclubs, leader, mmber, memberclub, senior, member_role)
