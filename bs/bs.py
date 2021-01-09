@@ -76,7 +76,7 @@ class BrawlStarsCog(commands.Cog):
         """Save your Brawl Stars player tag"""
         member = ctx.author if member is None else member
 
-        tag = tag.lower().replace('o', '0'))
+        tag = tag.lower().replace('o', '0')
         if tag.startswith("#"):
             tag = tag.strip('#')
 
