@@ -445,7 +445,7 @@ class BrawlStarsCog(commands.Cog):
         
         embedstosend = []
         for i in range(0, len(embedfields), 15):
-            embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}/41):")
+            embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}/43):")
             embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
             for e in embedfields[i:i + 15]:
                 embed.add_field(name=e[0], value=e[1], inline=True)
@@ -528,7 +528,7 @@ class BrawlStarsCog(commands.Cog):
             embed.description += f" {rank} {br.get('trophies')}/{br['highestTrophies']}"
             embed.description += f" <:pp:664267845336825906> {br['power']}"
         embed.description += "\n```" + data['description'] + "```"
-        embed.set_footer(text=data['class'])
+        embed.set_footer(text=data['class']['name'])
         starpowers = ""
         gadgets = ""
         for star in data['starPowers']:
@@ -795,8 +795,10 @@ class BrawlStarsCog(commands.Cog):
             worstm = ""
             for m in club.members[-5:]:
                 worstm += f"{get_league_emoji(m.trophies)}`{m.trophies}` {discord.utils.escape_markdown(m.name)}\n"
-            embed.add_field(name="Top Members", value=topm, inline=True)
-            embed.add_field(name="Lowest Members", value=worstm, inline=True)
+            if topm != "":
+                embed.add_field(name="Top Members", value=topm, inline=True)
+            if worstm != "":
+                embed.add_field(name="Lowest Members", value=worstm, inline=True)
             return await ctx.send(embed=randomize_colour(embed))
         elif keyword in ["memberlist", "members", "list", "m"]:
             colour = choice([discord.Colour.green(),
