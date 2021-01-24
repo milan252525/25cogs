@@ -358,7 +358,7 @@ class Welcome(commands.Cog):
                     error_counter = 0
 
                     for member in ch.guild.members:
-                        if member.bot:
+                        if member is None or member.bot:
                             continue
                         tag = await self.bsconfig.user(member).tag()
                         if tag is None:
