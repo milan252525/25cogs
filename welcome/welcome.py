@@ -325,7 +325,7 @@ class Welcome(commands.Cog):
         error_channel = self.bot.get_channel(472117791604998156)
         await error_channel.send(embed=embed)
 
-    @tasks.loop(hours=3)
+    @tasks.loop(hours=4)
     async def sortroles(self):
         try:
             for g in await self.config.all_guilds():
@@ -495,7 +495,7 @@ class Welcome(commands.Cog):
                         if msg != "":
                             await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
                                                               timestamp=datetime.datetime.now()))
-                await asyncio.sleep(600)
+                await asyncio.sleep(300)
         except Exception as e:
             await self.send_error(e, g)
 
@@ -503,7 +503,7 @@ class Welcome(commands.Cog):
     async def before_sortroles(self):
         await asyncio.sleep(10)
 
-    @tasks.loop(hours=3)
+    @tasks.loop(hours=4)
     async def mainsortroles(self):
         try:
             ch = self.bot.get_channel(756486248675147776)
@@ -592,7 +592,7 @@ class Welcome(commands.Cog):
 
     @mainsortroles.before_loop
     async def before_mainsortroles(self):
-        await asyncio.sleep(300)
+        await asyncio.sleep(150)
 
     @commands.command()
     @commands.guild_only()
