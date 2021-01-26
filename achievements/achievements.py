@@ -71,7 +71,8 @@ class Achievements(commands.Cog):
             "ppa": False,
             "ppp": False,
             "ppg": False,
-            "divine": False
+            "divine": False,
+            "gthief": False
         }
         self.config.register_user(**default_user)
 
@@ -114,8 +115,11 @@ class Achievements(commands.Cog):
         if await self.config.user(member).teamwork():
             ggcount = ggcount + 1
             gg = gg + "Teamwork\n"
+        if await self.config.user(member).gthief():
+            ggcount = ggcount + 1
+            gg = gg + "Gem Thief\n"
         if gg != "":
-            aembed.add_field(name=f"<:GemGrab:729650153388114002> Gem Grab ({ggcount}/2)", value=gg, inline=False)
+            aembed.add_field(name=f"<:GemGrab:729650153388114002> Gem Grab ({ggcount}/3)", value=gg, inline=False)
 
         bounty = ""
         bountycount = 0
@@ -404,7 +408,7 @@ class Achievements(commands.Cog):
                 msg += "Showdown Showoff role removed.\n"
 
         gh = member.guild.get_role(736961181138419783)
-        if await self.config.user(member).carrier() and await self.config.user(member).teamwork():
+        if await self.config.user(member).carrier() and await self.config.user(member).teamwork() and await self.config.user(member).gthief():
             if gh not in member.roles:
                 await member.add_roles(gh)
                 msg += f"Gem Hoarder role added!\n"
