@@ -331,51 +331,52 @@ class BrawlStarsCog(commands.Cog):
             "Check www.laclubs.net to see all our clubs!"
         ]
 
-        history_url = "https://localhost/api/history/player?tag=ggqg9rl0"
-        data = None
-        chart_data = []
-        async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
-            async with session.get(history_url) as resp:
-                data = await resp.json()
-        if data is not None:
-            for time, trophies in zip(data['times'], data['trophies']):
-                chart_data.append("{t:new Date(" + str(time*1000) + "),y:" + str(trophies) + "}")
-            qc = QuickChart()
-            qc.config = """
-            {
-                type: 'line',
-                data: {
-                    datasets: [{
-                        data : """ + str(chart_data).replace("\'", "") + """,
-                        label: "trophies",
-                        fill: true,
-                        cubicInterpolationMode: 'monotone',
-                        borderColor: 'rgba(10, 180, 20, 1)',
-                        backgroundColor: 'rgba(10, 180, 20, 0.1)'
-                    }]
-                },
-                options: {
-                    scales: {
-                        xAxes: [{
-                            type: 'time',
-                            time: {
-                                unit: 'day'
-                            },
-                            distribution: 'linear'
+        if "name" in player.raw_data["club"] and player.raw_data["club"]["name"].startswith("LA "):
+            history_url = "https://localhost/api/history/player?tag=" + player.raw_data['tag'].strip("#")
+            data = None
+            chart_data = []
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                async with session.get(history_url) as resp:
+                    data = await resp.json()
+            if data is not None and data['status'] == "ok":
+                for time, trophies in zip(data['times'], data['trophies']):
+                    chart_data.append("{t:new Date(" + str(time*1000) + "),y:" + str(trophies) + "}")
+                qc = QuickChart()
+                qc.config = """
+                {
+                    type: 'line',
+                    data: {
+                        datasets: [{
+                            data : """ + str(chart_data).replace("\'", "") + """,
+                            label: "trophies",
+                            fill: true,
+                            cubicInterpolationMode: 'monotone',
+                            borderColor: 'rgba(10, 180, 20, 1)',
+                            backgroundColor: 'rgba(10, 180, 20, 0.1)'
                         }]
                     },
-                    responsive: true,
-                    legend: {
-                        display: false
-                    },
-                    tooltips: {
-                        mode: 'index',
-                        intersect: false
+                    options: {
+                        scales: {
+                            xAxes: [{
+                                type: 'time',
+                                time: {
+                                    unit: 'day'
+                                },
+                                distribution: 'linear'
+                            }]
+                        },
+                        responsive: true,
+                        legend: {
+                            display: false
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        }
                     }
                 }
-            }
-            """
-            embed.set_image(url=qc.get_short_url())
+                """
+                embed.set_image(url=qc.get_short_url())
         embed.set_footer(text=choice(texts))
         await ctx.send(embed=embed)
 
