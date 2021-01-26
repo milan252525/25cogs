@@ -16,6 +16,7 @@ import aiohttp
 from cachetools import TTLCache
 from fuzzywuzzy import process
 from operator import itemgetter, attrgetter
+from quickchart import QuickChart
 
 class BrawlStarsCog(commands.Cog):
 
@@ -339,9 +340,9 @@ class BrawlStarsCog(commands.Cog):
         if data is not None:
             for time, trophies in zip(data['times'], data['trophies']):
                 chart_data.append(f"{{t:new Date({time*100}),y:{trophies}}}")
-            chart = "{type:'line',data:{datasets:[{data:" + str(chart_data) + ",label:'trophies',fill:true,cubicInterpolationMode:'monotone',borderColor:'rgba(10,180,20,1)',backgroundColor:'rgba(10,180,20,0.1)'}]},options:{scales:{xAxes:[{type:'time',time:{unit:'day'},distribution:'linear'}]},responsive:true,legend:{display:false},tooltips:{mode:'index',intersect:false}}}"
-            chart_url = f"https://quickchart.io/chart?c={chart}"
-            await ctx.send(chart_url)
+            qc = QuickChart()
+            qc.config = "{type:'line',data:{datasets:[{data:" + str(chart_data) + ",label:'trophies',fill:true,cubicInterpolationMode:'monotone',borderColor:'rgba(10,180,20,1)',backgroundColor:'rgba(10,180,20,0.1)'}]},options:{scales:{xAxes:[{type:'time',time:{unit:'day'},distribution:'linear'}]},responsive:true,legend:{display:false},tooltips:{mode:'index',intersect:false}}}"
+            await ctx.send(qc.get_short_url())
 
         embed.set_footer(text=choice(texts))
         await ctx.send(embed=embed)
