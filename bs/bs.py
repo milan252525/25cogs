@@ -339,8 +339,7 @@ class BrawlStarsCog(commands.Cog):
                 data = await resp.json()
         if data is not None:
             for time, trophies in zip(data['times'], data['trophies']):
-                chart_data.append("{t:new Date(" + str(time*100) + "),y:" + str(trophies) + "}")
-            await ctx.send(str(chart_data)[:1990])
+                chart_data.append("{t:new Date(" + str(time*1000) + "),y:" + str(trophies) + "}")
             qc = QuickChart()
             qc.config = """
             {
@@ -376,8 +375,7 @@ class BrawlStarsCog(commands.Cog):
                 }
             }
             """
-            await ctx.send(qc.get_short_url())
-
+            embed.set_image(url=qc.get_short_url())
         embed.set_footer(text=choice(texts))
         await ctx.send(embed=embed)
 
