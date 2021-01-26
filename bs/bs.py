@@ -375,10 +375,16 @@ class BrawlStarsCog(commands.Cog):
                         },
                         title: {
                             display: true,
-                            text: 'TROPHY PROGRESSION'
+                            text: 'TROPHY PROGRESSION',
+                            fontStyle: 'bold'
                         },
                         layout: {
-                            padding: 20
+                            padding: {
+                                left: 5,
+                                right: 5,
+                                top: 0,
+                                bottom: 5
+                            }
                         }
                     }
                 }
