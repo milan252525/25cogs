@@ -347,7 +347,7 @@ class BrawlStarsCog(commands.Cog):
                 type: 'line',
                 data: {
                     datasets: [{
-                        data : """ + str(chart_data) + """,
+                        data : """ + str(chart_data.replace("\'", "")) + """,
                         label: "trophies",
                         fill: true,
                         cubicInterpolationMode: 'monotone',
