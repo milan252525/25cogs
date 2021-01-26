@@ -372,6 +372,13 @@ class BrawlStarsCog(commands.Cog):
                         tooltips: {
                             mode: 'index',
                             intersect: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'TROPHY PROGRESSION'
+                        },
+                        layout: {
+                            padding: 20
                         }
                     }
                 }
