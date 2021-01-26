@@ -380,8 +380,8 @@ class BrawlStarsCog(commands.Cog):
                         },
                         layout: {
                             padding: {
-                                left: 2,
-                                right: 5,
+                                left: 5,
+                                right: 10,
                                 top: 0,
                                 bottom: 5
                             }
