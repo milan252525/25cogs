@@ -334,7 +334,7 @@ class BrawlStarsCog(commands.Cog):
         data = None
         chart_data = []
         async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
-            async with session.get(url) as resp:
+            async with session.get(history_url) as resp:
                 data = await resp.json()
         if data is not None:
             data = str(data).replace(" ", "")
@@ -343,7 +343,6 @@ class BrawlStarsCog(commands.Cog):
             chart = "\{type:'line',data:\{datasets:[\{data:{chart_data},label:'trophies',fill:true,cubicInterpolationMode:'monotone',borderColor:'rgba(10,180,20,1)',backgroundColor:'rgba(10,180,20,0.1)'\}]\},options:\{scales:\{xAxes:[\{type:'time',time:\{unit:'day'\},distribution:'linear'\}]\},responsive:true,legend:\{display:false\},tooltips:\{mode:'index',intersect:false\}\}\}"
             chart_url = f"https://quickchart.io/chart?c={chart.format(chart_data)}"
             await ctx.send(chart_url)
-
 
         embed.set_footer(text=choice(texts))
         await ctx.send(embed=embed)
