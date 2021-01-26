@@ -339,7 +339,7 @@ class BrawlStarsCog(commands.Cog):
                 async with session.get(history_url) as resp:
                     data = await resp.json()
             if data is not None and data['status'] == "ok":
-                for time, trophies in zip(data['times'], data['trophies']):
+                for time, trophies in zip(data['times'][::2], data['trophies'][::2]):
                     chart_data.append("{t:new Date(" + str(time*1000) + "),y:" + str(trophies) + "}")
                 qc = QuickChart()
                 qc.config = """
@@ -352,7 +352,7 @@ class BrawlStarsCog(commands.Cog):
                             fill: true,
                             cubicInterpolationMode: 'monotone',
                             borderColor: 'rgba(10, 180, 20, 1)',
-                            backgroundColor: 'rgba(10, 180, 20, 0.1)'
+                            backgroundColor: 'rgba(10, 180, 20, 0.3)'
                         }]
                     },
                     options: {
@@ -381,7 +381,7 @@ class BrawlStarsCog(commands.Cog):
                         layout: {
                             padding: {
                                 left: 5,
-                                right: 5,
+                                right: 10,
                                 top: 0,
                                 bottom: 5
                             }
