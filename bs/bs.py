@@ -4,8 +4,7 @@ from redbot.core.utils.embed import randomize_colour
 from redbot.core.utils.menus import menu, prev_page, next_page
 from discord.ext import tasks
 
-from .utils import badEmbed, goodEmbed, get_league_emoji, get_rank_emoji, get_brawler_emoji, reset_trophies
-from .utils import remove_codes, calculate_starpoints, get_gamemode_id, get_gamemode_emoji, club_status
+from .utils import *
 
 from random import choice
 import asyncio
@@ -319,9 +318,8 @@ class BrawlStarsCog(commands.Cog):
         embed.add_field(
             name="Season Reset",
             value=f"<:bstrophy:552558722770141204> {reset} <:starpoint:661265872891150346> {calculate_starpoints(player)}")
-        #championship gone for now
-        #emo = "<:good:450013422717763609> Qualified" if player.raw_data['isQualifiedFromChampionshipChallenge'] else "<:bad:450013438756782081> Not qualified"
-        #embed.add_field(name="Championship", value=f"{emo}")
+        emo = "<:good:450013422717763609> Qualified" if player.raw_data['isQualifiedFromChampionshipChallenge'] else "<:bad:450013438756782081> Not qualified"
+        embed.add_field(name="Championship", value=f"{emo}")
         texts = [
             "Check out all your brawlers using /brawlers!", 
             "Want to see your club stats? Try /club!", 
