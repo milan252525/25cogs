@@ -340,10 +340,9 @@ class BrawlStarsCog(commands.Cog):
             data = str(data).replace(" ", "")
             for time, trophies in zip(data['times'], data['trophies']):
                 chart_data.append(f"\{t:new Date({time*100}),y:{trophies}\}")
-
-        chart = f"\{type:'line',data:\{datasets:[\{data:history_data,label:"{chart_data}",fill:true,cubicInterpolationMode:'monotone',borderColor:'rgba(10,180,20,1)',backgroundColor:'rgba(10,180,20,0.1)'\}]\},options:\{scales:\{xAxes:[\{type:'time',time:\{unit:'day'\},distribution:'linear'\}]\},responsive:true,legend:\{display:false\},tooltips:\{mode:'index',intersect:false\}\}\}"
-        chart_url = f"https://quickchart.io/chart?c={chart}"
-        await ctx.send(chart_url)
+            chart = f"\{type:'line',data:\{datasets:[\{data:{chart_data},label:\"trophies\",fill:true,cubicInterpolationMode:'monotone',borderColor:'rgba(10,180,20,1)',backgroundColor:'rgba(10,180,20,0.1)'\}]\},options:\{scales:\{xAxes:[\{type:'time',time:\{unit:'day'\},distribution:'linear'\}]\},responsive:true,legend:\{display:false\},tooltips:\{mode:'index',intersect:false\}\}\}"
+            chart_url = f"https://quickchart.io/chart?c={chart}"
+            await ctx.send(chart_url)
 
 
         embed.set_footer(text=choice(texts))
