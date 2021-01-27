@@ -51,10 +51,12 @@ class Welcome(commands.Cog):
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
         self.sortroles.start()
         self.mainsortroles.start()
+        self.sortrolesevents.start()
 
     def cog_unload(self):
         self.sortroles.cancel()
         self.mainsortroles.cancel()
+        self.sortrolesevents.cancel()
 
     async def initialize(self):
         crapikey = await self.bot.get_shared_api_tokens("crapi")
@@ -1003,3 +1005,145 @@ class Welcome(commands.Cog):
             except discord.Forbidden:
                 msg += f":exclamation:Couldn't remove roles of this user. ({newcomer.name})\n"
         await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.blue()))
+
+    @tasks.loop(hours=24)
+    async def sortrolesevents(self):
+        try:
+            ch = self.bot.get_channel(707246339133669436)
+            await ch.trigger_typing()
+            lamember = ch.guild.get_role(654334569528688641)
+            guest = ch.guild.get_role(701822453021802596)
+            es = ch.guild.get_role(654341494773383178)
+            eu = ch.guild.get_role(654342521492865043)
+            asia = ch.guild.get_role(654341631302041610)
+            latam = ch.guild.get_role(654341685920399381)
+            na = ch.guild.get_role(654341571331883010)
+            bd = ch.guild.get_role(706469329679417366)
+            newcomer = ch.guild.get_role(677272975938027540)
+            esg = ch.guild.get_role(704951308154699858)
+            eug = ch.guild.get_role(704951500782174268)
+            asiag = ch.guild.get_role(704951716071866450)
+            latamg = ch.guild.get_role(704951697990221876)
+            nag = ch.guild.get_role(704951841229897758)
+            error_counter = 0
+
+            for member in ch.guild.members:
+                if member.bot:
+                    continue
+                tag = await self.config.user(member).tag()
+                if tag is None:
+                    continue
+                try:
+                    player = await self.ofcbsapi.get_player(tag)
+                    await asyncio.sleep(0.3)
+                except brawlstats.errors.RequestError as e:
+                    error_counter += 1
+                    if error_counter == 5:
+                        await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                          description=f"Stopping after 20 request errors! Displaying the last one:\n({str(e)})"))
+                        break
+                    await asyncio.sleep(1)
+                    continue
+                except Exception as e:
+                    return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                             description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
+
+                msg = ""
+                player_in_club = "name" in player.raw_data["club"]
+
+                tags = []
+                guilds = await self.config.all_guilds()
+                events = guilds[654334199494606848]
+                clubs = events["clubs"]
+                for club in clubs:
+                    info = clubs[club]
+                    tagn = "#" + info["tag"]
+                    tags.append(tagn)
+
+                if not player_in_club:
+                    if es in member.roles:
+                        msg += await self.removeroleifpresent(member, es)
+                        msg += await self.addroleifnotpresent(member, esg)
+                    elif eu in member.roles:
+                        msg += await self.removeroleifpresent(member, eu)
+                        msg += await self.addroleifnotpresent(member, eug)
+                    elif asia in member.roles:
+                        msg += await self.removeroleifpresent(member, asia)
+                        msg += await self.addroleifnotpresent(member, asiag)
+                    elif latam in member.roles:
+                        msg += await self.removeroleifpresent(member, latam)
+                        msg += await self.addroleifnotpresent(member, latamg)
+                    elif na in member.roles:
+                        msg += await self.removeroleifpresent(member, na)
+                        msg += await self.addroleifnotpresent(member, nag)
+                    elif bd in member.roles:
+                        msg += await self.removeroleifpresent(member, bd)
+                    msg += await self.removeroleifpresent(member, lamember, newcomer)
+                    msg += await self.addroleifnotpresent(member, guest)
+
+                if player_in_club and "LA " not in player.club.name and player.club.tag not in tags:
+                    if es in member.roles:
+                        msg += await self.removeroleifpresent(member, es)
+                        msg += await self.addroleifnotpresent(member, esg)
+                    elif eu in member.roles:
+                        msg += await self.removeroleifpresent(member, eu)
+                        msg += await self.addroleifnotpresent(member, eug)
+                    elif asia in member.roles:
+                        msg += await self.removeroleifpresent(member, asia)
+                        msg += await self.addroleifnotpresent(member, asiag)
+                    elif latam in member.roles:
+                        msg += await self.removeroleifpresent(member, latam)
+                        msg += await self.addroleifnotpresent(member, latamg)
+                    elif na in member.roles:
+                        msg += await self.removeroleifpresent(member, na)
+                        msg += await self.addroleifnotpresent(member, nag)
+                    elif bd in member.roles:
+                        msg += await self.removeroleifpresent(member, bd)
+                    msg += await self.removeroleifpresent(member, lamember, newcomer)
+                    msg += await self.addroleifnotpresent(member, guest)
+
+                if player_in_club and "LA " in player.club.name and player.club.tag not in tags:
+                    if esg in member.roles:
+                        msg += await self.removeroleifpresent(member, esg)
+                        msg += await self.addroleifnotpresent(member, es)
+                    elif eug in member.roles:
+                        msg += await self.removeroleifpresent(member, eug)
+                        msg += await self.addroleifnotpresent(member, eu)
+                    elif asiag in member.roles:
+                        msg += await self.removeroleifpresent(member, asiag)
+                        msg += await self.addroleifnotpresent(member, asia)
+                    elif latamg in member.roles:
+                        msg += await self.removeroleifpresent(member, latamg)
+                        msg += await self.addroleifnotpresent(member, latam)
+                    elif nag in member.roles:
+                        msg += await self.removeroleifpresent(member, nag)
+                        msg += await self.addroleifnotpresent(member, na)
+                    msg += await self.removeroleifpresent(member, guest, newcomer)
+                    msg += await self.addroleifnotpresent(member, lamember)
+
+                if player_in_club and player.club.tag in tags:
+                    if esg in member.roles:
+                        msg += await self.removeroleifpresent(member, esg)
+                        msg += await self.addroleifnotpresent(member, es)
+                    elif eug in member.roles:
+                        msg += await self.removeroleifpresent(member, eug)
+                        msg += await self.addroleifnotpresent(member, eu)
+                    elif asiag in member.roles:
+                        msg += await self.removeroleifpresent(member, asiag)
+                        msg += await self.addroleifnotpresent(member, asia)
+                    elif latamg in member.roles:
+                        msg += await self.removeroleifpresent(member, latamg)
+                        msg += await self.addroleifnotpresent(member, latam)
+                    elif nag in member.roles:
+                        msg += await self.removeroleifpresent(member, nag)
+                        msg += await self.addroleifnotpresent(member, na)
+                    msg += await self.removeroleifpresent(member, guest, newcomer)
+                    msg += await self.addroleifnotpresent(member, lamember)
+                if msg != "":
+                    await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member)))
+        except Exception as e:
+            await ch.send(e)
+
+    @sortrolesevents.before_loop
+    async def before_sortrolesevents(self):
+        await asyncio.sleep(5)
