@@ -851,7 +851,7 @@ class BrawlStarsCog(commands.Cog):
             if worstm != "":
                 embed.add_field(name="Lowest Members", value=worstm, inline=True)
             return await ctx.send(embed=randomize_colour(embed))
-        elif keyword in ["memberlist", "members", "list", "m"]:
+        elif keyword in ["memberlist", "members", "list", "m", "ml"]:
             colour = choice([discord.Colour.green(),
                              discord.Colour.blue(),
                              discord.Colour.purple(),
@@ -872,7 +872,7 @@ class BrawlStarsCog(commands.Cog):
                 elif mem.role.lower() == 'member':
                     mems.update({f"{get_league_emoji(mem.trophies)}`{mem.trophies}`**{remove_codes(mem.name)}** {mem.tag}" : "member"})
                 e_name = f"__**{rank}**__ {remove_codes(mem.name)}: {mem.tag}"
-                e_value= f" {get_league_emoji(mem.trophies)}`{mem.trophies}` <:role:739089429599354921>  ️{mem.role.capitalize()}"
+                e_value= f" {get_league_emoji(mem.trophies)}`{mem.trophies}` <:people:449645181826760734>  ️{mem.role.capitalize()}"
                 rank = rank + 1
                 embedfields.append([e_name, e_value])
 
