@@ -234,7 +234,7 @@ class Welcome(commands.Cog):
             labs_tags_roles["#" + tag] = labs_clubs[tag]["role"]
 
         local_tags_roles = {}
-        local_clubs = await self.bsconfig.guild(ch.guild).clubs()
+        local_clubs = await self.bsconfig.guild(ctx.guild).clubs()
 
         for tag in local_clubs:
             local_tags_roles["#" + tag] = local_clubs[tag]["role"]
@@ -405,8 +405,10 @@ class Welcome(commands.Cog):
 
                         msg += await self.addroleifnotpresent(member, notifications)
 
+                        player_in_club = "tag" in player.raw_data["club"]
+
                         member_role_expected = None
-                        if player.club.tag.strip("#") in local_tags_roles:
+                        if player_in_club and player.club.tag.strip("#") in local_tags_roles:
                             member_role_expected = ch.guild.get_role(local_tags_roles[player.club.tag.strip("#")])
                         
                         member_roles = []
@@ -422,7 +424,6 @@ class Welcome(commands.Cog):
 
                         member_role = None if len(member_roles) < 1 else member_roles[0]
 
-                        player_in_club = "tag" in player.raw_data["club"]
                         player_in_local_club = player.club.tag in local_tags_roles.keys()
                         player_in_la_club = player.club.tag in labs_tags_roles.keys()
 
