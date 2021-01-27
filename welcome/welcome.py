@@ -227,21 +227,24 @@ class Welcome(commands.Cog):
             elif language == 'es':
                 return await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=f"¡Algo ha ido mal: {str(e)}"))
 
-        player_in_club = "name" in player.raw_data["club"]
+        labs_guild = self.bot.get_guild(401883208511389716)
+        labs_clubs = await self.bsconfig.guild(labs_guild).clubs()
+        labs_tags_roles = {}
+        for tag in labs_clubs:
+            labs_tags_roles["#" + tag] = labs_clubs[tag]["role"]
+
+        local_tags_roles = {}
+        local_clubs = await self.bsconfig.guild(ch.guild).clubs()
+
+        for tag in local_clubs:
+            local_tags_roles["#" + tag] = local_clubs[tag]["role"]
 
         member_role_expected = None
-        tags = []
-        localtags = []
-        if player_in_club:
-            clubs = await self.bsconfig.guild(ctx.guild).clubs()
-            labs = self.bot.get_guild(401883208511389716)
-            officialclubs = await self.bsconfig.guild(labs).clubs()
-            for key in clubs.keys():
-                if "#" + clubs[key]["tag"] == player.club.tag:
-                    member_role_expected = ctx.guild.get_role(clubs[key]["role"])
-                localtags.append("#" + clubs[key]["tag"])
-            for ofkey in officialclubs.keys():
-                tags.append("#" + officialclubs[ofkey]["tag"])
+        if player.club.tag.strip("#") in local_tags_roles:
+            member_role_expected = ctx.guild.get_role(local_tags_roles[player.club.tag.strip("#")])
+
+        player_in_local_club = player.club.tag in local_tags_roles.keys()
+        player_in_la_club = player.club.tag in labs_tags_roles.keys()
 
         msg += await self.removeroleifpresent(member, newcomer)
         msg += await self.addroleifnotpresent(member, notifications)
@@ -249,28 +252,24 @@ class Welcome(commands.Cog):
         if not player_in_club:
             msg += await self.addroleifnotpresent(member, guest, brawlstars)
 
-        if player_in_club and player.club.tag not in tags:
+        if player_in_club and not player_in_la_club:
             msg += await self.addroleifnotpresent(member, guest, brawlstars)
-
-        if player_in_club and player.club.tag in tags and player.club.tag not in localtags:
-            if ctx.guild.id == 460550486257565697 or ctx.guild.id == 593732431551660063 or ctx.guild.id == 731404113836769320:
-                msg += await self.addroleifnotpresent(member, otherclubs, family, brawlstars)
-            elif ctx.guild.id == 683612536482168914:
-                msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
-                if player_club is not None:
-                    for mem in player_club.members:
-                        if mem.tag == player.raw_data['tag']:
-                            if mem.role.lower() == 'vicepresident':
-                                msg += await self.addroleifnotpresent(member, lavp, leader, leader_divider)
-                            elif mem.role.lower() == 'president':
-                                msg += await self.addroleifnotpresent(member, lapres, leader, leader_divider)
-                            break
-                else:
-                    msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
+        
+        if player_in_club and player_in_la_club and not player_in_local_club:
+            if player_club is not None:
+                for mem in player_club.members:
+                    if mem.tag == player.raw_data['tag']:
+                        if mem.role.lower() == 'vicepresident':
+                            msg += await self.addroleifnotpresent(member, lavp, leader, leader_divider)
+                        elif mem.role.lower() == 'president':
+                            msg += await self.addroleifnotpresent(member, lapres, leader, leader_divider)
+                        break
             else:
-                msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
+                msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
+            msg += await self.addroleifnotpresent(member, otherclubs, mmber, family, brawlstars)
 
-        if player_in_club and player.club.tag in localtags:
+
+        if player_in_club and player_in_local_club:
             if member_role_expected is None:
                 msg += await self.addroleifnotpresent(member, guest, brawlstars)
                 if language == 'en':
@@ -328,15 +327,23 @@ class Welcome(commands.Cog):
     @tasks.loop(hours=4)
     async def sortroles(self):
         try:
+            labs_guild = self.bot.get_guild(401883208511389716)
+            labs_clubs = await self.bsconfig.guild(labs_guild).clubs()
+            labs_tags_roles = {}
+            for tag in labs_clubs:
+                labs_tags_roles["#" + tag] = labs_clubs[tag]["role"]
+
             for g in await self.config.all_guilds():
                 guild = self.bot.get_guild(g)
                 if await self.config.guild(guild).roles.autorole():
                     roles_config = await self.config.guild(guild).roles()
                     language = roles_config['language']
+
                     ch = self.bot.get_channel(roles_config['channel'])
                     if ch is None:
                         continue
                     await ch.trigger_typing()
+
                     family = ch.guild.get_role(roles_config['family'])
                     guest = ch.guild.get_role(roles_config['guest'])
                     newcomer = ch.guild.get_role(roles_config['remove'])
@@ -354,25 +361,31 @@ class Welcome(commands.Cog):
                     lavp = ch.guild.get_role(roles_config['lavp'])
                     error_counter = 0
 
+                    local_tags_roles = {}
+                    local_clubs = await self.bsconfig.guild(ch.guild).clubs()
+
+                    for tag in local_clubs:
+                        local_tags_roles["#" + tag] = local_clubs[tag]["role"]
+
                     for member in ch.guild.members:
                         if member is None or member.bot:
                             continue
                         tag = await self.bsconfig.user(member).tag()
                         if tag is None:
                             continue
-                        if tag is None and guild == 401883208511389716:
-                            msg = ""
-                            if pres in member.roles or vp in member.roles:
-                                msg += "Has President or VP role, no tag saved.\n"
-                                msg += await self.removeroleifpresent(member, vp, pres)
-                                try:
-                                    await member.send(
-                                        f"Hello {member.mention},\nyour (Vice)President role in LA Brawl Stars server has been removed.\nThe reason is you don't have your in-game tag saved at LA bot. You can fix it by saving your tag using `/save #YOURTAG`.\n")
-                                except (discord.HTTPException, discord.Forbidden) as e:
-                                    msg += f"Couldn't send a DM with info. {str(e)}\n"
-                                await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=msg, title=str(member),
-                                                                  timestamp=datetime.datetime.now()))
-                            continue
+                        # if tag is None and guild == 401883208511389716:
+                        #     msg = ""
+                        #     if pres in member.roles or vp in member.roles:
+                        #         msg += "Has President or VP role, no tag saved.\n"
+                        #         msg += await self.removeroleifpresent(member, vp, pres)
+                        #         try:
+                        #             await member.send(
+                        #                 f"Hello {member.mention},\nyour (Vice)President role in LA Brawl Stars server has been removed.\nThe reason is you don't have your in-game tag saved at LA bot. You can fix it by saving your tag using `/save #YOURTAG`.\n")
+                        #         except (discord.HTTPException, discord.Forbidden) as e:
+                        #             msg += f"Couldn't send a DM with info. {str(e)}\n"
+                        #         await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=msg, title=str(member),
+                        #                                           timestamp=datetime.datetime.now()))
+                        #     continue
                         try:
                             player = await self.ofcbsapi.get_player(tag)
                             await asyncio.sleep(0.3)
@@ -381,34 +394,24 @@ class Welcome(commands.Cog):
                                 embed=discord.Embed(colour=discord.Colour.red(), description=f"{str(member)} ({member.id}) #{tag}"))
                             error_counter += 1
                             if error_counter == 10:
-                                await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                                  description=f"Stopping after 10 request errors! Displaying the last one:\n({str(e)})"))
+                                await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"Stopping after 10 request errors! Displaying the last one:\n({str(e)})"))
                                 break
                             await asyncio.sleep(1)
                             continue
                         except Exception as e:
-                            return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                                     description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
+                            return await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
 
                         msg = ""
-                        player_in_club = "name" in player.raw_data["club"]
-                        member_roles = []
-                        member_role_expected = None
-                        tags = []
-                        localtags = []
-                        if player_in_club:
-                            clubs = await self.bsconfig.guild(ch.guild).clubs()
-                            labs = self.bot.get_guild(401883208511389716)
-                            officialclubs = await self.bsconfig.guild(labs).clubs()
-                            for key in clubs.keys():
-                                if "#" + clubs[key]["tag"] == player.club.tag:
-                                    member_role_expected = ch.guild.get_role(clubs[key]["role"])
-                                localtags.append("#" + clubs[key]["tag"])
-                            for ofkey in officialclubs.keys():
-                                tags.append("#" + officialclubs[ofkey]["tag"])
 
+                        msg += await self.addroleifnotpresent(member, notifications)
+
+                        member_role_expected = None
+                        if player.club.tag.strip("#") in local_tags_roles:
+                            member_role_expected = ch.guild.get_role(local_tags_roles[player.club.tag.strip("#")])
+                        
+                        member_roles = []
                         for role in member.roles:
-                            if role.name.startswith('LA '):
+                            if role.id in local_tags_roles.values():
                                 member_roles.append(role)
 
                         if len(member_roles) > 1:
@@ -419,50 +422,51 @@ class Welcome(commands.Cog):
 
                         member_role = None if len(member_roles) < 1 else member_roles[0]
 
-                        msg += await self.addroleifnotpresent(member, notifications)
+                        player_in_club = "tag" in player.raw_data["club"]
+                        player_in_local_club = player.club.tag in local_tags_roles.keys()
+                        player_in_la_club = player.club.tag in labs_tags_roles.keys()
+
+                        player_club = None
+                        if player_in_club and (player_in_local_club or player_in_la_club):
+                            try:
+                                await asyncio.sleep(0.2)
+                                player_club = await self.ofcbsapi.get_club(player.club.tag)
+                            except brawlstats.errors.RequestError:
+                                msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
 
                         if not player_in_club:
                             msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, otherclubs, leader, leader_divider, mmber, memberclub, senior, member_role)
                             msg += await self.addroleifnotpresent(member, guest, brawlstars)
-                        elif player_in_club and player.club.tag not in tags and player.club.tag not in localtags:
+
+                        if player_in_club and not player_in_la_club and not player_in_local_club:
                             msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, otherclubs, leader, leader_divider, mmber, memberclub, senior, member_role)
                             msg += await self.addroleifnotpresent(member, guest, brawlstars)
-                        elif player_in_club and player.club.tag in tags and player.club.tag not in localtags:
-                            if ch.guild.id == 460550486257565697 or ch.guild.id == 593732431551660063 or ch.guild.id == 731404113836769320:
-                                msg += await self.removeroleifpresent(member, vp, pres, newcomer, leader, leader_divider, memberclub, senior, member_role, guest)
-                                msg += await self.addroleifnotpresent(member, otherclubs, family, brawlstars)
-                            elif ch.guild.id == 683612536482168914:
-                                msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, memberclub, senior, member_role, guest)
-                                msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
-                                try:
-                                    await asyncio.sleep(0.2)
-                                    player_club = await self.ofcbsapi.get_club(player.club.tag)
-                                    for mem in player_club.members:
-                                        if mem.tag == player.raw_data['tag']:
-                                            if mem.role.lower() == 'vicepresident':
-                                                msg += await self.removeroleifpresent(member, lapres)
-                                                msg += await self.addroleifnotpresent(member, lavp, leader, leader_divider)
-                                            elif mem.role.lower() == 'president':
-                                                msg += await self.removeroleifpresent(member, lavp)
-                                                msg += await self.addroleifnotpresent(member, lapres, leader, leader_divider)
-                                            elif mem.role.lower() == 'senior':
-                                                msg += await self.removeroleifpresent(member, lavp, lapres, leader, leader_divider)
-                                            elif mem.role.lower() == 'member':
-                                                msg += await self.removeroleifpresent(member, lavp, lapres, leader, leader_divider)
-                                            break
-                                except brawlstats.errors.RequestError:
-                                    msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
-                            else:
-                                msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, leader, leader_divider, memberclub, senior, member_role, guest)
-                                msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
-                        elif player_in_club and player.club.tag in localtags:
+
+                        elif player_in_club and player_in_la_club and not player_in_local_club:
+                            for mem in player_club.members:
+                                if mem.tag == player.raw_data['tag']:
+                                    if mem.role.lower() == 'vicepresident':
+                                        msg += await self.removeroleifpresent(member, lapres)
+                                        msg += await self.addroleifnotpresent(member, lavp, leader, leader_divider)
+                                    elif mem.role.lower() == 'president':
+                                        msg += await self.removeroleifpresent(member, lavp)
+                                        msg += await self.addroleifnotpresent(member, lapres, leader, leader_divider)
+                                    elif mem.role.lower() == 'senior':
+                                        msg += await self.removeroleifpresent(member, lavp, lapres, leader, leader_divider)
+                                    elif mem.role.lower() == 'member':
+                                        msg += await self.removeroleifpresent(member, lavp, lapres, leader, leader_divider)
+                                    break
+                            msg += await self.removeroleifpresent(member, vp, pres, newcomer, leader, leader_divider, memberclub, senior, member_role, guest)
+                            msg += await self.addroleifnotpresent(member, family, otherclubs, mmber, brawlstars)
+    
+                        elif player_in_club and player_in_local_club:
                             if member_role_expected is None:
                                 msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, otherclubs, leader, leader_divider, mmber, memberclub, senior, member_role)
                                 msg += await self.addroleifnotpresent(member, guest, brawlstars)
                                 if language == 'en':
-                                    msg += f"Role for the club {player.club.name} not found.\n"
+                                    msg += f"Role for the club {player.club.name} is not saved.\n"
                                 elif language == 'es':
-                                    msg += f"No se ha encontrado un rol para el club {player.club.name}.\n"
+                                    msg += f"El rol para el club {player.club.name} no está guardado.\n"
                                 await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member), timestamp=datetime.datetime.now()))
                                 continue
                             msg += await self.removeroleifpresent(member, newcomer, otherclubs, guest)
@@ -472,26 +476,23 @@ class Welcome(commands.Cog):
                             elif member_role != member_role_expected:
                                 msg += await self.removeroleifpresent(member, member_role)
                                 msg += await self.addroleifnotpresent(member, member_role_expected)
-                            try:
-                                await asyncio.sleep(0.2)
-                                player_club = await self.ofcbsapi.get_club(player.club.tag)
-                                for mem in player_club.members:
-                                    if mem.tag == player.raw_data['tag']:
-                                        if mem.role.lower() == 'vicepresident':
-                                            msg += await self.removeroleifpresent(member, pres, senior, memberclub)
-                                            msg += await self.addroleifnotpresent(member, vp, leader, leader_divider)
-                                        elif mem.role.lower() == 'president':
-                                            msg += await self.removeroleifpresent(member, vp, senior, memberclub)
-                                            msg += await self.addroleifnotpresent(member, pres, leader)
-                                        elif mem.role.lower() == 'senior':
-                                            msg += await self.removeroleifpresent(member, vp, pres, memberclub, leader, leader_divider)
-                                            msg += await self.addroleifnotpresent(member, senior)
-                                        elif mem.role.lower() == 'member':
-                                            msg += await self.removeroleifpresent(member, vp, pres, senior, leader, leader_divider)
-                                            msg += await self.addroleifnotpresent(member, memberclub)
-                                        break
-                            except brawlstats.errors.RequestError:
-                                msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
+
+                            for mem in player_club.members:
+                                if mem.tag == player.raw_data['tag']:
+                                    if mem.role.lower() == 'vicepresident':
+                                        msg += await self.removeroleifpresent(member, pres, senior, memberclub)
+                                        msg += await self.addroleifnotpresent(member, vp, leader, leader_divider)
+                                    elif mem.role.lower() == 'president':
+                                        msg += await self.removeroleifpresent(member, vp, senior, memberclub)
+                                        msg += await self.addroleifnotpresent(member, pres, leader)
+                                    elif mem.role.lower() == 'senior':
+                                        msg += await self.removeroleifpresent(member, vp, pres, memberclub, leader, leader_divider)
+                                        msg += await self.addroleifnotpresent(member, senior)
+                                    elif mem.role.lower() == 'member':
+                                        msg += await self.removeroleifpresent(member, vp, pres, senior, leader, leader_divider)
+                                        msg += await self.addroleifnotpresent(member, memberclub)
+                                    break
+
                         if msg != "":
                             await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
                                                               timestamp=datetime.datetime.now()))
