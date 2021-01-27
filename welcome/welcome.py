@@ -231,13 +231,13 @@ class Welcome(commands.Cog):
         labs_clubs = await self.bsconfig.guild(labs_guild).clubs()
         labs_tags_roles = {}
         for tag in labs_clubs:
-            labs_tags_roles["#" + tag] = labs_clubs[tag]["role"]
+            labs_tags_roles["#" + labs_clubs[tag]["tag"]] = labs_clubs[tag]["role"]
 
         local_tags_roles = {}
         local_clubs = await self.bsconfig.guild(ctx.guild).clubs()
 
         for tag in local_clubs:
-            local_tags_roles["#" + tag] = local_clubs[tag]["role"]
+            local_tags_roles["#" + local_clubs[tag]["tag"]] = local_clubs[tag]["role"]
 
         if player_in_club:
             member_role_expected = None
@@ -333,7 +333,7 @@ class Welcome(commands.Cog):
             labs_clubs = await self.bsconfig.guild(labs_guild).clubs()
             labs_tags_roles = {}
             for tag in labs_clubs:
-                labs_tags_roles["#" + tag] = labs_clubs[tag]["role"]
+                labs_tags_roles["#" + labs_clubs[tag]["tag"]] = labs_clubs[tag]["role"]
 
             for g in await self.config.all_guilds():
                 guild = self.bot.get_guild(g)
@@ -367,7 +367,7 @@ class Welcome(commands.Cog):
                     local_clubs = await self.bsconfig.guild(ch.guild).clubs()
 
                     for tag in local_clubs:
-                        local_tags_roles["#" + tag] = local_clubs[tag]["role"]
+                        local_tags_roles["#" + local_clubs[tag]["tag"]] = local_clubs[tag]["role"]
 
                     for member in ch.guild.members:
                         if member is None or member.bot:
