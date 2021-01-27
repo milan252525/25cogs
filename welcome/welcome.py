@@ -253,7 +253,7 @@ class Welcome(commands.Cog):
         if not player_in_club:
             msg += await self.addroleifnotpresent(member, guest, brawlstars)
 
-        if player_in_club and not player_in_la_club:
+        if player_in_club and not (player_in_la_club or player_in_local_club):
             msg += await self.addroleifnotpresent(member, guest, brawlstars)
         
         if player_in_club and player_in_la_club and not player_in_local_club:
@@ -261,9 +261,9 @@ class Welcome(commands.Cog):
                 for mem in player_club.members:
                     if mem.tag == player.raw_data['tag']:
                         if mem.role.lower() == 'vicepresident':
-                            msg += await self.addroleifnotpresent(member, lavp, leader, leader_divider)
+                            msg += await self.addroleifnotpresent(member, lavp)
                         elif mem.role.lower() == 'president':
-                            msg += await self.addroleifnotpresent(member, lapres, leader, leader_divider)
+                            msg += await self.addroleifnotpresent(member, lapres)
                         break
             else:
                 msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
@@ -440,7 +440,7 @@ class Welcome(commands.Cog):
                             msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, otherclubs, leader, leader_divider, mmber, memberclub, senior, member_role)
                             msg += await self.addroleifnotpresent(member, guest, brawlstars)
 
-                        if player_in_club and not player_in_la_club and not player_in_local_club:
+                        if player_in_club and not (player_in_la_club or player_in_local_club):
                             msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, otherclubs, leader, leader_divider, mmber, memberclub, senior, member_role)
                             msg += await self.addroleifnotpresent(member, guest, brawlstars)
 
@@ -449,14 +449,14 @@ class Welcome(commands.Cog):
                                 if mem.tag == player.raw_data['tag']:
                                     if mem.role.lower() == 'vicepresident':
                                         msg += await self.removeroleifpresent(member, lapres)
-                                        msg += await self.addroleifnotpresent(member, lavp, leader, leader_divider)
+                                        msg += await self.addroleifnotpresent(member, lavp)
                                     elif mem.role.lower() == 'president':
                                         msg += await self.removeroleifpresent(member, lavp)
-                                        msg += await self.addroleifnotpresent(member, lapres, leader, leader_divider)
+                                        msg += await self.addroleifnotpresent(member, lapres)
                                     elif mem.role.lower() == 'senior':
-                                        msg += await self.removeroleifpresent(member, lavp, lapres, leader, leader_divider)
+                                        msg += await self.removeroleifpresent(member, lavp, lapres)
                                     elif mem.role.lower() == 'member':
-                                        msg += await self.removeroleifpresent(member, lavp, lapres, leader, leader_divider)
+                                        msg += await self.removeroleifpresent(member, lavp, lapres)
                                     break
                             msg += await self.removeroleifpresent(member, vp, pres, newcomer, leader, leader_divider, memberclub, senior, member_role, guest)
                             msg += await self.addroleifnotpresent(member, family, otherclubs, mmber, brawlstars)
@@ -498,7 +498,7 @@ class Welcome(commands.Cog):
                         if msg != "":
                             await ch.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg, title=str(member),
                                                               timestamp=datetime.datetime.now()))
-                await asyncio.sleep(300)
+                await asyncio.sleep(120)
         except Exception as e:
             await self.send_error(e, g)
 
