@@ -246,7 +246,7 @@ class Welcome(commands.Cog):
 
             player_in_local_club = player.club.tag in local_tags_roles.keys()
             player_in_la_club = player.club.tag in labs_tags_roles.keys()
-            await ctx.send(str(local_tags_roles))
+            await ctx.send(str(local_tags_roles)[:1950])
 
         msg += await self.removeroleifpresent(member, newcomer)
         msg += await self.addroleifnotpresent(member, notifications)
