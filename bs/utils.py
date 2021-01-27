@@ -198,8 +198,10 @@ def get_brawler_emoji(name : str):
         return "<:byron:788738414442053662>"
     elif name == "EDGAR":
         return "<:edgar:788751655436943361>"
+    elif name == "COLONEL RUFFS":
+        return "<:ruffs:803995640543313972>"
     else:
-        return ""
+        return "<:__:452891824168894494>"
     
 def remove_codes(text : str):
     toremove = ["</c>", "<c1>", "<c2>", "<c3>", "<c4>", "<c5>", "<c6>", "<c7>", "<c8>", "<c9>", "<c0>"]

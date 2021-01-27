@@ -549,6 +549,9 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(
                 "****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
 
+        if brawler.upper() == "RUFFS":
+            brawler = "COLONEL RUFFS"
+
         unlocked = False
         br = None
         for b in player.raw_data['brawlers']:
@@ -1547,7 +1550,7 @@ class BrawlStarsCog(commands.Cog):
                 if alt is not None:
                     playeralt = await self.ofcbsapi.get_player(alt)
                 await asyncio.sleep(0.2)
-            except brawlstats.errors.RequestError as e:
+            except brawlstats.errors.RequestError:
                 msg += f"**{member.name}**: request error.\n"
                 continue
             except Exception as e:
@@ -1600,7 +1603,7 @@ class BrawlStarsCog(commands.Cog):
                 if alt is not None:
                     playeralt = await self.ofcbsapi.get_player(alt)
                 await asyncio.sleep(0.2)
-            except brawlstats.errors.RequestError as e:
+            except brawlstats.errors.RequestError:
                 continue
             except Exception as e:
                 return
@@ -1632,8 +1635,6 @@ class BrawlStarsCog(commands.Cog):
                         clubs["No club"] = current + 1
                     except KeyError:
                         clubs["No club"] = 1
-
-        embed = discord.Embed(colour=discord.Colour.green())
 
         messages = []
         msg = ""
