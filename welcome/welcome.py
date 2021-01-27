@@ -241,8 +241,8 @@ class Welcome(commands.Cog):
 
         if player_in_club:
             member_role_expected = None
-            if player.club.tag.strip("#") in local_tags_roles.keys():
-                member_role_expected = ctx.guild.get_role(local_tags_roles[player.club.tag.strip("#")])
+            if player.club.tag in local_tags_roles.keys():
+                member_role_expected = ctx.guild.get_role(local_tags_roles[player.club.tag])
 
             player_in_local_club = player.club.tag in local_tags_roles.keys()
             player_in_la_club = player.club.tag in labs_tags_roles.keys()
@@ -410,8 +410,8 @@ class Welcome(commands.Cog):
                         player_in_club = "tag" in player.raw_data["club"]
 
                         member_role_expected = None
-                        if player_in_club and player.club.tag.strip("#") in local_tags_roles:
-                            member_role_expected = ch.guild.get_role(local_tags_roles[player.club.tag.strip("#")])
+                        if player_in_club and player.club.tag in local_tags_roles:
+                            member_role_expected = ch.guild.get_role(local_tags_roles[player.club.tag])
                         
                         member_roles = []
                         for role in member.roles:
