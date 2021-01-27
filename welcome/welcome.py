@@ -424,8 +424,8 @@ class Welcome(commands.Cog):
 
                         member_role = None if len(member_roles) < 1 else member_roles[0]
 
-                        player_in_local_club = player.club.tag in local_tags_roles.keys()
-                        player_in_la_club = player.club.tag in labs_tags_roles.keys()
+                        player_in_local_club = player_in_club and player.club.tag in local_tags_roles.keys()
+                        player_in_la_club = player_in_club and player.club.tag in labs_tags_roles.keys()
 
                         player_club = None
                         if player_in_club and (player_in_local_club or player_in_la_club):
