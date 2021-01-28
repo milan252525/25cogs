@@ -98,8 +98,13 @@ class Welcome(commands.Cog):
         await welcome.send(text)
 
     async def removeroleifpresent(self, member: discord.Member, *roles):
-        msg = ""
         language = await self.config.guild(member.guild).roles.language()
+        if member is None:
+            if language == "en":
+                return "Couldn't remove roles\n"
+            elif language == "es":
+                return "No logre dar los roles\n"
+        msg = ""
         for role in roles:
             if role is None:
                 continue
@@ -112,8 +117,13 @@ class Welcome(commands.Cog):
         return msg
 
     async def addroleifnotpresent(self, member: discord.Member, *roles):
-        msg = ""
         language = await self.config.guild(member.guild).roles.language()
+        if member is None:
+            if language == "en":
+                return "Couldn't add roles\n"
+            elif language == "es":
+                return "No logre quitar los roles\n"
+        msg = ""  
         for role in roles:
             if role is None:
                 continue
@@ -268,7 +278,7 @@ class Welcome(commands.Cog):
                             msg += await self.addroleifnotpresent(member, lapres)
                         break
             else:
-                msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
+                msg += "<:offline:642094554019004416> Couldn't retrieve player's club role. Try again later!"
             msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
 
 
@@ -295,7 +305,7 @@ class Welcome(commands.Cog):
                             msg += await self.addroleifnotpresent(member, memberclub)
                         break
             else:
-                msg += "<:offline:642094554019004416> Couldn't retrieve player's club role."
+                msg += "<:offline:642094554019004416> Couldn't retrieve player's club role. Try again later!"
 
         if msg != "":
             await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(), description=msg))
