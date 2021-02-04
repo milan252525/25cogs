@@ -238,7 +238,7 @@ class BrawlStarsCog(commands.Cog):
             int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
         player_icon_id = player.raw_data["icon"]["id"]
         if self.icons is None:
-            self.icons = await self.starlist_request("https://api.starlist.pro/icons")
+            self.icons = await self.starlist_request("https://api.brawlify.com/icons")
         if self.icons['status'] == 'ok' and self.icons is not None:
             player_icon = self.icons['player'][str(player_icon_id)]['imageUrl2']
         else:
@@ -472,7 +472,7 @@ class BrawlStarsCog(commands.Cog):
 
         player_icon_id = player.raw_data["icon"]["id"]
         if self.icons is None:
-            self.icons = await self.starlist_request("https://api.starlist.pro/icons")
+            self.icons = await self.starlist_request("https://api.brawlify.com/icons")
         if self.icons['status'] == 'ok' and self.icons is not None:
             player_icon = self.icons['player'][str(player_icon_id)]['imageUrl2']
         else:
@@ -537,7 +537,7 @@ class BrawlStarsCog(commands.Cog):
 
         try:
             player = await self.ofcbsapi.get_player(tag)
-            brawler_data = (await self.starlist_request("https://api.starlist.pro/brawlers"))['list']
+            brawler_data = (await self.starlist_request("https://api.brawlify.com/brawlers"))['list']
 
         except brawlstats.errors.NotFoundError:
             return await ctx.send(embed=badEmbed("No player with this tag found, try again!"))
@@ -616,7 +616,7 @@ class BrawlStarsCog(commands.Cog):
                        
     @commands.command(aliases=['e'])
     async def events(self, ctx):
-        events = await self.starlist_request("https://api.starlist.pro/events")
+        events = await self.starlist_request("https://api.brawlify.com/events")
         if events['status'] != "ok":
             return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
         time_now = datetime.datetime.now()
@@ -651,7 +651,7 @@ class BrawlStarsCog(commands.Cog):
             diff = self.time_left((start - time_now).total_seconds())
             upcoming += f"**{challenge}{powerplay}{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n↳ Starts in: {diff}\n{modifier}"
         embed2.description = upcoming
-        embed2.set_footer(text="Data provided by starlist.pro")
+        embed2.set_footer(text="Data provided by brawlify.com")
         await ctx.send(embed=embed1)
         await ctx.send(embed=embed2)
                         
@@ -659,7 +659,7 @@ class BrawlStarsCog(commands.Cog):
     async def map(self, ctx, *, map_name: str):
         if self.maps is None:
             final = {}
-            all_maps = await self.starlist_request("https://api.starlist.pro/maps")
+            all_maps = await self.starlist_request("https://api.brawlify.com/maps")
             for m in all_maps['list']:
                 hash_ = m['hash'] + "-old" if m['disabled'] else m['hash']
                 hash_ = ''.join(i for i in hash_ if not i.isdigit())
@@ -673,8 +673,8 @@ class BrawlStarsCog(commands.Cog):
         result_map = self.maps[result[0][0]]
         embed = discord.Embed(colour=discord.Colour.green() )
         embed.set_author(name=result_map['name'], url=result_map['link'], icon_url=result_map['gm_url'])
-        data = (await self.starlist_request(f"https://api.starlist.pro/maps/{result_map['id']}/300-599"))['map']
-        brawlers = (await self.starlist_request(f"https://api.starlist.pro/brawlers"))['list']
+        data = (await self.starlist_request(f"https://api.brawlify.com/maps/{result_map['id']}/300-599"))['map']
+        brawlers = (await self.starlist_request(f"https://api.brawlify.com/brawlers"))['list']
         if 'stats' in data:
             stats = data['stats']
 
@@ -728,7 +728,7 @@ class BrawlStarsCog(commands.Cog):
                                             
         if result_map['disabled']:
             embed.description = "This map is currently disabled."
-        embed.set_footer(text="Data provided by starlist.pro")
+        embed.set_footer(text="Data provided by brawlify.com")
         embed.set_image(url=result_map['url'])
         await ctx.send(embed=embed)
        
@@ -819,7 +819,7 @@ class BrawlStarsCog(commands.Cog):
                 embed = discord.Embed(description=f"```{discord.utils.escape_markdown(club.description)}```")
             else:
                 embed = discord.Embed(description="```None```")
-            embed.set_author(name=f"{club.name} {club.tag}", icon_url=f"https://cdn.starlist.pro/club/{club.raw_data['badgeId']}.png?v=1", url=url)
+            embed.set_author(name=f"{club.name} {club.tag}", icon_url=f"https://cdn.brawlify.com/club/{club.raw_data['badgeId']}.png?v=1", url=url)
             embed.add_field(
                 name="Total Trophies",
                 value=f"<:bstrophy:552558722770141204> `{club.trophies}`")
@@ -922,10 +922,10 @@ class BrawlStarsCog(commands.Cog):
             else:
                 await ctx.send(embed=embedstosend[0])
         elif keyword == "log":
-            url = "https://api.starlist.pro/clublog/" + club.tag.replace("#", "")
+            url = "https://api.brawlify.com/clublog/" + club.tag.replace("#", "")
             log = await self.starlist_request(url)
             if log['status'] == "trackingDisabled":
-                return await ctx.send(embed=badEmbed(f"Tracking for this club isn't enabled on starlist.pro website!"))
+                return await ctx.send(embed=badEmbed(f"Tracking for this club isn't enabled on brawlify.com website!"))
             if log['status'] != "ok":
                 return await ctx.send(embed=badEmbed(f"Something went wrong. Please try again later! (Status: {log['status']})"))
             msg = ""
@@ -980,7 +980,7 @@ class BrawlStarsCog(commands.Cog):
                              discord.Colour.teal()])
 
             embed = discord.Embed(colour=colour, title=f"{club.name} {club.tag}", description=msg)
-            embed.set_footer(text="Data provided by starlist.pro")
+            embed.set_footer(text="Data provided by brawlify.com")
 
             await ctx.send(embed=embed)
         elif keyword == "link":
