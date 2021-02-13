@@ -1092,24 +1092,24 @@ class BrawlStarsCog(commands.Cog):
                         clubs.append(club)
                 if not offline and load_animation:
                     if 0 <= ind / len(keys) <= 0.25:
-                        if loadingembed.description != "Requesting clubs.\n(25%) ────":
+                        if loadingembed.description != "Requesting club data.\n(25%) ────":
                             loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                                            description="Requesting clubs.\n(25%) ────")
+                                                            description="Requesting club data.\n(25%) ────")
                             await msg.edit(embed=loadingembed)
                     elif 0.25 <= ind / len(keys) <= 0.5:
-                        if loadingembed.description != "Requesting clubs.\n(50%) ────────":
+                        if loadingembed.description != "Requesting club data.\n(50%) ────────":
                             loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                                            description="Requesting clubs.\n(50%) ────────")
+                                                            description="Requesting club data.\n(50%) ────────")
                             await msg.edit(embed=loadingembed)
                     elif 0.5 <= ind / len(keys) <= 0.75:
-                        if loadingembed.description != "Requesting clubs.\n(75%) ────────────":
+                        if loadingembed.description != "Requesting club data.\n(75%) ────────────":
                             loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                                            description="Requesting clubs.\n(75%) ────────────")
+                                                            description="Requesting club data.\n(75%) ────────────")
                             await msg.edit(embed=loadingembed)
                     elif 0.75 <= ind / len(keys) <= 1:
-                        if loadingembed.description != "Requesting clubs.\n(100%) ────────────────":
+                        if loadingembed.description != "Requesting club data.\n(100%) ────────────────":
                             loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                                            description="Requesting clubs.\n(100%) ────────────────")
+                                                            description="Requesting club data.\n(100%) ────────────────")
                             await msg.edit(embed=loadingembed)
                 #await asyncio.sleep(0.3)
 
