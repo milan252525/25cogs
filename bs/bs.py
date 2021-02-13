@@ -1054,16 +1054,18 @@ class BrawlStarsCog(commands.Cog):
                 keyword = keyword.replace("icanjoin", "").strip()
             elif trange is not None:
                 keyword = keyword.replace("icanjoin", "").replace(str(trange), "").strip()
+                                  
+        saved_clubs = await self.config.guild(ctx.guild).clubs()
+        clubs_count = len(saved_clubs.keys())
+        load_animation = clubs_count > 10
 
-        if len((await self.config.guild(ctx.guild).clubs()).keys()) < 1:
+        if clubs_count < 1:
             return await ctx.send(
                 embed=badEmbed(f"This server has no clubs saved. Save a club by using {ctx.prefix}clubs add!"))
 
-        loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                     description="Requesting clubs. Might take a while.\n(0%)", title="Loading...")
-        msg = await ctx.send(embed=loadingembed)
-
-        saved_clubs = await self.config.guild(ctx.guild).clubs()
+        if load_animation:
+            loadingembed = discord.Embed(colour=discord.Colour.red(), description="Requesting club data.\n(0%)")
+            msg = await ctx.send(embed=loadingembed)
 
         try:
             clubs = []
@@ -1088,38 +1090,35 @@ class BrawlStarsCog(commands.Cog):
                         except brawlstats.errors.RequestError as e:
                              return await ctx.send(embed=badEmbed(f"Can't return family clubs, API is offline"))
                         clubs.append(club)
-                if not offline:
+                if not offline and load_animation:
                     if 0 <= ind / len(keys) <= 0.25:
-                        if loadingembed.description != "Requesting clubs. Might take a while.\n(25%) ────":
+                        if loadingembed.description != "Requesting clubs.\n(25%) ────":
                             loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                                            description="Requesting clubs. Might take a while.\n(25%) ────",
-                                                            title="Loading...")
+                                                            description="Requesting clubs.\n(25%) ────")
                             await msg.edit(embed=loadingembed)
                     elif 0.25 <= ind / len(keys) <= 0.5:
-                        if loadingembed.description != "Requesting clubs. Might take a while.\n(50%) ────────":
+                        if loadingembed.description != "Requesting clubs.\n(50%) ────────":
                             loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                                            description="Requesting clubs. Might take a while.\n(50%) ────────",
-                                                            title="Loading...")
+                                                            description="Requesting clubs.\n(50%) ────────")
                             await msg.edit(embed=loadingembed)
                     elif 0.5 <= ind / len(keys) <= 0.75:
-                        if loadingembed.description != "Requesting clubs. Might take a while.\n(75%) ────────────":
+                        if loadingembed.description != "Requesting clubs.\n(75%) ────────────":
                             loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                                            description="Requesting clubs. Might take a while.\n(75%) ────────────",
-                                                            title="Loading...")
+                                                            description="Requesting clubs.\n(75%) ────────────")
                             await msg.edit(embed=loadingembed)
                     elif 0.75 <= ind / len(keys) <= 1:
-                        if loadingembed.description != "Requesting clubs. Might take a while.\n(100%) ────────────────":
+                        if loadingembed.description != "Requesting clubs.\n(100%) ────────────────":
                             loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                                            description="Requesting clubs. Might take a while.\n(100%) ────────────────",
-                                                            title="Loading...")
+                                                            description="Requesting clubs.\n(100%) ────────────────")
                             await msg.edit(embed=loadingembed)
                 #await asyncio.sleep(0.3)
 
             embedFields = []
 
-            loadingembed = discord.Embed(colour=discord.Colour.red(), description="Almost there!", title="Creating the embed...")
+            #if load_animation:
+                #loadingembed = discord.Embed(colour=discord.Colour.red(), description="Almost there!", title="Creating the embed...")
+                #await msg.edit(embed=loadingembed)
             if not offline:
-                await msg.edit(embed=loadingembed)
                 clubs = sorted(clubs, key=lambda sort: (sort.trophies), reverse=not reverse_order)
 
                 for i in range(len(clubs)):
@@ -1167,7 +1166,6 @@ class BrawlStarsCog(commands.Cog):
                 await self.config.guild(ctx.guild).set_raw("clubs", value=saved_clubs)
 
             else:
-                await msg.edit(embed=loadingembed)
                 offclubs = []
                 for k in saved_clubs.keys():
                     offclubs.append([saved_clubs[k]['lastPosition'], k])
@@ -1225,14 +1223,13 @@ class BrawlStarsCog(commands.Cog):
                     embed.add_field(name=e[0], value=e[1], inline=False)
                 embedsToSend.append(embed)
 
-            if len(embedsToSend) > 1:
+            if load_animation:
                 await msg.delete()
+            if len(embedsToSend) > 1:
                 await menu(ctx, embedsToSend, {"⬅": prev_page, "➡": next_page}, timeout=2000)
             elif len(embedsToSend) == 1:
-                await msg.delete()
                 await ctx.send(embed=embedsToSend[0])
             else:
-                await msg.delete()
                 await ctx.send("No clubs found!")
 
         except ZeroDivisionError as e:
