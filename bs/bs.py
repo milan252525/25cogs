@@ -17,7 +17,6 @@ from cachetools import TTLCache
 from fuzzywuzzy import process
 from operator import itemgetter, attrgetter
 from quickchart import QuickChart
-import textwrap 
 
 class BrawlStarsCog(commands.Cog):
 
@@ -775,16 +774,17 @@ class BrawlStarsCog(commands.Cog):
         except brawlstats.errors.RequestError as e:
             return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
+        embeds = []
         result = ""
         for club in lb:
-            result += f"`{club['rank']:03d}` {club['name']} `{club['trophies']}` `{club['member_count']}`\n"
-
-        wrapper = textwrap.TextWrapper(width=2000, replace_whitespace=False)
-        messages = wrapper.wrap(result)
-
-        embeds = []
-        for m in messages:
-            embeds.append(discord.Embed(colour=discord.Color.random(), description=m))
+            line = f"`{club['rank']:03d}` {club['name']} `{club['trophies']}` *{club['member_count']}*\n"
+            if len(result) + len(embed) > 2000:
+                embeds.append(discord.Embed(colour=discord.Color.random(), description=result))
+                result = ""
+            else:
+                result += line
+        if result != "":
+            embeds.append(discord.Embed(colour=discord.Color.random(), description=result))
         await menu(ctx, embeds, {"⬆️": prev_page, "⬇️": next_page, }, timeout=300)
                                             
     @commands.cooldown(1, 3, commands.BucketType.user)
