@@ -780,7 +780,7 @@ class BrawlStarsCog(commands.Cog):
         country = pycountry.countries.get(alpha_2=region)
         name = region[:30].upper() if country is None else country.name.upper()
         for club in lb:
-            cname = club['name'].replace('*', '\\*').replace('_', '\\_')
+            cname = club['name'].replace('*', '\*').replace('_', '\_')
             line = f"`{club['rank']:03d}` **{cname}** {club['tag']} `{club['trophies']}` {club['member_count']}\n"
             if len(result) + len(line) > 2000:
                 embeds.append(discord.Embed(colour=discord.Color.random(), description=result, title=name))
