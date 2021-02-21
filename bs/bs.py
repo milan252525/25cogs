@@ -17,6 +17,7 @@ from cachetools import TTLCache
 from fuzzywuzzy import process
 from operator import itemgetter, attrgetter
 from quickchart import QuickChart
+import pycountry
 
 class BrawlStarsCog(commands.Cog):
 
@@ -776,10 +777,12 @@ class BrawlStarsCog(commands.Cog):
 
         embeds = []
         result = ""
+        country = pycountry.countries.get(alpha_2=region)
+        name = region[:30].upper() if country is None else country.name.upper()
         for club in lb:
-            line = f"`{club['rank']:03d}` {club['name']} {club['tag']} `{club['trophies']}` {club['member_count']}\n"
+            line = f"`{club['rank']:03d}` **{club['name']}** {club['tag']} `{club['trophies']}` {club['member_count']}\n"
             if len(result) + len(line) > 2000:
-                embeds.append(discord.Embed(colour=discord.Color.random(), description=result))
+                embeds.append(discord.Embed(colour=discord.Color.random(), description=result, title=name))
                 result = ""
             else:
                 result += line
