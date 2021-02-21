@@ -784,7 +784,7 @@ class BrawlStarsCog(commands.Cog):
 
         embeds = []
         for m in messages:
-            embed.append(discord.Embed(colour=discord.Color.random(), description=m))
+            embeds.append(discord.Embed(colour=discord.Color.random(), description=m))
         await menu(ctx, embeds, {"⬆️": prev_page, "⬇️": next_page, }, timeout=300)
                                             
     @commands.cooldown(1, 3, commands.BucketType.user)
