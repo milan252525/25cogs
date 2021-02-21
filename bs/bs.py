@@ -778,7 +778,7 @@ class BrawlStarsCog(commands.Cog):
         result = ""
         for club in lb:
             line = f"`{club['rank']:03d}` {club['name']} `{club['trophies']}` *{club['member_count']}*\n"
-            if len(result) + len(embed) > 2000:
+            if len(result) + len(line) > 2000:
                 embeds.append(discord.Embed(colour=discord.Color.random(), description=result))
                 result = ""
             else:
