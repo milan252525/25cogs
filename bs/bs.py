@@ -17,6 +17,7 @@ from cachetools import TTLCache
 from fuzzywuzzy import process
 from operator import itemgetter, attrgetter
 from quickchart import QuickChart
+import textwrap 
 
 class BrawlStarsCog(commands.Cog):
 
@@ -764,9 +765,27 @@ class BrawlStarsCog(commands.Cog):
                 if member is not None:
                     tag = await self.config.user(member).tag()
                     if tag is None:
-                        return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
-                                            
-        return await ctx.send(f"https://laclubs.net/lb#{tag.strip('#')}")                    
+                        return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))                         
+        return await ctx.send(f"https://laclubs.net/lb#{tag.strip('#')}")
+
+    @commands.command()
+    async def bslb(self, ctx, *, region):
+        try:
+            lb = await self.ofcbsapi.get_rankings(ranking="clubs", region=region)
+        except brawlstats.errors.RequestError as e:
+            return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+
+        result = ""
+        for club in lb:
+            result += f"`{club['rank']:03d}` {club['name']} `{club['trophies']}` `{club['member_count']}`\n"
+
+        wrapper = textwrap.TextWrapper(width=2000, replace_whitespace=False)
+        messages = wrapper.wrap(result)
+
+        embeds = []
+        for m in messages:
+            embed.append(discord.Embed(colour=discord.Color.random(), description=m))
+        await menu(ctx, embeds, {"⬆️": prev_page, "⬇️": next_page, }, timeout=300)
                                             
     @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command()
