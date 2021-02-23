@@ -806,7 +806,7 @@ class BrawlStarsCog(commands.Cog):
                     return await ctx.send("This user is not in a club!")
                 tag = player.club.tag
             except brawlstats.errors.RequestError as e:
-                await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+                return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         elif isinstance(key, discord.Member):
             member = key
@@ -819,7 +819,7 @@ class BrawlStarsCog(commands.Cog):
                     return await ctx.send("This user is not in a club!")
                 tag = player.club.tag
             except brawlstats.errors.RequestError as e:
-                await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
+                return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
         elif key.startswith("#"):
             tag = key.upper().replace('O', '0')
         else:
@@ -833,8 +833,7 @@ class BrawlStarsCog(commands.Cog):
             return await ctx.send(embed=badEmbed("No club with this tag found, try again!"))
 
         except brawlstats.errors.RequestError as e:
-            await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-            return
+            return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         if keyword is None:
             url = f"https://laclubs.net/club?tag={club.tag.strip('#').upper()}"
