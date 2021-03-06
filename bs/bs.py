@@ -332,7 +332,7 @@ class BrawlStarsCog(commands.Cog):
                 async with session.get(history_url) as resp:
                     data = await resp.json()
             if data is not None and data['status'] == "ok":
-                for time, trophies in zip(data['times'][:-30:4]+data['times'][-30::2], data['trophies'][:-30:3]+data['trophies'][-30::2]):
+                for time, trophies in zip(data['times'][:-20:4]+data['times'][-20::2], data['trophies'][:-20:4]+data['trophies'][-20::2]):
                     chart_data.append("{t:new Date(" + str(time*1000) + "),y:" + str(trophies) + "}")
                 qc = QuickChart()
                 qc.config = """
