@@ -693,7 +693,8 @@ class BrawlStarsCog(commands.Cog):
                     wr += f"{get_brawler_emoji(name)} `{int(br['winRate'])}%` "
                     if counter % 5 == 0:
                         wr += "\n"
-                embed.add_field(name="Best Win Rates", value=wr, inline=False)
+                if wr.strip() != "":
+                    embed.add_field(name="Best Win Rates", value=wr, inline=False)
 
             if len(stats) > 0 and 'bossWinRate' in stats[0]:
                 bwr = ""
@@ -709,7 +710,8 @@ class BrawlStarsCog(commands.Cog):
                     bwr += f"{get_brawler_emoji(name)} `{int(br['bossWinRate'])}%` "
                     if counter % 5 == 0:
                         bwr += "\n"
-                embed.add_field(name="Best Boss Win Rates", value=bwr, inline=False)
+                if wr.strip() != "":
+                    embed.add_field(name="Best Boss Win Rates", value=bwr, inline=False)
 
             if len(stats) > 0 and 'useRate' in stats[0]:
                 ur = ""
@@ -725,7 +727,8 @@ class BrawlStarsCog(commands.Cog):
                     ur += f"{get_brawler_emoji(name)} `{int(br['useRate'])}%` "
                     if counter % 5 == 0:
                         ur += "\n"
-                embed.add_field(name="Highest Use Rates", value=ur, inline=False)
+                if wr.strip() != "":
+                    embed.add_field(name="Highest Use Rates", value=ur, inline=False)
                                             
         if result_map['disabled']:
             embed.description = "This map is currently disabled."
