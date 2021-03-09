@@ -43,7 +43,8 @@ class BrawlStarsCog(commands.Cog):
         self.starlist_key = (await self.bot.get_shared_api_tokens("starlist"))["starlist"]
         
     async def starlist_request(self, url):
-        header = {"Authorization": f"Bearer {self.starlist_key}", "User-Agent": "LA_bot"}
+        #"Authorization": f"Bearer {self.starlist_key}", 
+        header = {"User-Agent": "LA_bot"}
         async with self.aiohttp_session.get(url, headers=header) as resp:
             if resp.status == 200:
                 return await resp.json()
@@ -674,8 +675,8 @@ class BrawlStarsCog(commands.Cog):
         result_map = self.maps[result[0][0]]
         embed = discord.Embed(colour=discord.Colour.green() )
         embed.set_author(name=result_map['name'], url=result_map['link'], icon_url=result_map['gm_url'])
-        data = (await self.starlist_request(f"https://api.brawlify.com/v1/maps/{result_map['id']}/600+"))
-        brawlers = (await self.starlist_request(f"https://api.brawlify.com/v1/brawlers"))['list']
+        data = (await self.starlist_request(f"https://api.brawlapi.com/v1/maps/{result_map['id']}/600+"))['map']
+        brawlers = (await self.starlist_request(f"https://api.brawlapi.com/v1/brawlers"))['list']
         if 'stats' in data:
             stats = data['stats']
 
@@ -944,7 +945,7 @@ class BrawlStarsCog(commands.Cog):
             else:
                 await ctx.send(embed=embedstosend[0])
         elif keyword == "log":
-            url = "https://api.brawlify.com/clublog/" + club.tag.replace("#", "")
+            url = "https://api.brawlapi.com/clublog/" + club.tag.replace("#", "")
             log = await self.starlist_request(url)
             if log['status'] == "trackingDisabled":
                 return await ctx.send(embed=badEmbed(f"Tracking for this club isn't enabled on brawlify.com website!"))
