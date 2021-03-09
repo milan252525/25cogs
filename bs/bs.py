@@ -619,8 +619,8 @@ class BrawlStarsCog(commands.Cog):
     @commands.command(aliases=['e'])
     async def events(self, ctx):
         events = await self.starlist_request("https://api.brawlapi.com/v1/events")
-        if events['status'] != "ok":
-            return await ctx.send(embed=badEmbed("Something went wrong. Please try again later!"))
+        if 'status' in events:
+            return await ctx.send(embed=badEmbed(f"Something went wrong. Please try again later!\n{events['status']}"))
         time_now = datetime.datetime.now()
         embed1 = discord.Embed(title="ACTIVE EVENTS", colour=discord.Colour.green())
         embed2 = discord.Embed(title="UPCOMING EVENTS", colour=discord.Colour.green())
@@ -675,7 +675,7 @@ class BrawlStarsCog(commands.Cog):
         result_map = self.maps[result[0][0]]
         embed = discord.Embed(colour=discord.Colour.green() )
         embed.set_author(name=result_map['name'], url=result_map['link'], icon_url=result_map['gm_url'])
-        data = (await self.starlist_request(f"https://api.brawlapi.com/v1/maps/{result_map['id']}/600+"))['map']
+        data = (await self.starlist_request(f"https://api.brawlapi.com/v1/maps/{result_map['id']}/600+"))
         brawlers = (await self.starlist_request(f"https://api.brawlapi.com/v1/brawlers"))['list']
         if 'stats' in data:
             stats = data['stats']
