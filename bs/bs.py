@@ -674,7 +674,7 @@ class BrawlStarsCog(commands.Cog):
         result_map = self.maps[result[0][0]]
         embed = discord.Embed(colour=discord.Colour.green() )
         embed.set_author(name=result_map['name'], url=result_map['link'], icon_url=result_map['gm_url'])
-        data = (await self.starlist_request(f"https://api.brawlify.com/v1/maps/{result_map['id']}/600+"))['map']
+        data = (await self.starlist_request(f"https://api.brawlify.com/v1/maps/{result_map['id']}/600+"))
         brawlers = (await self.starlist_request(f"https://api.brawlify.com/v1/brawlers"))['list']
         if 'stats' in data:
             stats = data['stats']
