@@ -677,9 +677,8 @@ class BrawlStarsCog(commands.Cog):
         embed.set_author(name=result_map['name'], url=result_map['link'], icon_url=result_map['gm_url'])
         data = (await self.starlist_request(f"https://api.brawlapi.com/v1/maps/{result_map['id']}/600+"))
         brawlers = (await self.starlist_request(f"https://api.brawlapi.com/v1/brawlers"))['list']
-        if 'stats' in data:
+        if 'stats' in data and len(data['stats']) > 0:
             stats = data['stats']
-
             if len(stats) > 0 and 'winRate' in stats[0]:
                 wr = ""
                 stats.sort(key=itemgetter('winRate'), reverse=True)
