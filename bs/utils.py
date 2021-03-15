@@ -200,6 +200,8 @@ def get_brawler_emoji(name : str):
         return "<:edgar:788751655436943361>"
     elif name == "COLONEL RUFFS":
         return "<:ruffs:803995640543313972>"
+    elif name == "STU":
+        return "<:stu:820963374706982923>"
     else:
         return "<:__:452891824168894494>"
     
