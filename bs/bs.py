@@ -1097,7 +1097,7 @@ class BrawlStarsCog(commands.Cog):
         ]
 
         if load_animation:
-            loadingembed = discord.Embed(colour=discord.Colour.red(), description=f"Requesting club data.\n{loading_bar[0]}")
+            loadingembed = discord.Embed(colour=discord.Colour.red(), title="Requesting club data", description=loading_bar[0])
             msg = await ctx.send(embed=loadingembed)
 
         try:
@@ -1125,24 +1125,24 @@ class BrawlStarsCog(commands.Cog):
                         clubs.append(club)
                 if not offline and load_animation:
                     if 0.15 <= ind / len(keys) <= 0.25:
-                        if loadingembed.description != f"Requesting club data.\n{loading_bar[1]}":
-                            loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                                            description=f"Requesting club data.\n{loading_bar[1]}")
+                        if loadingembed.description != loading_bar[1]:
+                            loadingembed = discord.Embed(colour=discord.Colour.red(), title="Requesting club data",
+                                                            description=loading_bar[1])
                             await msg.edit(embed=loadingembed)
                     elif 0.4 <= ind / len(keys) <= 0.5:
-                        if loadingembed.description != f"Requesting club data.\n{loading_bar[2]}":
-                            loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                                            description=f"Requesting club data.\n{loading_bar[2]}")
+                        if loadingembed.description != loading_bar[2]:
+                            loadingembed = discord.Embed(colour=discord.Colour.red(), title="Requesting club data",
+                                                            description=loading_bar[2])
                             await msg.edit(embed=loadingembed)
                     elif 0.65 <= ind / len(keys) <= 0.75:
-                        if loadingembed.description != f"Requesting club data.\n{loading_bar[3]}":
-                            loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                                            description=f"Requesting club data.\n{loading_bar[3]}")
+                        if loadingembed.description != loading_bar[3]:
+                            loadingembed = discord.Embed(colour=discord.Colour.red(), title="Requesting club data",
+                                                            description=loading_bar[3])
                             await msg.edit(embed=loadingembed)
                     elif 0.9 <= ind / len(keys) <= 1:
-                        if loadingembed.description != f"Requesting club data.\n{loading_bar[4]}":
-                            loadingembed = discord.Embed(colour=discord.Colour.red(),
-                                                            description=f"Requesting club data.\n{loading_bar[4]}")
+                        if loadingembed.description != loading_bar[4]:
+                            loadingembed = discord.Embed(colour=discord.Colour.red(), title="Requesting club data",
+                                                            description=loading_bar[4])
                             await msg.edit(embed=loadingembed)
                 #await asyncio.sleep(0.3)
 
