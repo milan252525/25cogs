@@ -1082,7 +1082,7 @@ class BrawlStarsCog(commands.Cog):
                                   
         saved_clubs = await self.config.guild(ctx.guild).clubs()
         clubs_count = len(saved_clubs.keys())
-        load_animation = clubs_count > 10
+        load_animation = clubs_count > 10 and not offline
 
         if clubs_count < 1:
             return await ctx.send(
