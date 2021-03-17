@@ -297,18 +297,9 @@ class BrawlStarsCog(commands.Cog):
         #embed.add_field(
         #    name="Best Time as Big Brawler",
         #    value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler//60}:{str(player.best_time_as_big_brawler%60).rjust(2, '0')}")
-        title_extra = ""
-        value_extra = ""
         if "highestPowerPlayPoints" in player.raw_data:
-            title_extra = " (Highest)"
-            value_extra = f" ({player.raw_data['highestPowerPlayPoints']})"
-        if "powerPlayPoints" in player.raw_data:
-            embed.add_field(
-                name=f"PP Points{title_extra}",
-                value=f"<:powertrophies:661266876235513867> {player.raw_data['powerPlayPoints']}{value_extra}")
-        else:
-            embed.add_field(name=f"PP Points{title_extra}",
-                            value=f"<:powertrophies:661266876235513867> 0 {value_extra}")
+            value = f"{player.raw_data['highestPowerPlayPoints']}"
+            embed.add_field(name="Highest PP Points", value=f"<:powertrophies:661266876235513867> {value}")
         reset = reset_trophies(player) - player.trophies
         embed.add_field(
             name="Season Reset",
@@ -1089,11 +1080,11 @@ class BrawlStarsCog(commands.Cog):
                 embed=badEmbed(f"This server has no clubs saved. Save a club by using {ctx.prefix}clubs add!"))
                                   
         loading_bar = [
-            "<:blankleft:821065351907246201>" + 6 * "<:blankmid:821065351294615552>" + "<:blankright:821065351621115914>",
-            "<:loadleft:821065351726366761>" + "<:loadmid:821065352061780048>" + 5 * "<:blankmid:821065351294615552>" + "<:blankright:821065351621115914>",
-            "<:loadleft:821065351726366761>" + 3 * "<:loadmid:821065352061780048>" + 3 * "<:blankmid:821065351294615552>" + "<:blankright:821065351621115914>",
-            "<:loadleft:821065351726366761>" + 5 * "<:loadmid:821065352061780048>" + "<:blankmid:821065351294615552>" + "<:blankright:821065351621115914>",
-            "<:loadleft:821065351726366761>" + 6 * "<:loadmid:821065352061780048>" + "<:loadright:821065351903182889>"
+            "<:blankleft:821065351907246201>" + 6 * "<:blankmid:821065351294615552>" + "<:blankright:821065351621115914>" + "_ _",
+            "<:loadleft:821065351726366761>" + "<:loadmid:821065352061780048>" + 5 * "<:blankmid:821065351294615552>" + "<:blankright:821065351621115914>" + "_ _",
+            "<:loadleft:821065351726366761>" + 3 * "<:loadmid:821065352061780048>" + 3 * "<:blankmid:821065351294615552>" + "<:blankright:821065351621115914>" + "_ _",
+            "<:loadleft:821065351726366761>" + 5 * "<:loadmid:821065352061780048>" + "<:blankmid:821065351294615552>" + "<:blankright:821065351621115914>" + "_ _",
+            "<:loadleft:821065351726366761>" + 6 * "<:loadmid:821065352061780048>" + "<:loadright:821065351903182889> + "_ _""
         ]
 
         if load_animation:
