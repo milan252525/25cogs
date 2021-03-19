@@ -307,43 +307,45 @@ class BrawlStarsCog(commands.Cog):
         emo = "<:good:450013422717763609> Qualified" if player.raw_data['isQualifiedFromChampionshipChallenge'] else "<:bad:450013438756782081> Not qualified"
         embed.add_field(name="Championship", value=f"{emo}")
         
-        log = (await self.ofcbsapi.get_battle_logs(player.raw_data['tag'])).raw_data
-        plsolo = None
-        plteam = None
-        for battle in log:
-            if "type" in battle['battle']:
-                if battle['battle']['type'] == "soloRanked" and plsolo is None:
-                    for play in (battle['battle']['teams'][0]+battle['battle']['teams'][1]):
-                        if play['tag'] == player.raw_data['tag']:
-                            plsolo = play['brawler']['trophies']
-                            break
-                if battle['battle']['type'] == "teamRanked" and plteam is None:
-                    for play in (battle['battle']['teams'][0]+battle['battle']['teams'][1]):
-                        if play['tag'] == player.raw_data['tag']:
-                            plteam = play['brawler']['trophies']
-                            break
-            if plsolo is not None and plteam is not None:
-                break
+        try:
+            log = (await self.ofcbsapi.get_battle_logs(player.raw_data['tag'])).raw_data
+            plsolo = None
+            plteam = None
+            for battle in log:
+                if "type" in battle['battle']:
+                    if battle['battle']['type'] == "soloRanked" and plsolo is None:
+                        for play in (battle['battle']['teams'][0]+battle['battle']['teams'][1]):
+                            if play['tag'] == player.raw_data['tag']:
+                                plsolo = play['brawler']['trophies']
+                                break
+                    if battle['battle']['type'] == "teamRanked" and plteam is None:
+                        for play in (battle['battle']['teams'][0]+battle['battle']['teams'][1]):
+                            if play['tag'] == player.raw_data['tag']:
+                                plteam = play['brawler']['trophies']
+                                break
+                if plsolo is not None and plteam is not None:
+                    break
 
-        if plsolo is not None:
-            await self.config.user(member).plsolo.set(plsolo)
-        elif isinstance(member, discord.Member):
-            plsolo = await self.config.user(member).plsolo()
+            if plsolo is not None:
+                await self.config.user(member).plsolo.set(plsolo)
+            elif isinstance(member, discord.Member):
+                plsolo = await self.config.user(member).plsolo()
 
-        if plteam is not None:
-            await self.config.user(member).plteam.set(plteam)
-        elif isinstance(member, discord.Member):
-            plteam = await self.config.user(member).plteam()
+            if plteam is not None:
+                await self.config.user(member).plteam.set(plteam)
+            elif isinstance(member, discord.Member):
+                plteam = await self.config.user(member).plteam()
 
-        if plsolo is not None:
-            embed.add_field(name="Highest Solo League", value=get_power_league(plsolo))
-        else:
-            embed.add_field(name="Highest Solo League", value="<:__:452891824168894494> Unknown")
-        if plteam is not None:
-            embed.add_field(name="Highest Team League", value=get_power_league(plteam))
-        else:
-            embed.add_field(name="Highest Team League", value="<:__:452891824168894494> Unknown")
-
+            if plsolo is not None:
+                embed.add_field(name="Highest Solo League", value=get_power_league(plsolo))
+            else:
+                embed.add_field(name="Highest Solo League", value="<:__:452891824168894494> Play solo match to display")
+            if plteam is not None:
+                embed.add_field(name="Highest Team League", value=get_power_league(plteam))
+            else:
+                embed.add_field(name="Highest Team League", value="<:__:452891824168894494> Play team match to display")
+        except:
+            pass
         
         texts = [
             "Check out all your brawlers using /brawlers!", 
