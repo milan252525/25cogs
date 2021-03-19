@@ -335,6 +335,8 @@ class BrawlStarsCog(commands.Cog):
         elif isinstance(member, discord.Member):
             plteam = await self.config.user(member).plteam()
 
+        await ctx.send(str(plsolo) + str(plteam))
+
         if plsolo is not None:
             embed.add_field(name="Highest Solo League", value=get_power_league(plsolo))
         else:
