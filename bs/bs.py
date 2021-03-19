@@ -312,13 +312,12 @@ class BrawlStarsCog(commands.Cog):
         plteam = None
         for battle in log:
             if "type" in battle['battle']:
-                if battle['battle']['type'] == "soloRanked":
+                if battle['battle']['type'] == "soloRanked" and plsolo is None:
                     for play in (battle['battle']['teams'][0]+battle['battle']['teams'][1]):
                         if play['tag'] == player.raw_data['tag']:
                             plsolo = play['brawler']['trophies']
-                            await ctx.send(str(play))
                             break
-                if battle['battle']['type'] == "teamRanked":
+                if battle['battle']['type'] == "teamRanked" and plteam is None:
                     for play in (battle['battle']['teams'][0]+battle['battle']['teams'][1]):
                         if play['tag'] == player.raw_data['tag']:
                             plteam = play['brawler']['trophies']
