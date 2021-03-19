@@ -314,13 +314,13 @@ class BrawlStarsCog(commands.Cog):
             if "type" in battle['battle']:
                 if battle['battle']['type'] == "soloRanked":
                     for play in (battle['battle']['teams'][0]+battle['battle']['teams'][1]):
-                        if play['tag'] == player.raw_data['tag'] and 'trophies' in play:
-                            plsolo = play['trophies']
+                        if play['tag'] == player.raw_data['tag']:
+                            plsolo = play['brawler']['trophies']
                             break
                 if battle['battle']['type'] == "teamRanked":
                     for play in (battle['battle']['teams'][0]+battle['battle']['teams'][1]):
-                        if play['tag'] == player.raw_data['tag'] and 'trophies' in play:
-                            plteam = play['trophies']
+                        if play['tag'] == player.raw_data['tag']:
+                            plteam = play['brawler']['trophies']
                             break
             if plsolo is not None and plteam is not None:
                 break
@@ -334,8 +334,6 @@ class BrawlStarsCog(commands.Cog):
             await self.config.user(member).plteam.set(plteam)
         elif isinstance(member, discord.Member):
             plteam = await self.config.user(member).plteam()
-
-        await ctx.send(str(plsolo) + " " + str(plteam))
 
         if plsolo is not None:
             embed.add_field(name="Highest Solo League", value=get_power_league(plsolo))
