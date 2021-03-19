@@ -316,6 +316,7 @@ class BrawlStarsCog(commands.Cog):
                     for play in (battle['battle']['teams'][0]+battle['battle']['teams'][1]):
                         if play['tag'] == player.raw_data['tag']:
                             plsolo = play['brawler']['trophies']
+                            await ctx.send(str(play))
                             break
                 if battle['battle']['type'] == "teamRanked":
                     for play in (battle['battle']['teams'][0]+battle['battle']['teams'][1]):
