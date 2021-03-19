@@ -351,3 +351,20 @@ def reset_trophies(player : brawlstats.models.Player):
         else:
             total += 1150
     return total
+
+def get_power_league(league):
+    number = str(3 if league % 3 == 0 else league % 3)
+    if league <= 3:
+        return "<:bronze:822502621138911312> Bronze" + number
+    elif league <= 6:
+        return "<:silver:822502621092511854> Silver" + number
+    elif league <= 9:
+        return "<:gold:822502621310484490> Gold" + number
+    elif league <= 12:
+        return "<:diamond:822502621364748288> Diamond" + number
+    elif league <= 15:
+        return "<:mythic:822502621108502599> Mythic" + number
+    elif league <= 18:
+        return "<:legendary:822502621351903252> Legendary" + number
+    else:
+        return "<:masters:822502621663199252> Masters"
