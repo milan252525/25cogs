@@ -308,7 +308,7 @@ class Blacklist(commands.Cog):
                     if player.club.tag.strip("#") in clubs:
                         roletoping = None
                         for key in saved_clubs:
-                            if saved_clubs[key]['tag']==player.club.upper().replace("#", ""):
+                            if saved_clubs[key]['tag'] == player.club.tag.upper().replace("#", ""):
                                 roletoping = saved_clubs[key]['role']
                                 break
                         if roletoping is None:
@@ -361,7 +361,7 @@ class Blacklist(commands.Cog):
                         if player.club.tag.strip("#") in clubs:
                             roletoping = None
                             for key in saved_clubs:
-                                if saved_clubs[key]['tag']==player.club.upper().replace("#", ""):
+                                if saved_clubs[key]['tag'] == player.club.tag.upper().replace("#", ""):
                                     roletoping = saved_clubs[key]['role']
                                     break
                             if roletoping is None:
