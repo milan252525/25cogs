@@ -24,7 +24,7 @@ class BrawlStarsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=5245652)
-        default_user = {"tag": None, "alt": None, "name" : "", "altname" : "", "plsolo" : None, "plteam" : None}
+        default_user = {"tag": None, "alt": None, "name" : "", "altname" : "", "plsolo" : None, "plteam" : None, "lastsolo" : 0, "lastteam" : 0}
         self.config.register_user(**default_user)
         default_guild = {"clubs": {}}
         self.config.register_guild(**default_guild)
@@ -325,25 +325,30 @@ class BrawlStarsCog(commands.Cog):
                                 break
                 if plsolo is not None and plteam is not None:
                     break
-
+            
+            lastsolo = 0
+            lastteam = 0
+            
             if plsolo is not None:
                 await self.config.user(member).plsolo.set(plsolo)
+                await self.config.user(member).lastsolo.set(int(datetime.datetime.timestamp(datetime.datetime.now())))
             elif isinstance(member, discord.Member):
-                plsolo = await self.config.user(member).plsolo()
+                lastsolo = await self.config.user(member).lastsolo()
+                if (datetime.datetime.now() - datetime.datetime.fromtimestamp(lastsolo)).days > 0:
+                    plsolo = await self.config.user(member).plsolo()
 
             if plteam is not None:
                 await self.config.user(member).plteam.set(plteam)
+                await self.config.user(member).lastteam.set(int(datetime.datetime.timestamp(datetime.datetime.now())))
             elif isinstance(member, discord.Member):
-                plteam = await self.config.user(member).plteam()
+                lastteam = await self.config.user(member).lastteam()
+                if (datetime.datetime.now() - datetime.datetime.fromtimestamp(lastteam)).days > 0:
+                    plteam = await self.config.user(member).plteam()
 
             if plsolo is not None:
-                embed.add_field(name="Highest Solo League", value=get_power_league(plsolo))
-            else:
-                embed.add_field(name="Highest Solo League", value="<:__:452891824168894494> Play solo match to display")
+                embed.add_field(name="Current Solo League", value=get_power_league(plsolo))
             if plteam is not None:
-                embed.add_field(name="Highest Team League", value=get_power_league(plteam))
-            else:
-                embed.add_field(name="Highest Team League", value="<:__:452891824168894494> Play team match to display")
+                embed.add_field(name="Current Team League", value=get_power_league(plteam))
         except:
             pass
         
