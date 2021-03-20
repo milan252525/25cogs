@@ -372,6 +372,7 @@ class BrawlStarsCog(commands.Cog):
             if data is not None and data['status'] == "ok":
                 for time, trophies in zip(data['times'][:-20:4]+data['times'][-20::2], data['trophies'][:-20:4]+data['trophies'][-20::2]):
                     chart_data.append("{t:new Date(" + str(time*1000) + "),y:" + str(trophies) + "}")
+                chart_data.append("{t:new Date(" + str(int(datetime.datetime.timestamp(datetime.datetime.now())*1000)) + "),y:" + str(player.trophies) + "}")
                 qc = QuickChart()
                 qc.config = """
                 {
