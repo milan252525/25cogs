@@ -281,7 +281,7 @@ class Blacklist(commands.Cog):
     async def spainstaffbl(self):
         try:
             errors = 0
-                ch = self.bot.get_channel(822859587790569493)
+            ch = self.bot.get_channel(822859587790569493)
             await ch.trigger_typing()
             clubs = []
             saved_clubs = await self.bsconfig.guild(ch.guild).clubs()
