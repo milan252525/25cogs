@@ -266,7 +266,7 @@ class Blacklist(commands.Cog):
                         if roletoping is None:
                             party = f"No se ha encontrado un rol para el club {player.club.name}"
                         else:
-                            party = role.mention
+                            party = roletoping.mention
                         reason = await self.config.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
                         await ch.send(content=f"Club responsable: {party}", embed=discord.Embed(colour=discord.Colour.red(),
                                                                    description=f"Miembro de la blacklist **{player.name}** con el tag **{player.tag}** se ha unido a **{player.club.name}**!\nCon motivo de blacklist: {reason}"))
@@ -309,12 +309,12 @@ class Blacklist(commands.Cog):
                         roletoping = None
                         for key in saved_clubs:
                             if saved_clubs[key]['tag'] == player.club.tag.upper().replace("#", ""):
-                                roletoping = saved_clubs[key]['role']
+                                roletoping = ch.guild.get_role(saved_clubs[key]['role']) if 'role' in saved_clubs[key] else None
                                 break
                         if roletoping is None:
                             party = f"No se ha encontrado un rol para el club {player.club.name}"
                         else:
-                            party = role.mention
+                            party = roletoping.mention
                         reason = await self.config.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
                         await ch.send(content=f"Club responsable: {party}", embed=discord.Embed(colour=discord.Colour.red(),
                                                                    description=f"Miembro de la blacklist **{player.name}** con el tag **{player.tag}** se ha unido a **{player.club.name}**!\nCon motivo de blacklist: {reason}"))
@@ -362,12 +362,12 @@ class Blacklist(commands.Cog):
                             roletoping = None
                             for key in saved_clubs:
                                 if saved_clubs[key]['tag'] == player.club.tag.upper().replace("#", ""):
-                                    roletoping = saved_clubs[key]['role']
+                                    roletoping = ch.guild.get_role(saved_clubs[key]['role']) if 'role' in saved_clubs[key] else None
                                     break
                             if roletoping is None:
                                 party = f"Couldn't find a role for the club {player.club.name}"
                             else:
-                                party = role.mention
+                                party = roletoping.mention
                             reason = await self.config.guild(serverobj).blacklisted.get_raw(tag, "reason", default="")
                             await ch.send(content=f"Source: {serverobj.name}\nResponsible party: {party}", embed=discord.Embed(colour=discord.Colour.red(),
                                                               description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
