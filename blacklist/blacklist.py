@@ -1,12 +1,10 @@
 import discord
 from discord.ext import tasks
-
 from redbot.core import commands, Config, checks
 
-from bs.utils import badEmbed, goodEmbed, get_league_emoji, get_rank_emoji, get_brawler_emoji, remove_codes, calculate_starpoints
+from bs.utils import badEmbed, goodEmbed
 
 from re import sub
-
 import asyncio
 import brawlstats
 
@@ -216,12 +214,13 @@ class Blacklist(commands.Cog):
         servers = await self.config.all_guilds()
         for server in servers:
             serverobj = self.bot.get_guild(server)
-            try:
-                name = await self.config.guild(serverobj).blacklisted.get_raw(tag, "ign")
-                guild = serverobj.name
-                blacklisted = True
-            except KeyError:
-                continue
+            if serverobj is not None:
+                try:
+                    name = await self.config.guild(serverobj).blacklisted.get_raw(tag, "ign")
+                    guild = serverobj.name
+                    blacklisted = True
+                except KeyError:
+                    continue
 
         if blacklisted:
             await ctx.send(embed=goodEmbed(f"{name} is indeed blacklisted on {guild}!"))
@@ -342,35 +341,36 @@ class Blacklist(commands.Cog):
                 if server == 460550486257565697:
                     continue
                 serverobj = self.bot.get_guild(server)
-                tags = await self.config.guild(serverobj).blacklisted()
-                for tag in tags:
-                    try:
-                        player = await self.ofcbsapi.get_player(tag)
-                        player_in_club = "name" in player.raw_data["club"]
-                        await asyncio.sleep(1)
-                    except brawlstats.errors.RequestError as e:
-                        await asyncio.sleep(5)
-                        errors += 1
-                        if errors == 30:
-                            break
-                    except Exception as e:
-                        return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                                 description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
+                if serverobj is not None:
+                    tags = await self.config.guild(serverobj).blacklisted()
+                    for tag in tags:
+                        try:
+                            player = await self.ofcbsapi.get_player(tag)
+                            player_in_club = "name" in player.raw_data["club"]
+                            await asyncio.sleep(1)
+                        except brawlstats.errors.RequestError as e:
+                            await asyncio.sleep(5)
+                            errors += 1
+                            if errors == 30:
+                                break
+                        except Exception as e:
+                            return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
+                                                                     description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
 
-                    if player_in_club:
-                        if player.club.tag.strip("#") in clubs:
-                            roletoping = None
-                            for key in saved_clubs:
-                                if saved_clubs[key]['tag'] == player.club.tag.upper().replace("#", ""):
-                                    roletoping = ch.guild.get_role(saved_clubs[key]['role']) if 'role' in saved_clubs[key] else None
-                                    break
-                            if roletoping is None:
-                                party = f"Couldn't find a role for the club {player.club.name}"
-                            else:
-                                party = roletoping.mention
-                            reason = await self.config.guild(serverobj).blacklisted.get_raw(tag, "reason", default="")
-                            await ch.send(content=f"Source: {serverobj.name}\nResponsible party: {party}", embed=discord.Embed(colour=discord.Colour.red(),
-                                                              description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
+                        if player_in_club:
+                            if player.club.tag.strip("#") in clubs:
+                                roletoping = None
+                                for key in saved_clubs:
+                                    if saved_clubs[key]['tag'] == player.club.tag.upper().replace("#", ""):
+                                        roletoping = ch.guild.get_role(saved_clubs[key]['role']) if 'role' in saved_clubs[key] else None
+                                        break
+                                if roletoping is None:
+                                    party = f"Couldn't find a role for the club {player.club.name}"
+                                else:
+                                    party = roletoping.mention
+                                reason = await self.config.guild(serverobj).blacklisted.get_raw(tag, "reason", default="")
+                                await ch.send(content=f"Source: {serverobj.name}\nResponsible party: {party}", embed=discord.Embed(colour=discord.Colour.red(),
+                                                                  description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
         except Exception as e:
             await ch.send(e)
 
