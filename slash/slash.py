@@ -30,8 +30,7 @@ class Slash(commands.Cog):
         guild_ids=[401883208511389716]
     )
     async def p_test(self, ctx: SlashContext, member = None):
-        await ctx.respond()
-        await ctx.send(content=ctx.message.content)
+        await ctx.send(content=str(ctx.message))
         await self.bot.process_commands(ctx.message)
 
         
