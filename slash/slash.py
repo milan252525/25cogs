@@ -5,7 +5,7 @@ from discord_slash import cog_ext, SlashContext
 
 class Slash(commands.Cog):
     def __init__(self, bot):
-        self.bot = SlashCommand(bot, override_type = True)
+        self.bot = bot
 
     @cog_ext.cog_slash(name="test")
     async def _test(self, ctx: SlashContext):
