@@ -17,12 +17,12 @@ class Slash(commands.Cog):
 
     @cog_ext.cog_slash(
         name="slashtest", 
-        description="test command, might explode",
+        description="Test command, might explode!",
         guild_ids=[401883208511389716]
     )
-    async def slash_test(self, ctx: SlashContext, member):
+    async def slash_test(self, ctx: SlashContext):
         await ctx.respond()
-        await ctx.send(content="slash works")
+        await ctx.send(content="Slash works!")
 
     @cog_ext.cog_slash(
         name="ptest", 
