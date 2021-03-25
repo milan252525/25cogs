@@ -31,6 +31,9 @@ class Slash(commands.Cog):
     )
     async def p_test(self, ctx: SlashContext, member = None):
         await ctx.send(content=str(ctx.message))
-        await self.bot.process_commands(ctx.message)
+        cmd = discord.Message()
+        cmd.content = f"/profile {member}"
+        cmd.author = ctx.author
+        await self.bot.process_commands(cmd)
 
         
