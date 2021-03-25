@@ -30,10 +30,11 @@ class Slash(commands.Cog):
         guild_ids=[401883208511389716]
     )
     async def p_test(self, ctx: SlashContext, member = None):
-        await ctx.respond(eat=False)
-        msg = await ctx.send(content="Retrieving profile...", delete_after=0.01)
-        msg.content = f"/profile {member}" if member is not None else "/profile"
-        msg.author = ctx.author
-        await self.bot.process_commands(msg)
+        await ctx.respond()
+        await ctx.send("ctx.message is " + str(ctx.message))
+        #msg = await ctx.send(content="Retrieving profile...", delete_after=0.01)
+        #msg.content = f"/profile {member}" if member is not None else "/profile"
+        #msg.author = ctx.author
+        #await self.bot.process_commands(msg)
 
         
