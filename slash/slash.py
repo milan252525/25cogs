@@ -25,7 +25,7 @@ class Slash(commands.Cog):
         description="Get your BS stats",
         guild_ids=[401883208511389716]
     )
-    async def p_test(self, ctx: SlashContext, member: Union[discord.Member, str] = None):
+    async def p_test(self, ctx: SlashContext, member: discord.Member = None):
         await ctx.respond()
         await ctx.send(content=str(member))
 
