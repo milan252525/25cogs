@@ -30,11 +30,10 @@ class Slash(commands.Cog):
         guild_ids=[401883208511389716]
     )
     async def p_test(self, ctx: SlashContext, member = None):
-        await ctx.respond()
-        await ctx.send(content=str(ctx.message))
-        cmd = discord.Message(state=None, channel=ctx.channel, data={"id":0})
-        cmd.content = f"/profile {member}"
-        cmd.author = ctx.author
-        await self.bot.process_commands(cmd)
+        await ctx.respond(eat=False)
+        msg = await ctx.send(content=str(ctx.message))
+        msg.content = f"/profile {member}"
+        msg.author = ctx.author
+        await self.bot.process_commands(msg)
 
         
