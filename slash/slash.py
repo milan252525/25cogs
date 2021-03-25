@@ -31,7 +31,7 @@ class Slash(commands.Cog):
     )
     async def p_test(self, ctx: SlashContext, member = None):
         await ctx.respond()
-        await ctx.send(content=ctx.message.content
+        await ctx.send(content=ctx.message.content)
         await self.bot.process_commands(ctx.message)
 
         
