@@ -1,0 +1,10 @@
+{
+  "author": ["milan_25"],
+  "name" : "Slash",
+  "description": "Slash commands test",
+  "install_msg": "",
+  "short": "Slash commands test",
+  "requirements" : [],
+  "tags": [],
+  "end_user_data_statement" : "This cog does not store user data."
+}
