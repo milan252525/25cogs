@@ -15,3 +15,7 @@ class Slash(commands.Cog):
     async def _test(self, ctx: SlashContext):
         embed = discord.Embed(title="embed test")
         await ctx.send(content="test", embeds=[embed])
+
+    @cog_ext.cog_slash(name="slashtest")
+    async def slash_test(self, ctx: SlashContext):
+        await ctx.send(content="slash works")
