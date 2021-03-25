@@ -5,6 +5,7 @@ from discord_slash import cog_ext, SlashContext
 
 class Slash(commands.Cog):
     def __init__(self, bot):
+        print("SLASH IS: " + bot.slash)
         if not hasattr(bot, "slash"):
             bot.slash = SlashCommand(bot, sync_commands=True)
         self.bot = bot
