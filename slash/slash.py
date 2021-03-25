@@ -1,5 +1,5 @@
 import discord
-from discord.ext import commands
+from redbot.core import commands
 from discord_slash import SlashCommand
 from discord_slash import cog_ext, SlashContext
 
