@@ -32,7 +32,7 @@ class Slash(commands.Cog):
     async def p_test(self, ctx: SlashContext, member = None):
         await ctx.respond(eat=False)
         msg = await ctx.send(content=str(ctx.message))
-        msg.content = f"/profile {member}"
+        msg.content = f"/profile {member}" if member is not None else "/profile"
         msg.author = ctx.author
         await self.bot.process_commands(msg)
 
