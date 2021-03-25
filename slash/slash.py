@@ -7,7 +7,7 @@ import logging
 class Slash(commands.Cog):
     def __init__(self, bot):
         logging.error("SLASH IS: " + str(bot.slash))
-        if not hasattr(bot, "slash"):
+        if bot.slash is None:
             logging.error("condition triggered")
             bot.slash = SlashCommand(bot, sync_commands=True)
         self.bot = bot
