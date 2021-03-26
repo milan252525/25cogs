@@ -75,7 +75,7 @@ class Slash(commands.Cog):
         ]
     )
     async def bs_profile(self, ctx: SlashContext, target:str=None):
-        await ctx.respond()
+        await ctx.defer()
 
         fake_message = FakeMessage(
             content= "...",
