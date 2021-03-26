@@ -185,94 +185,12 @@ class BrawlStarsCog(commands.Cog):
         await ctx.trigger_typing()
         prefix = ctx.prefix
         member = ctx.author if member is None else member
-                
         try:
             member.id
         except AttributeError:
             return await ctx.send(embed=badEmbed(f"No such brawler found! If the brawler's name contains spaces surround it with quotes!"))
-
-        tag = await self.config.user(member).tag()
-        if tag is None:
-            return await ctx.send(embed=badEmbed(f"You have no tag saved! Use {prefix}save <tag>"))
-
-        if tag is None or tag == "":
-            desc = "/p\n/profile @user\n/p discord_name\n/p discord_id\n/p #BSTAG"
-            embed = discord.Embed(
-                title="Invalid argument!",
-                colour=discord.Colour.red(),
-                description=desc)
-            return await ctx.send(embed=embed)
-
-        try:
-            player = await self.ofcbsapi.get_player(tag)
-            brawler_data = (await self.starlist_request("https://api.brawlapi.com/v1/brawlers"))['list']
-
-        except brawlstats.errors.NotFoundError:
-            return await ctx.send(embed=badEmbed("No player with this tag found, try again!"))
-
-        except brawlstats.errors.RequestError as e:
-            return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-
-        except Exception as e:
-            return await ctx.send(
-                "****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
-
-        if brawler.upper() == "RUFFS":
-            brawler = "COLONEL RUFFS"
-
-        unlocked = False
-        br = None
-        for b in player.raw_data['brawlers']:
-            if b['name'] == brawler.upper():
-                br = b
-                unlocked = True
-                break
-
-        data = None
-        for b in brawler_data:
-            if b['name'].upper() == brawler.upper():
-                data = b
-                break
-
-        if br is None and data is None:
-            return await ctx.send(embed=badEmbed(f"No such brawler found! If the brawler's name contains spaces surround it with quotes!"))
-
-        colour = player.name_color if player.name_color is not None else "0xffffffff"
-        embed = discord.Embed(color=discord.Colour.from_rgb(
-            int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
-        if unlocked:
-            embed.set_author(name=f"{player.name}'s {data['name']}", icon_url=data['imageUrl2'])
-        else:
-            embed.set_author(name=f"{data['name']} (Not unlocked)", icon_url=data['imageUrl2'])
-        embed.description = f"<:brawlers:614518101983232020> {data['rarity']['name']}"
-        if unlocked:
-            rank = discord.utils.get(self.bot.emojis, name=f"rank_{br['rank']}")
-            embed.description += f" {rank} {br.get('trophies')}/{br['highestTrophies']}"
-            embed.description += f" <:pp:664267845336825906> {br['power']}"
-        embed.description += "\n```" + data['description'] + "```"
-        embed.set_footer(text=data['class']['name'])
-        starpowers = ""
-        gadgets = ""
-        for star in data['starPowers']:
-            owned = False
-            if unlocked:
-                for sp in br['starPowers']:
-                    if star['id'] == sp['id']:
-                        owned = True
-            emoji = "<:star_power:729732781638156348>" if owned else "<:sp_locked:729751963549302854>"
-            starpowers += f"{emoji} {star['name']}\n`{star['description']}`\n"
-        embed.add_field(name="Star Powers", value=starpowers if starpowers != "" else "No data available")
-        
-        for gadget in data['gadgets']:
-            owned = False
-            if unlocked:
-                for ga in br['gadgets']:
-                    if gadget['id'] == ga['id']:
-                        owned = True
-            emoji = "<:gadget:716341776608133130>" if owned else "<:ga_locked:729752493793476759>"
-            gadgets += f"{emoji} {gadget['name']}\n`{gadget['description']}`\n"
-        embed.add_field(name="Gadgets", value=gadgets if gadgets != "" else "No data available")
-        await ctx.send(embed=embed)
+        embed = await get_stats.get_single_brawler_embed(self.bot, ctx, member)
+        return await ctx.send(embed=embed)
     
     def time_left(self, seconds):
         hours, remainder = divmod(seconds, 3600)

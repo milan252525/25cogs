@@ -64,7 +64,7 @@ class Slash(commands.Cog):
 
     @cog_ext.cog_slash(
         name="profile", 
-        description="Brawl Stars stats",
+        description="BS player stats",
         options=[
             create_option(
                 name="target",
@@ -101,7 +101,7 @@ class Slash(commands.Cog):
 
     @cog_ext.cog_slash(
         name="brawlers", 
-        description="Brawler stats",
+        description="BS player's brawler stats",
         guild_ids=[401883208511389716],
         options=[
             create_option(
@@ -138,5 +138,49 @@ class Slash(commands.Cog):
         ctx.me = context.guild.get_member(self.bot.user.id)
         ctx.bot = self.bot
         await menu(ctx=ctx, pages=embeds, controls={"⬅": prev_page, "➡": next_page}, timeout=300)
+
+    @cog_ext.cog_slash(
+        name="brawler", 
+        description="BS player's detailed brawler stats",
+        guild_ids=[401883208511389716],
+        options=[
+            create_option(
+                name="brawler",
+                description="Brawler name",
+                option_type=SlashCommandOptionType.STRING,
+                required=True
+            ),
+            create_option(
+                name="target",
+                description="Discord user, ID or BS tag",
+                option_type=SlashCommandOptionType.STRING,
+                required=False
+            )
+        ]
+    )
+    async def bs_brawler(self, ctx: SlashContext, brawler:str, target:str=None):
+        await ctx.defer()
+
+        fake_message = FakeMessage(
+            content= "...",
+            channel= ctx.channel,
+            author=ctx.author,
+            id=int(ctx.interaction_id),
+            state=self.bot._connection
+        )
+        context = await self.bot.get_context(fake_message)
+
+        user = None
+        if target is None:
+            user = ctx.author
+        else:
+            try:
+                member_converter = commands.MemberConverter()
+                user = await member_converter.convert(context, target)
+            except commands.MemberNotFound:
+                user = target
+
+        embed = await get_stats.get_single_brawler_embed(self.bot, context, user)
+        await ctx.send(embed=embed)
 
         
