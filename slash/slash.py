@@ -62,7 +62,7 @@ class Slash(commands.Cog):
         self.bot.slash.remove_cog_commands(self)
 
     @cog_ext.cog_slash(
-        name="ptest", 
+        name="profile", 
         description="Get your BS stats",
         guild_ids=[401883208511389716],
         options=[
@@ -74,7 +74,7 @@ class Slash(commands.Cog):
             )
         ]
     )
-    async def p_test(self, ctx: SlashContext, target:str=None):
+    async def bs_profile(self, ctx: SlashContext, target:str=None):
         await ctx.respond()
 
         fake_message = FakeMessage(
