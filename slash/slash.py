@@ -80,7 +80,7 @@ class Slash(commands.Cog):
             content= "/profile",
             channel= ctx.channel,
             author=ctx.author,
-            id=ctx.interaction_id,
+            id=int(ctx.interaction_id),
             state=self.bot._connection
         )
         context = await self.bot.get_context(fake_message)
