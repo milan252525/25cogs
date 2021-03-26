@@ -5,7 +5,7 @@ from redbot.core.utils.menus import menu, prev_page, next_page
 from discord.ext import tasks
 
 from .utils import *
-from . import get_stats
+from . import player_stats, game_stats
 
 from random import choice
 import asyncio
@@ -153,7 +153,7 @@ class BrawlStarsCog(commands.Cog):
         """View player's BS statistics"""
         await ctx.trigger_typing()
         member = ctx.author if member is None else member
-        embed = await get_stats.get_profile_embed(self.bot, ctx, member)
+        embed = await player_stats.get_profile_embed(self.bot, ctx, member)
         return await ctx.send(embed=embed)
 
     @commands.cooldown(1, 3, commands.BucketType.user)
@@ -162,7 +162,7 @@ class BrawlStarsCog(commands.Cog):
         """View player's BS statistics - alt account"""
         await ctx.trigger_typing()
         member = ctx.author if member is None else member
-        embed = await get_stats.get_profile_embed(self.bot, ctx, member, alt=True)
+        embed = await player_stats.get_profile_embed(self.bot, ctx, member, alt=True)
         return await ctx.send(embed=embed)
     
 
@@ -172,7 +172,7 @@ class BrawlStarsCog(commands.Cog):
         """Brawl Stars brawlers"""
         await ctx.trigger_typing()
         member = ctx.author if member is None else member
-        embeds = await get_stats.get_brawlers_embeds(self.bot, ctx, member)
+        embeds = await player_stats.get_brawlers_embeds(self.bot, ctx, member)
         if len(embeds) > 1:
             await menu(ctx, embeds, {"⬅": prev_page, "➡": next_page}, timeout=500)
         else:
@@ -189,57 +189,15 @@ class BrawlStarsCog(commands.Cog):
             member.id
         except AttributeError:
             return await ctx.send(embed=badEmbed(f"No such brawler found! If the brawler's name contains spaces surround it with quotes!"))
-        embed = await get_stats.get_single_brawler_embed(self.bot, ctx, member, brawler)
+        embed = await player_stats.get_single_brawler_embed(self.bot, ctx, member, brawler)
         return await ctx.send(embed=embed)
-    
-    def time_left(self, seconds):
-        hours, remainder = divmod(seconds, 3600)
-        minutes, _ = divmod(remainder, 60)
-        if hours <= 24:
-            return "{}h {:02}m".format(int(hours), int(minutes))
-        else:
-            return f"{int(hours)//24}d {(int(hours)//24)%24}h"
                        
     @commands.command(aliases=['e'])
     async def events(self, ctx):
-        events = await self.starlist_request("https://api.brawlapi.com/v1/events")
-        if 'status' in events:
-            return await ctx.send(embed=badEmbed(f"Something went wrong. Please try again later!\n{events['status']}"))
-        time_now = datetime.datetime.now()
-        embed1 = discord.Embed(title="ACTIVE EVENTS", colour=discord.Colour.green())
-        embed2 = discord.Embed(title="UPCOMING EVENTS", colour=discord.Colour.green())
-        active = ""
-        for ev in events['active']:
-            if ev['slot']['name'] == "Duo Showdown":
-                continue
-            modifier = ""
-            powerplay = ""
-            if ev['slot']['name'] == "Power Play":
-                powerplay = "<:powertrophies:661266876235513867> "
-            if ev['modifier'] is not None:
-                modifier = f"↳ Modifier: {ev['modifier']['name']}\n"
-            active += f"**{powerplay}{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n{modifier}"
-        embed1.description = active
-        upcoming = ""
-        for ev in events['upcoming']:
-            if ev['slot']['name'] == "Duo Showdown":
-                continue
-            modifier = ""
-            powerplay = ""
-            challenge = ""
-            if ev['slot']['name'] == "Power Play":
-                powerplay = "<:powertrophies:661266876235513867> "
-            if "challenge" in ev['slot']['name'].lower():
-                challenge = "<:totaltrophies:614517396111097866> "
-            if ev['modifier'] is not None:
-                modifier = f"↳ Modifier: {ev['modifier']['name']}\n"
-            start = datetime.datetime.strptime(ev['startTime'], '%Y-%m-%dT%H:%M:%S.%fZ')
-            diff = self.time_left((start - time_now).total_seconds())
-            upcoming += f"**{challenge}{powerplay}{get_gamemode_emoji(ev['map']['gameMode']['id'])} {ev['map']['gameMode']['name']}**\n↳ Map: {ev['map']['name']}\n↳ Starts in: {diff}\n{modifier}"
-        embed2.description = upcoming
-        embed2.set_footer(text="Data provided by brawlify.com")
-        await ctx.send(embed=embed1)
-        await ctx.send(embed=embed2)
+        embeds = await game_stats.get_event_embeds(self.bot, ctx)
+        await ctx.send(embeds[0])
+        if len(embeds>1):
+            await ctx.send(embeds[1])
                         
     @commands.command(aliases=['m'])
     async def map(self, ctx, *, map_name: str):

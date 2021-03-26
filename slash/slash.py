@@ -5,7 +5,7 @@ from discord_slash.utils.manage_commands import remove_all_commands, create_opti
 from discord_slash.model import SlashCommandOptionType
 from redbot.core.utils.menus import menu, prev_page, next_page
 
-from bs import get_stats
+from bs import player_stats, game_stats
 
 from typing import Union
 
@@ -96,7 +96,7 @@ class Slash(commands.Cog):
             except commands.MemberNotFound:
                 user = target
 
-        embed = await get_stats.get_profile_embed(self.bot, context, user)
+        embed = await player_stats.get_profile_embed(self.bot, context, user)
         await ctx.send(embed=embed)
 
     @cog_ext.cog_slash(
@@ -134,7 +134,7 @@ class Slash(commands.Cog):
             except commands.MemberNotFound:
                 user = target
 
-        embeds = await get_stats.get_brawlers_embeds(self.bot, context, user)
+        embeds = await player_stats.get_brawlers_embeds(self.bot, context, user)
         ctx.me = context.guild.get_member(self.bot.user.id)
         ctx.bot = self.bot
         await menu(ctx=ctx, pages=embeds, controls={"⬅": prev_page, "➡": next_page}, timeout=300)
@@ -180,7 +180,15 @@ class Slash(commands.Cog):
             except commands.MemberNotFound:
                 user = target
 
-        embed = await get_stats.get_single_brawler_embed(self.bot, context, user, brawler)
+        embed = await player_stats.get_single_brawler_embed(self.bot, context, user, brawler)
         await ctx.send(embed=embed)
 
-        
+    @cog_ext.cog_slash( 
+        name="events", 
+        description="BS active and upcoming events",
+        guild_ids=[401883208511389716]
+    )
+    async def bs_events(self, ctx: SlashContext):
+        await ctx.defer()
+        embeds = await game_stats.get_event_embeds(self.bot)
+        await ctx.send(embeds=embeds)

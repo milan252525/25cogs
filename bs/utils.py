@@ -11,6 +11,14 @@ def goodEmbed(text):
     gembed.set_author(name=text, icon_url="https://i.imgur.com/fSAGoHh.png")
     return gembed
 
+def time_left(seconds):
+    hours, remainder = divmod(seconds, 3600)
+    minutes, _ = divmod(remainder, 60)
+    if hours <= 24:
+        return "{}h {:02}m".format(int(hours), int(minutes))
+    else:
+        return f"{int(hours)//24}d {(int(hours)//24)%24}h"
+
 club_status = {
     "inviteonly" : {"name": "Invite Only", "emoji": "<:invite_only:729734736490266625>"},
     "closed" : {"name": "Closed", "emoji": "<:locked:729734736573890570>"},
