@@ -135,7 +135,8 @@ class Slash(commands.Cog):
                 user = target
 
         embeds = await get_stats.get_brawlers_embeds(self.bot, context, user)
-        #first_message = await ctx.send(embed=embeds[0])
+        ctx.me = self.bot.user
+        ctx.bot = self.bot
         await menu(ctx=ctx, pages=embeds, controls={"⬅": prev_page, "➡": next_page}, timeout=300)
 
         
