@@ -76,7 +76,6 @@ class Slash(commands.Cog):
     )
     async def p_test(self, ctx: SlashContext, member = None):
         await ctx.respond()
-        await ctx.send(embed=discord.Embed(description=str(ctx._json)[:1999]))
         fake_message = FakeMessage(
             content= f"/profile {member}" if member is not None else "/profile",
             channel= ctx.channel,
@@ -84,7 +83,8 @@ class Slash(commands.Cog):
             id=ctx.interaction_id,
             state=self.bot._connection
         )
-        await self.bot.process_commands(fake_message)
+        context = await self.bot.get_context(fake_message)
+        await self.bot.invoke(context)
 
         #msg = await ctx.send(content="Retrieving profile...", delete_after=0.01)
         #msg.content = f"/profile {member}" if member is not None else "/profile"
