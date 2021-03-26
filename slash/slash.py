@@ -76,7 +76,7 @@ class Slash(commands.Cog):
     )
     async def p_test(self, ctx: SlashContext, member = None):
         await ctx.respond()
-        await ctx.send(content="Hi, Im getting your profile")
+        await ctx.send(embed=discord.Embed(description=str(ctx._json)[:1999]))
         fake_message = FakeMessage(
             content= f"/profile {member}" if member is not None else "/profile",
             channel= ctx.channel,
