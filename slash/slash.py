@@ -75,30 +75,36 @@ class Slash(commands.Cog):
         guild_ids=[401883208511389716],
         options=[
             create_option(
-                name="user",
-                description="mention a Discord user or use ID",
-                option_type=SlashCommandOptionType.USER,
-                required=False
-            ),
-            create_option(
-                name="tag",
-                description="in-game tag",
+                name="target",
+                description="discord user or in-game tag",
                 option_type=SlashCommandOptionType.STRING,
                 required=False
-            ),
+            )
         ]
     )
-    async def p_test(self, ctx: SlashContext, user:discord.User=None, tag:str=None):
+    async def p_test(self, ctx: SlashContext, target:str=None):
         await ctx.respond()
-        await ctx.send(content=str(user) + " | " + str(tag))
-        # fake_message = FakeMessage(
-        #     content= f"/profile {member}" if member is not None else "/profile",
-        #     channel= ctx.channel,
-        #     author=ctx.author,
-        #     id=int(ctx.interaction_id),
-        #     state=self.bot._connection
-        # )
-        # context = await self.bot.get_context(fake_message)
-        # await self.bot.invoke(context)
+
+        fake_message = FakeMessage(
+            content= "...",
+            channel= ctx.channel,
+            author=ctx.author,
+            id=int(ctx.interaction_id),
+            state=self.bot._connection
+        )
+        context = await self.bot.get_context(fake_message)
+
+        user = None
+
+        if target is None:
+            user = ctx.author
+        else:
+            try:
+                member_converter = commands.MemberConverter()
+                user = await member_converter.convert(context, target)
+            except commands.MemberNotFound:
+                user = target
+
+        await self.bot.get_cog("BrawlStarsCog").profile(context, member=user)
 
         
