@@ -4,6 +4,8 @@ from discord_slash import SlashCommand, cog_ext, SlashContext
 from discord_slash.utils.manage_commands import remove_all_commands, create_option
 from discord_slash.model import SlashCommandOptionType
 
+from bs import get_stats
+
 from typing import Union
 
 #source - https://github.com/phenom4n4n/phen-cogs/blob/d8cb2bd78fa1edc1b7f85ce4b67add8c8fd7db9e/slashtags/objects.py#L349
@@ -50,16 +52,6 @@ class FakeMessage(discord.Message):
             if not hasattr(self, item):
                 setattr(self, item, None)
 
-    @classmethod
-    def from_interaction(cls, interaction, content: str):
-        return cls(
-            content,
-            state=interaction._state,
-            id=interaction.id,
-            channel=interaction.channel,
-            author=interaction.author,
-        )
-
 class Slash(commands.Cog):
     def __init__(self, bot):
         if not hasattr(bot, "slash"):
@@ -76,7 +68,7 @@ class Slash(commands.Cog):
         options=[
             create_option(
                 name="target",
-                description="discord user or in-game tag",
+                description="Discord user or BS tag",
                 option_type=SlashCommandOptionType.STRING,
                 required=False
             )
@@ -105,6 +97,7 @@ class Slash(commands.Cog):
             except commands.MemberNotFound:
                 user = target
 
-        await self.bot.get_cog("BrawlStarsCog").profile(context, member=user)
+        embed = await get_stats.get_profile_embed(self.bot, context, user)
+        await ctx.send(embed=embed)
 
         
