@@ -7,7 +7,7 @@ import aiohttp
 from quickchart import QuickChart
 import random
 
-def tag_convertor(bot, ctx, member):
+async def tag_convertor(bot, ctx, member):
     if isinstance(member, discord.Member):
         return await bot.get_cog("BrawlStarsCog").config.user(member).tag()
     elif member.startswith("#"):
@@ -23,8 +23,8 @@ def tag_convertor(bot, ctx, member):
                 return await bot.get_cog("BrawlStarsCog").config.user(member).tag()      
     return None
 
-def get_profile_embed(bot, ctx, member):
-    tag = tag_convertor(bot, ctx, member)
+async def get_profile_embed(bot, ctx, member):
+    tag = await tag_convertor(bot, ctx, member)
     if tag is None:
         return badEmbed("This user has no tag saved! Use [prefix]save <tag>")
 
