@@ -18,6 +18,7 @@ from cachetools import TTLCache
 from fuzzywuzzy import process
 from operator import itemgetter, attrgetter
 import pycountry
+import math
 
 class BrawlStarsCog(commands.Cog):
 
@@ -170,125 +171,12 @@ class BrawlStarsCog(commands.Cog):
     async def brawlers(self, ctx, *, member: Union[discord.Member, str] = None):
         """Brawl Stars brawlers"""
         await ctx.trigger_typing()
-        prefix = ctx.prefix
-        tag = ""
         member = ctx.author if member is None else member
-
-        if isinstance(member, discord.Member):
-            tag = await self.config.user(member).tag()
-            if tag is None:
-                return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
-        elif member.startswith("#"):
-            tag = member.upper().replace('O', '0')
+        embeds = await get_stats.get_brawlers_embeds(self.bot, ctx, member)
+        if len(embeds) > 1:
+            await menu(ctx, embeds, {"⬅": prev_page, "➡": next_page}, timeout=2000)
         else:
-            try:
-                member = discord.utils.get(ctx.guild.members, id=int(member))
-                if member is not None:
-                    tag = await self.config.user(member).tag()
-                    if tag is None:
-                        return await ctx.send(
-                            embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
-            except ValueError:
-                member = discord.utils.get(ctx.guild.members, name=member)
-                if member is not None:
-                    tag = await self.config.user(member).tag()
-                    if tag is None:
-                        return await ctx.send(
-                            embed=badEmbed(f"This user has no tag saved! Use {prefix}bssave <tag>"))
-
-        if tag is None or tag == "":
-            desc = "/b\n/brawlers @user\n/b discord_name\n/b discord_id\n/b #BSTAG"
-            embed = discord.Embed(
-                title="Invalid argument!",
-                colour=discord.Colour.red(),
-                description=desc)
-            return await ctx.send(embed=embed)
-
-        has_alt = (await self.config.user(member).alt() is not None) if type(member) == discord.Member else False
-
-        if type(member) == discord.Member and has_alt:
-            tagg = await self.config.user(member).tag()
-            altt = await self.config.user(member).alt()
-            name_main = await self.config.user(member).name()
-            main_text = f" `{name_main}` " if name_main != "" else ""
-            alt_name = await self.config.user(member).altname()
-            alt_text = f" `{alt_name}` " if alt_name != "" else ""
-            tagg = main_text + "#" + tagg.upper()
-            altt = alt_text + "#" + altt.upper()
-            prompt = await ctx.send(embed=discord.Embed(colour=discord.Colour.blue(),
-                                                        title="Which one of the accounts would you like to see?", description=f"1️⃣ {tagg}\n2️⃣ {altt}"))
-            await prompt.add_reaction("1️⃣")
-            await prompt.add_reaction("2️⃣")
-
-            def check(reaction, user):
-                return user == ctx.author and str(reaction.emoji) in ["1️⃣", "2️⃣"]
-
-            try:
-                reaction, _ = await self.bot.wait_for('reaction_add', check=check, timeout=60)
-            except asyncio.TimeoutError:
-                return await prompt.delete()
-
-            if str(reaction.emoji) == "1️⃣":
-                tag = await self.config.user(member).tag()
-            elif str(reaction.emoji) == "2️⃣":
-                tag = await self.config.user(member).alt()
-
-            await prompt.delete()
-
-        try:
-            player = await self.ofcbsapi.get_player(tag)
-
-        except brawlstats.errors.NotFoundError:
-            return await ctx.send(embed=badEmbed("No player with this tag found, try again!"))
-
-        except brawlstats.errors.RequestError as e:
-            return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
-
-        except Exception as e:
-            return await ctx.send(
-                "****Something went wrong, please send a personal message to LA Modmail bot or try again!****")
-
-        colour = player.name_color if player.name_color is not None else "0xffffffff"
-
-        player_icon_id = player.raw_data["icon"]["id"]
-        if self.icons is None:
-            self.icons = await self.starlist_request("https://api.brawlapi.com/v1/icons")
-        if 'status' not in self.icons and self.icons is not None:
-            player_icon = self.icons['player'][str(player_icon_id)]['imageUrl2']
-        else:
-            self.icons = None
-            player_icon = member.avatar_url
-
-        brawlers = player.raw_data['brawlers']
-        brawlers.sort(key=itemgetter('trophies'), reverse=True)
-
-        embedfields = []
-        
-        for br in brawlers:
-            rank = discord.utils.get(self.bot.emojis, name=f"rank_{br['rank']}")
-            ename = f"{get_brawler_emoji(br['name'])} {br['name'].lower().title()} "
-            ename += f"<:pp:664267845336825906> {br['power']}"
-            evalue = f"{rank} `{br['trophies']}/{br['highestTrophies']}`\n"
-            evalue += f"<:star_power:729732781638156348> `{len(br['starPowers'])}` "
-            evalue += f"<:gadget:716341776608133130> `{len(br['gadgets'])}`"
-            evalue = evalue.strip()
-            embedfields.append([ename, evalue])
-        
-        embedstosend = []
-        for i in range(0, len(embedfields), 15):
-            embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}/44):")
-            embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
-            for e in embedfields[i:i + 15]:
-                embed.add_field(name=e[0], value=e[1], inline=True)
-            embedstosend.append(embed)
-
-        for i in range(len(embedstosend)):
-            embedstosend[i].set_footer(text=f"Page {i+1}/{len(embedstosend)}\n/brawler <name> for more stats")
-
-        if len(embedstosend) > 1:
-            await menu(ctx, embedstosend, {"⬅": prev_page, "➡": next_page}, timeout=2000)
-        else:
-            await ctx.send(embed=embedstosend[0])
+            await ctx.send(embed=embeds[0])
 
     @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command(aliases=['br'])
@@ -1028,7 +916,7 @@ class BrawlStarsCog(commands.Cog):
                     name=f"{ctx.guild.name} clubs",
                     icon_url=ctx.guild.icon_url)
                 page = (i // 8) + 1
-                footer = f"[{page}/{len(embedFields)//8+1}] API is offline, showing last saved data." if offline else f"[{page}/{len(embedFields)//8+1}] Need more info about a club? Use {ctx.prefix}club [key]"
+                footer = f"[{page}/{math.ceil(len(embedFields)/8)}] API is offline, showing last saved data." if offline else f"[{page}/{len(embedFields)//8+1}] Need more info about a club? Use {ctx.prefix}club [key]"
                 embed.set_footer(text=footer)
                 for e in embedFields[i:i + 8]:
                     embed.add_field(name=e[0], value=e[1], inline=False)

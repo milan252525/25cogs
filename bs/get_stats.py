@@ -6,6 +6,7 @@ import datetime
 import aiohttp
 from quickchart import QuickChart
 import random
+from operator import itemgetter, attrgetter
 
 async def tag_convertor(bot, ctx, member, alt=False):
     if alt:
@@ -38,6 +39,9 @@ async def get_profile_embed(bot, ctx, member, alt=False):
         tag = await tag_convertor(bot, ctx, member)
         if tag is None:
             return badEmbed("This user has no tag saved! Use [prefix]save <tag>")
+        if tag == "":
+            desc = "/p\n/profile @user\n/p discord_name\n/p discord_id\n/p #BSTAG"
+            return discord.Embed(title="Invalid argument!", colour=discord.Colour.red(), description=desc)
 
     bs_cog = bot.get_cog("BrawlStarsCog")
     try:
@@ -241,3 +245,59 @@ async def get_profile_embed(bot, ctx, member, alt=False):
             embed.set_image(url=qc.get_short_url())
     embed.set_footer(text=random.choice(texts))
     return embed
+
+async def get_brawlers_embeds(bot, ctx, member):
+    tag = await tag_convertor(bot, ctx, member)
+    if tag is None or tag == "":
+        return [badEmbed("This user has no tag saved! Use [prefix]save <tag>")]
+
+    bs_cog = bot.get_cog("BrawlStarsCog")
+    try:
+        player = await bs_cog.ofcbsapi.get_player(tag)
+
+    except brawlstats.errors.NotFoundError:
+        return [badEmbed("No player with this tag found, try again!")]
+
+    except brawlstats.errors.RequestError as e:
+        return [badEmbed("BS API ERROR: " + str(e))]
+
+    except Exception as e:
+        return [badEmbed("BS API ERROR: " + str(e))]
+
+    colour = player.name_color if player.name_color is not None else "0xffffffff"
+
+    player_icon_id = player.raw_data["icon"]["id"]
+    if bs_cog.icons is None:
+        bs_cog.icons = await bs_cog.starlist_request("https://api.brawlapi.com/v1/icons")
+    if 'status' not in bs_cog.icons and bs_cog.icons is not None:
+        player_icon = bs_cog.icons['player'][str(player_icon_id)]['imageUrl2']
+    else:
+        bs_cog.icons = None
+        player_icon = member.avatar_url
+
+    brawlers = player.raw_data['brawlers']
+    brawlers.sort(key=itemgetter('trophies'), reverse=True)
+
+    embedfields = []
+    
+    for br in brawlers:
+        rank = discord.utils.get(bs_cog.bot.emojis, name=f"rank_{br['rank']}")
+        ename = f"{get_brawler_emoji(br['name'])} {br['name'].lower().title()} "
+        ename += f"<:pp:664267845336825906> {br['power']}"
+        evalue = f"{rank} `{br['trophies']}/{br['highestTrophies']}`\n"
+        evalue += f"<:star_power:729732781638156348> `{len(br['starPowers'])}` "
+        evalue += f"<:gadget:716341776608133130> `{len(br['gadgets'])}`"
+        evalue = evalue.strip()
+        embedfields.append([ename, evalue])
+    
+    embedstosend = []
+    for i in range(0, len(embedfields), 15):
+        embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers({len(brawlers)}/44):")
+        embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
+        for e in embedfields[i:i + 15]:
+            embed.add_field(name=e[0], value=e[1], inline=True)
+        embedstosend.append(embed)
+
+    for i in range(len(embedstosend)):
+        embedstosend[i].set_footer(text=f"Page {i+1}/{len(embedstosend)}\n/brawler <name> for more stats")
+    return embedstosend

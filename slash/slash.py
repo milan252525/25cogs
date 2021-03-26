@@ -63,11 +63,11 @@ class Slash(commands.Cog):
 
     @cog_ext.cog_slash(
         name="profile", 
-        description="Get your BS stats",
+        description="Brawl Stars stats",
         options=[
             create_option(
                 name="target",
-                description="Discord user or BS tag",
+                description="Discord user, ID or BS tag",
                 option_type=SlashCommandOptionType.STRING,
                 required=False
             )
@@ -97,5 +97,43 @@ class Slash(commands.Cog):
 
         embed = await get_stats.get_profile_embed(self.bot, context, user)
         await ctx.send(embed=embed)
+
+    @cog_ext.cog_slash(
+        name="brawlers", 
+        description="Brawler stats",
+        guild_ids=[401883208511389716],
+        options=[
+            create_option(
+                name="target",
+                description="Discord user, ID or BS tag",
+                option_type=SlashCommandOptionType.STRING,
+                required=False
+            )
+        ]
+    )
+    async def bs_brawlers(self, ctx: SlashContext, target:str=None):
+        await ctx.defer()
+
+        fake_message = FakeMessage(
+            content= "...",
+            channel= ctx.channel,
+            author=ctx.author,
+            id=int(ctx.interaction_id),
+            state=self.bot._connection
+        )
+        context = await self.bot.get_context(fake_message)
+
+        user = None
+        if target is None:
+            user = ctx.author
+        else:
+            try:
+                member_converter = commands.MemberConverter()
+                user = await member_converter.convert(context, target)
+            except commands.MemberNotFound:
+                user = target
+
+        embeds = await get_stats.get_brawlers_embeds(self.bot, context, user)
+        await ctx.send(embeds=embeds)
 
         
