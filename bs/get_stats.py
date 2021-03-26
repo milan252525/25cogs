@@ -31,11 +31,11 @@ async def tag_convertor(bot, ctx, member, alt=False):
 
 async def get_profile_embed(bot, ctx, member, alt=False):
     if alt:
-        tag = await tag_convertor(bot, ctx, member)
+        tag = await tag_convertor(bot, ctx, member, alt=True)
         if tag is None:
             return badEmbed("This user has no alt saved! Use [prefix]savealt <tag>")
     else:
-        tag = await tag_convertor(bot, ctx, member, alt=True)
+        tag = await tag_convertor(bot, ctx, member)
         if tag is None:
             return badEmbed("This user has no tag saved! Use [prefix]save <tag>")
 
@@ -47,10 +47,10 @@ async def get_profile_embed(bot, ctx, member, alt=False):
         return badEmbed("No player with this tag found, try again!")
 
     except brawlstats.errors.RequestError as e:
-        return badEmbed("BS API ERROR: " +str(e))
+        return badEmbed("BS API ERROR: " + str(e))
 
     except brawlstats.errors.RequestError as e:
-        return badEmbed("BS API ERROR: " +str(e))
+        return badEmbed("BS API ERROR: " + str(e))
         
     colour = player.name_color if player.name_color is not None else "0xffffffff"
     embed = discord.Embed(color=discord.Colour.from_rgb(
