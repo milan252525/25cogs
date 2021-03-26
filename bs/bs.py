@@ -196,7 +196,7 @@ class BrawlStarsCog(commands.Cog):
     async def events(self, ctx):
         embeds = await game_stats.get_event_embeds(self.bot)
         await ctx.send(embeds[0])
-        if len(embeds>1):
+        if len(embeds) > 1:
             await ctx.send(embeds[1])
                         
     @commands.command(aliases=['m'])
