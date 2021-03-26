@@ -74,16 +74,17 @@ class Slash(commands.Cog):
         description="Get your BS stats",
         guild_ids=[401883208511389716]
     )
-    async def p_test(self, ctx: SlashContext, member = None):
+    async def p_test(self, ctx: SlashContext, member = discord.Member):
         await ctx.respond()
-        fake_message = FakeMessage(
-            content= f"/profile {member}" if member is not None else "/profile",
-            channel= ctx.channel,
-            author=ctx.author,
-            id=int(ctx.interaction_id),
-            state=self.bot._connection
-        )
-        context = await self.bot.get_context(fake_message)
-        await self.bot.invoke(context)
+        await self.bot.get_cog("BrawlStarsCog").profile(ctx, member=member)
+        # fake_message = FakeMessage(
+        #     content= f"/profile {member}" if member is not None else "/profile",
+        #     channel= ctx.channel,
+        #     author=ctx.author,
+        #     id=int(ctx.interaction_id),
+        #     state=self.bot._connection
+        # )
+        # context = await self.bot.get_context(fake_message)
+        # await self.bot.invoke(context)
 
         
