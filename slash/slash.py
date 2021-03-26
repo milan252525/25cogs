@@ -83,7 +83,7 @@ class Slash(commands.Cog):
             id=ctx.interaction_id,
             state=self.bot._connection
         )
-        # context = await self.bot.get_context(fake_message)
+        context = await self.bot.get_context(fake_message)
         # await self.bot.invoke(context)
 
         #msg = await ctx.send(content="Retrieving profile...", delete_after=0.01)
