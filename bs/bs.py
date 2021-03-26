@@ -152,7 +152,7 @@ class BrawlStarsCog(commands.Cog):
         """View player's BS statistics"""
         await ctx.trigger_typing()
         member = ctx.author if member is None else member
-        embed = get_stats.get_profile_embed(self.bot, ctx, member)
+        embed = await get_stats.get_profile_embed(self.bot, ctx, member)
         return await ctx.send(embed=embed)
 
     @commands.cooldown(1, 3, commands.BucketType.user)
@@ -161,7 +161,7 @@ class BrawlStarsCog(commands.Cog):
         """View player's BS statistics - alt account"""
         await ctx.trigger_typing()
         member = ctx.author if member is None else member
-        embed = get_stats.get_profile_embed(self.bot, ctx, member, alt=True)
+        embed = await get_stats.get_profile_embed(self.bot, ctx, member, alt=True)
         return await ctx.send(embed=embed)
     
 
