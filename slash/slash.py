@@ -75,7 +75,7 @@ class Slash(commands.Cog):
         guild_ids=[401883208511389716]
     )
     async def p_test(self, ctx: SlashContext, member = None):
-        #await ctx.respond()
+        await ctx.respond()
         fake_message = FakeMessage(
             content= "/profile",
             channel= ctx.channel,
