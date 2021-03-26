@@ -2,6 +2,8 @@ import discord
 import typing
 from .utils import *
 import datetime
+from fuzzywuzzy import process
+from operator import itemgetter, attrgetter
 
 async def get_event_embeds(bot):
     bs_cog = bot.get_cog("BrawlStarsCog")
@@ -42,3 +44,82 @@ async def get_event_embeds(bot):
     embed2.description = upcoming
     embed2.set_footer(text="Data provided by brawlify.com")
     return [embed1, embed2]
+
+async def get_map_embed(bot, map_name):
+    bs_cog = bot.get_cog("BrawlStarsCog")
+    if bs_cog.maps is None:
+        final = {}
+        all_maps = await bs_cog.starlist_request("https://api.brawlapi.com/v1/maps")
+        for m in all_maps['list']:
+            hash_ = m['hash'] + "-old" if m['disabled'] else m['hash']
+            hash_ = ''.join(i for i in hash_ if not i.isdigit())
+            final[hash_] = {'url': m['imageUrl'], 'name': m['name'], 
+                                'disabled': m['disabled'], 'link': m['link'],
+                                'gm_url': m['gameMode']['imageUrl'], 'id': m['id']}
+        bs_cog.maps = final
+                    
+    map_name = map_name.replace(" ", "-")
+    result = process.extract(map_name, list(bs_cog.maps.keys()), limit=1)
+    result_map = bs_cog.maps[result[0][0]]
+    embed = discord.Embed(colour=discord.Colour.green() )
+    embed.set_author(name=result_map['name'], url=result_map['link'], icon_url=result_map['gm_url'])
+    data = (await bs_cog.starlist_request(f"https://api.brawlapi.com/v1/maps/{result_map['id']}/600+"))
+    brawlers = (await bs_cog.starlist_request(f"https://api.brawlapi.com/v1/brawlers"))['list']
+    if 'stats' in data and len(data['stats']) > 0:
+        stats = data['stats']
+        if len(stats) > 0 and 'winRate' in stats[0]:
+            wr = ""
+            stats.sort(key=itemgetter('winRate'), reverse=True)
+            for counter, br in enumerate(stats[:10], start=1):
+                name = None
+                for b in brawlers:
+                    if b['id'] == br['brawler']:
+                        name = b['name'].upper()
+                        break
+                if name is None:
+                    continue                               
+                wr += f"{get_brawler_emoji(name)} `{int(br['winRate'])}%` "
+                if counter % 5 == 0:
+                    wr += "\n"
+            if wr.strip() != "":
+                embed.add_field(name="Best Win Rates", value=wr, inline=False)
+
+        if len(stats) > 0 and 'bossWinRate' in stats[0]:
+            bwr = ""
+            stats.sort(key=itemgetter('bossWinRate'), reverse=True)
+            for counter, br in enumerate(stats[:10], start=1):
+                name = None
+                for b in brawlers:
+                    if b['id'] == br['brawler']:
+                        name = b['name'].upper()
+                        break
+                if name is None:
+                    continue                               
+                bwr += f"{get_brawler_emoji(name)} `{int(br['bossWinRate'])}%` "
+                if counter % 5 == 0:
+                    bwr += "\n"
+            if wr.strip() != "":
+                embed.add_field(name="Best Boss Win Rates", value=bwr, inline=False)
+
+        if len(stats) > 0 and 'useRate' in stats[0]:
+            ur = ""
+            stats.sort(key=itemgetter('useRate'), reverse=True)
+            for counter, br in enumerate(stats[:10], start=1):
+                name = None
+                for b in brawlers:
+                    if b['id'] == br['brawler']:
+                        name = b['name'].upper()
+                        break
+                if name is None:
+                    continue                               
+                ur += f"{get_brawler_emoji(name)} `{int(br['useRate'])}%` "
+                if counter % 5 == 0:
+                    ur += "\n"
+            if wr.strip() != "":
+                embed.add_field(name="Highest Use Rates", value=ur, inline=False)
+                                        
+    if result_map['disabled']:
+        embed.description = "This map is currently disabled."
+    embed.set_footer(text="Data provided by brawlify.com")
+    embed.set_image(url=result_map['url'])
+    return embed

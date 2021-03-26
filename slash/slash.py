@@ -192,3 +192,21 @@ class Slash(commands.Cog):
         await ctx.defer()
         embeds = await game_stats.get_event_embeds(self.bot)
         await ctx.send(embeds=embeds)
+
+    @cog_ext.cog_slash( 
+        name="map", 
+        description="BS map info",
+        guild_ids=[401883208511389716],
+        options=[
+            create_option(
+                name="name",
+                description="Name of a map",
+                option_type=SlashCommandOptionType.STRING,
+                required=True
+            )
+        ]
+    )
+    async def bs_map(self, ctx: SlashContext, name:str):
+        await ctx.defer()
+        embed = await game_stats.get_map_embed(self.bot, name)
+        await ctx.send(embed=embed)
