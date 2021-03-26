@@ -81,7 +81,7 @@ class Slash(commands.Cog):
             channel= ctx.channel,
             author=ctx.author,
             id=ctx.interaction_id,
-            state=None
+            state=self.bot._connection
         )
         await self.bot.process_commands(fake_message)
 
