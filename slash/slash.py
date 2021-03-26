@@ -76,13 +76,13 @@ class Slash(commands.Cog):
     )
     async def p_test(self, ctx: SlashContext, member = None):
         await ctx.respond()
-        # fake_message = FakeMessage(
-        #     content= f"/profile {member}" if member is not None else "/profile",
-        #     channel= ctx.channel,
-        #     author=ctx.author,
-        #     id=ctx.interaction_id,
-        #     state=self.bot._connection
-        # )
+        fake_message = FakeMessage(
+            content= "/profile",
+            channel= ctx.channel,
+            author=ctx.author,
+            id=ctx.interaction_id,
+            state=self.bot._connection
+        )
         # context = await self.bot.get_context(fake_message)
         # await self.bot.invoke(context)
 
