@@ -195,9 +195,9 @@ class BrawlStarsCog(commands.Cog):
     @commands.command(aliases=['e'])
     async def events(self, ctx):
         embeds = await game_stats.get_event_embeds(self.bot)
-        await ctx.send(embeds[0])
+        await ctx.send(embed=embeds[0])
         if len(embeds) > 1:
-            await ctx.send(embeds[1])
+            await ctx.send(embed=embeds[1])
                         
     @commands.command(aliases=['m'])
     async def map(self, ctx, *, map_name: str):

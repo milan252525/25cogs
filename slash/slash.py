@@ -102,7 +102,6 @@ class Slash(commands.Cog):
     @cog_ext.cog_slash(
         name="brawlers", 
         description="BS player's brawler stats",
-        guild_ids=[401883208511389716],
         options=[
             create_option(
                 name="target",
@@ -142,7 +141,6 @@ class Slash(commands.Cog):
     @cog_ext.cog_slash(
         name="brawler", 
         description="BS player's detailed brawler stats",
-        guild_ids=[401883208511389716],
         options=[
             create_option(
                 name="brawler",
@@ -186,7 +184,6 @@ class Slash(commands.Cog):
     @cog_ext.cog_slash( 
         name="events", 
         description="BS active and upcoming events",
-        guild_ids=[401883208511389716]
     )
     async def bs_events(self, ctx: SlashContext):
         await ctx.defer()
@@ -196,7 +193,6 @@ class Slash(commands.Cog):
     @cog_ext.cog_slash( 
         name="map", 
         description="BS map info",
-        guild_ids=[401883208511389716],
         options=[
             create_option(
                 name="name",
@@ -210,3 +206,10 @@ class Slash(commands.Cog):
         await ctx.defer()
         embed = await game_stats.get_map_embed(self.bot, name)
         await ctx.send(embed=embed)
+
+    @cog_ext.cog_slash( 
+        name="website", 
+        description="LA BS website"
+    )
+    async def website(self, ctx: SlashContext):
+        await ctx.send(content="https://laclubs.net/")
