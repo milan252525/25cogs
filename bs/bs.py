@@ -189,7 +189,7 @@ class BrawlStarsCog(commands.Cog):
             member.id
         except AttributeError:
             return await ctx.send(embed=badEmbed(f"No such brawler found! If the brawler's name contains spaces surround it with quotes!"))
-        embed = await get_stats.get_single_brawler_embed(self.bot, ctx, member)
+        embed = await get_stats.get_single_brawler_embed(self.bot, ctx, member, brawler)
         return await ctx.send(embed=embed)
     
     def time_left(self, seconds):

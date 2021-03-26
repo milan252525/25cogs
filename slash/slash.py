@@ -180,7 +180,7 @@ class Slash(commands.Cog):
             except commands.MemberNotFound:
                 user = target
 
-        embed = await get_stats.get_single_brawler_embed(self.bot, context, user)
+        embed = await get_stats.get_single_brawler_embed(self.bot, context, user, brawler)
         await ctx.send(embed=embed)
 
         

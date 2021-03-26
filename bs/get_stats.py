@@ -302,7 +302,7 @@ async def get_brawlers_embeds(bot, ctx, member):
         embedstosend[i].set_footer(text=f"Page {i+1}/{len(embedstosend)}")
     return embedstosend
 
-async def get_single_brawler_embed(bot, ctx, member):
+async def get_single_brawler_embed(bot, ctx, member, brawler):
     tag = await tag_convertor(bot, ctx, member)
     if tag is None or tag == "":
         return badEmbed("This user has no tag saved! Use [prefix]save <tag>")
