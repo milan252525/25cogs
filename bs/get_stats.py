@@ -299,5 +299,5 @@ async def get_brawlers_embeds(bot, ctx, member):
         embedstosend.append(embed)
 
     for i in range(len(embedstosend)):
-        embedstosend[i].set_footer(text=f"Page {i+1}/{len(embedstosend)}\n/brawler <name> for more stats")
+        embedstosend[i].set_footer(text=f"Page {i+1}/{len(embedstosend)}")
     return embedstosend
