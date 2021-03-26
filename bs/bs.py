@@ -174,7 +174,7 @@ class BrawlStarsCog(commands.Cog):
         member = ctx.author if member is None else member
         embeds = await get_stats.get_brawlers_embeds(self.bot, ctx, member)
         if len(embeds) > 1:
-            await menu(ctx, embeds, {"⬅": prev_page, "➡": next_page}, timeout=2000)
+            await menu(ctx, embeds, {"⬅": prev_page, "➡": next_page}, timeout=500)
         else:
             await ctx.send(embed=embeds[0])
 

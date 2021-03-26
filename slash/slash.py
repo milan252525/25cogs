@@ -3,6 +3,7 @@ from redbot.core import commands
 from discord_slash import SlashCommand, cog_ext, SlashContext
 from discord_slash.utils.manage_commands import remove_all_commands, create_option
 from discord_slash.model import SlashCommandOptionType
+from redbot.core.utils.menus import menu, prev_page, next_page
 
 from bs import get_stats
 
@@ -134,6 +135,8 @@ class Slash(commands.Cog):
                 user = target
 
         embeds = await get_stats.get_brawlers_embeds(self.bot, context, user)
-        await ctx.send(embeds=embeds)
+        first_message = await ctx.send(embed=embeds[0])
+        if len(embeds) > 1:
+            await menu(ctx=context, pages=embeds, controls={"⬅": prev_page, "➡": next_page}, message=first_message, timeout=300)
 
         
