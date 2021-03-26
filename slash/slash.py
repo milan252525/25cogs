@@ -87,7 +87,6 @@ class Slash(commands.Cog):
         context = await self.bot.get_context(fake_message)
 
         user = None
-
         if target is None:
             user = ctx.author
         else:

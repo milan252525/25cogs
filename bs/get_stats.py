@@ -7,26 +7,37 @@ import aiohttp
 from quickchart import QuickChart
 import random
 
-async def tag_convertor(bot, ctx, member):
-    if isinstance(member, discord.Member):
-        return await bot.get_cog("BrawlStarsCog").config.user(member).tag()
-    elif member.startswith("#"):
-        return member.upper().replace('O', '0')
+async def tag_convertor(bot, ctx, member, alt=False):
+    if alt:
+        if isinstance(member, discord.Member):
+            return await bot.get_cog("BrawlStarsCog").config.user(member).alt()
+        else:
+            return None
     else:
-        try:
-            member = bot.get_user(int(member))
-            if member is not None:
-                return await bot.get_cog("BrawlStarsCog").config.user(member).tag()
-        except ValueError:
-            member = discord.utils.get(ctx.guild.members, name=member)
-            if member is not None:
-                return await bot.get_cog("BrawlStarsCog").config.user(member).tag()      
-    return None
+        if isinstance(member, discord.Member):
+            return await bot.get_cog("BrawlStarsCog").config.user(member).tag()
+        elif member.startswith("#"):
+            return member.upper().replace('O', '0')
+        else:
+            try:
+                member = bot.get_user(int(member))
+                if member is not None:
+                    return await bot.get_cog("BrawlStarsCog").config.user(member).tag()
+            except ValueError:
+                member = discord.utils.get(ctx.guild.members, name=member)
+                if member is not None:
+                    return await bot.get_cog("BrawlStarsCog").config.user(member).tag()      
+        return None
 
-async def get_profile_embed(bot, ctx, member):
-    tag = await tag_convertor(bot, ctx, member)
-    if tag is None:
-        return badEmbed("This user has no tag saved! Use [prefix]save <tag>")
+async def get_profile_embed(bot, ctx, member, alt=False):
+    if alt:
+        tag = await tag_convertor(bot, ctx, member)
+        if tag is None:
+            return badEmbed("This user has no alt saved! Use [prefix]savealt <tag>")
+    else:
+        tag = await tag_convertor(bot, ctx, member, alt=True)
+        if tag is None:
+            return badEmbed("This user has no tag saved! Use [prefix]save <tag>")
 
     bs_cog = bot.get_cog("BrawlStarsCog")
     try:
