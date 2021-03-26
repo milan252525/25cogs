@@ -1,8 +1,8 @@
 import discord
 from redbot.core import commands
-from discord_slash import SlashCommand
-from discord_slash import cog_ext, SlashContext
-from discord_slash.utils.manage_commands import remove_all_commands
+from discord_slash import SlashCommand, cog_ext, SlashContext
+from discord_slash.utils.manage_commands import remove_all_commands, create_option
+from discord_slash.model import SlashCommandOptionType
 
 from typing import Union
 
@@ -72,11 +72,25 @@ class Slash(commands.Cog):
     @cog_ext.cog_slash(
         name="ptest", 
         description="Get your BS stats",
-        guild_ids=[401883208511389716]
+        guild_ids=[401883208511389716],
+        options=[
+            create_option(
+                name="user",
+                description="mention a Discord user or use ID",
+                option_type=SlashCommandOptionType.USER,
+                required=False
+            ),
+            create_option(
+                name="tag",
+                description="in-game tag",
+                option_type=SlashCommandOptionType.STRING,
+                required=False
+            ),
+        ]
     )
-    async def p_test(self, ctx: SlashContext, member = discord.Member):
+    async def p_test(self, ctx: SlashContext, user:discord.User=None, tag:str=None):
         await ctx.respond()
-        await self.bot.get_cog("BrawlStarsCog").profile(ctx, member=member)
+        await ctx.send(content=str(user) + " | " + str(tag))
         # fake_message = FakeMessage(
         #     content= f"/profile {member}" if member is not None else "/profile",
         #     channel= ctx.channel,
