@@ -64,7 +64,6 @@ class Slash(commands.Cog):
     @cog_ext.cog_slash(
         name="profile", 
         description="Get your BS stats",
-        guild_ids=[401883208511389716],
         options=[
             create_option(
                 name="target",
