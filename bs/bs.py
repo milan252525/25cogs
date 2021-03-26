@@ -423,7 +423,7 @@ class BrawlStarsCog(commands.Cog):
                 """
                 embed.set_image(url=qc.get_short_url())
         embed.set_footer(text=choice(texts))
-        await ctx.send(embed=embed)
+        return await ctx.send(embed=embed)
 
     @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command(aliases=['b'])
