@@ -38,12 +38,12 @@ class Tools(commands.Cog):
     async def mirror(self, ctx, target: discord.Member=None):
         if ctx.guild.id != 401883208511389716:
             return
-        if target.id == 230947675837562880 or target.id == 599286708911210557:
+        if target is None:
+            target = ctx.author
+        if target.id in (230947675837562880, 599286708911210557) and ctx.author.id not in (230947675837562880, 599286708911210557):
             await ctx.send("NICE TRY YOU FOOL! Get shuffled!")
             await ctx.author.edit(nickname=''.join(random.sample(ctx.author.nickname,len(ctx.author.nickname))))
             return
-        if target is None:
-            target = ctx.author
         await target.edit(nickname=target.nickname[::-1])
         await ctx.send("Happy April Fools!")
         
