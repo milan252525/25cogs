@@ -48,7 +48,7 @@ class Tools(commands.Cog):
         await ctx.send("Happy April Fools!")
         
     @commands.command()
-    async def mirror(self, ctx, *, text:str):
+    async def fliptext(self, ctx, *, text:str):
         await ctx.send(text[::-1])
         
     @commands.Cog.listener()
