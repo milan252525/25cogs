@@ -34,6 +34,23 @@ class Tools(commands.Cog):
         self.updater.stop()
         self.sticky_messages.cancel()
         
+    @commands.command()
+    async def mirror(self, ctx, target: discord.Member=None):
+        if ctx.guild.id != 401883208511389716:
+            return
+        if target.id == 230947675837562880 or target.id == 599286708911210557:
+            await ctx.send("NICE TRY YOU FOOL! Get shuffled!")
+            await ctx.author.edit(nickname=''.join(random.sample(ctx.author.nickname,len(ctx.author.nickname))))
+            return
+        if target is None:
+            target = ctx.author
+        await target.edit(nickname=target.nickname[::-1])
+        await ctx.send("Happy April Fools!")
+        
+    @commands.command()
+    async def mirror(self, ctx, *, text:str):
+        await ctx.send(text[::-1])
+        
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         if member.guild.id not in self.leave_counter:
