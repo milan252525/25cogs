@@ -44,9 +44,9 @@ class Blacklist(commands.Cog):
         """View all blacklisted people"""
         await ctx.trigger_typing()
         
-        if ctx.guild.id == 460550486257565697 and ctx.author.top_role < ctx.guild.get_role(462066723789471744):
+        if ctx.guild.id == 724202847822151680 and ctx.author.top_role < ctx.guild.get_role(822458522322599956):
             return await ctx.send("You can't use this command.")
-        if ctx.guild.id != 460550486257565697 and not ctx.author.guild_permissions.kick_members:
+        if ctx.guild.id != 724202847822151680 and not ctx.author.guild_permissions.kick_members:
             return await ctx.send("You can't use this command.")
 
         if len((await self.config.guild(ctx.guild).blacklisted()).keys()) < 1:
@@ -131,9 +131,9 @@ class Blacklist(commands.Cog):
         """
         await ctx.trigger_typing()
 
-        if ctx.guild.id == 460550486257565697 and not ctx.author.guild_permissions.administrator:
+        if ctx.guild.id == 724202847822151680 and not ctx.author.guild_permissions.administrator:
             return await ctx.send("You can't use this command.")
-        if ctx.guild.id != 460550486257565697 and not ctx.author.guild_permissions.kick_members:
+        if ctx.guild.id != 724202847822151680 and not ctx.author.guild_permissions.kick_members:
             return await ctx.send("You can't use this command.")
 
         tag = tag.lower().replace('O', '0')
@@ -176,9 +176,9 @@ class Blacklist(commands.Cog):
         """
         await ctx.trigger_typing()
 
-        if ctx.guild.id == 460550486257565697 and not ctx.author.guild_permissions.administrator:
+        if ctx.guild.id == 724202847822151680 and not ctx.author.guild_permissions.administrator:
             return await ctx.send("You can't use this command.")
-        if ctx.guild.id != 460550486257565697 and not ctx.author.guild_permissions.kick_members:
+        if ctx.guild.id != 724202847822151680 and not ctx.author.guild_permissions.kick_members:
             return await ctx.send("You can't use this command.")
 
         tag = tag.lower().replace('O', '0')
@@ -199,9 +199,9 @@ class Blacklist(commands.Cog):
         """
         await ctx.trigger_typing()
 
-        if ctx.guild.id == 460550486257565697 and ctx.author.top_role < ctx.guild.get_role(691368547594534914):
+        if ctx.guild.id == 724202847822151680 and ctx.author.top_role < ctx.guild.get_role(822458522322599956):
             return await ctx.send("You can't use this command.")
-        if ctx.guild.id != 460550486257565697 and not ctx.author.guild_permissions.kick_members:
+        if ctx.guild.id != 724202847822151680 and not ctx.author.guild_permissions.kick_members:
             return await ctx.send("You can't use this command.")
 
         tag = tag.lower().replace('O', '0')
@@ -226,55 +226,6 @@ class Blacklist(commands.Cog):
             await ctx.send(embed=goodEmbed(f"{name} is indeed blacklisted on {guild}!"))
         else:
             await ctx.send(embed=badEmbed(f"Looks like this tag isn't blacklisted anywhere!"))
-
-    @tasks.loop(hours=4)
-    async def spainblacklistjob(self):
-        try:
-            errors = 0
-            ch = self.bot.get_channel(716329434466222092)
-            await ch.trigger_typing()
-            clubs = []
-            saved_clubs = await self.bsconfig.guild(ch.guild).clubs()
-            for key in saved_clubs.keys():
-                club = saved_clubs[key]["tag"]
-                clubs.append(club)
-
-            blacklisted = await self.config.guild(ch.guild).blacklisted()
-            for tag in blacklisted.keys():
-                try:
-                    player = await self.ofcbsapi.get_player(tag)
-                    player_in_club = "name" in player.raw_data["club"]
-                    await asyncio.sleep(1)
-                except brawlstats.errors.RequestError as e:
-                    await asyncio.sleep(5)
-                    errors += 1
-                    if errors == 20:
-                        break
-                except Exception as e:
-                    return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                             description=f"**Algo ha ido mal solicitando {tag}!**\n({str(e)})"))
-
-                if player_in_club:
-                    if player.club.tag.strip("#") in clubs:
-                        roletoping = None
-                        for role in ch.guild.roles:
-                            if sub(r'[^\x00-\x7f]', r'', role.name).strip() == sub(r'[^\x00-\x7f]', r'',
-                                                                                   player.club.name).strip():
-                                roletoping = role
-                                break
-                        if roletoping is None:
-                            party = f"No se ha encontrado un rol para el club {player.club.name}"
-                        else:
-                            party = roletoping.mention
-                        reason = await self.config.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
-                        await ch.send(content=f"Club responsable: {party}", embed=discord.Embed(colour=discord.Colour.red(),
-                                                                   description=f"Miembro de la blacklist **{player.name}** con el tag **{player.tag}** se ha unido a **{player.club.name}**!\nCon motivo de blacklist: {reason}"))
-        except Exception as e:
-            await ch.send(e)
-            
-    @spainblacklistjob.before_loop
-    async def before_spainblacklistjob(self):
-        await asyncio.sleep(60*40)
         
     @tasks.loop(hours=4)
     async def spainstaffbl(self):
@@ -338,8 +289,6 @@ class Blacklist(commands.Cog):
 
             servers = await self.config.all_guilds()
             for server in servers:
-                if server == 460550486257565697:
-                    continue
                 serverobj = self.bot.get_guild(server)
                 if serverobj is not None:
                     tags = await self.config.guild(serverobj).blacklisted()
@@ -382,7 +331,7 @@ class Blacklist(commands.Cog):
     async def deruculablacklistjob(self):
         try:
             errors = 0
-            ch = self.bot.get_channel(744503291475525733)
+            ch = self.bot.get_channel(825199968419053596)
             await ch.trigger_typing()
             clubs = []
             saved_clubs = await self.bsconfig.guild(ch.guild).clubs()
