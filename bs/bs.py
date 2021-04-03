@@ -502,6 +502,11 @@ class BrawlStarsCog(commands.Cog):
         if "low" in keyword:
             low_clubs = True
             keyword = keyword.replace("low", "").strip()
+            low_amount = None
+            for k in keyword.split(" "):
+                if k.strip().isdigit():
+                    membersnumber = int(k)
+                    break
 
         if "roles" in keyword:
             roles = True
@@ -647,8 +652,11 @@ class BrawlStarsCog(commands.Cog):
                                   
                     url = f"https://laclubs.net/club?tag={clubs[i].tag.strip('#').upper()}"
 
-                    if low_clubs and len(clubs[i].members) >= 95:
-                        continue
+                    if low_clubs:
+                        if low_amount is None and len(clubs[i].members) >= 95:
+                            continue
+                        if low_amount is not None and len(clubs[i].members) > low_amount:
+                            continue
 
                     if membersforhawk:
                         if len(clubs[i].members) != membersnumber:
@@ -690,8 +698,11 @@ class BrawlStarsCog(commands.Cog):
                                   
                     url = f"https://laclubs.net/club?tag={ctag.strip('#').upper()}"
                                            
-                    if low_clubs and cmembers >= 95:
-                        continue
+                    if low_clubs:
+                        if low_amount is None and cmembers >= 95:
+                            continue
+                        if low_amount is not None and cmembers > low_amount:
+                            continue
 
                     if membersforhawk:
                         if len(clubs[i].members) != membersnumber:
