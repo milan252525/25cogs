@@ -56,7 +56,7 @@ class Blacklist(commands.Cog):
         errored = ""
         for key in keys:
             try:
-                player = await self.ofcbsapi.get_player(key)
+                player = await self.ofcbsapi.get_player(key.replace("o", "0"))
                 players.append(player)
                 await asyncio.sleep(0.04)
             except brawlstats.errors.RequestError:
@@ -134,7 +134,7 @@ class Blacklist(commands.Cog):
         if ctx.guild.id != 724202847822151680 and not ctx.author.guild_permissions.kick_members:
             return await ctx.send("You can't use this command.")
 
-        tag = tag.lower().replace('O', '0')
+        tag = tag.lower().replace('o', '0')
         if tag.startswith("#"):
             tag = tag.strip('#')
 
@@ -179,7 +179,7 @@ class Blacklist(commands.Cog):
         if ctx.guild.id != 724202847822151680 and not ctx.author.guild_permissions.kick_members:
             return await ctx.send("You can't use this command.")
 
-        tag = tag.lower().replace('O', '0')
+        tag = tag.lower().replace('o', '0')
         if tag.startswith("#"):
             tag = tag.strip('#')
 
@@ -202,7 +202,7 @@ class Blacklist(commands.Cog):
         if ctx.guild.id != 724202847822151680 and not ctx.author.guild_permissions.kick_members:
             return await ctx.send("You can't use this command.")
 
-        tag = tag.lower().replace('O', '0')
+        tag = tag.lower().replace('o', '0')
         if tag.startswith("#"):
             tag = tag.strip('#')
 
