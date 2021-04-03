@@ -16,7 +16,6 @@ class Blacklist(commands.Cog):
         default_guild = {"blacklisted": {}}
         self.config.register_guild(**default_guild)
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
-        self.spainblacklistjob.start()
         self.spainstaffbl.start()
         self.blacklistalert.start()
         self.deruculablacklistjob.start()
@@ -33,7 +32,6 @@ class Blacklist(commands.Cog):
         return self.bsconfig
         
     def cog_unload(self):
-        self.spainblacklistjob.cancel()
         self.spainstaffbl.cancel()
         self.blacklistalert.cancel()
         self.deruculablacklistjob.cancel()
