@@ -53,16 +53,16 @@ class Blacklist(commands.Cog):
         
         players = []
         keys = (await self.config.guild(ctx.guild).blacklisted()).keys()
-        error = False
+        errored = ""
         for key in keys:
             try:
                 player = await self.ofcbsapi.get_player(key)
                 players.append(player)
-                await asyncio.sleep(0.05)
-            except brawlstats.errors.RequestError as e:
-                error = True
-        if error:
-            await ctx.send(embed=badEmbed(f"BS API Error - some players aren't displayed!"))  
+                await asyncio.sleep(0.04)
+            except brawlstats.errors.RequestError:
+                errored += f"{key}\n"
+        if errored != "":
+            await ctx.send(embed=badEmbed(f"BS API Error - some players aren't displayed!\nErrors in following tags:\n{errored}"))  
 
         msg = ""
         alertembed = False
