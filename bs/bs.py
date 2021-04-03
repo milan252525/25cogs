@@ -506,6 +506,7 @@ class BrawlStarsCog(commands.Cog):
             for k in keyword.split(" "):
                 if k.strip().isdigit():
                     low_amount = int(k)
+                    keyword = keyword.replace(str(low_amount), "")
                     break
 
         if "roles" in keyword:
