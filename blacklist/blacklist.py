@@ -290,6 +290,7 @@ class Blacklist(commands.Cog):
                 serverobj = self.bot.get_guild(server)
                 if serverobj is not None:
                     tags = await self.config.guild(serverobj).blacklisted()
+                    errored = ""
                     for tag in tags:
                         try:
                             player = await self.ofcbsapi.get_player(tag)
@@ -297,12 +298,13 @@ class Blacklist(commands.Cog):
                             await asyncio.sleep(1)
                         except brawlstats.errors.RequestError as e:
                             await asyncio.sleep(5)
+                            errored += f"{tag}\n"
                             errors += 1
                             if errors == 30:
+                                await ch.send(embed=discord.Embed(description=errored, title=f"ERRORS - {serverobj.name}"))
                                 break
                         except Exception as e:
-                            return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                                     description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
+                            return await ch.send(embed=discord.Embed(colour=discord.Colour.red(), description=f"**Something went wrong while requesting {tag}!**\n({str(e)})"))
 
                         if player_in_club:
                             if player.club.tag.strip("#") in clubs:
@@ -318,6 +320,8 @@ class Blacklist(commands.Cog):
                                 reason = await self.config.guild(serverobj).blacklisted.get_raw(tag, "reason", default="")
                                 await ch.send(content=f"Source: {serverobj.name}\nResponsible party: {party}", embed=discord.Embed(colour=discord.Colour.red(),
                                                                   description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
+                    if errored != "":
+                        await ch.send(embed=discord.Embed(description=errored, title=f"ERRORS - {serverobj.name}"))
         except Exception as e:
             await ch.send(e)
 
