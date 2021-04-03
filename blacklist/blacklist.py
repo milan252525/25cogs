@@ -209,19 +209,21 @@ class Blacklist(commands.Cog):
         blacklisted = False
         guild = ""
         name = ""
+        reason = ""
         servers = await self.config.all_guilds()
         for server in servers:
             serverobj = self.bot.get_guild(server)
             if serverobj is not None:
                 try:
                     name = await self.config.guild(serverobj).blacklisted.get_raw(tag, "ign")
+                    reason = await self.config.guild(serverobj).blacklisted.get_raw(tag, "reason")
                     guild = serverobj.name
                     blacklisted = True
                 except KeyError:
                     continue
 
         if blacklisted:
-            await ctx.send(embed=goodEmbed(f"{name} is indeed blacklisted on {guild}!"))
+            await ctx.send(embed=goodEmbed(f"{name} is blacklisted in {guild} ({reason})!"))
         else:
             await ctx.send(embed=badEmbed(f"Looks like this tag isn't blacklisted anywhere!"))
         
