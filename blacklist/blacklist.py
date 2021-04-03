@@ -244,7 +244,7 @@ class Blacklist(commands.Cog):
                     player_in_club = "name" in player.raw_data["club"]
                     await asyncio.sleep(1)
                 except brawlstats.errors.RequestError as e:
-                    await asyncio.sleep(5)
+                    await asyncio.sleep(3)
                     errors += 1
                     if errors == 20:
                         break
@@ -297,10 +297,10 @@ class Blacklist(commands.Cog):
                             player_in_club = "name" in player.raw_data["club"]
                             await asyncio.sleep(1)
                         except brawlstats.errors.RequestError as e:
-                            await asyncio.sleep(5)
+                            await asyncio.sleep(3)
                             errored += f"{tag}\n"
                             errors += 1
-                            if errors == 30:
+                            if errors == 20:
                                 await ch.send(embed=discord.Embed(description=errored, title=f"ERRORS - {serverobj.name}"))
                                 break
                         except Exception as e:
@@ -348,9 +348,9 @@ class Blacklist(commands.Cog):
                     player_in_club = "name" in player.raw_data["club"]
                     await asyncio.sleep(1)
                 except brawlstats.errors.RequestError as e:
-                    await asyncio.sleep(5)
+                    await asyncio.sleep(3)
                     errors += 1
-                    if errors == 30:
+                    if errors == 20:
                         break
                 except Exception as e:
                     return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
