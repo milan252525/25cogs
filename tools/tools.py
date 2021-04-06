@@ -35,19 +35,6 @@ class Tools(commands.Cog):
         self.sticky_messages.cancel()
         
     @commands.command()
-    async def mirror(self, ctx, target: discord.Member=None):
-        if ctx.guild.id != 401883208511389716:
-            return
-        if target is None:
-            target = ctx.author
-        if target.id in (230947675837562880, 599286708911210557) and ctx.author.id not in (230947675837562880, 599286708911210557):
-            await ctx.send("NICE TRY YOU FOOL! Get shuffled!")
-            await ctx.author.edit(nick=''.join(random.sample(ctx.author.display_name,len(ctx.author.display_name))))
-            return
-        await target.edit(nick=target.display_name[::-1])
-        await ctx.send("Happy April Fools!")
-        
-    @commands.command()
     async def fliptext(self, ctx, *, text:str):
         await ctx.send(text[::-1])
         
