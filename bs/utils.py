@@ -41,7 +41,8 @@ ids = {
     'roborumble': 8, 
     'biggame': 6, 
     'bossfight': 9, 
-    'training': 11
+    'training': 11,
+    'knockout': 17
 }
 
 def get_gamemode_id(name):
@@ -66,7 +67,8 @@ gamemodes = {
     "13": "<:LoneStar:729650156491767849>",
     "14": "<:PresentPlunder:729650153203433554>",
     "15": "<:HotZone:729650153723789413>",
-    "16": "<:SuperCityRampage:729650153203433582>"
+    "16": "<:SuperCityRampage:729650153203433582>",
+    "17" : "<:Knockout:829677905427955742>"
 }
 
 def get_gamemode_emoji(id):
@@ -210,6 +212,10 @@ def get_brawler_emoji(name : str):
         return "<:ruffs:803995640543313972>"
     elif name == "STU":
         return "<:stu:820963374706982923>"
+    elif name == "BELLE":
+        return "<:belle:829677042140184587>"
+    elif name =="SQUEAK":
+        return "<:squeak:829677042089328660>"
     else:
         return "<:__:452891824168894494>"
     
