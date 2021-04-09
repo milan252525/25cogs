@@ -54,8 +54,8 @@ class Challenges(commands.Cog):
             return
         now = dt.now()
         for chal_id in self.challenge_data:
-            start_date = dt.strptime(self.challenge_data[chal_id]["start"])
-            end_date = dt.strptime(self.challenge_data[chal_id]["end"])
+            start_date = dt.strptime(self.challenge_data[chal_id]["start"], "%d/%m/%y %H:%M")
+            end_date = dt.strptime(self.challenge_data[chal_id]["end"], "%d/%m/%y %H:%M")
 
             if chal_id not in labs_challs.keys() and start_date < now < end_date:
                 data = self.challenge_data[chal_id].copy()
@@ -69,7 +69,7 @@ class Challenges(commands.Cog):
 
     async def post_challenge(self, guild, data):
         channel_id = await self.config.guild(guild).channel()
-        ends = "Ends in: " + str(dt.strptime(data["end"]) - dt.now()).split(".")[0]
+        ends = "Ends in: " + str(dt.strptime(data["end"], "%d/%m/%y %H:%M") - dt.now()).split(".")[0]
         embed = discord.Embed(
             title = data["name"],
             description=data["description"],
