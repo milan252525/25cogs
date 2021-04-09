@@ -50,7 +50,7 @@ class Challenges(commands.Cog):
     async def challenge_start_end_loop(self):
         labs = self.bot.get_guild(self.labs)
         labs_challs = await self.config.guild(labs).active_challenges()
-        if self.config.guild(labs).channel() is None:
+        if await self.config.guild(labs).channel() is None:
             return
         now = dt.now()
         for chal_id in self.challenge_data:
@@ -68,7 +68,7 @@ class Challenges(commands.Cog):
                 await self.config.guild(labs).active_challenges.set_raw(chal_id, "status", value="to_be_ended")
 
     async def post_challenge(self, guild, data):
-        channel_id = self.config.guild(guild).channel()
+        channel_id = await self.config.guild(guild).channel()
         ends = "Ends in: " + str(dt.strptime(data["end"]) - dt.now()).split(".")[0]
         embed = discord.Embed(
             title = data["name"],
@@ -103,6 +103,6 @@ class Challenges(commands.Cog):
     @checks.is_owner()
     @commands.guild_only()
     @challenge.command(name="channel")
-    async def challenge_channel(self, ctx, channel):
-        await self.config.guild(ctx.guild).channel.set(ctx.channel.id)
-        return await ctx.send("channel set to " + ctx.channel.mention)
+    async def challenge_channel(self, ctx, channel:discord.TextChannel):
+        await self.config.guild(ctx.guild).channel.set(channel.id)
+        return await ctx.send("channel set to " + channel.mention)
