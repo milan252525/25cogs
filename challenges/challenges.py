@@ -26,10 +26,10 @@ class Challenges(commands.Cog):
             "empty": ["<:blankleft:821065351907246201>", "<:blankmid:821065351294615552>", "<:blankright:821065351621115914>"],
             "full": ["<:loadleft:821065351726366761>", "<:loadmid:821065352061780048>", "<:loadright:821065351903182889>"]
         }
-        self.post_challenge.start()
+        self.challenge_start_end_loop.start()
 
     def cog_unload(self):
-        self.post_challenge.cancel()
+        self.challenge_start_end_loop.cancel()
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
