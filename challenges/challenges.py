@@ -68,7 +68,7 @@ class Challenges(commands.Cog):
                 await self.config.guild(labs).active_challenges.set_raw(chal_id, "status", value="to_be_ended")
 
     async def post_challenge(self, guild, data):
-        channel = self.config.guild(guild).channel()
+        channel_id = self.config.guild(guild).channel()
         ends = "Ends in: " + str(dt.strptime(data["end"]) - dt.now()).split(".")[0]
         embed = discord.Embed(
             title = data["name"],
@@ -90,7 +90,7 @@ class Challenges(commands.Cog):
             glob = f"{data['global']['goal']} +{data['global']['reward']}{self.token}"
             glob += self.loading['empty'][0] + self.loading['empty'][1]*8 + self.loading['empty'][2]
             embed.add_field(name="Server Goal", value=rewards)
-        return await channel.send(embed=embed)
+        return await guild.get_channel(channel_id).send(embed=embed)
         
 
 
@@ -104,5 +104,5 @@ class Challenges(commands.Cog):
     @commands.guild_only()
     @challenge.command(name="channel")
     async def challenge_channel(self, ctx, channel):
-        await self.config.guild(ctx.guild).channel.set(ctx.channel)
+        await self.config.guild(ctx.guild).channel.set(ctx.channel.id)
         return await ctx.send("channel set to " + ctx.channel.mention)
