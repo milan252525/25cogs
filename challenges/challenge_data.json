@@ -1,7 +1,7 @@
 {
     "gem_madness1" : {
         "name": "Gem Madness",
-        "start": "09/04/21 00:00",
+        "start": "09/04/21 01:00",
         "end": "13/04/21 00:00",
         "gamemodes": ["gemGrab"],
         "brawlers": [],

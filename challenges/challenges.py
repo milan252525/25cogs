@@ -50,8 +50,6 @@ class Challenges(commands.Cog):
     async def challenge_start_end_loop(self):
         labs = self.bot.get_guild(self.labs)
         labs_challs = await self.config.guild(labs).active_challenges()
-        if await self.config.guild(labs).channel() is None:
-            return
         now = dt.now()
         for chal_id in self.challenge_data:
             start_date = dt.strptime(self.challenge_data[chal_id]["start"], "%d/%m/%y %H:%M")
@@ -62,20 +60,20 @@ class Challenges(commands.Cog):
                 data["status"] = "active"
                 message = await self.post_challenge(labs, data)
                 data["message"] = message.id
-                await self.config.guild(labs).active_challenges.set_raw(chal_id, value=data)
+                await self.config.guild(labs).set_raw("active_challenges", chal_id, value=data)
 
             if chal_id in labs_challs.keys() and now > end_date:
-                await self.config.guild(labs).active_challenges.set_raw(chal_id, "status", value="to_be_ended")
+                await self.config.guild(labs).set_raw("active_challenges", chal_id, "status", value="to_be_ended")
 
     async def post_challenge(self, guild, data):
         channel_id = await self.config.guild(guild).channel()
-        ends = "Ends in: " + str(dt.strptime(data["end"], "%d/%m/%y %H:%M") - dt.now()).split(".")[0]
+        ends = str(dt.strptime(data["end"], "%d/%m/%y %H:%M") - dt.now()).split(".")[0]
         embed = discord.Embed(
             title = data["name"],
             description=data["description"],
             colour=discord.Color.random()
         )
-        embed.add_field(name="Ends in", value=ends)
+        embed.add_field(name="Ends in", value=ends, inline=False)
         if "rewards" in data:
             rewards = ""
             for threshold in data["rewards"]:
@@ -84,12 +82,13 @@ class Challenges(commands.Cog):
                     rewards += f" +{data['rewards'][threshold]['normal']}{self.token}"
                 if "booster" in data["rewards"][threshold]:
                     rewards += f" <:booster:830158821132992543>+{data['rewards'][threshold]['booster']}{self.token}"
+                rewards += "\n"
             if rewards != "":
-                embed.add_field(name="Rewards", value=rewards)
+                embed.add_field(name="Rewards", value=rewards, inline=False)
         if "global" in data:
             glob = f"{data['global']['goal']} +{data['global']['reward']}{self.token}"
             glob += self.loading['empty'][0] + self.loading['empty'][1]*8 + self.loading['empty'][2]
-            embed.add_field(name="Server Goal", value=rewards)
+            embed.add_field(name="Server Goal", value=rewards, inline=False)
         return await guild.get_channel(channel_id).send(embed=embed)
         
 
