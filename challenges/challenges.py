@@ -97,7 +97,7 @@ class Challenges(commands.Cog):
                 embed.add_field(name="Rewards", value=rewards, inline=False)
         if "global" in data:
             glob_rew = f"[{data['global']['goal']}] +{data['global']['reward']}{self.token}"
-            glob_pro= "0/{data['global']['goal']}\n" + self.loading['empty'][0] + self.loading['empty'][1]*8 + self.loading['empty'][2]
+            glob_pro= f"0/{data['global']['goal']}\n" + self.loading['empty'][0] + self.loading['empty'][1]*8 + self.loading['empty'][2]
             embed.add_field(name="Server Goal", value=glob_rew, inline=False)
             embed.add_field(name="Progress", value=glob_pro, inline=False)
         return await guild.get_channel(channel_id).send(embed=embed)
