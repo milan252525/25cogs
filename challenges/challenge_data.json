@@ -1,0 +1,47 @@
+{
+    "gem_madness1" : {
+        "name": "Gem Madness",
+        "start": "09/04/21 00:00",
+        "end": "13/04/21 00:00",
+        "gamemodes": ["gemGrab"],
+        "brawlers": [],
+        "star_player": false,
+        "type": "wins",
+        "rewards": {
+            "10": {
+                "normal": 1
+            },
+            "20": {
+                "normal": 1,
+                "booster": 1
+            }
+        },
+        "description": "Win games in Gem Grab with any brawler!"
+    },
+    "tick_mania1" : {
+        "name": "Tick Mania",
+        "start": "09/04/21 00:00",
+        "end": "15/04/21 00:00",
+        "gamemodes": [],
+        "brawlers": ["TICK"],
+        "star_player": false,
+        "type": "wins",
+        "rewards": {
+            "15": {
+                "booster": 1
+            },
+            "30": {
+                "normal": 2
+            },
+            "50": {
+                "normal":3
+            }
+        },
+        "global" : {
+            "goal": 1000,
+            "reward": 1,
+            "min": 5
+        },
+        "description": "Win games with Tick in any gamemode!"
+    }
+}
