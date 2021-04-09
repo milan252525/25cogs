@@ -1,6 +1,7 @@
 import discord
 from discord.ext import tasks
 from redbot.core import commands, Config, checks
+from redbot.core.data_manager import cog_data_path
 
 import brawlstats
 import asyncio
@@ -18,7 +19,7 @@ class Challenges(commands.Cog):
         self.config.register_global(**default_server)
         self.labs = 401883208511389716
         self.bsconfig = None
-        with open("challenge_data.json", "r") as file:
+        with open(str(cog_data_path(self)).replace("Challenges", r"CogManager/cogs/challenges/challenge_data.json")) as file:
             self.challenge_data = json.load(file)
         self.token = " token"#"🪙"
         self.loading = {
