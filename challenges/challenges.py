@@ -58,6 +58,8 @@ class Challenges(commands.Cog):
     async def challenge_start_end_loop(self):
         labs = self.bot.get_guild(self.labs)
         labs_challs = await self.config.guild(labs).active_challenges()
+        if labs_challs is None:
+            await self.config.guild(labs).set_raw("active_challenges", value={})
         now = dt.now()
         for chal_id in self.challenge_data:
             start_date = dt.strptime(self.challenge_data[chal_id]["start"], "%d/%m/%y %H:%M")
@@ -81,7 +83,7 @@ class Challenges(commands.Cog):
             description=data["description"],
             colour=discord.Color.random()
         )
-        embed.add_field(name="Ends in", value=ends, inline=False)
+        embed.add_field(name="Time left", value=ends, inline=False)
         if "rewards" in data:
             rewards = ""
             for threshold in data["rewards"]:
@@ -94,9 +96,10 @@ class Challenges(commands.Cog):
             if rewards != "":
                 embed.add_field(name="Rewards", value=rewards, inline=False)
         if "global" in data:
-            glob = f"{data['global']['goal']} +{data['global']['reward']}{self.token}"
-            glob += self.loading['empty'][0] + self.loading['empty'][1]*8 + self.loading['empty'][2]
-            embed.add_field(name="Server Goal", value=glob, inline=False)
+            glob_rew = f"[{data['global']['goal']}] +{data['global']['reward']}{self.token}"
+            glob_pro= "0/{data['global']['goal']}\n" + self.loading['empty'][0] + self.loading['empty'][1]*8 + self.loading['empty'][2]
+            embed.add_field(name="Server Goal", value=glob_rew, inline=False)
+            embed.add_field(name="Progress", value=glob_pro, inline=False)
         return await guild.get_channel(channel_id).send(embed=embed)
         
 
