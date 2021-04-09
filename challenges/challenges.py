@@ -46,6 +46,14 @@ class Challenges(commands.Cog):
     def labs_check(self, guild: discord.Guild):
         return guild.id == self.labs
 
+    def time_left(self, seconds):
+        hours, remainder = divmod(seconds, 3600)
+        minutes, _ = divmod(remainder, 60)
+        if hours <= 24:
+            return "{}h {:02}m".format(int(hours), int(minutes))
+        else:
+            return f"{int(hours)//24}d {(int(hours)//24)%24}h"
+
     @tasks.loop(minutes=5)
     async def challenge_start_end_loop(self):
         labs = self.bot.get_guild(self.labs)
@@ -67,7 +75,7 @@ class Challenges(commands.Cog):
 
     async def post_challenge(self, guild, data):
         channel_id = await self.config.guild(guild).channel()
-        ends = str(dt.strptime(data["end"], "%d/%m/%y %H:%M") - dt.now()).split(".")[0]
+        ends = self.time_left((dt.strptime(data["end"], "%d/%m/%y %H:%M") - dt.now()).total_seconds())
         embed = discord.Embed(
             title = data["name"],
             description=data["description"],
@@ -88,7 +96,7 @@ class Challenges(commands.Cog):
         if "global" in data:
             glob = f"{data['global']['goal']} +{data['global']['reward']}{self.token}"
             glob += self.loading['empty'][0] + self.loading['empty'][1]*8 + self.loading['empty'][2]
-            embed.add_field(name="Server Goal", value=rewards, inline=False)
+            embed.add_field(name="Server Goal", value=glob, inline=False)
         return await guild.get_channel(channel_id).send(embed=embed)
         
 
