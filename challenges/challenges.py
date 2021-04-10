@@ -59,7 +59,7 @@ class Challenges(commands.Cog):
         else:
             return f"{int(hours)//24}d {(int(hours)//24)%24}h"
 
-    @tasks.loop(minutes=3)
+    @tasks.loop(minutes=5)
     async def challenge_update_loop(self):
         labs = self.bot.get_guild(self.labs)
         labs_channel_id = await self.config.guild(labs).channel()
@@ -171,7 +171,7 @@ class Challenges(commands.Cog):
 
             if data["status"] == "ended":
                 end_date = dt.strptime(data["end"], "%d/%m/%y %H:%M")
-                if (now - end_date) > timedelta(hours=1): ###DEBUG!!!!CHANGE BACK TO 24
+                if (now - end_date) > timedelta(hours=6):
                     await self.log(log_channel, f"Deleting {chal_id}", discord.Color.purple())
                     message = labs_channel.get_partial_message(data["message_id"])
                     await message.delete()
@@ -181,7 +181,7 @@ class Challenges(commands.Cog):
     async def challenge_update_loop_errors(self, error):
         await self.log_error(error)
 
-    @tasks.loop(minutes=3)
+    @tasks.loop(minutes=5)
     async def progress_update_loop(self):
         labs = self.bot.get_guild(self.labs)
         labs_log_id = await self.config.guild(labs).log()
