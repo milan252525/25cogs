@@ -185,21 +185,19 @@ class Challenges(commands.Cog):
     @tasks.loop(minutes=3)
     async def progress_update_loop(self):
         labs = self.bot.get_guild(self.labs)
-        labs_channel_id = await self.config.guild(labs).channel()
         labs_log_id = await self.config.guild(labs).log()
-        if labs_channel_id is None or labs_log_id is None:
+        if  labs_log_id is None:
             return
-        labs_channel = labs.get_channel(labs_channel_id)
         log_channel = labs.get_channel(labs_log_id)
         labs_challs = await self.config.guild(labs).active_challenges()
         if labs_challs is None:
             await self.config.guild(labs).set_raw("active_challenges", value={})
             labs_challs = {}
-        now = dt.now()
         bs_conf = self.get_bs_config()
         tags = await bs_conf.all_users()
         
         for chall_id in labs_challs:
+            await self.log(log_channel, f"updating progress for {chall_id}", discord.Color.teal())
             if labs_challs[chall_id]["status"] == "active":
                 data = labs_challs[chall_id]
                 participants = data["participants"]
