@@ -90,7 +90,7 @@ class Challenges(commands.Cog):
                 await self.config.guild(labs).set_raw("active_challenges", chal_id, value=data)
         #update prepared and start
         for chal_id in labs_challs:
-            data = labs_challs[labs_challs]
+            data = labs_challs[chal_id]
             if data["status"] == "start_soon":
                 start_date = dt.strptime(data["start"], "%d/%m/%y %H:%M")
                 if (start_date - now) < timedelta(hours=24):
