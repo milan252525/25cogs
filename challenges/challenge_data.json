@@ -8,6 +8,7 @@
         "star_player": false,
         "type": "wins",
         "min_trophy": 500,
+        "map_maker": false,
         "rewards": {
             "10": {
                 "normal": 1
@@ -29,6 +30,7 @@
         "star_player": false,
         "type": "wins",
         "min_trophy": 0,
+        "map_maker": false,
         "rewards": {
             "15": {
                 "booster": 1

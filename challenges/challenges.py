@@ -119,7 +119,6 @@ class Challenges(commands.Cog):
                     await self.config.guild(labs).set_raw("active_challenges", chal_id, "embed", value=embed.to_dict())
             if data["status"] == "active":
                 #score update is independent loop
-
                 end_date = dt.strptime(data["end"], "%d/%m/%y %H:%M")
                 if now >= end_date:
                     await self.log(log_channel, f"Marking {chal_id} as ended", discord.Color.purple())
@@ -148,7 +147,7 @@ class Challenges(commands.Cog):
                         middle = self.loading['full'][1] * full + self.loading['empty'][1] * (8 - full)
                         last = self.loading['empty'][2] if percentage < 100 else self.loading['full'][2]
                         glob_pro = f"{total}/{data['global']['goal']}\n" + first + middle + last
-                        embed.set_field_at(2, name="Progress", value=glob_pro, inline=False)
+                        embed.set_field_at(3, name="Progress", value=glob_pro, inline=False)
                     embed.set_footer(text="Participants: " + str(len(participants.keys())))
                     await message.edit(embed=embed)
                     data["embed"] = embed.to_dict()
@@ -156,7 +155,7 @@ class Challenges(commands.Cog):
 
             if data["status"] == "to_be_ended":
                 await self.log(log_channel, f"Finishing {chal_id}", discord.Color.purple())
-                await self.challenge_finish()
+                await self.challenge_finish(labs, chal_id)
 
                 await self.log(log_channel, f"Ending {chal_id}", discord.Color.purple())
                 data["status"] = "ended"
@@ -205,6 +204,8 @@ class Challenges(commands.Cog):
                 brawlers = data["brawlers"]
                 type = data["type"]
                 min_trophy = data["min_trophy"]
+                map_maker = data["map_maker"]
+                star_player = data["star_player"]
 
                 score = 0
 
@@ -216,7 +217,7 @@ class Challenges(commands.Cog):
                     tag = tags[user.id]['tag'].replace("o", "0").replace("O", "0")
                     try:
                         log = await self.ofcbsapi.get_battle_logs(tag)
-                        await asyncio.sleep(0.03)
+                        await asyncio.sleep(0.04)
                         log = log.raw_data
                     except brawlstats.errors.RequestError as e:
                         await self.log_error(e)
@@ -229,8 +230,9 @@ class Challenges(commands.Cog):
                         if b_time <= dt.strptime(last, '%Y%m%dT%H%M%S.%fZ'):
                             break
                         
-                        if "id" in battle['event'] and battle['event']['id'] == 0 and ("type" not in battle['battle'] or battle['battle']['type'] != "ranked"):
+                        if not map_maker and "id" in battle['event'] and battle['event']['id'] == 0:
                             continue
+
                         if "type" in battle['battle'] and battle['battle']['type'] == "friendly":
                             continue
                         
@@ -260,6 +262,9 @@ class Challenges(commands.Cog):
                                     player = p
                         if player is None:
                             await self.log_error(e)
+                            continue
+
+                        if star_player and battle['battle']['starPlayer']['tag'].replace("#", "") != tag.upper():
                             continue
 
                         if "trophies" not in player['brawler']:
@@ -305,11 +310,30 @@ class Challenges(commands.Cog):
         embed=discord.Embed(colour=colour, description=message)
         await channel.send(embed=embed)
 
-    async def challenge_update(self):
-        return
-
-    async def challenge_finish(self):
-        return
+    async def challenge_finish(self, guild, chal_id):
+        data = await self.config.guild(guild).get_raw("active_challenges", chal_id)
+        participants = data["participants"]
+        rewards = data["rewards"]
+        total = sum([participants[id]["progress"] for id in participants])
+        glob = "global" in data
+        for mem_id in participants:
+            member = guild.get_member(int(mem_id))
+            if member is None:
+                continue
+            booster = member in guild.premium_subscribers
+            tokens = 0
+            score = participants[mem_id]["progress"]
+            for goal in rewards.keys():
+                if int(goal) <= score:
+                    if "normal" in rewards[goal]:
+                        tokens += rewards[goal]["normal"]
+                    if "booster" in rewards[goal] and booster:
+                        tokens += rewards[goal]["booster"]
+            if glob:
+                if total >= data["global"]["goal"] and score >= data["global"]["min"]:
+                    tokens += data["global"]["reward"]
+            if tokens != 0:
+                await self.config.member(member).tokens.set(await self.config.member(member).tokens() + tokens)
 
     def make_chall_embed(self, data, chal_id):
         starts = self.time_left((dt.strptime(data["start"], "%d/%m/%y %H:%M") - dt.now()).total_seconds())
@@ -344,7 +368,6 @@ class Challenges(commands.Cog):
     @commands.group(invoke_without_command=False, aliases=['chal', 'chall', 'ch'])
     async def challenge(self, ctx):
         return
-
     
     @checks.is_owner()
     @commands.guild_only()
