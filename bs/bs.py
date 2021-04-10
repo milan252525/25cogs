@@ -394,16 +394,16 @@ class BrawlStarsCog(commands.Cog):
                 startingembed.add_field(name=f"Vice Presidents: {vp_count}", value=vp_value, inline=False)
             if senior_value == "":
                 startingembed.add_field(name=f"Seniors: {senior_count}", value="None", inline=False)
-            elif len(senior_value) > 1024:
+            elif len(senior_value) > 1000:
                 startingembed.add_field(name=f"Seniors: {senior_count}", value="Too many to show", inline=False)
             else:
                 startingembed.add_field(name=f"Seniors: {senior_count}", value=senior_value, inline=False)
 
             embedstosend = []
             embedstosend.append(startingembed)
-            for i in range(0, len(embedfields), 19):
+            for i in range(0, len(embedfields), 15):
                 embed = discord.Embed(color=colour, title=f"{club.name} {club.tag}")
-                for e in embedfields[i:i + 19]:
+                for e in embedfields[i:i + 15]:
                     embed.add_field(name=e[0], value=e[1], inline=False)
                 embedstosend.append(embed)
 
