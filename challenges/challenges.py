@@ -242,5 +242,5 @@ class Challenges(commands.Cog):
             return await ctx.send(f"No challenge with ID {challenge_id} found!")
         if ctx.author.id in challs[challenge_id]["participants"]:
             return await ctx.send(f"You are already participating in {challs[challenge_id]['name']}.")
-        await self.config.guild(ctx.guild).set_raw("active_challenges", "participants", str(ctx.author.id), value=0)
+        await self.config.guild(ctx.guild).set_raw("active_challenges", challenge_id, "participants", str(ctx.author.id), value=0)
         return await ctx.send(f"{ctx.author.mention} sucessfully joined {challs[challenge_id]['name']}!")
