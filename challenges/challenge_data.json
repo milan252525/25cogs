@@ -1,8 +1,8 @@
 {
-    "gem_madness1" : {
+    "gems" : {
         "name": "Gem Madness",
-        "start": "09/04/21 01:00",
-        "end": "13/04/21 00:00",
+        "start": "10/04/21 13:00",
+        "end": "10/04/21 13:15",
         "gamemodes": ["gemGrab"],
         "brawlers": [],
         "star_player": false,
@@ -16,12 +16,13 @@
                 "booster": 1
             }
         },
-        "description": "Win games in Gem Grab with any brawler!"
+        "description": "Win games in Gem Grab with any brawler!",
+        "image": "https://static.wikia.nocookie.net/brawlstars/images/1/1e/Gem_Grab.png"
     },
-    "tick_mania1" : {
+    "tick" : {
         "name": "Tick Mania",
-        "start": "09/04/21 00:00",
-        "end": "15/04/21 00:00",
+        "start": "10/04/21 13:15",
+        "end": "10/04/21 16:00",
         "gamemodes": [],
         "brawlers": ["TICK"],
         "star_player": false,
@@ -42,6 +43,7 @@
             "reward": 1,
             "min": 5
         },
-        "description": "Win games with Tick in any gamemode!"
+        "description": "Win games with Tick in any gamemode!",
+        "image": "https://static.wikia.nocookie.net/brawlstars/images/7/72/Tick_Portrait.png"
     }
 }
