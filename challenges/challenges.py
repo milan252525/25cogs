@@ -57,26 +57,6 @@ class Challenges(commands.Cog):
         else:
             return f"{int(hours)//24}d {(int(hours)//24)%24}h"
 
-    @challenge_update_loop.error
-    async def challenge_update_loop_errors(self, error):
-        traceback.print_exc()
-        labs = self.bot.get_guild(self.labs)
-        labs_log_id = await self.config.guild(labs).log()
-        log_channel = labs.get_channel(labs_log_id)
-        
-        str_error = traceback.format_exception(type(error), error, error.__traceback__)
-        wrapper = textwrap.TextWrapper(width=1000, max_lines=5, expand_tabs=False, replace_whitespace=False)
-        messages = wrapper.wrap("".join(str_error))
-        embed = discord.Embed(colour=discord.Color.red())
-        
-        for i, m in enumerate(messages[:5], start=1):
-            embed.add_field(
-                name=f"Part {i}",
-                value="```py\n" + m + "```",
-                inline=False
-            )
-        await log_channel.send(embed=embed)
-
     @tasks.loop(minutes=3)
     async def challenge_update_loop(self):
         labs = self.bot.get_guild(self.labs)
@@ -172,6 +152,25 @@ class Challenges(commands.Cog):
                     await message.delete()
                     await self.config.guild(labs).clear_raw("active_challenges", chal_id)
         
+    @challenge_update_loop.error
+    async def challenge_update_loop_errors(self, error):
+        traceback.print_exc()
+        labs = self.bot.get_guild(self.labs)
+        labs_log_id = await self.config.guild(labs).log()
+        log_channel = labs.get_channel(labs_log_id)
+        
+        str_error = traceback.format_exception(type(error), error, error.__traceback__)
+        wrapper = textwrap.TextWrapper(width=1000, max_lines=5, expand_tabs=False, replace_whitespace=False)
+        messages = wrapper.wrap("".join(str_error))
+        embed = discord.Embed(colour=discord.Color.red())
+        
+        for i, m in enumerate(messages[:5], start=1):
+            embed.add_field(
+                name=f"Part {i}",
+                value="```py\n" + m + "```",
+                inline=False
+            )
+        await log_channel.send(embed=embed)
 
     async def log(self, channel, message, colour=discord.Colour.green()):
         embed=discord.Embed(colour=colour, description=message)
