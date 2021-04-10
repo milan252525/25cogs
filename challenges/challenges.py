@@ -137,7 +137,7 @@ class Challenges(commands.Cog):
 
                     participants = data["participants"]
                     if 'global' in data:
-                        total = sum([participants["progress"] for id in participants])
+                        total = sum([participants[id]["progress"] for id in participants])
                         percentage = int((total/data['global']['goal'])*100)
                         first = self.loading['empty'][0] if percentage < 10 else self.loading['full'][0]
                         full = int((percentage-10)/10)
