@@ -109,7 +109,8 @@ class Challenges(commands.Cog):
                     if 'global' in data:
                         glob_pro= f"0/{data['global']['goal']}\n" + self.loading['empty'][0] + self.loading['empty'][1]*8 + self.loading['empty'][2]
                         embed.add_field(name="Progress", value=glob_pro, inline=False)
-                    embed.set_footer(text="Participants: 0")
+                    participants = len(data['participants'].keys())
+                    embed.set_footer(text="Participants: " + str(participants))
                     data["embed"] = embed.to_dict()
                     await message.edit(embed=embed)
                     await self.config.guild(labs).set_raw("active_challenges", chal_id, value=data)
