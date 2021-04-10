@@ -87,7 +87,6 @@ class Challenges(commands.Cog):
                 data["embed"] = embed.to_dict()
                 data["message_id"] = message.id
                 data["participants"] = {}
-                data["progress"] = 0
                 labs_challs[chal_id] = data
                 await self.config.guild(labs).set_raw("active_challenges", chal_id, value=data)
         #update prepared and handle status changes
@@ -212,7 +211,7 @@ class Challenges(commands.Cog):
                 score = 0
 
                 for mem_id in participants:
-                    last = participants[mem_id]["last"]
+                    last = participants[str(mem_id)]["last"]
                     user = labs.get_member(mem_id)
                     if user is None:
                         continue
@@ -275,7 +274,7 @@ class Challenges(commands.Cog):
                             return
 
                         score += 1
-                    old = participants[mem_id]["progress"]
+                    old = participants[str(mem_id)]["progress"]
                     await self.config.guild(labs).set_raw("active_challenges", chall_id, "participants", str(mem_id), value={"progress": old + score, "last": log[0]['battleTime']})
                     if score != 0:
                         await self.log(log_channel, f"[{chall_id}] {user.display_name} +{score}")
@@ -374,7 +373,7 @@ class Challenges(commands.Cog):
         bs_conf = self.get_bs_config()
         if (await bs_conf.user(ctx.author).tag()) is None:
             return await ctx.send("Save your tag using `/save` first!")
-        if ctx.author.id in challs[challenge_id]["participants"]:
+        if str(ctx.author.id) in challs[challenge_id]["participants"]:
             return await ctx.send(f"You are already participating in {challs[challenge_id]['name']}.")
         time = (dt.strptime(challs[challenge_id]["start"], "%d/%m/%y %H:%M")).strftime("%Y%m%dT%H%M%S.%fZ")
         await self.config.guild(ctx.guild).set_raw("active_challenges", challenge_id, "participants", str(ctx.author.id), value={"progress": 0, "last": time})
@@ -393,13 +392,13 @@ class Challenges(commands.Cog):
         progress = ""
         challs = await self.config.guild(ctx.guild).active_challenges()
         for chall_id in challs:
-            if target.id in challs[chall_id]["participants"]:
+            if str(target.id) in challs[chall_id]["participants"]:
                 if challs[chall_id]['status'] == "start_soon":
                     progress += f"**{challs[chall_id]['name']}** `hasn't started yet`\n"
                 else:
-                    progress += f"**{challs[chall_id]['name']}** `{challs[chall_id]['participants'][target.id]['progress']}`\n"
+                    progress += f"**{challs[chall_id]['name']}** `{challs[chall_id]['participants'][str(target.id)]['progress']}`\n"
             else:
                 progress += f"**{challs[chall_id]['name']}** `not participating`\n"
-        embed.add_field(name="Progress", value=progress, inline=False)
+        embed.description = progress
         await ctx.send(embed=embed)
         
