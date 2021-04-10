@@ -99,7 +99,7 @@ class Challenges(commands.Cog):
                     embed = discord.Embed.from_dict(data["embed"])
                     embed.set_field_at(0, name="Starts in", value=starts)
                     await message.edit(embed=embed)
-                if (start_date - now) >= timedelta(hours=24):
+                if now >= start_date:
                     await self.log(log_channel, f"Starting {chal_id}", discord.Color.orange())
                     data["status"] = "active"
                     ends = self.time_left((dt.strptime(data["end"], "%d/%m/%y %H:%M") - now).total_seconds())
@@ -116,7 +116,7 @@ class Challenges(commands.Cog):
                 await self.challenge_update() #update scores
 
                 end_date = dt.strptime(data["end"], "%d/%m/%y %H:%M")
-                if end_date <= now:
+                if now >= end_date:
                     await self.log(log_channel, f"Marking {chal_id} as ended", discord.Color.purple())
                     data["status"] = "to_be_ended"
                     message = labs_channel.get_partial_message(data["message_id"])
