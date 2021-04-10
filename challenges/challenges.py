@@ -86,7 +86,7 @@ class Challenges(commands.Cog):
                 data["message_id"] = message.id
                 data["participants"] = {}
                 data["progress"] = 0
-                labs_challs["active_challenges"][chal_id] = data
+                labs_challs[chal_id] = data
                 await self.config.guild(labs).set_raw("active_challenges", chal_id, value=data)
         #update prepared and start
         for chal_id in labs_challs:
