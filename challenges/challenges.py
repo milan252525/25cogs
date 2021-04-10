@@ -381,7 +381,7 @@ class Challenges(commands.Cog):
 
     @commands.guild_only()
     @challenge.command(name="stats")
-    async def challenge_stats(self, ctx, target: discord.User = None):
+    async def challenge_stats(self, ctx, target: discord.Member = None):
         if ctx.guild.id != self.labs:
             return
         if target is None:
