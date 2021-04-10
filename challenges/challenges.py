@@ -69,6 +69,7 @@ class Challenges(commands.Cog):
         labs_challs = await self.config.guild(labs).active_challenges()
         if labs_challs is None:
             await self.config.guild(labs).set_raw("active_challenges", value={})
+            labs_challs = {}
         now = dt.now()
 
         #prepare challenges 24h in advance
@@ -183,7 +184,7 @@ class Challenges(commands.Cog):
         return
 
     def make_chall_embed(self, data, chal_id):
-        starts = self.time_left(dt.now() - (dt.strptime(data["start"], "%d/%m/%y %H:%M")).total_seconds())
+        starts = self.time_left((dt.now() - dt.strptime(data["start"], "%d/%m/%y %H:%M")).total_seconds())
         #ends = self.time_left((dt.strptime(data["end"], "%d/%m/%y %H:%M") - dt.now()).total_seconds())
         embed = discord.Embed(
             title = data["name"],
