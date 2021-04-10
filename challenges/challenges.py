@@ -107,7 +107,7 @@ class Challenges(commands.Cog):
                     message = labs_channel.get_partial_message(data["message_id"])
                     embed = discord.Embed.from_dict(data["embed"])
                     embed.set_field_at(0, name="Time left", value=ends)
-                    embed.description = embed.description + "\nCheck your progress with `/ch stats`"
+                    embed.description = embed.description + "\nCheck your progress with `*ch stats`"
                     if 'global' in data:
                         glob_pro= f"0/{data['global']['goal']}\n" + self.loading['empty'][0] + self.loading['empty'][1]*8 + self.loading['empty'][2]
                         embed.add_field(name="Progress", value=glob_pro, inline=False)
@@ -164,7 +164,7 @@ class Challenges(commands.Cog):
                 embed = discord.Embed.from_dict(data["embed"])
                 embed.remove_field(0)
                 embed.title = "[ENDED] " + data["name"]
-                embed.description = data["description"] + "\nCheck your progress with `/ch stats`"
+                embed.description = data["description"] + "\nCheck your progress with `*ch stats`"
                 data["embed"] = embed.to_dict()
                 await message.edit(embed=embed)
                 await self.config.guild(labs).set_raw("active_challenges", chal_id, "status", value="ended")
@@ -197,7 +197,7 @@ class Challenges(commands.Cog):
         tags = await bs_conf.all_users()
         
         for chall_id in labs_challs:
-            await self.log(log_channel, f"updating progress for {chall_id}", discord.Color.teal())
+            #await self.log(log_channel, f"updating progress for {chall_id}", discord.Color.teal())
             if labs_challs[chall_id]["status"] == "active":
                 data = labs_challs[chall_id]
                 participants = data["participants"]
@@ -268,8 +268,8 @@ class Challenges(commands.Cog):
                             continue
 
                         brawler_name = player['brawler']['name']
-                        if len(brawlers) > 1 and brawler_name not in brawlers:
-                            return
+                        if len(brawlers) > 0 and brawler_name not in brawlers:
+                            continue
 
                         score += 1
                     old = participants[mem_id]["progress"]
@@ -316,7 +316,7 @@ class Challenges(commands.Cog):
         #ends = self.time_left((dt.strptime(data["end"], "%d/%m/%y %H:%M") - dt.now()).total_seconds())
         embed = discord.Embed(
             title = data["name"],
-            description=data["description"] + f"\n\nJoin with `/ch join {chal_id}`",
+            description=data["description"] + f"\n\nJoin with `*ch join {chal_id}`",
             colour=discord.Colour.random()
         )
         embed.add_field(name="Starts in", value=starts, inline=False)
