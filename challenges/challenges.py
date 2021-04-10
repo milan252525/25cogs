@@ -209,8 +209,8 @@ class Challenges(commands.Cog):
                 score = 0
 
                 for mem_id in participants:
-                    last = participants[str(mem_id)]["last"]
-                    user = labs.get_member(mem_id)
+                    last = participants[mem_id]["last"]
+                    user = labs.get_member(int(mem_id))
                     if user is None:
                         continue
                     tag = tags[user.id]['tag'].replace("o", "0").replace("O", "0")
@@ -272,8 +272,8 @@ class Challenges(commands.Cog):
                             return
 
                         score += 1
-                    old = participants[str(mem_id)]["progress"]
-                    await self.config.guild(labs).set_raw("active_challenges", chall_id, "participants", str(mem_id), value={"progress": old + score, "last": log[0]['battleTime']})
+                    old = participants[mem_id]["progress"]
+                    await self.config.guild(labs).set_raw("active_challenges", chall_id, "participants", mem_id, value={"progress": old + score, "last": log[0]['battleTime']})
                     if score != 0:
                         await self.log(log_channel, f"[{chall_id}] {user.display_name} +{score}")
 
