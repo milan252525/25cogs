@@ -106,8 +106,9 @@ class Challenges(commands.Cog):
                     message = labs_channel.get_partial_message(data["message_id"])
                     embed = discord.Embed.from_dict(data["embed"])
                     embed.set_field_at(0, name="Time left", value=ends)
-                    glob_pro= f"0/{data['global']['goal']}\n" + self.loading['empty'][0] + self.loading['empty'][1]*8 + self.loading['empty'][2]
-                    embed.add_field(name="Progress", value=glob_pro, inline=False)
+                    if 'global' in data:
+                        glob_pro= f"0/{data['global']['goal']}\n" + self.loading['empty'][0] + self.loading['empty'][1]*8 + self.loading['empty'][2]
+                        embed.add_field(name="Progress", value=glob_pro, inline=False)
                     embed.set_footer(text="Participants: 0")
                     data["embed"] = embed.to_dict()
                     await message.edit(embed=embed)
@@ -184,7 +185,7 @@ class Challenges(commands.Cog):
         return
 
     def make_chall_embed(self, data, chal_id):
-        starts = self.time_left((dt.now() - dt.strptime(data["start"], "%d/%m/%y %H:%M")).total_seconds())
+        starts = self.time_left((dt.strptime(data["start"], "%d/%m/%y %H:%M") - dt.now()).total_seconds())
         #ends = self.time_left((dt.strptime(data["end"], "%d/%m/%y %H:%M") - dt.now()).total_seconds())
         embed = discord.Embed(
             title = data["name"],
