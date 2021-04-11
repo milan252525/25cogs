@@ -207,9 +207,8 @@ class Challenges(commands.Cog):
                 map_maker = data["map_maker"]
                 star_player = data["star_player"]
 
-                score = 0
-
                 for mem_id in participants:
+                    score = 0
                     last = participants[mem_id]["last"]
                     user = labs.get_member(int(mem_id))
                     if user is None:
