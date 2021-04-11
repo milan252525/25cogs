@@ -263,6 +263,9 @@ class Challenges(commands.Cog):
                             await self.log_error(e)
                             continue
 
+                        if star_player and 'starPlayer' not in battle['battle']:
+                            continue
+
                         if star_player and battle['battle']['starPlayer']['tag'].replace("#", "") != tag.upper():
                             continue
 
