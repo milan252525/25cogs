@@ -248,7 +248,7 @@ class Challenges(commands.Cog):
                             win = False
 
                         if type == "wins" and not win:
-                            return
+                            continue
 
                         player = None
                         if "teams" in battle['battle']:
