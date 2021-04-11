@@ -277,6 +277,8 @@ class Challenges(commands.Cog):
                             continue
 
                         score += 1
+                        await self.log(log_channel, f"[{chall_id}] {user.display_name}\n```py\n{str(battle)[:1800]}\n```")
+
                     old = participants[mem_id]["progress"]
                     await self.config.guild(labs).set_raw("active_challenges", chall_id, "participants", mem_id, value={"progress": old + score, "last": log[0]['battleTime']})
                     if score != 0:
