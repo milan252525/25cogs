@@ -62,10 +62,9 @@ async def get_profile_embed(bot, ctx, member, alt=False):
     player_icon_id = player.raw_data["icon"]["id"]
     if bs_cog.icons is None:
         bs_cog.icons = await bs_cog.starlist_request("https://api.brawlapi.com/v1/icons")
-    if 'status' not in bs_cog.icons and bs_cog.icons is not None:
+    try:
         player_icon = bs_cog.icons['player'][str(player_icon_id)]['imageUrl2']
-    else:
-        bs_cog.icons = None
+    except:
         player_icon = member.avatar_url
     embed.set_author(
         name=f"{player.name} {player.raw_data['tag']}",
@@ -269,10 +268,9 @@ async def get_brawlers_embeds(bot, ctx, member):
     player_icon_id = player.raw_data["icon"]["id"]
     if bs_cog.icons is None:
         bs_cog.icons = await bs_cog.starlist_request("https://api.brawlapi.com/v1/icons")
-    if 'status' not in bs_cog.icons and bs_cog.icons is not None:
+    try:
         player_icon = bs_cog.icons['player'][str(player_icon_id)]['imageUrl2']
-    else:
-        bs_cog.icons = None
+    except:
         player_icon = member.avatar_url
 
     brawlers = player.raw_data['brawlers']
