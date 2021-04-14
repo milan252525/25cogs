@@ -180,7 +180,7 @@ class Challenges(commands.Cog):
 
             if data["status"] == "ended":
                 end_date = dt.strptime(data["end"], "%d/%m/%y %H:%M")
-                if (now - end_date) > timedelta(hours=6):
+                if (now - end_date) > timedelta(hours=24):
                     await self.log(log_channel, f"Deleting {chal_id}", discord.Color.purple())
                     message = labs_channel.get_partial_message(data["message_id"])
                     await message.delete()
@@ -423,6 +423,7 @@ class Challenges(commands.Cog):
         embed = discord.Embed(colour=discord.Colour.green())
         embed.set_author(name=f"{target.display_name}'s challenge stats", icon_url=target.avatar_url)
         embed.add_field(name="Tokens", value=await self.config.member(target).tokens(), inline=False)
+        embed.add_field(name="Purchased Giveaway Entries", value=await self.config.member(target).entries(), inline=False)
         progress = ""
         challs = await self.config.guild(ctx.guild).active_challenges()
         for chall_id in challs:

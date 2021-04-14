@@ -1,101 +1,60 @@
 {
     "gems" : {
-        "name": "Gem Madness",
-        "start": "11/04/21 10:00",
-        "end": "11/04/21 12:00",
-        "gamemodes": ["gemGrab"],
+        "name": "Gem Shortage",
+        "start": "16/04/21 00:00",
+        "end": "21/04/21 00:00",
+        "gamemodes": ["gemGrab", "heist"],
         "brawlers": [],
         "star_player": false,
         "type": "wins",
-        "min_trophy": 200,
+        "min_trophy": 500,
         "map_maker": false,
         "rewards": {
-            "2": {
+            "10": {
                 "normal": 1
             },
-            "5": {
+            "25": {
                 "normal": 1,
                 "booster": 1
+            },
+            "50": {
+                "normal": 3
             }
         },
         "global" : {
-            "goal": 10,
-            "reward": 1,
-            "min": 1
+            "goal": 500,
+            "reward": 2,
+            "min": 10
         },
-        "description": "Win games in **Gem Grab** with any brawler! (200+ trophies)",
+        "description": "There is shortage of gems! Help Mike mine more or steal some from Brawl Bank!\nWin games in ranked **Gem Grab** or **Heist** with any brawler! (500+ trophies)",
         "image": "https://static.wikia.nocookie.net/brawlstars/images/1/1e/Gem_Grab.png"
     },
     "tick" : {
-        "name": "Tick Mania",
-        "start": "11/04/21 10:00",
-        "end": "11/04/21 12:30",
+        "name": "The Junker Family",
+        "start": "21/04/21 12:00",
+        "end": "24/04/21 12:00",
         "gamemodes": [],
-        "brawlers": ["TICK"],
+        "brawlers": ["PAM", "JESSIE", "NANI"],
         "star_player": false,
         "type": "wins",
         "min_trophy": 0,
         "map_maker": true,
         "rewards": {
-            "1": {
+            "25": {
+                "normal": 1,
                 "booster": 1
             },
-            "3": {
-                "normal": 1
-            },
-            "5": {
+            "50": {
                 "normal": 2,
                 "booster": 1
             }
         },
         "global" : {
-            "goal": 10,
+            "goal": 1000,
             "reward": 2,
-            "min": 1
+            "min": 25
         },
-        "description": "Win games with **Tick** in any gamemode (including map maker)!",
-        "image": "https://static.wikia.nocookie.net/brawlstars/images/7/72/Tick_Portrait.png"
-    },
-    "shelly" : {
-        "name": "Star Shelly",
-        "start": "11/04/21 11:00",
-        "end": "11/04/21 13:00",
-        "gamemodes": [],
-        "brawlers": ["SHELLY"],
-        "star_player": true,
-        "type": "any",
-        "min_trophy": 0,
-        "map_maker": true,
-        "rewards": {
-            "1": {
-                "normal": 5
-            }
-        },
-        "description": "Get **star player** as **Shelly** in any mode (including map maker)!",
-        "image": "https://static.wikia.nocookie.net/brawlstars/images/d/de/Shelly_Skin-Star.png/revision/latest/top-crop/width/220/height/220"
-    },
-    "plants" : {
-        "name": "Plant Uprising",
-        "start": "11/04/21 11:00",
-        "end": "11/04/21 13:15",
-        "gamemodes": ["soloShowdown", "duoShowdown"],
-        "brawlers": ["SPIKE", "SPROUT"],
-        "star_player": false,
-        "type": "any",
-        "min_trophy": 0,
-        "map_maker": false,
-        "rewards": {
-            "3": {
-                "normal": 1
-            }
-        },
-        "global" : {
-            "goal": 25,
-            "reward": 1,
-            "min": 1
-        },
-        "description": "Play showdown with **Spike** or **Sprout**!",
-        "image": "https://static.wikia.nocookie.net/brawlstars/images/2/22/Spike_Portrait.png/revision/latest/scale-to-width-down/120?cb=20200304182450"
+        "description": "Win games with **Pam, Jessie or Nani** in any gamemode (including map maker, any trophies)!",
+        "image": "https://i.pinimg.com/236x/d3/95/89/d395890b7d68dd88828ba09e5835a87c.jpg"
     }
-
 }
