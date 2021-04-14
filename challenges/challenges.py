@@ -455,7 +455,7 @@ class Challenges(commands.Cog):
             if pred.result is not True:
                 return await ctx.send("Okay, cancelling...")
         if number in (1, 2, 3, 4):
-            role = ctx.guild.get_role(self.roles[number])
+            role = ctx.guild.get_role(self.shop[number])
             await target.add_roles(role)
         if number == 5:
             await ctx.send("DM milan_25 with screenshot of this message.")
