@@ -2,6 +2,7 @@ import discord
 from discord.ext import tasks
 from redbot.core import commands, Config, checks
 from redbot.core.data_manager import cog_data_path
+from redbot.core.utils.predicates import MessagePredicate
 
 import brawlstats
 import asyncio
@@ -10,31 +11,39 @@ from datetime import timedelta
 import json
 import traceback
 import textwrap
-
 class Challenges(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=25202025)
-        default_member = {"tokens" : 0}
-        default_server = {"active_challenges" : {}, "channel" : None, "log": None}
+        default_member = {"tokens" : 0, "entries": 0}
+        default_server = {"active_challenges" : dict(), "channel" : None, "log": None}
         self.config.register_member(**default_member)
         self.config.register_global(**default_server)
         self.labs = 401883208511389716
         self.bsconfig = None
         with open(str(cog_data_path(self)).replace("Challenges", r"CogManager/cogs/challenges/challenge_data.json")) as file:
             self.challenge_data = json.load(file)
-        self.token = " token"#"🪙"
+        self.token = "<:tokens:831928395394449419>"#"🪙"
         self.loading = {
             "empty": ["<:blankleft:821065351907246201>", "<:blankmid:821065351294615552>", "<:blankright:821065351621115914>"],
             "full": ["<:loadleft:821065351726366761>", "<:loadmid:821065352061780048>", "<:loadright:821065351903182889>"]
         }
+        self.shop = [
+            831929464384520243, #orange
+            831929854731485216, #yellow
+            831929988495179826, #black
+            831934602158669844  #rainbow
+        ]
+        self.costs = [10, 10, 15, 15, 30, 3]
         self.challenge_update_loop.start()
         self.progress_update_loop.start()
+        self.rainbow_loop.start()
 
     def cog_unload(self):
         self.challenge_update_loop.stop()
         self.progress_update_loop.stop()
+        self.rainbow_loop.cancel()
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
@@ -426,4 +435,44 @@ class Challenges(commands.Cog):
                 progress += f"**{challs[chall_id]['name']}** `not participating`\n"
         embed.description = progress
         await ctx.send(embed=embed)
+
+    @commands.guild_only()
+    @commands.command(name="buy")
+    async def buy(self, ctx, number:int, target:discord.Member=None):
+        if ctx.guild.id != self.labs:
+            return
+        if target is None:
+            target = ctx.author
+        if number < 1 or number > 6:
+            return await ctx.send("Invalid number!")
+        balance = await self.config.member(target).tokens()
+        if balance < self.costs[number]:
+            return await ctx.send("You dont have enought tokens to buy that!")
+        if target != ctx.author:
+            await ctx.send(f"Are you sure you want to buy this item for someone else? ({target.display_name})\nConfirm with 'yes'")
+            pred = MessagePredicate.yes_or_no(ctx)
+            await self.bot.wait_for("message", check=pred, timeout=10)
+            if pred.result is not True:
+                return await ctx.send("Okay, cancelling...")
+        if number in (1, 2, 3, 4):
+            role = ctx.guild.get_role(self.roles[number])
+            await target.add_roles(role)
+        if number == 5:
+            await ctx.send("DM milan_25 with screenshot of this message.")
+        if number == 6:
+            entries = await self.config.member(target).entries()
+            await self.config.member(target).entries.set(entries+1)
+        log_id = await self.config.guild(ctx.guild).log()
+        log_channel = ctx.guild.get_channel(log_id)
+        cost = self.costs[number]
+        await self.log(log_channel, f"{ctx.author.display_name} {ctx.author.id} bought {number} for {target.display_name} {target.id} {balance}->{balance-cost}")
+        await self.config.member(target).tokens.set(balance-cost)
+        await ctx.send(f"Success! {cost} tokens have been deducted from your balance.")
+
+    @tasks.loop(hours=24)
+    async def rainbow_loop(self):
+        labs = self.bot.get_guild(self.labs)
+        role = labs.get_role(831934602158669844)
+        await role.edit(colour=discord.Colour.random())
+
         
