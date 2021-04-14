@@ -445,7 +445,7 @@ class Challenges(commands.Cog):
             target = ctx.author
         if number < 1 or number > 6:
             return await ctx.send("Invalid number!")
-        balance = await self.config.member(target).tokens()
+        balance = await self.config.member(ctx.author).tokens()
         if balance < self.costs[number-1]:
             return await ctx.send("You dont have enought tokens to buy that!")
         if target != ctx.author:
@@ -466,7 +466,7 @@ class Challenges(commands.Cog):
         log_channel = ctx.guild.get_channel(log_id)
         cost = self.costs[number-1]
         await self.log(log_channel, f"{ctx.author.display_name} {ctx.author.id} bought {number} for {target.display_name} {target.id} {balance}->{balance-cost}")
-        await self.config.member(target).tokens.set(balance-cost)
+        await self.config.member(ctx.author).tokens.set(balance-cost)
         await ctx.send(f"Success! {cost} tokens have been deducted from your balance.")
 
     @tasks.loop(hours=24)
