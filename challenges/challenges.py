@@ -446,7 +446,7 @@ class Challenges(commands.Cog):
         if number < 1 or number > 6:
             return await ctx.send("Invalid number!")
         balance = await self.config.member(target).tokens()
-        if balance < self.costs[number]:
+        if balance < self.costs[number-1]:
             return await ctx.send("You dont have enought tokens to buy that!")
         if target != ctx.author:
             await ctx.send(f"Are you sure you want to buy this item for someone else? ({target.display_name})\nConfirm with 'yes'")
@@ -455,7 +455,7 @@ class Challenges(commands.Cog):
             if pred.result is not True:
                 return await ctx.send("Okay, cancelling...")
         if number in (1, 2, 3, 4):
-            role = ctx.guild.get_role(self.shop[number])
+            role = ctx.guild.get_role(self.shop[number-1])
             await target.add_roles(role)
         if number == 5:
             await ctx.send("DM milan_25 with screenshot of this message.")
@@ -464,7 +464,7 @@ class Challenges(commands.Cog):
             await self.config.member(target).entries.set(entries+1)
         log_id = await self.config.guild(ctx.guild).log()
         log_channel = ctx.guild.get_channel(log_id)
-        cost = self.costs[number]
+        cost = self.costs[number-1]
         await self.log(log_channel, f"{ctx.author.display_name} {ctx.author.id} bought {number} for {target.display_name} {target.id} {balance}->{balance-cost}")
         await self.config.member(target).tokens.set(balance-cost)
         await ctx.send(f"Success! {cost} tokens have been deducted from your balance.")
