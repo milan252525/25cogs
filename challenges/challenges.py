@@ -470,7 +470,7 @@ class Challenges(commands.Cog):
         await self.config.member(ctx.author).tokens.set(balance-cost)
         await ctx.send(f"Success! {cost} tokens have been deducted from your balance.")
 
-    @tasks.loop(hours=24)
+    @tasks.loop(hours=12)
     async def rainbow_loop(self):
         labs = self.bot.get_guild(self.labs)
         role = labs.get_role(831934602158669844)
