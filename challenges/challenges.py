@@ -227,6 +227,9 @@ class Challenges(commands.Cog):
                         log = await self.ofcbsapi.get_battle_logs(tag)
                         await asyncio.sleep(0.04)
                         log = log.raw_data
+                    except brawlstats.error.NotFound as e:
+                        await self.log(log_channel, f"[{chall_id}] not found {user.id} {tag}")
+                        continue
                     except brawlstats.errors.RequestError as e:
                         await self.log_error(e)
                         break
