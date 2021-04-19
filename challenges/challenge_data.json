@@ -29,7 +29,7 @@
         "description": "There is shortage of gems! Help Mike mine more or steal some from Brawl Bank!\nWin games in ranked **Gem Grab** or **Heist** with any brawler! (500+ trophies)",
         "image": "https://static.wikia.nocookie.net/brawlstars/images/1/1e/Gem_Grab.png"
     },
-    "tick" : {
+    "junkers" : {
         "name": "The Junker Family",
         "start": "21/04/21 12:00",
         "end": "24/04/21 12:00",
@@ -40,19 +40,26 @@
         "min_trophy": 0,
         "map_maker": true,
         "rewards": {
-            "25": {
+            "10": {
                 "normal": 1,
                 "booster": 1
             },
-            "50": {
+            "20": {
                 "normal": 2,
                 "booster": 1
+            },
+            "30": {
+                "normal": 3,
+                "booster": 1
+            },
+            "50": {
+                "normal": 3
             }
         },
         "global" : {
-            "goal": 1000,
+            "goal": 500,
             "reward": 2,
-            "min": 25
+            "min": 10
         },
         "description": "Win games with **Pam, Jessie or Nani** in any gamemode (including map maker, any trophies)!",
         "image": "https://i.pinimg.com/236x/d3/95/89/d395890b7d68dd88828ba09e5835a87c.jpg"
