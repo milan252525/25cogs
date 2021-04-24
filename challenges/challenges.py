@@ -271,9 +271,12 @@ class Challenges(commands.Cog):
                             for p in battle['battle']['players']:
                                 if p['tag'].replace("#", "") == tag.upper():
                                     player = p
+                            if player is None and battle['battle']['mode'] == "bigGame":
+                                if battle['battle']['bigBrawler']['tag'].replace("#", "") == tag.upper():
+                                    player = battle['battle']['bigBrawler']
                                     
                         if player is None:
-                            await self.log(log_channel, f"[{chall_id}] {user.display_name} missing battle:\n```py\n{str(battle)[:1800]}\n```", discord.Colour.red())
+                            await self.log(log_channel, f"[{chall_id}] {user.display_name} missing player:\n```py\n{str(battle)[:1800]}\n```", discord.Colour.red())
                             continue
 
                         if star_player and 'starPlayer' not in battle['battle']:
