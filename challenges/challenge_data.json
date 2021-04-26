@@ -1,33 +1,38 @@
 {
-    "gems" : {
-        "name": "Gem Shortage",
-        "start": "16/04/21 00:00",
-        "end": "21/04/21 00:00",
-        "gamemodes": ["gemGrab", "heist"],
+    "ball" : {
+        "name": "Ball Stars",
+        "start": "28/04/21 10:00",
+        "end": "01/05/21 10:00",
+        "gamemodes": ["brawlBall"],
         "brawlers": [],
-        "star_player": false,
-        "type": "wins",
-        "min_trophy": 500,
+        "star_player": true,
+        "type": "any",
+        "min_trophy": 300,
         "map_maker": false,
         "rewards": {
-            "10": {
-                "normal": 1
-            },
-            "25": {
+            "1": {
                 "normal": 1,
                 "booster": 1
             },
-            "50": {
+            "2": {
+                "normal": 1,
+                "booster": 1
+            },
+            "3": {
+                "normal": 1,
+                "booster": 1
+            },
+            "5": {
                 "normal": 3
             }
         },
-        "global" : {
-            "goal": 500,
-            "reward": 2,
-            "min": 10
+        "notglobal" : {
+            "goal": 0,
+            "reward": 0,
+            "min": 0
         },
-        "description": "There is shortage of gems! Help Mike mine more or steal some from Brawl Bank!\nWin games in ranked **Gem Grab** or **Heist** with any brawler! (500+ trophies)",
-        "image": "https://static.wikia.nocookie.net/brawlstars/images/1/1e/Gem_Grab.png"
+        "description": "Let's see who is the star! Get Star Player in Brawl Ball (300+ trophies, no map maker)",
+        "image": "https://static.wikia.nocookie.net/brawlstars/images/4/48/Brawl_Ball.png"
     },
     "junkers" : {
         "name": "The Junker Family",
