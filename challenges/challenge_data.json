@@ -1,8 +1,8 @@
 {
     "ball" : {
         "name": "Ball Stars",
-        "start": "28/04/21 10:00",
-        "end": "01/05/21 10:00",
+        "start": "01/05/21 10:00",
+        "end": "05/05/21 10:00",
         "gamemodes": ["brawlBall"],
         "brawlers": [],
         "star_player": true,
