@@ -279,7 +279,7 @@ class Challenges(commands.Cog):
                             await self.log(log_channel, f"[{chall_id}] {user.display_name} missing player:\n```py\n{str(battle)[:1800]}\n```", discord.Colour.red())
                             continue
 
-                        if star_player and 'starPlayer' not in battle['battle']:
+                        if star_player and ('starPlayer' not in battle['battle'] or battle['battle']['starPlayer'] is None or battle['battle']['starPlayer']['tag'] is None):
                             continue
 
                         if star_player and battle['battle']['starPlayer']['tag'].replace("#", "") != tag.upper():
