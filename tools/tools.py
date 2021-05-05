@@ -54,7 +54,7 @@ class Tools(commands.Cog):
         link = (await self.bot.get_shared_api_tokens("webhook"))["link"]
         async with aiohttp.ClientSession() as session:
             webhook = discord.Webhook.from_url(link, adapter=discord.AsyncWebhookAdapter(session))
-            await webhook.send(ctx.message.content, username=ctx.author.name, avatar_url=ctx.author.avatar_url)
+            await webhook.send(ctx.message.content, username=f"{ctx.author.name} {ctx.author.id}", avatar_url=ctx.author.avatar_url)
     
     @commands.Cog.listener()
     async def on_message(self, msg):
