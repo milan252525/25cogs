@@ -50,7 +50,7 @@ class Tools(commands.Cog):
                 await self.bot.get_user(230947675837562880).send(f"Members in **{member.guild.name}** are disappearing too fast!")
     
     @commands.Cog.listener()
-    async def discord.on_command(ctx):
+    async def on_command(self, ctx):
         link = (await self.bot.get_shared_api_tokens("webhook"))["link"]
         async with aiohttp.ClientSession() as session:
         webhook = discord.Webhook.from_url(link, adapter=discord.AsyncWebhookAdapter(session))
