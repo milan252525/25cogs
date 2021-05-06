@@ -1,7 +1,7 @@
 {   "takedown" : {
         "name": "Takedown Special",
-        "start": "07/05/21 14:00",
-        "end": "09/05/21 14:15",
+        "start": "08/05/21 08:00",
+        "end": "10/05/21 08:00",
         "gamemodes": ["takedown"],
         "brawlers": [],
         "star_player": false,
@@ -32,7 +32,7 @@
             "min": 3
         },
         "description": "Takedown is back!\nWin games in Takedown with any brawler! (any trophies)",
-        "image": "https://static.wikia.nocookie.net/brawlstars/images/e/e6/Takedown.png"
+        "image": "https://static.wikia.nocookie.net/brawlstars/images/e/e6/Takedown.png/revision/latest?cb=20190919143710"
     },
     "speed" : {
         "name": "Speed Showdown",
