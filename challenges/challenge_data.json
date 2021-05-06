@@ -1,38 +1,69 @@
-{
-    "ball" : {
-        "name": "Ball Stars",
-        "start": "01/05/21 10:00",
-        "end": "05/05/21 10:00",
-        "gamemodes": ["brawlBall"],
+{   "takedown" : {
+        "name": "Takedown Special",
+        "start": "07/05/21 14:00",
+        "end": "09/05/21 14:15",
+        "gamemodes": ["takedown"],
         "brawlers": [],
-        "star_player": true,
-        "type": "any",
-        "min_trophy": 300,
+        "star_player": false,
+        "type": "wins",
+        "min_trophy": 0,
         "map_maker": false,
         "rewards": {
-            "1": {
-                "normal": 1,
-                "booster": 1
-            },
-            "2": {
-                "normal": 1,
-                "booster": 1
-            },
             "3": {
+                "normal": 1
+            },
+            "6": {
+                "normal": 1
+            },
+            "9": {
+                "normal": 1
+            },
+            "12": {
+                "normal": 2
+            },
+            "15": {
+                "normal": 3,
+                "booster": 3
+            }
+        },
+        "global" : {
+            "goal": 200,
+            "reward": 3,
+            "min": 3
+        },
+        "description": "Takedown is back!\nWin games in Takedown with any brawler! (any trophies)",
+        "image": "https://static.wikia.nocookie.net/brawlstars/images/e/e6/Takedown.png"
+    },
+    "speed" : {
+        "name": "Speed Showdown",
+        "start": "11/05/21 12:00",
+        "end": "13/05/21 12:00",
+        "gamemodes": ["soloShowdown", "duoShowdown"],
+        "brawlers": ["MAX"],
+        "star_player": false,
+        "type": "wins",
+        "min_trophy": 0,
+        "map_maker": false,
+        "rewards": {
+            "4": {
                 "normal": 1,
                 "booster": 1
             },
-            "5": {
+            "6": {
+                "normal": 2,
+                "booster": 1
+            },
+            "10": {
                 "normal": 3
             }
         },
-        "notglobal" : {
-            "goal": 0,
-            "reward": 0,
-            "min": 0
+        "global" : {
+            "goal": 100,
+            "reward": 3,
+            "min": 4
         },
-        "description": "Let's see who is the star! Get Star Player in Brawl Ball (300+ trophies, no map maker)",
-        "image": "https://static.wikia.nocookie.net/brawlstars/images/4/48/Brawl_Ball.png"
+        "description": "Max to the max!\nWin Solo or Duo Showdown with Max! (any trophies)",
+        "image": "https://wallpaperaccess.com/full/4485634.jpg"
     },
     "junkers" : {
         "name": "The Junker Family",
