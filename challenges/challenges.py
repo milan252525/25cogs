@@ -103,13 +103,13 @@ class Challenges(commands.Cog):
             data = labs_challs[chal_id]
             if data["status"] == "start_soon":
                 start_date = dt.strptime(data["start"], "%d/%m/%y %H:%M")
-                if (start_date - now) < timedelta(hours=24):
+                if now < start_date:
                     starts = self.time_left((start_date - now).total_seconds())
                     message = labs_channel.get_partial_message(data["message_id"])
                     embed = discord.Embed.from_dict(data["embed"])
                     embed.set_field_at(0, name="Starts in", value=starts)
                     await message.edit(embed=embed)
-                if now >= start_date:
+                else:
                     await self.log(log_channel, f"Starting {chal_id}", discord.Color.orange())
                     data["status"] = "active"
                     ends = self.time_left((dt.strptime(data["end"], "%d/%m/%y %H:%M") - now).total_seconds())
