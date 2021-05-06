@@ -253,9 +253,9 @@ class Challenges(commands.Cog):
                         win = True
                         if "result" in battle['battle'] and battle['battle']['result'] != "victory":
                             win = False
-                        if "rank" in battle['battle'] and battle['battle']['mode'] == "soloShowdown" and battle['battle']['rank'] > 4:
+                        if "rank" in battle['battle'] and battle['battle']['mode'] == "duoShowdown" and battle['battle']['rank'] > 2:
                             win = False
-                        if "rank" in battle['battle'] and battle['battle']['mode'] != "soloShowdown" and battle['battle']['rank'] > 2:
+                        if "rank" in battle['battle'] and battle['battle']['mode'] != "duoShowdown" and battle['battle']['rank'] > 4:
                             win = False
 
                         if type == "wins" and not win:
