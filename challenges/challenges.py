@@ -66,7 +66,7 @@ class Challenges(commands.Cog):
         if hours <= 24:
             return "{}h {:02}m".format(int(hours), int(minutes))
         else:
-            return f"{int(hours)//24}d {(int(hours)//24)%24}h"
+            return f"{int(hours/24)}d {int(hours%24)}h"
 
     @tasks.loop(minutes=5)
     async def challenge_update_loop(self):
