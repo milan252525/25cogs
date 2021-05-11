@@ -17,7 +17,7 @@ def time_left(seconds):
     if hours <= 24:
         return "{}h {:02}m".format(int(hours), int(minutes))
     else:
-        return f"{int(hours)//24}d {(int(hours)//24)%24}h"
+        return f"{int(hours/24)}d {int(hours%24)}h"
 
 club_status = {
     "inviteonly" : {"name": "Invite Only", "emoji": "<:invite_only:729734736490266625>"},
