@@ -183,65 +183,68 @@ async def get_profile_embed(bot, ctx, member, alt=False):
     ]
 
     if "name" in player.raw_data["club"] and player.raw_data["club"]["name"].startswith("LA "):
-        history_url = "https://localhost/api/history/player?tag=" + player.raw_data['tag'].strip("#")
-        data = None
-        chart_data = []
-        async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
-            async with session.get(history_url) as resp:
-                data = await resp.json()
-        if data is not None and data['status'] == "ok":
-            for time, trophies in zip(data['times'][:-20:4]+data['times'][-20::2], data['trophies'][:-20:4]+data['trophies'][-20::2]):
-                chart_data.append("{t:new Date(" + str(time*1000) + "),y:" + str(trophies) + "}")
-            chart_data.append("{t:new Date(" + str(int(datetime.datetime.timestamp(datetime.datetime.now())*1000)) + "),y:" + str(player.trophies) + "}")
-            qc = QuickChart()
-            qc.config = """
-            {
-                type: 'line',
-                data: {
-                    datasets: [{
-                        data : """ + str(chart_data).replace("\'", "") + """,
-                        label: "trophies",
-                        fill: true,
-                        cubicInterpolationMode: 'monotone',
-                        borderColor: 'rgba(10, 180, 20, 1)',
-                        backgroundColor: 'rgba(10, 180, 20, 0.3)'
-                    }]
-                },
-                options: {
-                    scales: {
-                        xAxes: [{
-                            type: 'time',
-                            time: {
-                                unit: 'day'
-                            },
-                            distribution: 'linear'
+        try:
+            history_url = "https://localhost/api/history/player?tag=" + player.raw_data['tag'].strip("#")
+            data = None
+            chart_data = []
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                async with session.get(history_url) as resp:
+                    data = await resp.json()
+            if data is not None and data['status'] == "ok":
+                for time, trophies in zip(data['times'][:-20:4]+data['times'][-20::2], data['trophies'][:-20:4]+data['trophies'][-20::2]):
+                    chart_data.append("{t:new Date(" + str(time*1000) + "),y:" + str(trophies) + "}")
+                chart_data.append("{t:new Date(" + str(int(datetime.datetime.timestamp(datetime.datetime.now())*1000)) + "),y:" + str(player.trophies) + "}")
+                qc = QuickChart()
+                qc.config = """
+                {
+                    type: 'line',
+                    data: {
+                        datasets: [{
+                            data : """ + str(chart_data).replace("\'", "") + """,
+                            label: "trophies",
+                            fill: true,
+                            cubicInterpolationMode: 'monotone',
+                            borderColor: 'rgba(10, 180, 20, 1)',
+                            backgroundColor: 'rgba(10, 180, 20, 0.3)'
                         }]
                     },
-                    responsive: false,
-                    legend: {
-                        display: false
-                    },
-                    tooltips: {
-                        mode: 'index',
-                        intersect: false
-                    },
-                    title: {
-                        display: true,
-                        text: 'TROPHY PROGRESSION',
-                        fontStyle: 'bold'
-                    },
-                    layout: {
-                        padding: {
-                            left: 5,
-                            right: 10,
-                            top: 0,
-                            bottom: 5
+                    options: {
+                        scales: {
+                            xAxes: [{
+                                type: 'time',
+                                time: {
+                                    unit: 'day'
+                                },
+                                distribution: 'linear'
+                            }]
+                        },
+                        responsive: false,
+                        legend: {
+                            display: false
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'TROPHY PROGRESSION',
+                            fontStyle: 'bold'
+                        },
+                        layout: {
+                            padding: {
+                                left: 5,
+                                right: 10,
+                                top: 0,
+                                bottom: 5
+                            }
                         }
                     }
                 }
-            }
-            """
-            embed.set_image(url=qc.get_short_url())
+                """
+                embed.set_image(url=qc.get_short_url())
+    except (aiohttp.client_exceptions.ContentTypeError):
+        pass
     embed.set_footer(text=random.choice(texts))
     return embed
 
