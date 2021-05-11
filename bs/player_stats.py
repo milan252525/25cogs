@@ -243,8 +243,8 @@ async def get_profile_embed(bot, ctx, member, alt=False):
                 }
                 """
                 embed.set_image(url=qc.get_short_url())
-    except (aiohttp.client_exceptions.ContentTypeError):
-        pass
+        except (aiohttp.client_exceptions.ContentTypeError):
+            pass
     embed.set_footer(text=random.choice(texts))
     return embed
 
