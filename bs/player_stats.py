@@ -197,16 +197,16 @@ async def get_profile_embed(bot, ctx, member, alt=False):
                 for time in data['times']:
                     if time > one_day:
                         day_diff = player.trophies - data['trophies'][data['times'].index(time)]
-                        if day_diff > 0:
-                            stats += f"<:stonks:841606734066090015> **1 day** {day_diff}\n"
+                        if day_diff >= 0:
+                            stats += f"<:stonks:841606734066090015> **1 day** +{day_diff}\n"
                         else:
                             stats += f"<:stinks:841606733997670430> **1 day** {day_diff}\n"
                         break
                 for time in data['times']:
                     if time > one_week:
                         week_diff = player.trophies - data['trophies'][data['times'].index(time)]
-                        if week_diff > 0:
-                            stats += f"<:stonks:841606734066090015> **1 week** {week_diff}\n"
+                        if week_diff >= 0:
+                            stats += f"<:stonks:841606734066090015> **1 week** +{week_diff}\n"
                         else:
                             stats += f"<:stinks:841606733997670430> **1 week** {week_diff}\n"
                         break
