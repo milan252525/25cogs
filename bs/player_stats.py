@@ -191,6 +191,29 @@ async def get_profile_embed(bot, ctx, member, alt=False):
                 async with session.get(history_url) as resp:
                     data = await resp.json()
             if data is not None and data['status'] == "ok":
+                one_day =  int(datetime.datetime.timestamp(datetime.datetime.now() - datetime.timedelta(hours=24)))
+                one_week =  int(datetime.datetime.timestamp(datetime.datetime.now() - datetime.timedelta(days=7)))
+                stats = ""
+                for time in data['times']:
+                    if time > one_day:
+                        day_diff = player.trophies - data['trophies'][data['times'].index(time)]
+                        if day_diff > 0:
+                            stats += f"1 day <:stonks:841606734066090015>{day_diff}\n"
+                        else:
+                            stats += f"1 day <:stinks:841606733997670430>{day_diff}\n"
+                        break
+                for time in data['times']:
+                    if time > one_week:
+                        week_diff = player.trophies - data['trophies'][data['times'].index(time)]
+                        if week_diff > 0:
+                            stats += f"1 week <:stonks:841606734066090015>{week_diff}\n"
+                        else:
+                            stats += f"1 week <:stinks:841606733997670430>{week_diff}\n"
+                        break
+                if stats != "":
+                    embed.add_field(name="Trophy progress", value=stats, inline=False)
+
+
                 for time, trophies in zip(data['times'][:-20:4]+data['times'][-20::2], data['trophies'][:-20:4]+data['trophies'][-20::2]):
                     chart_data.append("{t:new Date(" + str(time*1000) + "),y:" + str(trophies) + "}")
                 chart_data.append("{t:new Date(" + str(int(datetime.datetime.timestamp(datetime.datetime.now())*1000)) + "),y:" + str(player.trophies) + "}")
