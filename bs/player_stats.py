@@ -211,7 +211,7 @@ async def get_profile_embed(bot, ctx, member, alt=False):
                             stats += f"<:stinks:841606733997670430> **1 week** {week_diff}\n"
                         break
                 if stats != "":
-                    embed.add_field(name="Trophy Progress", value=stats, inline=False)
+                    embed.add_field(name="Trophy Progression", value=stats, inline=False)
 
 
                 for time, trophies in zip(data['times'][:-20:4]+data['times'][-20::2], data['trophies'][:-20:4]+data['trophies'][-20::2]):
@@ -250,7 +250,7 @@ async def get_profile_embed(bot, ctx, member, alt=False):
                             intersect: false
                         },
                         title: {
-                            display: true,
+                            display: false,
                             text: 'TROPHY PROGRESSION',
                             fontStyle: 'bold'
                         },
