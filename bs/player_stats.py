@@ -127,50 +127,50 @@ async def get_profile_embed(bot, ctx, member, alt=False):
     emo = "<:good:450013422717763609> Qualified" if player.raw_data['isQualifiedFromChampionshipChallenge'] else "<:bad:450013438756782081> Not qualified"
     embed.add_field(name="Championship", value=f"{emo}")
     
-    try:
-        log = (await bs_cog.ofcbsapi.get_battle_logs(player.raw_data['tag'])).raw_data
-        plsolo = None
-        plteam = None
-        for battle in log:
-            if "type" in battle['battle']:
-                if battle['battle']['type'] == "soloRanked" and plsolo is None:
-                    for play in (battle['battle']['teams'][0]+battle['battle']['teams'][1]):
-                        if play['tag'] == player.raw_data['tag']:
-                            plsolo = play['brawler']['trophies']
-                            break
-                if battle['battle']['type'] == "teamRanked" and plteam is None:
-                    for play in (battle['battle']['teams'][0]+battle['battle']['teams'][1]):
-                        if play['tag'] == player.raw_data['tag']:
-                            plteam = play['brawler']['trophies']
-                            break
-            if plsolo is not None and plteam is not None:
-                break
+    # try:
+    #     log = (await bs_cog.ofcbsapi.get_battle_logs(player.raw_data['tag'])).raw_data
+    #     plsolo = None
+    #     plteam = None
+    #     for battle in log:
+    #         if "type" in battle['battle']:
+    #             if battle['battle']['type'] == "soloRanked" and plsolo is None:
+    #                 for play in (battle['battle']['teams'][0]+battle['battle']['teams'][1]):
+    #                     if play['tag'] == player.raw_data['tag']:
+    #                         plsolo = play['brawler']['trophies']
+    #                         break
+    #             if battle['battle']['type'] == "teamRanked" and plteam is None:
+    #                 for play in (battle['battle']['teams'][0]+battle['battle']['teams'][1]):
+    #                     if play['tag'] == player.raw_data['tag']:
+    #                         plteam = play['brawler']['trophies']
+    #                         break
+    #         if plsolo is not None and plteam is not None:
+    #             break
         
-        lastsolo = 0
-        lastteam = 0
+    #     lastsolo = 0
+    #     lastteam = 0
         
-        if plsolo is not None:
-            await bs_cog.config.user(member).plsolo.set(plsolo)
-            await bs_cog.config.user(member).lastsolo.set(int(datetime.datetime.timestamp(datetime.datetime.now())))
-        elif isinstance(member, discord.Member):
-            lastsolo = await bs_cog.config.user(member).lastsolo()
-            if (datetime.datetime.now() - datetime.datetime.fromtimestamp(lastsolo)).days > 0:
-                plsolo = await bs_cog.config.user(member).plsolo()
+    #     if plsolo is not None:
+    #         await bs_cog.config.user(member).plsolo.set(plsolo)
+    #         await bs_cog.config.user(member).lastsolo.set(int(datetime.datetime.timestamp(datetime.datetime.now())))
+    #     elif isinstance(member, discord.Member):
+    #         lastsolo = await bs_cog.config.user(member).lastsolo()
+    #         if (datetime.datetime.now() - datetime.datetime.fromtimestamp(lastsolo)).days > 0:
+    #             plsolo = await bs_cog.config.user(member).plsolo()
 
-        if plteam is not None:
-            await bs_cog.config.user(member).plteam.set(plteam)
-            await bs_cog.config.user(member).lastteam.set(int(datetime.datetime.timestamp(datetime.datetime.now())))
-        elif isinstance(member, discord.Member):
-            lastteam = await bs_cog.config.user(member).lastteam()
-            if (datetime.datetime.now() - datetime.datetime.fromtimestamp(lastteam)).days > 0:
-                plteam = await bs_cog.config.user(member).plteam()
+    #     if plteam is not None:
+    #         await bs_cog.config.user(member).plteam.set(plteam)
+    #         await bs_cog.config.user(member).lastteam.set(int(datetime.datetime.timestamp(datetime.datetime.now())))
+    #     elif isinstance(member, discord.Member):
+    #         lastteam = await bs_cog.config.user(member).lastteam()
+    #         if (datetime.datetime.now() - datetime.datetime.fromtimestamp(lastteam)).days > 0:
+    #             plteam = await bs_cog.config.user(member).plteam()
 
-        if plsolo is not None:
-            embed.add_field(name="Current Solo League", value=get_power_league(plsolo))
-        if plteam is not None:
-            embed.add_field(name="Current Team League", value=get_power_league(plteam))
-    except:
-        pass
+    #     if plsolo is not None:
+    #         embed.add_field(name="Current Solo League", value=get_power_league(plsolo))
+    #     if plteam is not None:
+    #         embed.add_field(name="Current Team League", value=get_power_league(plteam))
+    # except:
+    #     pass
     
     texts = [
         "Check out all your brawlers using /brawlers!", 
