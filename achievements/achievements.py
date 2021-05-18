@@ -68,9 +68,9 @@ class Achievements(commands.Cog):
             "duoa": False,
             "duop": False,
             "duog": False,
-            "ppa": False,
-            "ppp": False,
-            "ppg": False,
+            "pla": False,
+            "plp": False,
+            "plg": False,
             "divine": False,
             "gthief": False
         }
@@ -331,14 +331,14 @@ class Achievements(commands.Cog):
             aembed.add_field(name="<:DuoShowdown:729650154092625970> Duo Showdown", value=duo, inline=False)
 
         pp = ""
-        if await self.config.user(member).ppa():
-            pp = pp + "PowerPlay Amateur\n"
-        elif await self.config.user(member).ppp():
-            pp = pp + "PowerPlay Pro\n"
-        elif await self.config.user(member).ppg():
-            pp = pp + "PowerPlay God\n"
+        if await self.config.user(member).pla():
+            pp = pp + "Power League Amateur\n"
+        elif await self.config.user(member).plp():
+            pp = pp + "Power League Pro\n"
+        elif await self.config.user(member).plg():
+            pp = pp + "Power League God\n"
         if pp != "":
-            aembed.add_field(name="<:powertrophies:661266876235513867> Power Play Points", value=pp, inline=False)
+            aembed.add_field(name="<:pl:844147379561299988> Power League", value=pp, inline=False)
 
         return await ctx.send(embed=aembed)
 
@@ -471,7 +471,7 @@ class Achievements(commands.Cog):
         values = await self.config.user(member).all()
         result = True
         for v in values:
-            if v == "expa" or v == "expp" or v == "trophya" or v == "trophyp" or v == "trioa" or v == "triop" or v == "soloa" or v == "solop" or v == "duoa" or v == "duop" or v == "ppa" or v == "ppp":
+            if v == "expa" or v == "expp" or v == "trophya" or v == "trophyp" or v == "trioa" or v == "triop" or v == "soloa" or v == "solop" or v == "duoa" or v == "duop" or v == "pla" or v == "plp":
                 continue
             if not await self.config.user(member).get_raw(v):
                 result = False
@@ -493,7 +493,7 @@ class Achievements(commands.Cog):
                 msg += "Brawl Legend role removed.\n"
 
         lw = member.guild.get_role(736975188369080331)
-        if await self.config.user(member).trophyg() and await self.config.user(member).triog() and await self.config.user(member).solog() and await self.config.user(member).duog() and await self.config.user(member).ppg() and await self.config.user(member).shut() and await self.config.user(member).robo() and await self.config.user(member).defender() and await self.config.user(member).city():
+        if await self.config.user(member).trophyg() and await self.config.user(member).triog() and await self.config.user(member).solog() and await self.config.user(member).duog() and await self.config.user(member).plg() and await self.config.user(member).shut() and await self.config.user(member).robo() and await self.config.user(member).defender() and await self.config.user(member).city():
             if lw not in member.roles:
                 await member.add_roles(lw)
                 msg += f"Ladder Warrior role added!\n"
