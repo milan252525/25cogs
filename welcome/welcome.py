@@ -348,6 +348,8 @@ class Welcome(commands.Cog):
 
             for g in await self.config.all_guilds():
                 guild = self.bot.get_guild(g)
+                if guild is None:
+                    continue
                 if await self.config.guild(guild).roles.autorole():
                     roles_config = await self.config.guild(guild).roles()
                     language = roles_config['language']
