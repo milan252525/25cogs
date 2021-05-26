@@ -370,7 +370,7 @@ class Blacklist(commands.Cog):
                         else:
                             party = roletoping.mention
                         reason = await self.config.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
-                        await ch.send(embed=discord.Embed(content=f"Club: {party}", colour=discord.Colour.red(), description=f"Miembro de la blacklist **{player.name}** con el tag **{player.tag}** se ha unido a **{player.club.name}**!\nCon motivo de blacklist: {reason}"))
+                        await ch.send(content=f"Club: {party}", embed=discord.Embed(colour=discord.Colour.red(), description=f"Miembro de la blacklist **{player.name}** con el tag **{player.tag}** se ha unido a **{player.club.name}**!\nCon motivo de blacklist: {reason}"))
         except Exception as e:
             await ch.send(e)
 
