@@ -184,7 +184,7 @@ async def get_profile_embed(bot, ctx, member, alt=False):
 
     if "name" in player.raw_data["club"] and player.raw_data["club"]["name"].startswith("LA "):
         try:
-            history_url = "https://localhost/api/history/player?tag=" + player.raw_data['tag'].strip("#")
+            history_url = "https://laclubs.net/api/history/player?tag=" + player.raw_data['tag'].strip("#")
             data = None
             chart_data = []
             async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
