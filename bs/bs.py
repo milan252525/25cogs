@@ -350,9 +350,9 @@ class BrawlStarsCog(commands.Cog):
                 embed.add_field(name="Lowest Members", value=worstm, inline=True)
             if club.name.startswith("LA "):
                 buttons = [[
-                    Button(style=ButtonStyle.URL, label="Member LB", url=f"https://laclubs.net/club?tag={club.tag.replace('#', '').upper()}"),
-                    Button(style=ButtonStyle.URL, label="Club Trophy History", url=f"https://laclubs.net/history/club?tag={club.tag.replace('#', '').upper()}"),
-                    Button(style=ButtonStyle.URL, label="Club Log", url=f"https://laclubs.net/history/log?tag={club.tag.replace('#', '').upper()}"),
+                    Button(style=ButtonStyle.URL, label="Member LB", url=f"https://laclubs.net/club?tag={club.tag.replace('#', '').upper()}", emoji=self.bot.get_emoji(848256313740886057)),
+                    Button(style=ButtonStyle.URL, label="Club Trophy History", url=f"https://laclubs.net/history/club?tag={club.tag.replace('#', '').upper()}", emoji=self.bot.get_emoji(552558722770141204)),
+                    Button(style=ButtonStyle.URL, label="Club Log", url=f"https://laclubs.net/history/log?tag={club.tag.replace('#', '').upper()}", emoji=self.bot.get_emoji(688112584368586779)),
                 ]]
                 return await ctx.send(embed=randomize_colour(embed), components=buttons)
             else:
