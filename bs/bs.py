@@ -348,12 +348,11 @@ class BrawlStarsCog(commands.Cog):
                 embed.add_field(name="Top Members", value=topm, inline=True)
             if worstm != "":
                 embed.add_field(name="Lowest Members", value=worstm, inline=True)
-            tag_url = await self.config.guild(ctx.guild).clubs.get_raw(key.lower(), "tag", default=None)
-            if tag_url is not None:
+            if club.name.startswith("LA "):
                 buttons = [[
-                    Button(style=ButtonStyle.URL, label="Member LB", url=f"https://laclubs.net/club?tag={tag_url.replace('#', '').upper()}"),
-                    Button(style=ButtonStyle.URL, label="Club Trophy History", url=f"https://laclubs.net/history/club?tag={tag_url.replace('#', '').upper()}"),
-                    Button(style=ButtonStyle.URL, label="Club Log", uurl=f"https://laclubs.net/history/log?tag={tag_url.replace('#', '').upper()}"),
+                    Button(style=ButtonStyle.URL, label="Member LB", url=f"https://laclubs.net/club?tag={club.tag.replace('#', '').upper()}"),
+                    Button(style=ButtonStyle.URL, label="Club Trophy History", url=f"https://laclubs.net/history/club?tag={club.tag.replace('#', '').upper()}"),
+                    Button(style=ButtonStyle.URL, label="Club Log", uurl=f"https://laclubs.net/history/log?tag={club.tag.replace('#', '').upper()}"),
                 ]]
                 return await ctx.send(embed=randomize_colour(embed), components=buttons)
             else:
