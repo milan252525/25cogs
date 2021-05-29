@@ -3,6 +3,7 @@ from redbot.core import commands, Config, checks
 from redbot.core.utils.embed import randomize_colour
 from redbot.core.utils.menus import menu, prev_page, next_page
 from discord.ext import tasks
+from discord_components import DiscordComponents, Button, ButtonStyle, 
 
 from .utils import *
 from . import player_stats, game_stats
@@ -32,6 +33,7 @@ class BrawlStarsCog(commands.Cog):
         self.maps = None
         self.icons = None
         self.aiohttp_session = aiohttp.ClientSession()
+        DiscordComponents(self.bot)
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
@@ -346,7 +348,16 @@ class BrawlStarsCog(commands.Cog):
                 embed.add_field(name="Top Members", value=topm, inline=True)
             if worstm != "":
                 embed.add_field(name="Lowest Members", value=worstm, inline=True)
-            return await ctx.send(embed=randomize_colour(embed))
+            tag_url = await self.config.guild(ctx.guild).clubs.get_raw(key.lower(), "tag", default=None)
+            if tag_url is not None:
+                buttons = [[
+                    Button(style=ButtonStyle.URL, label="Member LB", url=f"https://laclubs.net/club?tag={tag_url.replace('#', '').upper()}"),
+                    Button(style=ButtonStyle.URL, label="Club Trophy History", url=f"https://laclubs.net/history/club?tag={tag_url.replace('#', '').upper()}"),
+                    Button(style=ButtonStyle.URL, label="Club Log", uurl=f"https://laclubs.net/history/log?tag={tag_url.replace('#', '').upper()}"),
+                ]]
+                return await ctx.send(embed=randomize_colour(embed), components=buttons)
+            else:
+                return await ctx.send(embed=randomize_colour(embed))
         elif keyword in ["memberlist", "members", "list", "m", "ml"]:
             colour = choice([discord.Colour.green(),
                              discord.Colour.blue(),
