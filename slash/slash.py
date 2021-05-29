@@ -212,4 +212,7 @@ class Slash(commands.Cog):
         description="LA BS website"
     )
     async def website(self, ctx: SlashContext):
-        await ctx.send(content="https://laclubs.net/")
+        comp = [
+            Button(style=ButtonStyle.URL, label="LA Clubs", url="https://laclubs.net/"),
+        ]
+        await ctx.send(content="\u200b", components=comp)
