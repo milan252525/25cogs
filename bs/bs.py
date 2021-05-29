@@ -352,7 +352,7 @@ class BrawlStarsCog(commands.Cog):
                 buttons = [[
                     Button(style=ButtonStyle.URL, label="Member LB", url=f"https://laclubs.net/club?tag={club.tag.replace('#', '').upper()}"),
                     Button(style=ButtonStyle.URL, label="Club Trophy History", url=f"https://laclubs.net/history/club?tag={club.tag.replace('#', '').upper()}"),
-                    Button(style=ButtonStyle.URL, label="Club Log", uurl=f"https://laclubs.net/history/log?tag={club.tag.replace('#', '').upper()}"),
+                    Button(style=ButtonStyle.URL, label="Club Log", url=f"https://laclubs.net/history/log?tag={club.tag.replace('#', '').upper()}"),
                 ]]
                 return await ctx.send(embed=randomize_colour(embed), components=buttons)
             else:
