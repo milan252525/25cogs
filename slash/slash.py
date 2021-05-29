@@ -57,7 +57,7 @@ class FakeMessage(discord.Message):
 class Slash(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        DiscordComponents(self.bot)
+        #DiscordComponents(self.bot)
 
     def cog_unload(self):
         self.bot.slash.remove_cog_commands(self)
@@ -212,7 +212,4 @@ class Slash(commands.Cog):
         description="LA BS website"
     )
     async def website(self, ctx: SlashContext):
-        comp = [
-            Button(style=ButtonStyle.URL, label="LA Clubs", url="https://laclubs.net/"),
-        ]
-        await ctx.send("Buttons:", components=comp)
+        await ctx.send(content="https://laclubs.net/") 
