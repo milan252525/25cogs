@@ -4,6 +4,7 @@ from discord_slash import SlashCommand, cog_ext, SlashContext
 from discord_slash.utils.manage_commands import remove_all_commands, create_option
 from discord_slash.model import SlashCommandOptionType
 from redbot.core.utils.menus import menu, prev_page, next_page
+from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType
 
 from bs import player_stats, game_stats
 
@@ -55,9 +56,8 @@ class FakeMessage(discord.Message):
 
 class Slash(commands.Cog):
     def __init__(self, bot):
-        if not hasattr(bot, "slash"):
-            bot.slash = SlashCommand(bot, sync_on_cog_reload=True)
         self.bot = bot
+        DiscordComponents(self.bot)
 
     def cog_unload(self):
         self.bot.slash.remove_cog_commands(self)
