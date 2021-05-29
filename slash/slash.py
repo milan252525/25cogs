@@ -215,4 +215,4 @@ class Slash(commands.Cog):
         comp = [
             Button(style=ButtonStyle.URL, label="LA Clubs", url="https://laclubs.net/"),
         ]
-        await ctx.send(content="\u200b", components=comp)
+        await ctx.send("Buttons:", components=comp)
