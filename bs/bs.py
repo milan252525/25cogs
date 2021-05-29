@@ -3,7 +3,7 @@ from redbot.core import commands, Config, checks
 from redbot.core.utils.embed import randomize_colour
 from redbot.core.utils.menus import menu, prev_page, next_page
 from discord.ext import tasks
-from discord_components import DiscordComponents, Button, ButtonStyle, 
+from discord_components import DiscordComponents, Button, ButtonStyle
 
 from .utils import *
 from . import player_stats, game_stats
