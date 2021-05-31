@@ -49,14 +49,14 @@ class Tools(commands.Cog):
             if self.leave_counter[member.guild.id][-1] - self.leave_counter[member.guild.id][-4] < 300:
                 await self.bot.get_user(230947675837562880).send(f"Members in **{member.guild.name}** are disappearing too fast!")
     
-    @commands.Cog.listener()
-    async def on_command(self, ctx):
-        if ctx.author.id == 230947675837562880:
-            return
-        link = (await self.bot.get_shared_api_tokens("webhook"))["link"]
-        async with aiohttp.ClientSession() as session:
-            webhook = discord.Webhook.from_url(link, adapter=discord.AsyncWebhookAdapter(session))
-            await webhook.send(f"[{ctx.guild.name}]\n[{ctx.author.id}]\n{ctx.message.content}", username=f"{ctx.author.name}", avatar_url=ctx.author.avatar_url)
+    #@commands.Cog.listener()
+    #async def on_command(self, ctx):
+    #    if ctx.author.id == 230947675837562880:
+    #        return
+    #    link = (await self.bot.get_shared_api_tokens("webhook"))["link"]
+    #    async with aiohttp.ClientSession() as session:
+    #        webhook = discord.Webhook.from_url(link, adapter=discord.AsyncWebhookAdapter(session))
+    #        await webhook.send(f"[{ctx.guild.name}]\n[{ctx.author.id}]\n{ctx.message.content}", username=f"{ctx.author.name}", avatar_url=ctx.author.avatar_url)
     
     @commands.Cog.listener()
     async def on_message(self, msg):
