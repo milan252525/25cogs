@@ -445,8 +445,8 @@ class Challenges(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.guild_only()
-    @commands.command(name="buy")
-    async def buy(self, ctx, number:int, target:discord.Member=None):
+    @challenge.command(name="buy")
+    async def challenge_buy(self, ctx, number:int, target:discord.Member=None):
         if ctx.guild.id != self.labs:
             return
         if target is None:
