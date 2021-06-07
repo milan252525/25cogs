@@ -1,103 +1,71 @@
-{   "takedown" : {
-        "name": "Takedown Special",
-        "start": "08/05/21 08:00",
-        "end": "10/05/21 08:00",
-        "gamemodes": ["takedown"],
-        "brawlers": [],
-        "star_player": false,
-        "type": "wins",
-        "min_trophy": 0,
-        "map_maker": false,
-        "rewards": {
-            "3": {
-                "normal": 1
-            },
-            "6": {
-                "normal": 1
-            },
-            "9": {
-                "normal": 1
-            },
-            "12": {
-                "normal": 2
-            },
-            "15": {
-                "normal": 3,
-                "booster": 3
-            }
-        },
-        "global" : {
-            "goal": 200,
-            "reward": 3,
-            "min": 3
-        },
-        "description": "Takedown is back!\nWin games in Takedown with any brawler! (any trophies)",
-        "image": "https://static.wikia.nocookie.net/brawlstars/images/e/e6/Takedown.png/revision/latest?cb=20190919143710"
-    },
-    "speed" : {
-        "name": "Speed Showdown",
-        "start": "11/05/21 12:00",
-        "end": "13/05/21 12:00",
-        "gamemodes": ["soloShowdown", "duoShowdown"],
-        "brawlers": ["MAX"],
-        "star_player": false,
-        "type": "wins",
-        "min_trophy": 0,
-        "map_maker": false,
-        "rewards": {
-            "4": {
-                "normal": 1,
-                "booster": 1
-            },
-            "6": {
-                "normal": 2,
-                "booster": 1
-            },
-            "10": {
-                "normal": 3
-            }
-        },
-        "global" : {
-            "goal": 100,
-            "reward": 3,
-            "min": 4
-        },
-        "description": "Max to the max!\nWin Solo or Duo Showdown with Max! (any trophies)",
-        "image": "https://wallpaperaccess.com/full/4485634.jpg"
-    },
-    "junkers" : {
-        "name": "The Junker Family",
-        "start": "21/04/21 12:00",
-        "end": "24/04/21 12:00",
-        "gamemodes": [],
-        "brawlers": ["PAM", "JESSIE", "NANI"],
+{
+    "force" : {
+        "name": "Starr Force: A New Hope",
+        "start": "08/06/21 12:00",
+        "end": "13/06/21 12:00",
+        "gamemodes": ["siege, takedown"],
+        "brawlers": ["BULL", "COLETTE", "COLONEL RUFFS"],
         "star_player": false,
         "type": "wins",
         "min_trophy": 0,
         "map_maker": true,
         "rewards": {
+            "5": {
+                "normal": 1
+            },
             "10": {
-                "normal": 1,
-                "booster": 1
+                "normal": 2,
+                "booster": 2
+            },
+            "15": {
+                "normal": 3
             },
             "20": {
-                "normal": 2,
-                "booster": 1
+                "normal": 4,
+                "booster": 2
+            }
+        },
+        "global" : {
+            "goal": 666,
+            "reward": 3,
+            "min": 5
+        },
+        "description": "It is a period of brawl war. Rebel spaceships, striking from a hidden base, have won their first victory against the evil Galactic Empire. During the battle, Rebel spies managed to steal secret plans to the Empire's ultimate weapon, the I.K.E., an armored siege turet with enough power to destroy an entire Starr Park.\n\nWin Siege or Takedown with Ruffs, Colette or Bull. (Any trophies)",
+        "image": "https://i1.sndcdn.com/artworks-3OYqkUwCqjDzNQdv-HcHV9A-t500x500.jpg"
+    },
+    "empire" : {
+        "name": "Starr Force: The Empire Strikes Back",
+        "start": "15/06/21 12:00",
+        "end": "20/06/21 12:00",
+        "gamemodes": ["hotzone, bounty"],
+        "brawlers": ["SPIKE", "MR. P", "LOU"],
+        "star_player": false,
+        "type": "wins",
+        "min_trophy": 0,
+        "map_maker": true,
+        "rewards": {
+            "5": {
+                "normal": 1
+            },
+            "10": {
+                "normal": 2
+            },
+            "15": {
+                "normal": 3
+            },
+            "20": {
+                "normal": 3
             },
             "30": {
-                "normal": 3,
-                "booster": 1
-            },
-            "50": {
                 "normal": 3
             }
         },
         "global" : {
-            "goal": 500,
-            "reward": 2,
-            "min": 10
+            "goal": 700,
+            "reward": 4,
+            "min": 5
         },
-        "description": "Win games with **Pam, Jessie or Nani** in any gamemode (including map maker, any trophies)!",
-        "image": "https://i.pinimg.com/236x/d3/95/89/d395890b7d68dd88828ba09e5835a87c.jpg"
+        "description": "It is a dark time for the Rebellion. Although the I.K.E. has been destroyed, Imperial troops have driven the Rebel forces from their hidden base and pursued them across the Starr Park. \nEvading the dreaded Imperial Starfleet, a group of freedom fighters led by Colonel Ruffs has established a new secret base on the remote ice area of Snowtel.\n\nWin Hotzone or Takedown with Spike, Mr. P or Lou. (Any trophies)",
+        "image": "https://i.imgur.com/Ge5EkcT.jpg"
     }
 }
