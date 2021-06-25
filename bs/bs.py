@@ -271,7 +271,7 @@ class BrawlStarsCog(commands.Cog):
         for mode in data:
             brs = ""
             for map in data[mode]:
-                brs += f"**{map}**\n\"
+                brs += f"**{map}**\n"
                 for br in data[mode][map]['main']:
                     brs += get_brawler_emoji(br) + " "
                 brs+= "\n"
