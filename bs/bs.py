@@ -275,7 +275,7 @@ class BrawlStarsCog(commands.Cog):
                 for br in data[mode][map]['main']:
                     brs += get_brawler_emoji(br) + " "
                 brs+= "\n"
-                for br in data[mode][map]['other'][:4]:
+                for br in data[mode][map]['other'][:5]:
                     brs += get_brawler_emoji(br) + " "
                 brs+= "\n"
             embed.add_field(name=mode, value=brs)
