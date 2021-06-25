@@ -24,7 +24,7 @@ class Challenges(commands.Cog):
         self.bsconfig = None
         with open(str(cog_data_path(self)).replace("Challenges", r"CogManager/cogs/challenges/challenge_data.json")) as file:
             self.challenge_data = json.load(file)
-        self.token = "<:tokens:831928395394449419>"#"🪙"
+        self.token = "<:la_token:851817519773908993>"#"<:tokens:831928395394449419>"#"🪙"
         self.loading = {
             "empty": ["<:blankleft:821065351907246201>", "<:blankmid:821065351294615552>", "<:blankright:821065351621115914>"],
             "full": ["<:loadleft:821065351726366761>", "<:loadmid:821065352061780048>", "<:loadright:821065351903182889>"]
