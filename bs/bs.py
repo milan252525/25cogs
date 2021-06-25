@@ -271,11 +271,11 @@ class BrawlStarsCog(commands.Cog):
         for mode in data:
             brs = ""
             for map in data[mode]:
-                brs += f"**{map}**\n\<:pl:844147379561299988>  "
+                brs += f"**{map}**\n\⬆️ "
                 for br in data[mode][map]['main']:
                     brs += get_brawler_emoji(br) + " "
-                brs+= "\n<:pl_ok:858049929305391134>  "
-                for br in data[mode][map]['other'][:4]:
+                brs+= "\n🆗 "
+                for br in data[mode][map]['other'][:5]:
                     brs += get_brawler_emoji(br) + " "
                 brs+= "\n"
             embed.add_field(name=mode, value=brs)
