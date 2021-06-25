@@ -67,5 +67,37 @@
         },
         "description": "It is a dark time for the Rebellion. Although the I.K.E. has been destroyed, Imperial troops have driven the Rebel forces from their hidden base and pursued them across the Starr Park. \nEvading the dreaded Imperial Starfleet, a group of freedom fighters led by Colonel Ruffs has established a new secret base on the remote ice area of Snowtel.\n\nWin Hotzone or Bounty with Spike, Mr. P or Lou. (Any trophies)",
         "image": "https://i.imgur.com/Ge5EkcT.jpg"
+    },
+    "return" : {
+        "name": "Starr Force: Return of the Brawler",
+        "start": "29/06/21 12:00",
+        "end": "04/07/21 12:00",
+        "gamemodes": ["gemGrab", "brawlBall"],
+        "brawlers": ["COLONEL RUFFS", "BULL", "DARRYL", "SPROUT"],
+        "star_player": false,
+        "type": "wins",
+        "min_trophy": 0,
+        "map_maker": true,
+        "rewards": {
+            "3": {
+                "normal": 1
+            },
+            "5": {
+                "normal": 2
+            },
+            "10": {
+                "normal": 3
+            },
+            "15": {
+                "normal": 3
+            }
+        },
+        "global" : {
+            "goal": 100,
+            "reward": 5,
+            "min": 3
+        },
+        "description": "Colonel Ruffs has returned to his home planet of Starr Park in an attempt to rescue his friend D4R-RY1 from the clutches of the vile gangster Lunar Sprout.\nLittle does Ruffs know that the Galactic empire has secretly begun construction on a new armored space station even more powerful than the first dreaded I.K.E.\n\nWin Gem grab or Brawl ball with Ruffs, Bull, Darryl or Sprout. (Any trophies)",
+        "image": "https://i1.sndcdn.com/artworks-EBroGvYu6AalzzmB-5CUELA-t500x500.jpg"
     }
 }
