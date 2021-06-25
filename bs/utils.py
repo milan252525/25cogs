@@ -216,6 +216,8 @@ def get_brawler_emoji(name : str):
         return "<:belle:829677042140184587>"
     elif name =="SQUEAK":
         return "<:squeak:829677042089328660>"
+    elif name == "BUZZ":
+        return "<:buzz:857925510813188106>"
     else:
         return "<:__:452891824168894494>"
     
