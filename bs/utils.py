@@ -384,3 +384,110 @@ def get_power_league(league):
         return "<:legendary:822502621351903252> Legendary " + number
     else:
         return "<:masters:822502621663199252> Masters "
+    
+pl_brawlers = {
+  "<:GemGrab:729650153388114002> Gem Grab" : {
+    "Double Swoosh": {
+      "main" : ["GENE", "TARA", "AMBER"],
+      "other" : ["EMZ", "STU", "BELLE", "BUZZ", "CARL", "MAX", "CROW", "EL PRIMO"]
+    },
+    "Hard Rock Mine": {
+      "main" : ["GENE", "BELLE", "BUZZ"],
+      "other" : ["RICO", "STU", "COLONEL RUFFS", "8-BIT", "CARL", "MAX", "EL PRIMO", "SPROUT"]
+    },
+    "Minecart Madness": {
+      "main" : ["GENE", "BELLE", "CROW"],
+      "other" : ["AMBER", "STU", "MAX", "BUZZ", "SPROUT", "COLONEL RUFFS", "EL PRIMO", "BYRON"]
+    },
+    "UnderMine": {
+      "main" : ["GENE", "TARA", "CROW"],
+      "other" : ["STU", "BELLE", "EMZ", "AMBER", "SPROUT", "BUZZ", "EL PRIMO", "RICO"]
+    }
+  },
+  "<:Heist:729650154139025449> Heist" : {
+    "Hot Potato": {
+      "main" : ["EL PRIMO", "COLETTE", "RICO"],
+      "other" : ["BULL", "BARLEY", "EMZ", "BUZZ", "CARL", "COLONEL RUFFS", "JESSIE", "STU"]
+    },
+    "Pit Stop": {
+      "main" : ["BULL", "EL PRIMO", "RICO"],
+      "other" : ["BARLEY", "STU", "EMZ", "BUZZ", "NITA", "SPIKE", "SURGE", "CARL"]
+    },
+    "Safe Zone": {
+      "main" : ["COLETTE", "BELLE", "COLT"],
+      "other" : ["PIPER", "AMBER", "SURGE", "BROCK", "CARL", "CROW", "STU", "EL PRIMO"]
+    },
+    "Spring Onions": {
+      "main" : ["BULL", "EL PRIMO", "RICO"],
+      "other" : ["TARA", "EMZ", "SPIKE", "COLETTE", "BUZZ", "NITA", "STU", "AMBER"]
+    }
+  },
+  "<:Bounty:729650154638016532> Bounty" : {
+    "Layer Cake": {
+      "main" : ["TICK", "SPROUT", "GENE"],
+      "other" : ["BELLE", "PIPER", "STU", "CARL", "MAX", "BUZZ", "MORTIS", "EL PRIMO"]
+    },
+    "Canal Grande": {
+      "main" : ["TICK", "BELLE", "GENE"],
+      "other" : ["SPROUT", "CARL", "BYRON", "ROSA", "MAX", "EL PRIMO", "COLONEL RUFFS", "PIPER"]
+    },
+    "Dry Season": {
+      "main" : ["GENE", "BELLE", "TICK"],
+      "other" : ["SPROUT", "STU", "COLONEL RUFFS", "CARL", "MAX", "PIPER", "BYRON", "EL PRIMO"]
+    },
+    "Shooting Star": {
+      "main" : ["PIPER", "BELLE", "NANI"],
+      "other" : ["TICK", "GENE", "BYRON", "MAX", "SPROUT", "STU", "BROCK"]
+    }
+  },
+  "<:BrawlBall:729650154919034882> Brawl Ball" : {
+    "Pinball Dreams": {
+      "main" : ["GENE", "TARA", "BELLE"],
+      "other" : ["EMZ", "RICO", "BARLEY", "SURGE", "STU", "CARL", "BUZZ", "NITA"]
+    },
+    "Pinhole Punt": {
+      "main" : ["BELLE", "GENE", "TARA"],
+      "other" : ["EMZ", "NITA", "MAX", "SURGE", "CROW", "STU", "AMBER", "CARL"]
+    },
+    "Super Stadium": {
+      "main" : ["GENE", "BUZZ", "BEA"],
+      "other" : ["EMZ", "SURGE", "BARLEY", "TARA", "STU", "CARL", "MAX", "COLONEL RUFFS"]
+    }
+  },
+  "<:HotZone:729650153723789413> Hotzone" : {
+    "Split": {
+      "main" : ["TICK", "COLONEL RUFFS", "SURGE"],
+      "other" : ["STU", "EL PRIMO", "RICO", "BARLEY", "BUZZ", "SPROUT", "GENE", "EMZ"]
+    },
+    "Dueling Beetles": {
+      "main" : ["GENE", "LOU", "AMBER"],
+      "other" : ["EMZ", "STU", "BELLE", "MAX", "BUZZ", "TICK", "SPROUT", "EL PRIMO"]
+    },
+    "Parallel Plays": {
+      "main" : ["GENE", "COLONEL RUFFS", "BELLE"],
+      "other" : ["JESSIE", "AMBER", "STU", "EL PRIMO", "BUZZ", "SURGE", "GALE", "SPROUT"]
+    },
+    "Ring Of Fire": {
+      "main" : ["LOU", "AMBER", "BELLE"],
+      "other" : ["GENE", "STU", "SURGE", "RICO", "BUZZ", "SPROUT", "COLONEL RUFFS", "EL PRIMO"]
+    }
+  },
+  "<:Siege:729650155673878558> Siege" : {
+    "Some Assembly Required": {
+      "main" : ["GENE", "EL PRIMO", "BUZZ"],
+      "other" : ["CARL", "EMZ", "BARLEY", "SURGE", "STU", "BELLE", "BIBI", "MAX"]
+    },
+    "Bot Drop": {
+      "main" : ["BELLE", "GENE", "CROW"],
+      "other" : ["STU", "AMBER", "MAX", "CARL", "PIPER", "COLONEL RUFFS", "BYRON", "BUZZ"]
+    },
+    "Factory Rush": {
+      "main" : ["BELLE", "GENE", "LOU"],
+      "other" : ["AMBER", "STU", "BUZZ", "BARLEY", "CROW", "PIPER", "COLT", "EL PRIMO"]
+    },
+    "Nuts And Bolts": {
+      "main" : ["BUZZ", "EL PRIMO", "GENE"],
+      "other" : ["SPROUT", "EMZ", "CARL", "SURGE", "BARLEY", "STU", "BELLE", "BULL"]
+    }
+  }
+}
