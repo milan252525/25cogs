@@ -1093,9 +1093,8 @@ class BrawlStarsCog(commands.Cog):
                 msg += f"**{member.name}**: request error.\n"
                 continue
             except Exception as e:
-                msg += "Something went wrong."
-                await ctx.send(str(e))
-                return
+                msg += "Error: " + str(e) + "\n"
+                continue
             player_in_club = "name" in player.raw_data["club"]
             if alt is not None:
                 player_in_club2 = "name" in playeralt.raw_data["club"]
