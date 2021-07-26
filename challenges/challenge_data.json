@@ -34,5 +34,38 @@
         },
         "description": "Let's play some sports in celebration of Summer Olympic Games!\n\nWin games in Brawlball, Basketbrawl or Volleybrawl (if they become available) with any brawler! (mapmaker included, any trophies)",
         "image": "https://i.pinimg.com/564x/cf/c4/7e/cfc47e01b56db03c617f2a6594141f22.jpg"
+    },
+    "vb" : {
+        "name": "Volleybrawl",
+        "start": "02/08/21 10:00",
+        "end": "07/08/21 10:00",
+        "gamemodes": ["volleyBrawl"],
+        "brawlers": [],
+        "star_player": false,
+        "type": "wins",
+        "min_trophy": 0,
+        "map_maker": true,
+        "rewards": {
+            "3": {
+                "normal": 2
+            },
+            "6": {
+                "normal": 3
+            },
+            "10": {
+                "normal": 3,
+                "booster": 3
+            },
+            "15": {
+                "normal": 5
+            }
+        },
+        "global" : {
+            "goal": 200,
+            "reward": 3,
+            "min": 3
+        },
+        "description": "It's volleybrawl time!\n\nWin games in Volleybrawl with any brawler! (any trophies)",
+        "image": "https://upload.wikimedia.org/wikipedia/en/3/3d/Volleyball%2C_Rio_2016.png"
     }
 }
