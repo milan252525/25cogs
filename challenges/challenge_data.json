@@ -2,7 +2,7 @@
     "bad" : {
         "name": "BAD RANDOMS",
         "start": "27/08/21 10:00",
-        "end": "03/08/21 10:00",
+        "end": "03/09/21 10:00",
         "gamemodes": [],
         "brawlers": ["BUZZ", "STU", "POCO"],
         "star_player": false,
