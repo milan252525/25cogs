@@ -334,7 +334,7 @@ class BrawlStarsCog(commands.Cog):
                 embed = discord.Embed(description=f"```{discord.utils.escape_markdown(club.description)}```")
             else:
                 embed = discord.Embed(description="```None```")
-            embed.set_author(name=f"{club.name} {club.tag}", icon_url=f"https://cdn.brawlify.com/club/{club.raw_data['badgeId']}.png?v=1", url=url)
+            embed.set_author(name=f"{club.name} {club.tag}", icon_url=f"https://cdn.brawlify.com/club/{club.raw_data['badgeId']}.png", url=url)
             embed.add_field(
                 name="Total Trophies",
                 value=f"<:bstrophy:552558722770141204> `{club.trophies}`")
