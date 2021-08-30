@@ -137,7 +137,10 @@ class Welcome(commands.Cog):
 
     def get_badge(self, badge_id):
         guild = self.bot.get_guild(717766786019360769)
-        em = discord.utils.get(guild.emojis, name=str(badge_id-8000000).rjust(2, "0"))
+        guild2 = self.bot.get_guild(881132228858486824)
+        em = discord.utils.get(guild.emojis, name=str(badge_id))
+        if em is None:
+            em = discord.utils.get(guild2.emojis, name=str(badge_id))
         return str(em)
 
     @commands.command(aliases=['nuevorol', 'vincular', 'salvar', 'nc'])
