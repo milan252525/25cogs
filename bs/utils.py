@@ -1,5 +1,5 @@
 from discord import Embed
-import brawlstats
+import brawlstats, discord
 
 def badEmbed(text):
     bembed = Embed(color=0xff0000)
@@ -121,105 +121,12 @@ def get_rank_emoji(rank : int):
     elif 35 <= rank:
         return "<:rank35:664262686028333056>"
 
-def get_brawler_emoji(name : str):
-    if name == "SHELLY":
-        return "<:shelly:664235199076237323>"
-    elif name == "TICK":
-        return "<:tick:664235450889928744>"
-    elif name == "TARA":
-        return "<:tara:664236127015796764>"
-    elif name == "SPIKE":
-        return "<:spike:664235867748958249>"
-    elif name == "SANDY":
-        return "<:sandy:664235310573420544>"
-    elif name == "ROSA":
-        return "<:rosa:664235409722834954>"
-    elif name == "RICO":
-        return "<:rico:664235890171707393>"
-    elif name == "EL PRIMO":
-        return "<:primo:664235742758830135>"
-    elif name == "POCO":
-        return "<:poco:769133920784482324>"
-    elif name == "PIPER":
-        return "<:piper:664235622998867971>"
-    elif name == "PENNY":
-        return "<:penny:664235535094644737>"
-    elif name == "PAM":
-        return "<:pam:769132131552854018>"
-    elif name == "NITA":
-        return "<:nita:664235795959513088>"
-    elif name == "MORTIS":
-        return "<:mortis:664235717693800468>"
-    elif name == "MAX":
-        return "<:max:769131218125586442>"
-    elif name == "LEON":
-        return "<:leon:664235430530514964>"
-    elif name == "JESSIE":
-        return "<:jessie:664235816339636244>"
-    elif name == "GENE":
-        return "<:gene:664235476084981795>"
-    elif name == "FRANK":
-        return "<:frank:664235513242320922>"
-    elif name == "EMZ":
-        return "<:emz:664235245956235287>"
-    elif name == "DYNAMIKE":
-        return "<:dynamike:664235766620094464>"
-    elif name == "DARRYL":
-        return "<:darryl:769133920783826944>"
-    elif name == "CROW":
-        return "<:crow:769133920759316530>"
-    elif name == "COLT":
-        return "<:colt:664235956202766346>"
-    elif name == "CARL":
-        return "<:carl:664235388537274369>"
-    elif name == "BULL":
-        return "<:bull:664235934006378509>"
-    elif name == "BROCK":
-        return "<:brock:664235912150122499>"
-    elif name == "BO":
-        return "<:bo:664235645287530528>"
-    elif name == "BIBI":
-        return "<:bibi:664235367615954964>"
-    elif name == "BEA":
-        return "<:bea:664235276758941701>"
-    elif name == "BARLEY":
-        return "<:barley:664235839316033536>"
-    elif name == "8-BIT":
-        return "<:8bit:664235332522213418>"
-    elif name == "MR. P":
-        return "<:mrp:671379771585855508>"
-    elif name == "JACKY":
-        return "<:jackie:697096353494597642>"
-    elif name == "SPROUT":
-        return "<:sprout:705235612890038282>"
-    elif name == "GALE":
-        return "<:gale:710492017905500191>"
-    elif name == "NANI":
-        return "<:nani:718555376340959242>"
-    elif name == "SURGE":
-        return "<:surge:729632664218238986>"
-    elif name == "COLETTE":
-        return "<:colette:753659575424516287>"
-    elif name == "AMBER":
-        return "<:amber:769131126773907498>"
-    elif name == "LOU":
-        return "<:lou:777831488930054169>"
-    elif name == "BYRON":
-        return "<:byron:788738414442053662>"
-    elif name == "EDGAR":
-        return "<:edgar:788751655436943361>"
-    elif name == "COLONEL RUFFS":
-        return "<:ruffs:803995640543313972>"
-    elif name == "STU":
-        return "<:stu:820963374706982923>"
-    elif name == "BELLE":
-        return "<:belle:829677042140184587>"
-    elif name =="SQUEAK":
-        return "<:squeak:829677042089328660>"
-    elif name == "BUZZ":
-        return "<:buzz:857925510813188106>"
-    else:
+def get_brawler_emoji(bot, id):
+    guild = bot.get_guild(664228332765839361)
+    emoji = discord.utils.get(guild.emojis, name=str(id))
+    if emoji is None:
         return "<:__:452891824168894494>"
+    return str(emoji)
     
 def remove_codes(text : str):
     toremove = ["</c>", "<c1>", "<c2>", "<c3>", "<c4>", "<c5>", "<c6>", "<c7>", "<c8>", "<c9>", "<c0>"]

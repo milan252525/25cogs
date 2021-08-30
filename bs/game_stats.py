@@ -71,14 +71,14 @@ async def get_map_embed(bot, map_name):
             wr = ""
             stats.sort(key=itemgetter('winRate'), reverse=True)
             for counter, br in enumerate(stats[:10], start=1):
-                name = None
+                id = None
                 for b in brawlers:
                     if b['id'] == br['brawler']:
-                        name = b['name'].upper()
+                        id = b['id']
                         break
-                if name is None:
+                if id is None:
                     continue                               
-                wr += f"{get_brawler_emoji(name)} `{int(br['winRate'])}%` "
+                wr += f"{get_brawler_emoji(bot, id)} `{int(br['winRate'])}%` "
                 if counter % 5 == 0:
                     wr += "\n"
             if wr.strip() != "":
@@ -88,14 +88,14 @@ async def get_map_embed(bot, map_name):
             bwr = ""
             stats.sort(key=itemgetter('bossWinRate'), reverse=True)
             for counter, br in enumerate(stats[:10], start=1):
-                name = None
+                id = None
                 for b in brawlers:
                     if b['id'] == br['brawler']:
-                        name = b['name'].upper()
+                        id = b['id']
                         break
-                if name is None:
-                    continue                               
-                bwr += f"{get_brawler_emoji(name)} `{int(br['bossWinRate'])}%` "
+                if id is None:
+                    continue                             
+                bwr += f"{get_brawler_emoji(bot, id)} `{int(br['bossWinRate'])}%` "
                 if counter % 5 == 0:
                     bwr += "\n"
             if wr.strip() != "":
@@ -105,14 +105,14 @@ async def get_map_embed(bot, map_name):
             ur = ""
             stats.sort(key=itemgetter('useRate'), reverse=True)
             for counter, br in enumerate(stats[:10], start=1):
-                name = None
+                id = None
                 for b in brawlers:
                     if b['id'] == br['brawler']:
-                        name = b['name'].upper()
+                        id = b['id']
                         break
-                if name is None:
+                if id is None:
                     continue                               
-                ur += f"{get_brawler_emoji(name)} `{int(br['useRate'])}%` "
+                ur += f"{get_brawler_emoji(bot, id)} `{int(br['useRate'])}%` "
                 if counter % 5 == 0:
                     ur += "\n"
             if wr.strip() != "":

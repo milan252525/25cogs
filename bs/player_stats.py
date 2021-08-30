@@ -306,8 +306,8 @@ async def get_brawlers_embeds(bot, ctx, member):
     
     for br in brawlers:
         rank = discord.utils.get(bs_cog.bot.emojis, name=f"rank_{br['rank']}")
-        ename = f"{get_brawler_emoji(br['name'])} {br['name'].lower().title()} "
-        ename += f"<:pp:664267845336825906> {br['power']}"
+        ename = f"{get_brawler_emoji(bot, br['id'])} {br['name'].lower().title()} "
+        ename += f"<:pp:881843594674176029> {br['power']}"
         evalue = f"{rank} `{br['trophies']}/{br['highestTrophies']}`\n"
         evalue += f"<:star_power:729732781638156348> `{len(br['starPowers'])}` "
         evalue += f"<:gadget:716341776608133130> `{len(br['gadgets'])}`"
@@ -374,7 +374,7 @@ async def get_single_brawler_embed(bot, ctx, member, brawler):
     if unlocked:
         rank = discord.utils.get(bs_cog.bot.emojis, name=f"rank_{br['rank']}")
         embed.description += f" {rank} {br.get('trophies')}/{br['highestTrophies']}"
-        embed.description += f" <:pp:664267845336825906> {br['power']}"
+        embed.description += f" <:pp:881843594674176029> {br['power']}"
     embed.description += "\n```" + data['description'] + "```"
     embed.set_footer(text=data['class']['name'])
     starpowers = ""
