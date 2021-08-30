@@ -267,22 +267,22 @@ class BrawlStarsCog(commands.Cog):
             embeds.append(discord.Embed(colour=discord.Color.random(), description=result))
         await menu(ctx, embeds, {"⬆️": prev_page, "⬇️": next_page, }, timeout=300)
         
-    @commands.command()
-    async def pl(self, ctx):
-        data = pl_brawlers
-        embed = discord.Embed(title="Power League Picks", colour=discord.Colour.red())
-        for mode in data:
-            brs = ""
-            for map in data[mode]:
-                brs += f"**{map}**\n"
-                for br in data[mode][map]['main']:
-                    brs += get_brawler_emoji(br) + " "
-                brs+= "\n"
-                for br in data[mode][map]['other'][:5]:
-                    brs += get_brawler_emoji(br) + " "
-                brs+= "\n"
-            embed.add_field(name=mode, value=brs)
-        await ctx.send(embed=embed)
+    # @commands.command()
+    # async def pl(self, ctx):
+    #     data = pl_brawlers
+    #     embed = discord.Embed(title="Power League Picks", colour=discord.Colour.red())
+    #     for mode in data:
+    #         brs = ""
+    #         for map in data[mode]:
+    #             brs += f"**{map}**\n"
+    #             for br in data[mode][map]['main']:
+    #                 brs += get_brawler_emoji(br) + " "
+    #             brs+= "\n"
+    #             for br in data[mode][map]['other'][:5]:
+    #                 brs += get_brawler_emoji(br) + " "
+    #             brs+= "\n"
+    #         embed.add_field(name=mode, value=brs)
+    #     await ctx.send(embed=embed)
                                             
     @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command()
