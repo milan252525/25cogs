@@ -42,13 +42,13 @@ class Broadcast(commands.Cog):
                         for i in range(start, len(message.attachments)):
                             embed.add_field(name=f"Attachment {str(i+1)}:", value=message.attachments[i].url, inline=False)
                     if message.stickers:
-                        if embed.image == discord.Embed.Empty:
+                        if embed.image.url == discord.Embed.Empty:
                             embed.set_image(url=message.stickers[0].image_url)
                         else:
                             embed.add_field(name=f"Sticker", value=message.stickers[0].image_url, inline=False)
-                    gif = re.search(r"(https?:\/\/.+\.gif)|(http?:\/\/.+\.gif)", message.content)
+                    gif = re.search(r"https?:\/\/.+\.gif", message.content)
                     if gif is not None:
-                        if embed.image == discord.Embed.Empty:
+                        if embed.image.url == discord.Embed.Empty:
                             embed.set_image(url=gif[0])
 
                 elif message.author.bot and message.embeds:
