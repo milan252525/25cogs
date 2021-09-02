@@ -48,11 +48,11 @@ class Broadcast(commands.Cog):
                                     embed.add_field(name=f"Sticker", value=message.stickers[0].image_url, inline=False)
                             await channel.send(embed=embed)
                         if message.author.bot and message.embeds:
-                            if message.embeds[0].footer is discord.Embed.Empty or "⠀" not in message.embeds[0].footer.text:
+                            if message.embeds[0].footer.text is discord.Embed.Empty or "⠀" not in message.embeds[0].footer.text:
                                 embed=message.embeds[0]
-                                if embed.footer is not discord.Embed.Empty:
+                                if embed.footer.text is not discord.Embed.Empty:
                                     embed.set_footer(text=embed.footer.text+"⠀")
-                                await channel.send(embed=message.embeds[0])
+                                await channel.send(embed=embed)
 
     @commands.guild_only()
     @commands.is_owner()
