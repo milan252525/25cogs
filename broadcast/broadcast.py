@@ -31,7 +31,7 @@ class Broadcast(commands.Cog):
                         embed = discord.Embed(colour=message.author.colour)
                         name = f"{message.author.name} [{message.author.nick}]" if message.author.nick else f"{message.author.name}"
                         embed.set_author(name=name, icon_url=message.author.avatar_url, url=message.jump_url)
-                        embed.set_footer(text=f"#{message.channel.name} | {message.guild.name}")
+                        embed.set_footer(text=f"#{message.channel.name} | {message.guild.name}⠀")
                         embed.description = message.content[:1995] if message.content != "" else None
                         if message.attachments:
                             start = 0
@@ -46,8 +46,8 @@ class Broadcast(commands.Cog):
                             else:
                                 embed.add_field(name=f"Sticker", value=message.stickers[0].image_url, inline=False)
                         await channel.send(embed=embed)
-                        if message.author == self.bot.user:
-                            if message.embeds:
+                        if message.author == self.bot.user and message.embeds:
+                            if message.embed[0].footer is discord.Empty or "⠀" not in message.embed[0].footer.text: 
                                 await channel.send(embed=message.embeds[0])
 
     @commands.guild_only()
