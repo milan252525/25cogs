@@ -52,6 +52,8 @@ class Broadcast(commands.Cog):
                                 embed=message.embeds[0]
                                 if embed.footer.text is not discord.Embed.Empty:
                                     embed.set_footer(text=embed.footer.text+"⠀")
+                                else: 
+                                    embed.set_footer("⠀")
                                 await channel.send(embed=embed)
 
     @commands.guild_only()
