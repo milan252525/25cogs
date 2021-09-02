@@ -65,7 +65,10 @@ async def get_profile_embed(bot, ctx, member, alt=False):
     try:
         player_icon = bs_cog.icons['player'][str(player_icon_id)]['imageUrl2']
     except:
-        player_icon = member.avatar_url
+        if type(member) is discord.Member:
+            player_icon = member.avatar_url
+        else:
+            player_icon = None
     embed.set_author(
         name=f"{player.name} {player.raw_data['tag']}",
         icon_url=player_icon)
