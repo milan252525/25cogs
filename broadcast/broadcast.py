@@ -4,6 +4,7 @@ from redbot.core import commands, Config, checks
 
 from typing import Union
 import asyncio
+import re
 
 
 class Broadcast(commands.Cog):
@@ -34,16 +35,22 @@ class Broadcast(commands.Cog):
                         embed.description = embed.description.replace(f"<@&{role.id}>", "@"+role.name)
                     if message.attachments:
                         start = 0
-                        if "image" in message.attachments[0].content_type:
+                        content_type = message.attachments[0].content_type
+                        if "image" in content_type or "video" in content_type:
                             embed.set_image(url=message.attachments[0].url)
                             start = 1
                         for i in range(start, len(message.attachments)):
                             embed.add_field(name=f"Attachment {str(i+1)}:", value=message.attachments[i].url, inline=False)
                     if message.stickers:
-                        if not embed.image != discord.Embed.Empty:
+                        if embed.image == discord.Embed.Empty:
                             embed.set_image(url=message.stickers[0].image_url)
                         else:
                             embed.add_field(name=f"Sticker", value=message.stickers[0].image_url, inline=False)
+                    gif = re.search(r"(https?:\/\/.+\.gif)", message.content)
+                    if gif is not None:
+                        if embed.image == discord.Embed.Empty:
+                            embed.set_image(url=gif[0])
+
                 elif message.author.bot and message.embeds:
                     if message.embeds[0].footer.text == discord.Embed.Empty or "⠀" not in message.embeds[0].footer.text:
                         embed=message.embeds[0]
