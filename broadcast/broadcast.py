@@ -20,9 +20,9 @@ class Broadcast(commands.Cog):
             self.cached_conf = await self.config.broadcasts()
         if message.author.bot:
             return
-        for bc, channels in self.cached_conf["broadcasts"].items():
-            if message.channel.id in channels:
-                for channel_id in channels:
+        for bc, value in self.cached_conf["broadcasts"].items():
+            if message.channel.id in value["channels"]:
+                for channel_id in value["channels"]:
                     if channel_id != message.channel.id:
                         channel = self.bot.get_channel(channel_id)
                         if channel is None:
@@ -49,7 +49,7 @@ class Broadcast(commands.Cog):
         conf = await self.config.broadcasts()
         if broadcast_name not in conf.keys():
             await self.config.broadcasts.set_raw(broadcast_name, value={"channels": []})
-        channels = await self.config.broadcasts.get_raw(broadcast_name)
+        channels = await self.config.broadcasts.get_raw(broadcast_name, "channels")
         if channel.id not in channels:
             channels.append(channel.id)
             await self.config.broadcasts.set_raw(broadcast_name, value={"channels": channels})
@@ -67,7 +67,7 @@ class Broadcast(commands.Cog):
         conf = await self.config.broadcasts()
         if broadcast_name not in conf.keys():
             return await ctx.send(f"{broadcast_name} doesn't exist!")
-        channels = await self.config.broadcasts.get_raw(broadcast_name)
+        channels = await self.config.broadcasts.get_raw(broadcast_name, "channels")
         if channel.id not in channels:
             return await ctx.send(f"That channel wasn't subscribed to {broadcast_name}!")
         else:
