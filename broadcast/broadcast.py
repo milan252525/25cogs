@@ -34,6 +34,8 @@ class Broadcast(commands.Cog):
                             embed.set_author(name=name, icon_url=message.author.avatar_url, url=message.jump_url)
                             embed.set_footer(text=f"#{message.channel.name} | {message.guild.name}⠀")
                             embed.description = message.content[:1995] if message.content != "" else None
+                            for role in message.role_mentions:
+                                embed.description = embed.description.replace(f"<@&{role.id}>", "@"+role.name)
                             if message.attachments:
                                 start = 0
                                 if "image" in message.attachments[0].content_type:
