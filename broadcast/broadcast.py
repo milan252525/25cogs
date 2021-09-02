@@ -28,26 +28,27 @@ class Broadcast(commands.Cog):
                         channel = self.bot.get_channel(channel_id)
                         if channel is None:
                             continue 
-                        embed = discord.Embed(colour=message.author.colour)
-                        name = f"{message.author.name} [{message.author.nick}]" if message.author.nick else f"{message.author.name}"
-                        embed.set_author(name=name, icon_url=message.author.avatar_url, url=message.jump_url)
-                        embed.set_footer(text=f"#{message.channel.name} | {message.guild.name}⠀")
-                        embed.description = message.content[:1995] if message.content != "" else None
-                        if message.attachments:
-                            start = 0
-                            if "image" in message.attachments[0].content_type:
-                                embed.set_image(url=message.attachments[0].url)
-                                start = 1
-                            for i in range(start, len(message.attachments)):
-                                embed.add_field(name=f"Attachment {str(i+1)}:", value=message.attachments[i].url, inline=False)
-                        if message.stickers:
-                            if not embed.image is not discord.Embed.Empty:
-                                embed.set_image(url=message.stickers[0].image_url)
-                            else:
-                                embed.add_field(name=f"Sticker", value=message.stickers[0].image_url, inline=False)
-                        await channel.send(embed=embed)
-                        if message.author == self.bot.user and message.embeds:
-                            if message.embed[0].footer is discord.Empty or "⠀" not in message.embed[0].footer.text: 
+                        if not message.author.bot or not message.embeds:
+                            embed = discord.Embed(colour=message.author.colour)
+                            name = f"{message.author.name} [{message.author.nick}]" if message.author.nick else f"{message.author.name}"
+                            embed.set_author(name=name, icon_url=message.author.avatar_url, url=message.jump_url)
+                            embed.set_footer(text=f"#{message.channel.name} | {message.guild.name}⠀")
+                            embed.description = message.content[:1995] if message.content != "" else None
+                            if message.attachments:
+                                start = 0
+                                if "image" in message.attachments[0].content_type:
+                                    embed.set_image(url=message.attachments[0].url)
+                                    start = 1
+                                for i in range(start, len(message.attachments)):
+                                    embed.add_field(name=f"Attachment {str(i+1)}:", value=message.attachments[i].url, inline=False)
+                            if message.stickers:
+                                if not embed.image is not discord.Embed.Empty:
+                                    embed.set_image(url=message.stickers[0].image_url)
+                                else:
+                                    embed.add_field(name=f"Sticker", value=message.stickers[0].image_url, inline=False)
+                            await channel.send(embed=embed)
+                        if message.author.bot and message.embeds:
+                            if message.embed[0].footer is discord.Embed.Empty or "⠀" not in message.embed[0].footer.text: 
                                 await channel.send(embed=message.embeds[0])
 
     @commands.guild_only()
