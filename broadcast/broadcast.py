@@ -38,6 +38,11 @@ class Broadcast(commands.Cog):
                                 start = 1
                             for i in range(start, len(message.attachments)):
                                 embed.add_field(name=f"Attachment {str(i+1)}:", value=message.attachments[i].url, inline=False)
+                        if message.stickers:
+                            if not embed.image is not discord.Embed.Empty:
+                                embed.set_image(url=message.stickers[0].image_url)
+                            else:
+                                embed.add_field(name=f"Sticker", value=message.stickers[0].image_url, inline=False)
                         await channel.send(embed=embed)
 
     @commands.guild_only()
