@@ -42,18 +42,18 @@ class Broadcast(commands.Cog):
                                 for i in range(start, len(message.attachments)):
                                     embed.add_field(name=f"Attachment {str(i+1)}:", value=message.attachments[i].url, inline=False)
                             if message.stickers:
-                                if not embed.image is not discord.Embed.Empty:
+                                if not embed.image != discord.Embed.Empty:
                                     embed.set_image(url=message.stickers[0].image_url)
                                 else:
                                     embed.add_field(name=f"Sticker", value=message.stickers[0].image_url, inline=False)
                             await channel.send(embed=embed)
                         if message.author.bot and message.embeds:
-                            if message.embeds[0].footer.text is discord.Embed.Empty or "⠀" not in message.embeds[0].footer.text:
+                            if message.embeds[0].footer.text == discord.Embed.Empty or "⠀" not in message.embeds[0].footer.text:
                                 embed=message.embeds[0]
-                                if embed.footer.text is not discord.Embed.Empty:
+                                if embed.footer.text != discord.Embed.Empty:
                                     embed.set_footer(text=embed.footer.text+"⠀")
                                 else: 
-                                    embed.set_footer("⠀")
+                                    embed.set_footer(text="⠀")
                                 await channel.send(embed=embed)
 
     @commands.guild_only()
