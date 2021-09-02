@@ -1,4 +1,5 @@
 import discord
+from discord import colour
 from redbot.core import commands, Config, checks
 
 from typing import Union
@@ -27,9 +28,9 @@ class Broadcast(commands.Cog):
                         channel = self.bot.get_channel(channel_id)
                         if channel is None:
                             continue 
-                        embed = discord.Embed()
-                        embed.set_author(name=f"{message.author.name}", icon_url=message.author.avatar_url, url=message.jump_url)
-                        embed.set_footer(text=f"{message.guild.name}")
+                        embed = discord.Embed(colour=message.author.colour)
+                        embed.set_author(name=f"{message.author.name} [{message.author.nick}]", icon_url=message.author.avatar_url, url=message.jump_url)
+                        embed.set_footer(text=f"#{message.channel.name} {message.guild.name}")
                         embed.description = message.content if message.content != "" else None
                         if message.attachments:
                             start = 0
