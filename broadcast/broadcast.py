@@ -46,7 +46,8 @@ class Broadcast(commands.Cog):
                             embed.set_image(url=message.stickers[0].image_url)
                         else:
                             embed.add_field(name=f"Sticker", value=message.stickers[0].image_url, inline=False)
-                    gif = re.search(r"(https?:\/\/.+\.gif)|(https?:\/\/((\btenor\b)|(\bgiphy\b))[^\s]+)", message.content)
+                    #gif = re.search(r"(https?:\/\/.+\.gif)|(https?:\/\/((\btenor\b)|(\bgiphy\b))[^\s]+)", message.content)
+                    gif = re.search(r"(https?:\/\/.+\.gif)", message.content)
                     if gif is not None:
                         if embed.image.url == discord.Embed.Empty:
                             embed.set_image(url=gif[0])
