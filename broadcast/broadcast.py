@@ -20,7 +20,7 @@ class Broadcast(commands.Cog):
             self.cached_conf = await self.config.broadcasts()
         if message.author.bot:
             return
-        for bc, value in self.cached_conf["broadcasts"].items():
+        for bc, value in self.cached_conf.items():
             if message.channel.id in value["channels"]:
                 for channel_id in value["channels"]:
                     if channel_id != message.channel.id:
