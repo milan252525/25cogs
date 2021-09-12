@@ -270,16 +270,22 @@ class BrawlStarsCog(commands.Cog):
     @commands.command()
     async def pl(self, ctx):
         data = pl_brawlers
+        brawler_data = (await self.starlist_request("https://api.brawlapi.com/v1/brawlers"))['list']
+        ids = dict()
+        for br in brawler_data:
+            ids[br['name'].upper()] = br['id']
         embed = discord.Embed(title="Power League Picks", colour=discord.Colour.red())
         for mode in data:
             brs = ""
             for map in data[mode]:
                 brs += f"**{map}**\n"
                 for br in data[mode][map]['main']:
-                    brs += get_brawler_emoji(br) + " "
+                    id = ids[br]
+                    brs += get_brawler_emoji(id) + " "
                 brs+= "\n"
                 for br in data[mode][map]['other'][:5]:
-                    brs += get_brawler_emoji(br) + " "
+                    id = ids[br]
+                    brs += get_brawler_emoji(id) + " "
                 brs+= "\n"
             embed.add_field(name=mode, value=brs)
         await ctx.send(embed=embed)
