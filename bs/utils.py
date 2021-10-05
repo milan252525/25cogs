@@ -123,7 +123,10 @@ def get_rank_emoji(rank : int):
 
 def get_brawler_emoji(bot, id):
     guild = bot.get_guild(664228332765839361)
+    guild2 = bot.get_guild(894989253514248202)
     emoji = discord.utils.get(guild.emojis, name=str(id))
+    if emoji is None:
+        emoji = discord.utils.get(guild2.emojis, name=str(id))
     if emoji is None:
         return "<:__:452891824168894494>"
     return str(emoji)
