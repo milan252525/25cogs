@@ -359,7 +359,7 @@ class BrawlStarsCog(commands.Cog):
                     break
             embed.add_field(
                 name="Members",
-                value=f"<:icon_gameroom:553299647729238016> {len(club.members)}/100")
+                value=f"<:icon_gameroom:553299647729238016> {len(club.members)}/30")
             embed.add_field(
                 name="Status",
                 value=f"{club_status[club.type.lower()]['emoji']} {club_status[club.type.lower()]['name']}"
@@ -1112,13 +1112,13 @@ class BrawlStarsCog(commands.Cog):
                 msg = ""
             if player_in_club:
                 clubobj = await self.ofcbsapi.get_club(player.club.tag)
-                msg += f"**{str(member)}** `{player.trophies}` <:bstrophy:552558722770141204>: {player.club.name} ({len(clubobj.members)}/100)\n"
+                msg += f"**{str(member)}** `{player.trophies}` <:bstrophy:552558722770141204>: {player.club.name} ({len(clubobj.members)}/30)\n"
             else:
                 msg += f"**{str(member)}** `{player.trophies}` <:bstrophy:552558722770141204>: not in a club.\n"
             if alt is not None:
                 if player_in_club2:
                     clubobj = await self.ofcbsapi.get_club(playeralt.club.tag)
-                    msg += f"**{str(member)}'s alt** `{playeralt.trophies}` <:bstrophy:552558722770141204>: {playeralt.club.name} ({len(clubobj.members)}/100)\n"
+                    msg += f"**{str(member)}'s alt** `{playeralt.trophies}` <:bstrophy:552558722770141204>: {playeralt.club.name} ({len(clubobj.members)}/30)\n"
                 else:
                     msg += f"**{str(member)}'s alt** `{playeralt.trophies}` <:bstrophy:552558722770141204>: not in a club.\n"
         if len(msg) > 0:
