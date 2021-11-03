@@ -17,7 +17,7 @@ class Blacklist(commands.Cog):
         self.config.register_guild(**default_guild)
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
         self.spainstaffbl.start()
-        #temp disabled self.blacklistalert.start()
+        self.blacklistalert.start()
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
@@ -317,7 +317,7 @@ class Blacklist(commands.Cog):
                                 if roletoping is None:
                                     party = f"Couldn't find a role for the club {player.club.name}"
                                 else:
-                                    party = roletoping.mention
+                                    party = roletoping.name
                                 reason = await self.config.guild(serverobj).blacklisted.get_raw(tag, "reason", default="")
                                 await ch.send(content=f"Source: {serverobj.name}\nResponsible party: {party}", embed=discord.Embed(colour=discord.Colour.red(),
                                                                   description=f"Blacklisted user **{player.name}** with tag **{player.tag}** joined **{player.club.name}**!\nBlacklist reason: {reason}"))
