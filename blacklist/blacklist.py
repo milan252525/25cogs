@@ -17,8 +17,7 @@ class Blacklist(commands.Cog):
         self.config.register_guild(**default_guild)
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
         self.spainstaffbl.start()
-        self.blacklistalert.start()
-        self.deruculablacklistjob.start()
+        #temp disabled self.blacklistalert.start()
 
     async def initialize(self):
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
@@ -330,52 +329,3 @@ class Blacklist(commands.Cog):
     @blacklistalert.before_loop
     async def before_blacklistalert(self):
         await asyncio.sleep(60*20)
-
-    @tasks.loop(hours=8)
-    async def deruculablacklistjob(self):
-        try:
-            errors = 0
-            ch = self.bot.get_channel(825199968419053596)
-            await ch.trigger_typing()
-            clubs = []
-            saved_clubs = await self.bsconfig.guild(ch.guild).clubs()
-            for key in saved_clubs.keys():
-                club = saved_clubs[key]["tag"]
-                clubs.append(club)
-
-            blacklisted = await self.config.guild(ch.guild).blacklisted()
-            for tag in blacklisted.keys():
-                try:
-                    player = await self.ofcbsapi.get_player(tag)
-                    player_in_club = "name" in player.raw_data["club"]
-                    await asyncio.sleep(1)
-                except brawlstats.errors.RequestError as e:
-                    await asyncio.sleep(3)
-                    errors += 1
-                    if errors == 20:
-                        break
-                except Exception as e:
-                    return await ch.send(embed=discord.Embed(colour=discord.Colour.red(),
-                                                             description=f"**Algo ha ido mal solicitando {tag}!**\n({str(e)})"))
-
-                if player_in_club:
-                    if player.club.tag.strip("#") in clubs:
-                        roletoping = None
-                        for key in saved_clubs:
-                            if saved_clubs[key]['tag'] == player.club.tag.upper().replace("#", ""):
-                                roletoping = ch.guild.get_role(saved_clubs[key]['role']) if 'role' in saved_clubs[key] else None
-                                break
-                        if roletoping is None:
-                            party = f"No se ha encontrado un rol para el club {player.club.name}"
-                        else:
-                            party = roletoping.mention
-                        reason = await self.config.guild(ch.guild).blacklisted.get_raw(tag, "reason", default="")
-                        await ch.send(content=f"Club: {party}", embed=discord.Embed(colour=discord.Colour.red(), description=f"Miembro de la blacklist **{player.name}** con el tag **{player.tag}** se ha unido a **{player.club.name}**!\nCon motivo de blacklist: {reason}"))
-        except Exception as e:
-            await ch.send(e)
-
-    @deruculablacklistjob.before_loop
-    async def before_deruculablacklistjob(self):
-        await asyncio.sleep(60*50)
-
-
