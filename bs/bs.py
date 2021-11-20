@@ -692,7 +692,7 @@ class BrawlStarsCog(commands.Cog):
                     url = f"https://laclubs.net/club?tag={clubs[i].tag.strip('#').upper()}"
 
                     if low_clubs:
-                        if low_amount is None and len(clubs[i].members) >= 95:
+                        if low_amount is None and len(clubs[i].members) >= 25:
                             continue
                         if low_amount is not None and len(clubs[i].members) > low_amount:
                             continue
