@@ -325,13 +325,17 @@ class Tools(commands.Cog):
     @commands.command()
     async def membersall(self, ctx):
         user_ids = set()
+        user_ids_online = set()
         servers = ""
-        for guild in self.bot.guilds:
+        LA_guilds = [guild for guild in self.bot.guilds if "LA" in guild.name]
+        for guild in LA_guilds:
             if "LA" in guild.name:
                 servers += f"{guild.name} - {guild.member_count}\n"
                 for mem in guild.members:
                     user_ids.add(mem.id)
-        await ctx.send(f"Total unique accounts: {len(user_ids)}\n\nServers: {servers[:1950]}\n\nCount: {len(self.bot.guilds)}")
+                    if mem.status in (discord.Status.online, discord.Status.idle, discord.Status.dnd):
+                        user_ids_online.add(mem.id)
+        await ctx.send(f"__Total unique accounts:__ {len(user_ids)}\n__Currently online:__ {len(user_ids_online)}\n__Servers__: ({len(LA_guilds)})\n```{servers[:1950]}```")
 
     @commands.guild_only()
     @commands.command()
