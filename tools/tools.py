@@ -322,6 +322,16 @@ class Tools(commands.Cog):
             msg = msg + f"{str(p)}\n"
         await ctx.send(embed=discord.Embed(colour=discord.Colour.orange(), description=msg, title="Members:"))
 
+    @commands.command()
+    async def membersall(self, ctx):
+        user_ids = set()
+        servers = ""
+        for guild in self.bot.guilds:
+            if "LA" in guild.name:
+                servers += f"{guild.name} - {guild.member_count}\n"
+                for mem in guild.members:
+                    user_ids.add(mem.id)
+        await ctx.send(f"Total unique accounts: {len(user_ids)}\n\nServers: {servers[:1950]}\n\nCount: {len(self.bot.guilds)}")
 
     @commands.guild_only()
     @commands.command()
