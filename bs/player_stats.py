@@ -302,7 +302,12 @@ async def get_brawlers_embeds(bot, ctx, member):
     try:
         player_icon = bs_cog.icons['player'][str(player_icon_id)]['imageUrl2']
     except:
-        player_icon = member.avatar_url
+        if type(member) is discord.Member:
+            player_icon = member.avatar_url
+        else:
+            player_icon = None
+    if player_icon == "none":
+        player_icon = None
 
     brawlers = player.raw_data['brawlers']
     brawlers.sort(key=itemgetter('trophies'), reverse=True)
