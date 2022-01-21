@@ -87,6 +87,14 @@ class Welcome(commands.Cog):
         if member.guild.id == 585075868188278784 and not member.bot: #LA Asia unverified autorole
             await member.add_roles(member.guild.get_role(795641413126586408))
 
+    @commands.Cog.listener()
+    async def on_member_update(self, before, after):
+        if before.guild.id == 401883208511389716:
+            if before.pending != after.pending:
+                guest_role = before.guild.get_role(578260960981286923)
+                channel = self.bot.get_channel(405159360222986253)
+                await after.add_roles(guest_role)
+                await channel.send(f"Welcome {after.mention} to LA Gaming! Be sure to check out our <#582211768814927882> and <#582211785189359646> and send a picture of your profile in <#547087959015292929> if you play Brawl Stars. Enjoy!")
 
     #DISABLED
     async def do_setup(self, member):
