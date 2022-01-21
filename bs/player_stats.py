@@ -69,6 +69,8 @@ async def get_profile_embed(bot, ctx, member, alt=False):
             player_icon = member.avatar_url
         else:
             player_icon = None
+    if player_icon == "none":
+        player_icon = None
     embed.set_author(
         name=f"{player.name} {player.raw_data['tag']}",
         icon_url=player_icon)
