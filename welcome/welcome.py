@@ -51,12 +51,12 @@ class Welcome(commands.Cog):
         self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
         self.sortroles.start()
         self.mainsortroles.start()
-        self.sortrolesevents.start()
+        #self.sortrolesevents.start()
 
     def cog_unload(self):
         self.sortroles.cancel()
         self.mainsortroles.cancel()
-        self.sortrolesevents.cancel()
+        #self.sortrolesevents.cancel()
 
     async def initialize(self):
         crapikey = await self.bot.get_shared_api_tokens("crapi")
@@ -78,10 +78,10 @@ class Welcome(commands.Cog):
     async def on_member_join(self, member):
         #if member.guild.id == 440960893916807188 and not member.bot:
         #    await self.do_setup(member)
-        if member.guild.id == 593248015729295360 and not member.bot:
-            await self.do_setup_LAFC(member)
-        if member.guild.id == 654334199494606848 and not member.bot:
-            await self.do_setup_LABSevent(member)
+        #if member.guild.id == 593248015729295360 and not member.bot:
+            #await self.do_setup_LAFC(member)
+        #if member.guild.id == 654334199494606848 and not member.bot:
+            #await self.do_setup_LABSevent(member)
         if member.guild.id == 704457125295947887 and not member.bot: #LA NA unverified autorole
             await member.add_roles(member.guild.get_role(785243512199184395))
         if member.guild.id == 585075868188278784 and not member.bot: #LA Asia unverified autorole
@@ -94,7 +94,7 @@ class Welcome(commands.Cog):
                 guest_role = before.guild.get_role(578260960981286923)
                 channel = self.bot.get_channel(405159360222986253)
                 await after.add_roles(guest_role)
-                await channel.send(f"Welcome {after.mention} to LA Gaming! Be sure to check out our <#582211768814927882> and <#582211785189359646> and send a picture of your profile in <#547087959015292929> if you play Brawl Stars. Enjoy!")
+                await channel.send(f"Welcome {after.mention} to LA Gaming! Be sure to check out our <#582211768814927882> and <#582211785189359646> and send a picture of your profile in <#555662656736985090> if you play Brawl Stars. Enjoy!")
 
     #DISABLED
     async def do_setup(self, member):
