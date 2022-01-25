@@ -64,6 +64,7 @@ class BrawlStarsCog(commands.Cog):
                 ch = member.guild.get_channel(channels[guilds.index(member.guild.id)])
                 embed = discord.Embed(colour=discord.Colour.blue(), description=f"#{tag.upper()}")
                 embed.set_author(name=member.display_name, icon_url=member.avatar_url)
+                embed.set_footer(text=member.id)
                 await asyncio.sleep(3)
                 await ch.send(embed=embed)
 
