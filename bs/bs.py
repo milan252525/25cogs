@@ -57,7 +57,7 @@ class BrawlStarsCog(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         guilds = (401883208511389716, 616673259538350084, 674348799673499671, 663716223258984496)
-        channels = (547087959015292929, 616696393729441849, 674348799673499671, 663803544276828171)
+        channels = (555662656736985090, 616696393729441849, 674348799673499671, 663803544276828171)
         if member.guild.id in guilds:
             tag = await self.config.user(member).tag()
             if tag is not None:
