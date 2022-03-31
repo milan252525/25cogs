@@ -8,6 +8,7 @@ from random import choice
 import random
 from typing import Union
 import asyncio
+import upsidedown
 from bs.utils import badEmbed
 import aiohttp
 #from profanity_check import predict, predict_prob
@@ -38,6 +39,10 @@ class Tools(commands.Cog):
     @commands.command()
     async def fliptext(self, ctx, *, text:str):
         await ctx.send(text[::-1])
+
+    @commands.command()
+    async def updown(self, ctx, *, text:str):
+        await ctx.send(upsidedown.transform(text))
         
     @commands.Cog.listener()
     async def on_member_remove(self, member):
