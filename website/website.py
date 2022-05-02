@@ -10,7 +10,7 @@ class Website(commands.Cog):
        
     @commands.command()
     async def addclub(self, ctx, tag:str, name:str, region:str, country:str):
-        if ctx.author.id not in (230947675837562880, 425260327425409028, 683436834080161821, 344492440746459136):
+        if ctx.author.id not in (230947675837562880, 425260327425409028, 683436834080161821, 344492440746459136, 665095737016713239):
             return
         club = {
             "name": name,
@@ -28,7 +28,7 @@ class Website(commands.Cog):
 
     @commands.command()
     async def delclub(self, ctx, tag:str):
-        if ctx.author.id not in (230947675837562880, 425260327425409028, 683436834080161821, 344492440746459136):
+        if ctx.author.id not in (230947675837562880, 425260327425409028, 683436834080161821, 344492440746459136, 665095737016713239):
             return
         delete = self.db['tracked_clubs'].delete_one(
             {'tag': tag.upper().strip("#")}
