@@ -345,7 +345,7 @@ class Tools(commands.Cog):
     @commands.guild_only()
     @commands.command()
     async def laban(self, ctx, member:Union[discord.Member, str], reason:str=""):
-        if ctx.author.id not in [355514130737922048, 230947675837562880]:
+        if ctx.author.id not in [614138334717149205, 230947675837562880]:
             return await ctx.send("You can't use this command.")
         #main labs lafc labsevents spain, academy, asia, bd, derucula, support, portugal, me
         guilds = [440960893916807188, 401883208511389716, 593248015729295360, 654334199494606848, 460550486257565697, 473169548301041674, 663716223258984496, 593732431551660063, 631888808224489482, 594736382727946250, 616673259538350084, 773750926578155541]
@@ -369,7 +369,7 @@ class Tools(commands.Cog):
     @commands.guild_only()
     @commands.command()
     async def launban(self, ctx, member: Union[discord.Member, str], reason:str=""):
-        if ctx.author.id not in [355514130737922048, 230947675837562880]:
+        if ctx.author.id not in [614138334717149205, 230947675837562880]:
             return await ctx.send("You can't use this command.")
         guilds = [440960893916807188, 401883208511389716, 593248015729295360, 654334199494606848, 460550486257565697, 473169548301041674, 663716223258984496, 593732431551660063, 631888808224489482, 594736382727946250, 616673259538350084, 773750926578155541]
         msg = f"Attempting to unban **{member}** in all LA servers:"
