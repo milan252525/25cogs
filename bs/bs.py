@@ -47,7 +47,7 @@ class BrawlStarsCog(commands.Cog):
         
     async def starlist_request(self, url):
         #"Authorization": f"Bearer {self.starlist_key}", 
-        header = {"User-Agent": "LA_bot"}
+        header = {"User-Agent": "CMG_bot"}
         async with self.aiohttp_session.get(url, headers=header) as resp:
             if resp.status == 200:
                 return await resp.json()
@@ -91,7 +91,7 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         except Exception as e:
-            await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+            await ctx.send("**Something went wrong, please send a personal message to Modmail bot or try again!****")
 
     @commands.command(aliases=['bssave2'])
     async def savealt(self, ctx, tag, member: discord.Member = None):
@@ -115,7 +115,7 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         except Exception as e:
-            await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+            await ctx.send("**Something went wrong, please send a personal message to Modmail bot or try again!****")
 
     @commands.has_permissions(administrator = True)
     @commands.command(aliases=['bsunsave'])
@@ -217,7 +217,7 @@ class BrawlStarsCog(commands.Cog):
                                    
     @commands.command()
     async def lblink(self, ctx, *, member: Union[discord.Member, str] = None):
-        """Get LA clubs website leaderboard link"""
+        """Get clubs website leaderboard link"""
         await ctx.trigger_typing()
         prefix = ctx.prefix
         tag = ""
@@ -786,7 +786,7 @@ class BrawlStarsCog(commands.Cog):
 
         except ZeroDivisionError as e:
             return await ctx.send(
-                "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
+                "**Something went wrong, please send a personal message to Modmail bot or try again!**")
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
@@ -829,7 +829,7 @@ class BrawlStarsCog(commands.Cog):
             await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
 
         except Exception as e:
-            return await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
+            return await ctx.send("**Something went wrong, please send a personal message to Modmail bot or try again!**")
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)

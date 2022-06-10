@@ -71,7 +71,7 @@ class ClashRoyaleCog(commands.Cog):
             await ctx.send(embed = self.badEmbed(f"CR API is offline, please try again later! ({str(e)})"))
         
         except Exception as e:
-            await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
+            await ctx.send("**Something went wrong, please send a personal message to Modmail bot or try again!**")
             
     @commands.has_permissions(administrator = True) 
     @commands.command()
@@ -153,7 +153,7 @@ class ClashRoyaleCog(commands.Cog):
             return await ctx.send(embed = self.badEmbed(f"CR API is offline, please try again later! ({str(e)})"))
         
         except Exception as e:
-            return await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+            return await ctx.send("**Something went wrong, please send a personal message to Modmail bot or try again!****")
 
 
         embed=discord.Embed()
@@ -204,7 +204,7 @@ class ClashRoyaleCog(commands.Cog):
         if isinstance(key, discord.Member):
             mtag = await self.config.user(ctx.author).tag()
             if mtag is None:
-                return await ctx.send(embed=badEmbed(f"This user has no tag saved! Use {ctx.prefix}crsave <tag>"))
+                return await ctx.send(embed=self.badEmbed(f"This user has no tag saved! Use {ctx.prefix}crsave <tag>"))
             try:
                 player = await self.crapi.get_player(mtag)
                 if player.clan is None:
@@ -331,7 +331,7 @@ class ClashRoyaleCog(commands.Cog):
 
                     info = saved_clans[key]['info'] if "info" in saved_clans[key] else ""
 
-                    if low_clubs and len(clubs[i].members) >= 45:
+                    if low_clubs and len(clans[i].members) >= 45:
                         continue
 
                     e_name = f"{str(cemoji)} {clans[i]['name']} [{key}] ({clans[i]['tag']}) {info}"
@@ -444,7 +444,7 @@ class ClashRoyaleCog(commands.Cog):
             await ctx.send(embed = self.badEmbed(f"CR API is offline, please try again later! ({str(e)})"))
 
         except Exception as e:
-            return await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
+            return await ctx.send("**Something went wrong, please send a personal message to Modmail bot or try again!**")
                                                   
     @commands.guild_only()
     @commands.has_permissions(administrator = True)
@@ -476,58 +476,6 @@ class ClashRoyaleCog(commands.Cog):
             await ctx.send(embed = self.goodEmbed("Clan info successfully edited!"))
         except KeyError:
             await ctx.send(embed = self.badEmbed(f"{key.title()} isn't saved clan in this server!"))
-
-    @commands.command()
-    @commands.guild_only()
-    async def refreshLAFC(self, ctx, member:discord.Member=None):
-        if member == None:
-            member = ctx.author
-        msg = ""
-        try:
-            tag = await self.config.user(member).tag()
-            player = await self.crapi.get_player("#" + tag)
-            nick = f"{player.name} | {player.clan.name}" if player.clan is not None else f"{player.name}"
-            try:
-                await member.edit(nick=nick[:31])
-                msg += f"Nickname changed: {nick[:31]}\n"
-            except discord.Forbidden:
-                msg += f":exclamation:Couldn't change nickname of this user. ({nick[:31]})\n"
-            trophyRole = None
-            if player.trophies >= 8000:
-                trophyRole = member.guild.get_role(600325526007054346)
-            elif player.trophies >= 7000:
-                trophyRole = member.guild.get_role(594960052604108811)
-            elif player.trophies >= 6000:
-                trophyRole = member.guild.get_role(594960023088660491)
-            elif player.trophies >= 5000:
-                trophyRole = member.guild.get_role(594959970181709828)
-            elif player.trophies >= 4000:
-                trophyRole = member.guild.get_role(594959895904649257)
-            elif player.trophies >= 3000:
-                trophyRole = member.guild.get_role(598396866299953165)
-            if trophyRole is not None:
-                try:
-                    await member.add_roles(trophyRole)
-                    msg += f"Assigned roles: {trophyRole.name}\n"
-                except discord.Forbidden:
-                    msg += f":exclamation:Couldn't change roles of this user. ({trophyRole.name})\n"
-            if player.challengeMaxWins >= 20:
-                try:
-                    wins20Role = member.guild.get_role(593776990604230656)
-                    await member.add_roles(wins20Role)
-                    msg += f"Assigned roles: {wins20Role.name}\n"
-                except discord.Forbidden:
-                    msg += f":exclamation:Couldn't change roles of this user. ({wins20Role.name})\n"
-
-        except clashroyale.NotFoundError as e:
-            msg += "No player with this tag found, try again!\n"
-        except ValueError as e:
-            msg += f"**{str(e)}\nTry again or send a personal message to LA Modmail! ({str(e)})**\n"
-        except clashroyale.RequestError as e:
-            msg += f"Clash Royale API is offline, please try again later! ({str(e)})\n"
-        except Exception as e:
-            msg += f"**Something went wrong, please send a personal message to LA Modmail or try again! ({str(e)})**\n"
-        await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.blue()))
 
     @commands.command()
     @commands.guild_only()

@@ -102,7 +102,7 @@ class ClashOfClansCog(commands.Cog):
 
         except ZeroDivisionError as e:
             return await ctx.send(
-                "**Something went wrong, please send a personal message to LA Modmail bot or try again!**")
+                "**Something went wrong, please send a personal message to Modmail bot or try again!**")
 
     @coc_clans.command(name="add")
     @commands.guild_only()

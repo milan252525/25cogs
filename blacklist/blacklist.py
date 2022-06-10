@@ -163,7 +163,7 @@ class Blacklist(commands.Cog):
 
         except Exception as e:
             return await ctx.send(
-                f"**Something went wrong, please send a personal message to LA Modmail bot or try again!** ({e})")
+                f"**Something went wrong, please send a personal message to Modmail bot or try again!** ({e})")
 
     @commands.guild_only()
     @blacklisted.command(name="remove")
