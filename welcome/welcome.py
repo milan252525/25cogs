@@ -94,14 +94,14 @@ class Welcome(commands.Cog):
                 guest_role = before.guild.get_role(578260960981286923)
                 channel = self.bot.get_channel(405159360222986253)
                 await after.add_roles(guest_role)
-                await channel.send(f"Welcome {after.mention} to LA Gaming! Be sure to check out our <#582211768814927882> and <#582211785189359646> and send a picture of your profile in <#555662656736985090> if you play Brawl Stars. Enjoy!")
+                await channel.send(f"Welcome {after.mention} to CMG! Be sure to check <#582211768814927882> and <#582211785189359646> out! And send a picture of your profile in <#555662656736985090> if you play Brawl Stars. Enjoy!")
 
     #DISABLED
     async def do_setup(self, member):
         welcome = self.bot.get_channel(674348799673499671)
         welcomeEmbed = discord.Embed(colour=discord.Colour.blue())
         welcomeEmbed.set_image(url="https://i.imgur.com/wwhgP4f.png")
-        text = f"Welcome to **LA** {member.mention}!\nMake sure to read <#713858515135103047> and <#713882338018459729> to familiarise yourself with the server.\nPlease type **/setup cr #your\\_cr\\_tag** or **/setup bs #your\\_bs\\_tag**,\nfor other games type **/setup other** to get verified and see rest of the server!"
+        text = f"Welcome to **CMG** {member.mention}!\nMake sure to read <#713858515135103047> and <#713882338018459729> to familiarise yourself with the server.\nPlease type **/setup cr #your\\_cr\\_tag** or **/setup bs #your\\_bs\\_tag**,\nfor other games type **/setup other** to get verified and see rest of the server!"
         await welcome.send(embed=welcomeEmbed)
         await welcome.send(text)
 
@@ -228,9 +228,9 @@ class Welcome(commands.Cog):
 
         except Exception as e:
             if language == 'en':
-                return await ctx.send("**Something went wrong, please send a personal message to LA Modmail bot or try again!****")
+                return await ctx.send("**Something went wrong, please send a personal message to ou Modmail bot or try again!****")
             elif language == 'es':
-                return await ctx.send("**¡Algo ha ido mal, por favor envía un mensaje personal al bot LA Modmail o inténtalo de nuevo!**")
+                return await ctx.send("**¡Algo ha ido mal, por favor envía un mensaje personal al bot Modmail o inténtalo de nuevo!**")
 
         nick = f"{player.name}"
         try:
@@ -920,11 +920,11 @@ class Welcome(commands.Cog):
         except clashroyale.NotFoundError as e:
             msg += "No player with this tag found, try again!\n"
         except ValueError as e:
-            msg += f"**{str(e)}\nTry again or send a personal message to LA Modmail! ({str(e)})**\n"
+            msg += f"**{str(e)}\nTry again or send a personal message to our Modmail! ({str(e)})**\n"
         except clashroyale.RequestError as e:
             msg += f"Clash Royale API is offline, please try again later! ({str(e)})\n"
         except Exception as e:
-            msg += f"**Something went wrong, please send a personal message to LA Modmail or try again! ({str(e)})**\n"
+            msg += f"**Something went wrong, please send a personal message to our Modmail or try again! ({str(e)})**\n"
         await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.blue()))
 
         await member.remove_roles(welcomingprocess)
