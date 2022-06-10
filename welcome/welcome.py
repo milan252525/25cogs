@@ -228,7 +228,7 @@ class Welcome(commands.Cog):
 
         except Exception as e:
             if language == 'en':
-                return await ctx.send("**Something went wrong, please send a personal message to ou Modmail bot or try again!****")
+                return await ctx.send("**Something went wrong, please send a personal message to our Modmail bot or try again!****")
             elif language == 'es':
                 return await ctx.send("**¡Algo ha ido mal, por favor envía un mensaje personal al bot Modmail o inténtalo de nuevo!**")
 
@@ -241,7 +241,7 @@ class Welcome(commands.Cog):
                 msg += f"Nuevo apodo: **{nick[:31]}**\n"
         except discord.Forbidden:
             if language == 'en':
-                msg += f"I dont have permission to change nickname of this user!\n"
+                msg += f"I don't have permission to change nickname of this user!\n"
             elif language == 'es':
                 msg += f"¡No tengo permisos para cambiar el apodo de este usuario!\n"
         except Exception as e:
