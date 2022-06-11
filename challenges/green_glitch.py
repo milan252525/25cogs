@@ -48,11 +48,11 @@ class Challenges(commands.Cog):
         if await self.config.member(ctx.author).tracking():
             return await ctx.send("Your progress is already being tracked!")
         if not self.cmg_check(ctx.guild):
-            return await ctx.send("This can only be used in LA Brawl Stars server.")
+            return await ctx.send("This can only be used in CMG Brawl Stars server.")
         labs_mem = ctx.guild.get_role(576028728052809728)
         special = ctx.guild.get_role(706420605309812776)
         if labs_mem not in ctx.author.roles and special not in ctx.author.roles:
-            return await ctx.send("Only LA members can participate!")
+            return await ctx.send("Only CMG members can participate!")
         bs_conf = self.get_bs_config()
         if (await bs_conf.user(ctx.author).tag()) is None:
             return await ctx.send("Save your tag using `/save` first!")
@@ -64,7 +64,7 @@ class Challenges(commands.Cog):
     async def challenge_stats(self, ctx, member: discord.Member = None):
         member = ctx.author if member is None else member
         if not self.cmg_check(ctx.guild):
-            return await ctx.send("This can only be used in LA Brawl Stars server.")
+            return await ctx.send("This can only be used in CMG Brawl Stars server.")
         if not (await self.config.member(member).tracking()):
             return await ctx.send(f"**{member.display_name}** isn't participating yet! (`/glitch track`)")
         embed = discord.Embed(colour=discord.Colour.green(), title="Stats")
