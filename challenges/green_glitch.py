@@ -12,7 +12,7 @@ class Challenges(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=424242696942)
+        self.config = Config.get_conf(self, identifier=694204225252)
         default_member = {'tracking': False, 'lastBattleTime': "20200627T170000.000Z", 'entries': 0, 'streak': 0}
         self.config.register_member(**default_member)
         self.cmg = 401883208511389716
@@ -49,10 +49,11 @@ class Challenges(commands.Cog):
             return await ctx.send("Your progress is already being tracked!")
         if not self.cmg_check(ctx.guild):
             return await ctx.send("This can only be used in CMG Brawl Stars server.")
-        labs_mem = ctx.guild.get_role(576028728052809728)
-        special = ctx.guild.get_role(706420605309812776)
-        if labs_mem not in ctx.author.roles and special not in ctx.author.roles:
-            return await ctx.send("Only CMG members can participate!")
+        # Mo doesn't want role checking for now
+        #labs_mem = ctx.guild.get_role(576028728052809728)
+        #special = ctx.guild.get_role(706420605309812776)
+        #if labs_mem not in ctx.author.roles and special not in ctx.author.roles:
+        #    return await ctx.send("Only CMG members can participate!")
         bs_conf = self.get_bs_config()
         if (await bs_conf.user(ctx.author).tag()) is None:
             return await ctx.send("Save your tag using `/save` first!")
