@@ -13,7 +13,7 @@ class Challenges(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=694204225252)
-        default_member = {'tracking': False, 'lastBattleTime': "20200627T170000.000Z", 'entries': 0, 'streak': 0}
+        default_member = {'tracking': False, 'lastBattleTime': "20220613T000000.000Z", 'entries': 0, 'streak': 0}
         self.config.register_member(**default_member)
         self.cmg = 401883208511389716
         self.bsconfig = None
@@ -83,7 +83,7 @@ class Challenges(commands.Cog):
         await self.config.enabled.set(not enabled)
         await ctx.send(f"Challenge enabled: {not enabled}")
 
-    @tasks.loop(minutes=15)
+    @tasks.loop(minutes=5)
     async def battle_check(self):
         if await self.config.enabled():
             error_ch = self.bot.get_channel(722486276288282744)
@@ -145,11 +145,13 @@ class Challenges(commands.Cog):
                                 win = False
 
                             streak = await self.config.member(user).streak()
-                            if "trophies" not in player['brawler']:
+                            if "brawler" not in player:
                                 continue
-                            if win and player['brawler']['trophies'] >= 400 and battle['battle']['mode'] in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone', 'heist'):
+                            if "trophies" not in player["brawler"]:
+                                continue
+                            if win and player['brawler']['trophies'] >= 400 and battle['battle']['mode'] in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone', 'heist', 'knockout', 'wipeout'):
                                 streak = streak + 1
-                            elif win and (player['brawler']['trophies'] < 400 or battle['battle']['mode'] not in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone', 'heist')):
+                            elif win and (player['brawler']['trophies'] < 400 or battle['battle']['mode'] not in ('brawlBall', 'gemGrab', 'bounty', 'siege', 'hotZone', 'heist', 'knockout', 'wipeout')):
                                 streak = streak
                             else:
                                 streak = 0
