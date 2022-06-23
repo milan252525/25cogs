@@ -418,7 +418,7 @@ class Tools(commands.Cog):
         m = await ctx.send("Sticky message removed successfully.")
         await m.delete(delay=5)
 
-    @tasks.loop(seconds=30)
+    @tasks.loop(seconds=15)
     async def sticky_messages(self):
         all = await self.config.all_channels()
         for channel_id in all:
