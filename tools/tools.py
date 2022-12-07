@@ -63,7 +63,7 @@ class Tools(commands.Cog):
             if staff_role in msg.role_mentions:
                 ch = msg.channel
                 category = msg.guild.get_channel(1048692861744451614)
-                return await ch.edit(name=f"🔴│{ch.name}", category=category, topic=f"{ch.topic} [[{ch.category_id}]]")
+                return await ch.edit(name=f"🔴│{ch.name}", category=category, topic=f"{ch.topic if ch.topic is not None else ''} [[{ch.category_id}]]")
 
     @commands.guild_only()
     @commands.has_role("Chasmac Cup Staff")
@@ -79,7 +79,7 @@ class Tools(commands.Cog):
             return await ctx.send("Can't move back to original category.")
         await ch.edit(
             name=ch.name.replace("🔴│", ""),
-            category=ctx.guild.get_channel(original_cat),
+            category=ch.guild.get_channel(int(original_cat)),
             topic=ch.topic.replace(f"[[{original_cat}]]", "")
         )
 
