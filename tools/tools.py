@@ -58,7 +58,7 @@ class Tools(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, msg):
         # CMG CUP staff ping ping
-        if msg.guild.id == 1030444739289436250 and not msg.author.bot:
+        if msg.guild.id == 1030444739289436250 and not msg.author.bot and msg.channel.category_id == 1030449457835290654:
             staff_role = msg.guild.get_role(1030450401297846353)
             if staff_role in msg.role_mentions:
                 ch = msg.channel
@@ -76,7 +76,7 @@ class Tools(commands.Cog):
             return await ctx.send("This channel is not in Mediator category.")
         original_cat = ch.topic[ch.topic.find("[[")+2:ch.topic.find("]]")]
         if not original_cat.isdigit():
-            return await ctx.send("Can't move back to original category.")
+            return await ctx.send("Can't move back to the original category.")
         await ch.edit(
             name=ch.name.replace("🔴│", ""),
             category=ch.guild.get_channel(int(original_cat)),
