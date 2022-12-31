@@ -72,7 +72,7 @@ class Tools(commands.Cog):
         if ctx.guild.id != 1030444739289436250:
             return
         ch = ctx.channel
-        if not ch.name.startswith("🔴"):
+        if "🔴" not in ch.name:
             return await ctx.send("This channel is not in Mediator category.")
         original_cat = ch.topic[ch.topic.find("[[")+2:ch.topic.find("]]")]
         if not original_cat.isdigit():
