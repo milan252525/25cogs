@@ -82,6 +82,7 @@ class Tools(commands.Cog):
             category=ch.guild.get_channel(int(original_cat)),
             topic=ch.topic.replace(f"[[{original_cat}]]", "")
         )
+        await ctx.message.add_reaction("✅")
 
     @commands.guild_only()
     @commands.is_owner()
