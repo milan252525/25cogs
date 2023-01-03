@@ -84,14 +84,26 @@ class Tools(commands.Cog):
         )
         await ctx.message.add_reaction("✅")
 
-    @commands.guild_only()
-    @commands.is_owner()
     @commands.command()
-    async def spamadd(self, ctx, amount: int, member: discord.Member):
-        value = await self.config.member(member).messages()
-        await self.config.member(member).messages.set(value+amount)
-        await self.config.member(member).name.set(member.display_name)
-        await ctx.send("Done!")
+    async def submit(self, ctx, *, text:str=""):
+        if text == "" and not ctx.message.attachments:
+            msg = await ctx.send(embed=discord.Embed(title=f"Do not submit empty message with no attachments. {ctx.prefix}submit <content>", colour=discord.Colour.red()))
+            await msg.delete(delay=10)
+        target = self.bot.get_channel(722486276288282744) # admin-bot-tests
+        
+        if ctx.message.attachments:
+            files = []
+            for attach in ctx.message.attachments:
+                try:
+                    files.append(await attach.to_file())
+                except:
+                    continue
+            await target.send(content=f"__{ctx.author.mention} [{ctx.author.id}] submitted:__\n{text[:1950]}", files=files[:10])
+        else:
+            await target.send(content=f"__{ctx.author.mention} [{ctx.author.id}] submitted:__\n{text[:1950]}")
+        await ctx.message.add_reaction("✅")
+        await ctx.message.delete(delay=5)
+        await ctx.send(f"{ctx.author.mention} your submission has been received.")
 
     def convertToLeft(self, sec):
         if sec > 3600:
