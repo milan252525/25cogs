@@ -101,8 +101,7 @@ class Tools(commands.Cog):
             await target.send(content=f"__{ctx.author.mention} [{ctx.author.id}] submitted:__\n{text[:1950]}", files=files[:10])
         else:
             await target.send(content=f"__{ctx.author.mention} [{ctx.author.id}] submitted:__\n{text[:1950]}")
-        await ctx.message.add_reaction("✅")
-        await ctx.message.delete(delay=5)
+        await ctx.message.delete()
         await ctx.send(f"{ctx.author.mention} your submission has been received.")
 
     def convertToLeft(self, sec):
