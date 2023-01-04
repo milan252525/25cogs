@@ -58,7 +58,7 @@ class Tools(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, msg):
         # CMG CUP staff ping ping
-        if msg.guild.id == 1030444739289436250 and not msg.author.bot and msg.channel.category and "ccw" in msg.channel.category.name.lower():
+        if msg.guild.id == 1030444739289436250 and msg.channel.category and "ccw" in msg.channel.category.name.lower():
             staff_role = msg.guild.get_role(1030450401297846353)
             if staff_role in msg.role_mentions:
                 ch = msg.channel
