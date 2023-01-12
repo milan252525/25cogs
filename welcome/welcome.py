@@ -84,7 +84,7 @@ class Welcome(commands.Cog):
                 guest_role = before.guild.get_role(578260960981286923)
                 channel = self.bot.get_channel(405159360222986253)
                 await after.add_roles(guest_role)
-                await channel.send(f"Welcome {after.mention} to CMG! Make sure to grab some roles from <#576759538708119566> And link your Brawl Stars account with `*bssave #tag` if you play Brawl Stars. Enjoy!")
+                await channel.send(f"Welcome {after.mention} to CMG! Make sure to grab some roles from <#576759538708119566> And link your Brawl Stars account with `*bssave #tag` in <#503583214422589441> if you play Brawl Stars. Enjoy!")
 
 
     async def removeroleifpresent(self, member: discord.Member, *roles):
