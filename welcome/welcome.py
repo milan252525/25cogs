@@ -1,18 +1,14 @@
-import discord
-from redbot.core import commands, Config, checks
-from redbot.core.utils.chat_formatting import pagify
-from bs.utils import goodEmbed, badEmbed
-from discord.ext import tasks
-from random import choice
-from re import sub
-import traceback
-import textwrap 
-
-import datetime
-import clashroyale
-import brawlstats
 import asyncio
-import time
+import datetime
+import textwrap
+import traceback
+
+import brawlstats
+import discord
+from bs.utils import badEmbed, goodEmbed
+from discord.ext import tasks
+from redbot.core import Config, checks, commands
+
 
 class Welcome(commands.Cog):
 
@@ -21,71 +17,67 @@ class Welcome(commands.Cog):
         self.config = Config.get_conf(self, identifier=2536725)
         default_guild = {
             "roles": {
-                "pres": None, 
-                "vp": None, 
-                "member": None, 
-                "bs": None, 
-                "guest" : None, 
+                "pres": None,
+                "vp": None,
+                "member": None,
+                "bs": None,
+                "guest": None,
                 "leader": None,
-                "leader_divider": None, #for LA Asia
-                "family" : None, 
-                "remove": None, 
-                "otherclubs": None, 
-                "staff": None, 
-                "language": None, 
-                "memberclub": None, 
-                "senior": None, 
-                "autorole": False, 
-                "channel": None, 
-                "notifications": None, 
-                "ping": None, 
-                "pingchannel": None, 
+                "leader_divider": None,  # for LA Asia
+                "family": None,
+                "remove": None,
+                "otherclubs": None,
+                "staff": None,
+                "language": None,
+                "memberclub": None,
+                "senior": None,
+                "autorole": False,
+                "channel": None,
+                "notifications": None,
+                "ping": None,
+                "pingchannel": None,
                 "pingmessage": None,
                 "invisible_roles": [],
                 "lapres": None,
                 "lavp": None
-                }
             }
+        }
         self.config.register_guild(**default_guild)
-        self.crconfig = Config.get_conf(None, identifier=2512325, cog_name="ClashRoyaleCog")
-        self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
-        self.sortroles.start()
+        self.crconfig = Config.get_conf(
+            None, identifier=2512325, cog_name="ClashRoyaleCog")
+        self.bsconfig = Config.get_conf(
+            None, identifier=5245652, cog_name="BrawlStarsCog")
+        # self.sortroles.start()
 
     def cog_unload(self):
         self.sortroles.cancel()
 
     async def initialize(self):
-        crapikey = await self.bot.get_shared_api_tokens("crapi")
-        if crapikey["api_key"] is None:
-            raise ValueError("The Clash Royale API key has not been set.")
-        self.crapi = clashroyale.OfficialAPI(crapikey["api_key"], is_async=True)
-        
+        # crapikey = await self.bot.get_shared_api_tokens("crapi")
+        # if crapikey["api_key"] is None:
+        #     raise ValueError("The Clash Royale API key has not been set.")
+        # self.crapi = clashroyale.OfficialAPI(crapikey["api_key"], is_async=True)
+
         ofcbsapikey = await self.bot.get_shared_api_tokens("ofcbsapi")
         if ofcbsapikey["api_key"] is None:
-            raise ValueError("The Official Brawl Stars API key has not been set.")
-        self.ofcbsapi = brawlstats.Client(ofcbsapikey["api_key"], is_async=True)
+            raise ValueError(
+                "The Official Brawl Stars API key has not been set.")
+        self.ofcbsapi = brawlstats.Client(
+            ofcbsapikey["api_key"], is_async=True)
 
     def get_bs_config(self):
         if self.bsconfig is None:
-            self.bsconfig = Config.get_conf(None, identifier=5245652, cog_name="BrawlStarsCog")
+            self.bsconfig = Config.get_conf(
+                None, identifier=5245652, cog_name="BrawlStarsCog")
         return self.bsconfig
-    
-    @commands.Cog.listener()
-    async def on_member_join(self, member):
-        if member.guild.id == 704457125295947887 and not member.bot: #LA NA unverified autorole
-            await member.add_roles(member.guild.get_role(785243512199184395))
-        if member.guild.id == 585075868188278784 and not member.bot: #LA Asia unverified autorole
-            await member.add_roles(member.guild.get_role(795641413126586408))
 
     @commands.Cog.listener()
     async def on_member_update(self, before, after):
-        if before.guild.id == 401883208511389716:
-            if before.pending != after.pending:
-                guest_role = before.guild.get_role(578260960981286923)
-                channel = self.bot.get_channel(405159360222986253)
-                await after.add_roles(guest_role)
-                await channel.send(f"Welcome {after.mention} to CMG! Make sure to grab some roles from <#576759538708119566> And link your Brawl Stars account with `*bssave #tag` in <#503583214422589441> if you play Brawl Stars. Enjoy!")
-
+        if before.guild.id == 518276112040853515:
+            verified = before.guild.get_role(753038839785848832)
+            if verified not in before.roles and verified in after.roles:
+                channel = self.bot.get_channel(518559373774028803)
+                await channel.send(f"Welcome {after.mention} to Vanguard Gaming! This is the main channel for all your chatting needs. Make sure to grab some roles from <#750490004144390195>. Have fun!")
 
     async def removeroleifpresent(self, member: discord.Member, *roles):
         language = await self.config.guild(member.guild).roles.language()
@@ -113,7 +105,7 @@ class Welcome(commands.Cog):
                 return "Couldn't add roles\n"
             elif language == "es":
                 return "No logre quitar los roles\n"
-        msg = ""  
+        msg = ""
         for role in roles:
             if role is None:
                 continue
@@ -133,8 +125,8 @@ class Welcome(commands.Cog):
             em = discord.utils.get(guild2.emojis, name=str(badge_id))
         return str(em)
 
-    @commands.command(aliases=['nuevorol', 'vincular', 'salvar', 'nc'])
     @commands.guild_only()
+    # @commands.command(aliases=['nuevorol', 'vincular', 'salvar', 'nc'])
     async def newcomer(self, ctx, tag, member: discord.Member = None):
         staff = ctx.guild.get_role(await self.config.guild(ctx.guild).roles.staff())
         language = await self.config.guild(ctx.guild).roles.language()
@@ -191,9 +183,11 @@ class Welcome(commands.Cog):
                 except brawlstats.errors.RequestError:
                     badge = "<:bsband:600741378497970177>"
             if language == 'en':
-                cl_name = f"{badge} {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> No club"
+                cl_name = f"{badge} {player.club.name}" if "name" in player.raw_data[
+                    "club"] else "<:noclub:661285120287834122> No club"
             elif language == 'es':
-                cl_name = f"{badge} {player.club.name}" if "name" in player.raw_data["club"] else "<:noclub:661285120287834122> Sin club"
+                cl_name = f"{badge} {player.club.name}" if "name" in player.raw_data[
+                    "club"] else "<:noclub:661285120287834122> Sin club"
             msg += f"**{player.name}** <:bstrophy:552558722770141204> {player.trophies} {cl_name}\n"
         except brawlstats.errors.NotFoundError:
             if language == 'en':
@@ -206,7 +200,6 @@ class Welcome(commands.Cog):
                 return await ctx.send(embed=badEmbed(f"BS API is offline, please try again later! ({str(e)})"))
             elif language == 'es':
                 return await ctx.send(embed=badEmbed(f"BS API está fuera de línea, por favor inténtalo de nuevo más tarde! ({str(e)})"))
-
 
         except Exception as e:
             if language == 'en':
@@ -236,18 +229,21 @@ class Welcome(commands.Cog):
         labs_clubs = await self.bsconfig.guild(labs_guild).clubs()
         labs_tags_roles = {}
         for tag in labs_clubs:
-            labs_tags_roles["#" + labs_clubs[tag]["tag"]] = labs_clubs[tag]["role"]
+            labs_tags_roles["#" + labs_clubs[tag]
+                            ["tag"]] = labs_clubs[tag]["role"]
 
         local_tags_roles = {}
         local_clubs = await self.bsconfig.guild(ctx.guild).clubs()
 
         for tag in local_clubs:
-            local_tags_roles["#" + local_clubs[tag]["tag"]] = local_clubs[tag]["role"]
+            local_tags_roles["#" + local_clubs[tag]
+                             ["tag"]] = local_clubs[tag]["role"]
 
         if player_in_club:
             member_role_expected = None
             if player.club.tag in local_tags_roles.keys():
-                member_role_expected = ctx.guild.get_role(local_tags_roles[player.club.tag])
+                member_role_expected = ctx.guild.get_role(
+                    local_tags_roles[player.club.tag])
 
             player_in_local_club = player.club.tag in local_tags_roles.keys()
             player_in_la_club = player.club.tag in labs_tags_roles.keys()
@@ -260,7 +256,7 @@ class Welcome(commands.Cog):
 
         if player_in_club and not (player_in_la_club or player_in_local_club):
             msg += await self.addroleifnotpresent(member, guest, brawlstars)
-        
+
         if player_in_club and player_in_la_club and not player_in_local_club:
             if player_club is not None:
                 for mem in player_club.members:
@@ -273,7 +269,6 @@ class Welcome(commands.Cog):
             else:
                 msg += "<:offline:642094554019004416> Couldn't retrieve player's club role. Try again later!"
             msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
-
 
         if player_in_club and player_in_local_club:
             if member_role_expected is None:
@@ -311,11 +306,13 @@ class Welcome(commands.Cog):
             pingch = self.bot.get_channel(roles_config['pingchannel'])
             message = roles_config['pingmessage']
             await pingch.send(member.mention + message)
-            
-    async def send_error(self, error, id):
-        str_error = traceback.format_exception(type(error), error, error.__traceback__)
 
-        wrapper = textwrap.TextWrapper(width=1000, max_lines=5, expand_tabs=False, replace_whitespace=False)
+    async def send_error(self, error, id):
+        str_error = traceback.format_exception(
+            type(error), error, error.__traceback__)
+
+        wrapper = textwrap.TextWrapper(
+            width=1000, max_lines=5, expand_tabs=False, replace_whitespace=False)
         messages = wrapper.wrap("".join(str_error))
 
         embed = discord.Embed(colour=discord.Color.red(), description=str(id))
@@ -326,8 +323,8 @@ class Welcome(commands.Cog):
                 value="```py\n" + m + "```",
                 inline=False
             )
-            
-        error_channel = self.bot.get_channel(722486276288282744)
+
+        error_channel = self.bot.get_channel(1077518660442263622)
         await error_channel.send(embed=embed)
 
     @tasks.loop(hours=4)
@@ -337,7 +334,8 @@ class Welcome(commands.Cog):
             labs_clubs = await self.bsconfig.guild(labs_guild).clubs()
             labs_tags_roles = {}
             for tag in labs_clubs:
-                labs_tags_roles["#" + labs_clubs[tag]["tag"]] = labs_clubs[tag]["role"]
+                labs_tags_roles["#" + labs_clubs[tag]
+                                ["tag"]] = labs_clubs[tag]["role"]
 
             for g in await self.config.all_guilds():
                 guild = self.bot.get_guild(g)
@@ -360,11 +358,13 @@ class Welcome(commands.Cog):
                     pres = ch.guild.get_role(roles_config['pres'])
                     otherclubs = ch.guild.get_role(roles_config['otherclubs'])
                     leader = ch.guild.get_role(roles_config['leader'])
-                    leader_divider = ch.guild.get_role(roles_config['leader_divider'])
+                    leader_divider = ch.guild.get_role(
+                        roles_config['leader_divider'])
                     mmber = ch.guild.get_role(roles_config['member'])
                     memberclub = ch.guild.get_role(roles_config['memberclub'])
                     senior = ch.guild.get_role(roles_config['senior'])
-                    notifications = ch.guild.get_role(roles_config['notifications'])
+                    notifications = ch.guild.get_role(
+                        roles_config['notifications'])
                     lapres = ch.guild.get_role(roles_config['lapres'])
                     lavp = ch.guild.get_role(roles_config['lavp'])
                     error_counter = 0
@@ -373,7 +373,8 @@ class Welcome(commands.Cog):
                     local_clubs = await self.bsconfig.guild(ch.guild).clubs()
 
                     for tag in local_clubs:
-                        local_tags_roles["#" + local_clubs[tag]["tag"]] = local_clubs[tag]["role"]
+                        local_tags_roles["#" + local_clubs[tag]
+                                         ["tag"]] = local_clubs[tag]["role"]
 
                     for member in ch.guild.members:
                         if member is None or member.bot:
@@ -417,8 +418,9 @@ class Welcome(commands.Cog):
 
                         member_role_expected = None
                         if player_in_club and player.club.tag in local_tags_roles:
-                            member_role_expected = ch.guild.get_role(local_tags_roles[player.club.tag])
-                        
+                            member_role_expected = ch.guild.get_role(
+                                local_tags_roles[player.club.tag])
+
                         member_roles = []
                         for role in member.roles:
                             if role.id in local_tags_roles.values():
@@ -430,7 +432,8 @@ class Welcome(commands.Cog):
                                 if role != member_role_expected:
                                     msg += await self.removeroleifpresent(member, role)
 
-                        member_role = None if len(member_roles) < 1 else member_roles[0]
+                        member_role = None if len(
+                            member_roles) < 1 else member_roles[0]
 
                         player_in_local_club = player_in_club and player.club.tag in local_tags_roles.keys()
                         player_in_la_club = player_in_club and player.club.tag in labs_tags_roles.keys()
@@ -468,7 +471,7 @@ class Welcome(commands.Cog):
                                         break
                             msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, leader, leader_divider, memberclub, senior, member_role, guest)
                             msg += await self.addroleifnotpresent(member, otherclubs, mmber, brawlstars)
-    
+
                         elif player_in_club and player_in_local_club:
                             if member_role_expected is None:
                                 msg += await self.removeroleifpresent(member, family, vp, pres, newcomer, otherclubs, leader, leader_divider, mmber, memberclub, senior, member_role)
