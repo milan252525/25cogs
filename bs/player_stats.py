@@ -1,12 +1,11 @@
-import discord
-import typing
-from .utils import *
-import brawlstats
-import datetime
-import aiohttp
-from quickchart import QuickChart
 import random
-from operator import itemgetter, attrgetter
+from operator import attrgetter, itemgetter
+
+import brawlstats
+import discord
+
+from .utils import *
+
 
 async def tag_convertor(bot, ctx, member, alt=False):
     if alt:
@@ -27,8 +26,9 @@ async def tag_convertor(bot, ctx, member, alt=False):
             except ValueError:
                 member = discord.utils.get(ctx.guild.members, name=member)
                 if member is not None:
-                    return await bot.get_cog("BrawlStarsCog").config.user(member).tag()      
+                    return await bot.get_cog("BrawlStarsCog").config.user(member).tag()
         return None
+
 
 async def get_profile_embed(bot, ctx, member, alt=False):
     if alt:
@@ -55,7 +55,7 @@ async def get_profile_embed(bot, ctx, member, alt=False):
 
     except brawlstats.errors.RequestError as e:
         return badEmbed("BS API ERROR: " + str(e))
-        
+
     colour = player.name_color if player.name_color is not None else "0xffffffff"
     embed = discord.Embed(color=discord.Colour.from_rgb(
         int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
@@ -91,13 +91,16 @@ async def get_profile_embed(bot, ctx, member, alt=False):
     if "tag" in player.raw_data["club"]:
         try:
             club = await bs_cog.ofcbsapi.get_club(player.club.tag)
-            embed.add_field(name="Club", value=f"{bs_cog.get_badge(club.raw_data['badgeId'])} {player.club.name}")
+            embed.add_field(
+                name="Club", value=f"{bs_cog.get_badge(club.raw_data['badgeId'])} {player.club.name}")
             for m in club.members:
                 if m.tag == player.raw_data['tag']:
-                    embed.add_field(name="Role", value=f"<:role:614520101621989435> {m.role.capitalize()}")
+                    embed.add_field(
+                        name="Role", value=f"<:role:614520101621989435> {m.role.capitalize()}")
                     break
         except brawlstats.errors.RequestError:
-            embed.add_field(name="Club", value=f"<:bsband:600741378497970177> {player.club.name}")
+            embed.add_field(
+                name="Club", value=f"<:bsband:600741378497970177> {player.club.name}")
             embed.add_field(
                 name="Role",
                 value=f"<:offline:642094554019004416> Error while retrieving role")
@@ -119,19 +122,21 @@ async def get_profile_embed(bot, ctx, member, alt=False):
     embed.add_field(
         name="Best RR Level",
         value=f"{get_gamemode_emoji(get_gamemode_id('roborumble'))} {rr_level}")
-    #embed.add_field(
+    # embed.add_field(
     #    name="Best Time as Big Brawler",
     #    value=f"<:biggame:614517022323245056> {player.best_time_as_big_brawler//60}:{str(player.best_time_as_big_brawler%60).rjust(2, '0')}")
     if "highestPowerPlayPoints" in player.raw_data:
         value = f"{player.raw_data['highestPowerPlayPoints']}"
-        embed.add_field(name="Highest PP Points", value=f"<:powertrophies:661266876235513867> {value}")
+        embed.add_field(name="Highest PP Points",
+                        value=f"<:powertrophies:661266876235513867> {value}")
     reset = reset_trophies(player) - player.trophies
     embed.add_field(
         name="Season Reset",
         value=f"<:bstrophy:552558722770141204> {reset} <:starpoint:661265872891150346> {calculate_starpoints(player)}")
-    emo = "<:good:450013422717763609> Qualified" if player.raw_data['isQualifiedFromChampionshipChallenge'] else "<:bad:450013438756782081> Not qualified"
+    emo = "<:good:450013422717763609> Qualified" if player.raw_data[
+        'isQualifiedFromChampionshipChallenge'] else "<:bad:450013438756782081> Not qualified"
     embed.add_field(name="Championship", value=f"{emo}")
-    
+
     # try:
     #     log = (await bs_cog.ofcbsapi.get_battle_logs(player.raw_data['tag'])).raw_data
     #     plsolo = None
@@ -150,10 +155,10 @@ async def get_profile_embed(bot, ctx, member, alt=False):
     #                         break
     #         if plsolo is not None and plteam is not None:
     #             break
-        
+
     #     lastsolo = 0
     #     lastteam = 0
-        
+
     #     if plsolo is not None:
     #         await bs_cog.config.user(member).plsolo.set(plsolo)
     #         await bs_cog.config.user(member).lastsolo.set(int(datetime.datetime.timestamp(datetime.datetime.now())))
@@ -176,10 +181,10 @@ async def get_profile_embed(bot, ctx, member, alt=False):
     #         embed.add_field(name="Current Team League", value=get_power_league(plteam))
     # except:
     #     pass
-    
+
     texts = [
-        "Check out all your brawlers using /brawlers!", 
-        "Want to see your club stats? Try /club!", 
+        "Check out all your brawlers using /brawlers!",
+        "Want to see your club stats? Try /club!",
         "Have you seen all our clubs? No? Do /clubs!",
         "You can see stats of other players by typing /p @user.",
         "You can display player's stats by using his tag! /p #TAG",
@@ -187,6 +192,7 @@ async def get_profile_embed(bot, ctx, member, alt=False):
     ]
     embed.set_footer(text=random.choice(texts))
     return embed
+
 
 async def get_brawlers_embeds(bot, ctx, member):
     tag = await tag_convertor(bot, ctx, member)
@@ -225,7 +231,7 @@ async def get_brawlers_embeds(bot, ctx, member):
     brawlers.sort(key=itemgetter('trophies'), reverse=True)
 
     embedfields = []
-    
+
     for br in brawlers:
         rank = discord.utils.get(bs_cog.bot.emojis, name=f"rank_{br['rank']}")
         ename = f"{get_brawler_emoji(bot, br['id'])} {br['name'].lower().title()} "
@@ -235,11 +241,13 @@ async def get_brawlers_embeds(bot, ctx, member):
         evalue += f"<:gadget:716341776608133130> `{len(br['gadgets'])}`"
         evalue = evalue.strip()
         embedfields.append([ename, evalue])
-    
+
     embedstosend = []
     for i in range(0, len(embedfields), 15):
-        embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers ({len(brawlers)}):")
-        embed.set_author(name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
+        embed = discord.Embed(color=discord.Colour.from_rgb(int(colour[4:6], 16), int(
+            colour[6:8], 16), int(colour[8:10], 16)), title=f"Brawlers ({len(brawlers)}):")
+        embed.set_author(
+            name=f"{player.name} {player.raw_data['tag']}", icon_url=player_icon)
         for e in embedfields[i:i + 15]:
             embed.add_field(name=e[0], value=e[1], inline=True)
         embedstosend.append(embed)
@@ -247,6 +255,7 @@ async def get_brawlers_embeds(bot, ctx, member):
     for i in range(len(embedstosend)):
         embedstosend[i].set_footer(text=f"Page {i+1}/{len(embedstosend)}")
     return embedstosend
+
 
 async def get_single_brawler_embed(bot, ctx, member, brawler):
     tag = await tag_convertor(bot, ctx, member)
@@ -289,9 +298,11 @@ async def get_single_brawler_embed(bot, ctx, member, brawler):
     embed = discord.Embed(color=discord.Colour.from_rgb(
         int(colour[4:6], 16), int(colour[6:8], 16), int(colour[8:10], 16)))
     if unlocked:
-        embed.set_author(name=f"{player.name}'s {data['name']}", icon_url=data['imageUrl2'])
+        embed.set_author(
+            name=f"{player.name}'s {data['name']}", icon_url=data['imageUrl2'])
     else:
-        embed.set_author(name=f"{data['name']} (Not unlocked)", icon_url=data['imageUrl2'])
+        embed.set_author(
+            name=f"{data['name']} (Not unlocked)", icon_url=data['imageUrl2'])
     embed.description = f"<:brawlers:614518101983232020> {data['rarity']['name']}"
     if unlocked:
         rank = discord.utils.get(bs_cog.bot.emojis, name=f"rank_{br['rank']}")
@@ -309,8 +320,9 @@ async def get_single_brawler_embed(bot, ctx, member, brawler):
                     owned = True
         emoji = "<:star_power:729732781638156348>" if owned else "<:sp_locked:729751963549302854>"
         starpowers += f"{emoji} {star['name']}\n`{star['description']}`\n"
-    embed.add_field(name="Star Powers", value=starpowers if starpowers != "" else "No data available")
-    
+    embed.add_field(name="Star Powers",
+                    value=starpowers if starpowers != "" else "No data available")
+
     for gadget in data['gadgets']:
         owned = False
         if unlocked:
@@ -319,5 +331,6 @@ async def get_single_brawler_embed(bot, ctx, member, brawler):
                     owned = True
         emoji = "<:gadget:716341776608133130>" if owned else "<:ga_locked:729752493793476759>"
         gadgets += f"{emoji} {gadget['name']}\n`{gadget['description']}`\n"
-    embed.add_field(name="Gadgets", value=gadgets if gadgets != "" else "No data available")
+    embed.add_field(name="Gadgets", value=gadgets if gadgets !=
+                    "" else "No data available")
     return embed

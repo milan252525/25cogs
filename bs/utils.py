@@ -1,5 +1,6 @@
+import brawlstats
+import discord
 from discord import Embed
-import brawlstats, discord
 
 def badEmbed(text):
     bembed = Embed(color=0xff0000)

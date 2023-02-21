@@ -1,23 +1,20 @@
-import discord
-from redbot.core import commands, Config, checks
-from redbot.core.utils.embed import randomize_colour
-from redbot.core.utils.menus import menu, prev_page, next_page
-from discord.ext import tasks
-
-from .utils import *
-from . import player_stats, game_stats
-
-from random import choice
 import asyncio
-import brawlstats
-from typing import Union
-from re import sub
-import datetime
-import aiohttp
-from cachetools import TTLCache
-from operator import itemgetter, attrgetter
-import pycountry
 import math
+from random import choice
+from typing import Union
+
+import aiohttp
+import brawlstats
+import discord
+import pycountry
+from cachetools import TTLCache
+from redbot.core import Config, checks, commands
+from redbot.core.utils.embed import randomize_colour
+from redbot.core.utils.menus import menu, next_page, prev_page
+
+from . import game_stats, player_stats
+from .utils import *
+
 
 class BrawlStarsCog(commands.Cog):
 
