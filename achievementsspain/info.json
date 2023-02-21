@@ -1,9 +1,0 @@
-{
-  "author": ["datura-metel"],
-  "name" : "AchievementsSpain",
-  "description": "Achievements for LA Spain cog",
-  "install_msg": "Thank you for installing our Achievements for LA Spain cog. Set your BS API token with `[p]set api bsapi api_key,YOURAPIKEY`",
-  "short": "Achievements for LA Spain server",
-  "requirements" : ["brawlstats"],
-  "tags": ["achievements"]
-}

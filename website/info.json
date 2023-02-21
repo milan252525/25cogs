@@ -1,8 +1,0 @@
-{
-  "author": ["milan_25"],
-  "name" : "Website",
-  "description": "Allow interaction with LAClubs website",
-  "requirements" : ["pymongo"],
-  "tags": [],
-  "end_user_data_statement" : "This cog does not store user data."
-}
