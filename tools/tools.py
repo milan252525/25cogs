@@ -1,18 +1,12 @@
-import discord
-from redbot.core import commands, Config, checks
-from redbot.core.utils.embed import randomize_colour
-from discord.ext import tasks
-from datetime import datetime
-from time import time
-from random import choice
-import random
-from typing import Union
 import asyncio
+from time import time
+from typing import Union
+
+import discord
 import upsidedown
 from bs.utils import badEmbed
-import aiohttp
-#from profanity_check import predict, predict_prob
-#from profanityfilter import ProfanityFilter
+from discord.ext import tasks
+from redbot.core import Config, commands
 
 
 class Tools(commands.Cog):
@@ -26,7 +20,6 @@ class Tools(commands.Cog):
         self.config.register_global(**default_global)
         self.config.register_member(**default_member)
         self.config.register_channel(**default_channel)
-        self.leave_counter = {}
         #self.pf = ProfanityFilter()
         self.updater.start()
         self.sticky_messages.start()
@@ -45,64 +38,25 @@ class Tools(commands.Cog):
     async def updown(self, ctx, *, text: str):
         await ctx.send(upsidedown.transform(text))
 
-    @commands.Cog.listener()
-    async def on_member_remove(self, member):
-        if member.guild.id not in self.leave_counter:
-            self.leave_counter[member.guild.id] = [int(time())]
-        else:
-            self.leave_counter[member.guild.id].append(int(time()))
-        if len(self.leave_counter[member.guild.id]) > 4:
-            if self.leave_counter[member.guild.id][-1] - self.leave_counter[member.guild.id][-4] < 300:
-                await self.bot.get_user(230947675837562880).send(f"Members in **{member.guild.name}** are disappearing too fast!")
+    # @commands.command()
+    # async def submit(self, ctx, *, text: str = ""):
+    #     if text == "" and not ctx.message.attachments:
+    #         msg = await ctx.send(embed=discord.Embed(title=f"Do not submit empty message with no attachments. {ctx.prefix}submit <content>", colour=discord.Colour.red()))
+    #         await msg.delete(delay=10)
+    #     target = self.bot.get_channel(722486276288282744)  # admin-bot-tests
 
-    @commands.Cog.listener()
-    async def on_message(self, msg):
-        # CMG CUP staff ping ping
-        if msg.guild.id == 1030444739289436250 and msg.channel.category and "ccw" in msg.channel.category.name.lower():
-            staff_role = msg.guild.get_role(1030450401297846353)
-            if staff_role in msg.role_mentions:
-                ch = msg.channel
-                category = msg.guild.get_channel(1048692861744451614)
-                return await ch.edit(name=f"🔴│{ch.name}", category=category, topic=f"{ch.topic if ch.topic is not None else ''} [[{ch.category_id}]]")
-
-    @commands.guild_only()
-    @commands.has_role("Chasmac Cup Staff")
-    @commands.command()
-    async def solved(self, ctx):
-        if ctx.guild.id != 1030444739289436250:
-            return
-        ch = ctx.channel
-        if "🔴" not in ch.name:
-            return await ctx.send("This channel is not in Mediator category.")
-        original_cat = ch.topic[ch.topic.find("[[")+2:ch.topic.find("]]")]
-        if not original_cat.isdigit():
-            return await ctx.send("Can't move back to the original category.")
-        await ch.edit(
-            name=ch.name.replace("🔴│", ""),
-            category=ch.guild.get_channel(int(original_cat)),
-            topic=ch.topic.replace(f"[[{original_cat}]]", "")
-        )
-        await ctx.message.add_reaction("✅")
-
-    @commands.command()
-    async def submit(self, ctx, *, text:str=""):
-        if text == "" and not ctx.message.attachments:
-            msg = await ctx.send(embed=discord.Embed(title=f"Do not submit empty message with no attachments. {ctx.prefix}submit <content>", colour=discord.Colour.red()))
-            await msg.delete(delay=10)
-        target = self.bot.get_channel(722486276288282744) # admin-bot-tests
-        
-        if ctx.message.attachments:
-            files = []
-            for attach in ctx.message.attachments:
-                try:
-                    files.append(await attach.to_file())
-                except:
-                    continue
-            await target.send(content=f"__{ctx.author.mention} [{ctx.author.id}] submitted:__\n{text[:1950]}", files=files[:10])
-        else:
-            await target.send(content=f"__{ctx.author.mention} [{ctx.author.id}] submitted:__\n{text[:1950]}")
-        await ctx.message.delete()
-        await ctx.send(f"{ctx.author.mention} your submission has been received.")
+    #     if ctx.message.attachments:
+    #         files = []
+    #         for attach in ctx.message.attachments:
+    #             try:
+    #                 files.append(await attach.to_file())
+    #             except:
+    #                 continue
+    #         await target.send(content=f"__{ctx.author.mention} [{ctx.author.id}] submitted:__\n{text[:1950]}", files=files[:10])
+    #     else:
+    #         await target.send(content=f"__{ctx.author.mention} [{ctx.author.id}] submitted:__\n{text[:1950]}")
+    #     await ctx.message.delete()
+    #     await ctx.send(f"{ctx.author.mention} your submission has been received.")
 
     def convertToLeft(self, sec):
         if sec > 3600:
@@ -233,102 +187,6 @@ class Tools(commands.Cog):
             m = m.replace('*', '\\*')
             m = m.replace('~', '\\~')
             await ctx.send(embed=discord.Embed(title=role.name, description=m, colour=discord.Colour.green()))
-
-    # @commands.command()
-    async def membersadvanced(self, ctx, *, settings):
-        settings = settings.split(" ")
-        if len(settings) % 2 != 0:
-            return await ctx.send(embed=badEmbed("Looks like you entered the settings incorrectly."))
-        people = []
-        for i in range(len(settings)):
-            if i % 2 != 0:
-                continue
-            role = None
-            for r in ctx.guild.roles:
-                if r.name.lower().startswith(settings[i + 1]):
-                    role = r
-            if role is None:
-                return await ctx.send(embed=badEmbed(f"{settings[i + 1]} doesn't look like a valid role."))
-            if settings[i] == "-r":
-                for m in ctx.guild.members:
-                    if role in m.roles:
-                        if m in people:
-                            people.remove(m)
-            elif settings[i] == "-a":
-                for m in ctx.guild.members:
-                    if role in m.roles:
-                        people.append(m)
-        msg = ""
-        for p in people:
-            msg = msg + f"{str(p)}\n"
-        await ctx.send(embed=discord.Embed(colour=discord.Colour.orange(), description=msg, title="Members:"))
-
-    # @commands.command()
-    async def membersall(self, ctx):
-        user_ids = set()
-        user_ids_online = set()
-        servers = ""
-        LA_guilds = sorted([guild for guild in self.bot.guilds if "LA" in guild.name],
-                           key=lambda x: x.member_count, reverse=True)
-        for guild in LA_guilds:
-            if "LA" in guild.name:
-                servers += f"[{guild.member_count}] {guild.name}\n"
-                for mem in guild.members:
-                    user_ids.add(mem.id)
-                    if mem.status in (discord.Status.online, discord.Status.idle, discord.Status.dnd):
-                        user_ids_online.add(mem.id)
-        await ctx.send(f"**Total unique accounts:** {len(user_ids)}\n**Currently online:** {len(user_ids_online)}\n**Servers**: ({len(LA_guilds)})\n```{servers[:1950]}```")
-
-    # @commands.guild_only()
-    # @commands.command()
-    async def laban(self, ctx, member: Union[discord.Member, str], reason: str = ""):
-        if ctx.author.id not in [614138334717149205, 230947675837562880]:
-            return await ctx.send("You can't use this command.")
-        # main labs lafc labsevents spain, academy, asia, bd, derucula, support, portugal, me
-        guilds = [440960893916807188, 401883208511389716, 593248015729295360, 654334199494606848, 460550486257565697, 473169548301041674,
-                  663716223258984496, 593732431551660063, 631888808224489482, 594736382727946250, 616673259538350084, 773750926578155541]
-        msg = f"Attempting to ban **{member}** in all LA servers:"
-        for id in guilds:
-            try:
-                guild = self.bot.get_guild(id)
-                m = discord.Object(member.id if isinstance(
-                    member, discord.Member) else member)
-                await guild.ban(m, reason=f"Banned from all LA servers. Reason: {reason if reason != '' else 'not specified'}")
-                msg += f"\n<:good:450013422717763609> **{guild.name}**"
-            except discord.Forbidden:
-                msg += f"\n<:bad:450013438756782081> **{guild.name}** (Forbidden to ban)"
-            except discord.HTTPException as he:
-                msg += f"\n<:bad:450013438756782081> **{guild.name}** ({he})"
-            except AttributeError as he:
-                msg += f"\n<:bad:450013438756782081> **{id}** ({he})"
-            except Exception as e:
-                msg += f"\n<:bad:450013438756782081> **{guild.name}** ({e})"
-        await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.red()))
-
-    # @commands.guild_only()
-    # @commands.command()
-    async def launban(self, ctx, member: Union[discord.Member, str], reason: str = ""):
-        if ctx.author.id not in [614138334717149205, 230947675837562880]:
-            return await ctx.send("You can't use this command.")
-        guilds = [440960893916807188, 401883208511389716, 593248015729295360, 654334199494606848, 460550486257565697, 473169548301041674,
-                  663716223258984496, 593732431551660063, 631888808224489482, 594736382727946250, 616673259538350084, 773750926578155541]
-        msg = f"Attempting to unban **{member}** in all LA servers:"
-        for id in guilds:
-            try:
-                guild = self.bot.get_guild(id)
-                m = discord.Object(member.id if isinstance(
-                    member, discord.Member) else member)
-                await guild.unban(m, reason=f"Banned from all LA servers. Reason: {reason if reason != '' else 'not specified'}")
-                msg += f"\n<:good:450013422717763609> **{guild.name}**"
-            except discord.Forbidden:
-                msg += f"\n<:bad:450013438756782081> **{guild.name}** (Forbidden to unban)"
-            except discord.HTTPException as he:
-                msg += f"\n<:bad:450013438756782081> **{guild.name}** ({he})"
-            except AttributeError as he:
-                msg += f"\n<:bad:450013438756782081> **{id}** ({he})"
-            except Exception as e:
-                msg += f"\n<:bad:450013438756782081> **{guild.name}** ({e})"
-        await ctx.send(embed=discord.Embed(description=msg, colour=discord.Colour.green()))
 
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
