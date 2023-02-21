@@ -77,7 +77,7 @@ class Welcome(commands.Cog):
             verified = before.guild.get_role(753038839785848832)
             if verified not in before.roles and verified in after.roles:
                 channel = self.bot.get_channel(518559373774028803)
-                await channel.send(f"Welcome {after.mention} to Vanguard Gaming! This is the main channel for all your chatting needs. Make sure to grab some roles from <#750490004144390195>. Have fun!")
+                await channel.send(f"Welcome {after.mention} to Vanguard Gaming! <:VGOP:904766817396994158>\nThis is the main channel for all your chatting needs. Make sure to grab some roles from <#750490004144390195>. Have fun!")
 
     async def removeroleifpresent(self, member: discord.Member, *roles):
         language = await self.config.guild(member.guild).roles.language()
