@@ -34,11 +34,11 @@ async def get_profile_embed(bot, ctx, member, alt=False):
     if alt:
         tag = await tag_convertor(bot, ctx, member, alt=True)
         if tag is None:
-            return badEmbed("This user has no alt saved! Use [prefix]savealt <tag>")
+            return badEmbed(f"This user has no alt saved! Use {ctx.prefix}savealt <tag>")
     else:
         tag = await tag_convertor(bot, ctx, member)
         if tag is None:
-            return badEmbed("This user has no tag saved! Use [prefix]save <tag>")
+            return badEmbed(f"This user has no tag saved! Use {ctx.prefix}save <tag>")
         if tag == "":
             desc = "/p\n/profile @user\n/p discord_name\n/p discord_id\n/p #BSTAG"
             return discord.Embed(title="Invalid argument!", colour=discord.Colour.red(), description=desc)
@@ -197,7 +197,7 @@ async def get_profile_embed(bot, ctx, member, alt=False):
 async def get_brawlers_embeds(bot, ctx, member):
     tag = await tag_convertor(bot, ctx, member)
     if tag is None or tag == "":
-        return [badEmbed("This user has no tag saved! Use [prefix]save <tag>")]
+        return [badEmbed(f"This user has no tag saved! Use {ctx.prefix}save <tag>")]
 
     bs_cog = bot.get_cog("BrawlStarsCog")
     try:
@@ -260,7 +260,7 @@ async def get_brawlers_embeds(bot, ctx, member):
 async def get_single_brawler_embed(bot, ctx, member, brawler):
     tag = await tag_convertor(bot, ctx, member)
     if tag is None or tag == "":
-        return badEmbed("This user has no tag saved! Use [prefix]save <tag>")
+        return badEmbed(f"This user has no tag saved! Use {ctx.prefix}save <tag>")
 
     bs_cog = bot.get_cog("BrawlStarsCog")
 

@@ -300,8 +300,7 @@ class BrawlStarsCog(commands.Cog):
                 embed.add_field(name="Top Members", value=topm, inline=True)
             if worstm != "":
                 embed.add_field(name="Lowest Members", value=worstm, inline=True)
-            else:
-                return await ctx.send(embed=randomize_colour(embed))
+            return await ctx.send(embed=randomize_colour(embed))
         elif keyword in ["memberlist", "members", "list", "m", "ml"]:
             colour = choice([discord.Colour.green(),
                              discord.Colour.blue(),
