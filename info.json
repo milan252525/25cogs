@@ -1,7 +1,7 @@
 {
-    "AUTHOR" : "milan_25",
-    "INSTALL_MSG" : "LAcogs installed",
-    "NAME" : "LAcogs",
-    "SHORT" : "Cogs for Red V3",
-    "DESCRIPTION" : "Collection of Clash Royale, Brawl Stars and moderation cogs for Legendary Alliance. Made to work specifically with LA servers. Don't attempt to install."
+    "author" : "milan_25",
+    "install_msg" : "25cogs installed",
+    "name" : "install_msg",
+    "short" : "Cogs for Red V3",
+    "description" : "Collection of Clash Royale, Brawl Stars and moderation cogs. Not made to work with other bots. Don't attempt to install."
 }
