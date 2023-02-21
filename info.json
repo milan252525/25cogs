@@ -1,5 +1,5 @@
 {
-    "author" : "milan_25",
+    "author" : ["milan_25"],
     "install_msg" : "25cogs installed",
     "name" : "install_msg",
     "short" : "Cogs for Red V3",
