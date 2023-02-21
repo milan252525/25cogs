@@ -37,7 +37,7 @@ class BrawlStarsCog(commands.Cog):
         self.ofcbsapi = brawlstats.Client(
             ofcbsapikey["api_key"], is_async=True)
         self.ofcbsapi.cache = TTLCache(10000, 60*10)
-        self.starlist_key = (await self.bot.get_shared_api_tokens("starlist"))["starlist"]
+        # self.starlist_key = (await self.bot.get_shared_api_tokens("starlist"))["starlist"]
         
     async def starlist_request(self, url):
         #"Authorization": f"Bearer {self.starlist_key}", 
